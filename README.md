@@ -1,8 +1,6 @@
-## Introduction to Econometrics with Python - Osman Doğan, Süleyman Taşpınar
+## Probability Theory - Osman Doğan, Süleyman Taşpınar
 
-This book serves as a Python companion to the well-known textbook by Stock and Watson (2020), which we use in our undergraduate econometrics courses. In our courses, the first semester introduces econometrics through Chapters 1 to 9, followed by Chapters 10 to 17 in the second semester. This book compiles lecture and lab materials we used for teaching econometrics. Lecture slides are also available and can be provided upon request.
-
-This repo contains the source code for [osmdogan.github.io/Python_Book](https://osmdogan.github.io/Python_Book), built with [Quarto v1.5.57](https://quarto.org) and deployed using [GitHub Pages](https://docs.github.com/en/pages).
+In this book, we collect the lecture notes provided by [Todd Kemp](https://mathweb.ucsd.edu/~tkemp/ProbabilityTube/). These notes are based on the book [Probability Tools with Examples](https://mathweb.ucsd.edu/~tkemp/280B/Driver-Probability-Lecture-Notes.pdf) by Bruce Driver and were developed for a full-year graduate course on probability theory and stochastic processes. Our aim is to make these lecture notes more accessible by providing a more structured and organized presentation of the material. We also provide additional explanations, illustrations, and examples to help readers better understand the concepts. The book consists of three main parts: Probability Theory I, II, and III. 
 
 ## License
 
