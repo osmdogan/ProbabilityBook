@@ -1,0 +1,180 @@
+
+# Lecture 5.2: Lebesgue Measure
+
+## Lebesgue Measure on $\mathbb{R}$
+
+::: {#def-lebesgue-measure}
+## Lebesgue Measure
+The unique Radon measure $\lambda$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ satisfying:
+$$
+\lambda((a, b]) = b - a \quad \text{for all } -\infty < a < b < \infty
+$${#eq-lebesgue-def}
+is called **Lebesgue measure**.
+:::
+
+## Translation Invariance
+
+For any translation $\tau \in \mathbb{R}$ and interval $J = (a, b]$, we have $J + \tau = (a + \tau, b + \tau]$, so:
+$$
+\lambda(J + \tau) = (b + \tau) - (a + \tau) = b - a = \lambda(J).
+$${#eq-interval-translation}
+By the extension and uniqueness theorems, this implies:
+
+* $\lambda(A + \tau) = \lambda(A)$ for all $A \in \mathcal{B}(\mathbb{R})$.
+* $\lambda^*(E + \tau) = \lambda^*(E)$ for all arbitrary subsets $E \subseteq \mathbb{R}$.
+
+---
+
+## Characterization and Scaling Properties
+
+::: {#thm-uniqueness-translation-invariant}
+## Uniqueness of Translation-Invariant Borel Measures
+Lebesgue measure $\lambda$ is the unique translation-invariant Borel measure on $\mathbb{R}$ satisfying $\lambda((0, 1]) = 1$. If $\mu$ is any other translation-invariant Borel measure on $\mathbb{R}$, then $\mu = \alpha \lambda$ for some constant $\alpha \ge 0$.
+:::
+
+::: {.proof}
+## Proof of @thm-uniqueness-translation-invariant
+
+1. **Existence/Base Case:**
+   Since $\lambda$ is constructed from the translation-invariant premeasure on half-open intervals, $\lambda$ (and its outer measure $\lambda^*$) is translation-invariant with $\lambda((0, 1]) = 1 - 0 = 1$.
+
+2. **Uniqueness for $\mu((0, 1]) = 1$:**
+   Suppose $\mu$ is a translation-invariant Borel measure with $\mu((0, 1]) = 1$. For any $n \in \mathbb{N}$, partition $(0, 1]$ into $n$ equal disjoint intervals:
+   $$
+   (0, 1] = \bigcup_{k=0}^{n-1} \left( \frac{k}{n}, \frac{k+1}{n} \right] = \bigcup_{k=0}^{n-1} \left( \frac{k}{n} + \left(0, \frac{1}{n}\right] \right).
+   $${#eq-unit-interval-partition}
+   By countable additivity and translation invariance of $\mu$:
+   $$
+   \begin{align*}
+   &1 = \mu((0, 1]) = \sum_{k=0}^{n-1} \mu\left( \frac{k}{n} + \left(0, \frac{1}{n}\right] \right) = n \cdot \mu\left( \left(0, \frac{1}{n}\right] \right)\\
+   &\implies \mu\left( \left(0, \frac{1}{n}\right] \right) = \frac{1}{n}.
+   \end{align*}
+   $${#eq-rational-base-step}
+   By additivity across $m$ disjoint copies, for any rational $r = \frac{m}{n} > 0$:
+   $$
+   \mu((0, r]) = \mu\left( \left(0, \frac{m}{n}\right] \right) = m \cdot \mu\left( \left(0, \frac{1}{n}\right] \right) = \frac{m}{n} = r.
+   $${#eq-rational-cdf-step}
+   Thus $F_\mu(r) - F_\mu(0) = r$ for all $r \in \mathbb{Q}^+$. By right-continuity of CDFs, $F_\mu(x) - F_\mu(0) = x$ for all $x \ge 0$. Hence, $\mu((a, b]) = b - a = \lambda((a, b])$, so $\mu = \lambda$ on $\mathcal{B}(\mathbb{R})$.
+
+3. **General Scaling Constant $\alpha$:**
+   If $\mu(\mathbb{R}) = 0$, then $\alpha = 0$. If $\mu((0, 1]) = \alpha > 0$, define $\nu := \frac{1}{\alpha} \mu$. Then $\nu$ is translation-invariant and $\nu((0, 1]) = 1$. By Step 2, $\nu = \lambda \implies \mu = \alpha \lambda$. 
+:::
+
+::: {#thm-lebesgue-scaling}
+## Scaling Invariance Property
+For any scale factor $\gamma \in \mathbb{R}$ and $B \in \mathcal{B}(\mathbb{R})$:
+$$
+\lambda(\gamma \cdot B) = \vert{}\gamma\vert{} \cdot \lambda(B).
+$${#eq-lebesgue-scaling-identity}
+:::
+
+::: {.proof}
+## Proof of @thm-lebesgue-scaling 
+If $\gamma = 0$, then $\lambda(\{0\}) = 0 = 0 \cdot \lambda(B)$. 
+
+For $\gamma \ne 0$, set $\gamma \cdot B = \{\gamma x : x \in B\}$. Define the set function $\mu(B) := \frac{1}{\vert{}\gamma\vert{}} \lambda(\gamma \cdot B)$. 
+
+* $\mu$ is a translation-invariant Borel measure on $\mathbb{R}$.
+* Check its value on $(0, 1]$:
+  * If $\gamma > 0$, then $\gamma \cdot (0, 1] = (0, \gamma]$, so $\mu((0, 1]) = \frac{1}{\gamma} \lambda((0, \gamma]) = \frac{\gamma}{\gamma} = 1$.
+  * If $\gamma < 0$, then $\gamma \cdot (0, 1] = [\gamma, 0)$, so $\mu((0, 1]) = \frac{1}{\vert{}\gamma\vert{}} \lambda([\gamma, 0)) = \frac{\vert{}\gamma\vert{}}{\vert{}\gamma\vert{}} = 1$.
+
+Since $\mu$ is translation-invariant and $\mu((0, 1]) = 1$, @thm-uniqueness-translation-invariant yields $\mu = \lambda$. Therefore, $\lambda(\gamma \cdot B) = \vert{}\gamma\vert{} \lambda(B)$. 
+:::
+
+---
+
+## Null Sets and Sub-Sets
+
+::: {#def-null-set}
+## Null Set
+In a measure space $(\Omega, \mathcal{F}, \mu)$, a set $N \in \mathcal{F}$ is called a **null set** if $\mu(N) = 0$.
+:::
+
+### Examples of Lebesgue Null Sets
+
+1. **Countable Sets:** Every countable set $X = \{x_1, x_2, \dots\} \subset \mathbb{R}$ is Lebesgue null ($\lambda(X) = 0$). Cover each $x_n$ by $(x_n - \frac{\epsilon}{2^n}, x_n]$ for any $\epsilon > 0$:
+   $$
+   \begin{align*}
+   &\lambda(X) \le \sum_{n=1}^\infty \lambda\left( \left(x_n - \frac{\epsilon}{2^n}, x_n\right] \right) = \sum_{n=1}^\infty \frac{\epsilon}{2^n} = \epsilon\\
+   & \implies \lambda(X) = 0.
+   \end{align*}
+   $${#eq-countable-null-proof}
+2. **Uncountable Null Sets (Cantor Set):** 
+   The middle-thirds Cantor set $C = \bigcap_{n=0}^\infty C_n$ is uncountable. Since $C_n$ consists of $2^n$ closed intervals each of length $3^{-n}$, $\lambda(C_n) = (2/3)^n$. By monotonicity:
+   $$
+   \lambda(C) \le \lambda(C_n) = \left(\frac{2}{3}\right)^n \xrightarrow{n \to \infty} 0 \implies \lambda(C) = 0.
+   $${#eq-cantor-null-proof}
+
+---
+
+## Completion of Measure Spaces
+
+**The Measurability Problem:** Subsets of null sets are not guaranteed to be measurable in $(\Omega, \mathcal{F}, \mu)$. For example, there exist non-Borel subsets $\Lambda \subseteq C$ contained inside the Borel null set $C \in \mathcal{B}(\mathbb{R})$.
+
+::: {#def-null-complete}
+## Null Complete Measure Space
+A measure space $(\Omega, \mathcal{F}, \mu)$ is called **(null) complete** if for every $N \in \mathcal{F}$ with $\mu(N) = 0$, every subset $\Lambda \subseteq N$ belongs to $\mathcal{F}$ (and satisfies $\mu(\Lambda) = 0$).
+:::
+
+::: {#thm-completion-construction}
+## Completion Theorem
+For any measure space $(\Omega, \mathcal{F}, \mu)$, there exists a minimal complete extension $(\Omega, \tilde{\mathcal{F}}, \tilde{\mu})$ where $\mathcal{F} \subseteq \tilde{\mathcal{F}}$ and $\tilde{\mu}\big\vert{}_{\mathcal{F}} = \mu$.
+:::
+
+::: {.proof}
+## Proof of @thm-completion-construction
+Define the candidate collection and extended measure by:
+$$
+\tilde{\mathcal{F}} := \{ A \cup \Lambda : A \in \mathcal{F}, \, \Lambda \subseteq N \text{ for some } N \in \mathcal{F} \text{ with } \mu(N) = 0 \},
+$${#eq-f-tilde-def}
+$$
+\tilde{\mu}(A \cup \Lambda) := \mu(A).
+$${#eq-mu-tilde-def}
+
+1. **$\tilde{\mathcal{F}}$ is a $\sigma$-field:**
+
+   * **Complements:** Let $E = A \cup \Lambda \in \tilde{\mathcal{F}}$ with $\Lambda \subseteq N$ and $\mu(N) = 0$. Then:
+     $$
+     E^c = (A \cup \Lambda)^c = A^c \cap \Lambda^c = (A^c \cap (N \setminus \Lambda)) \cup (A^c \cap N^c).
+     $${#eq-completion-complement-identity}
+     Set $A' := A^c \cap N^c \in \mathcal{F}$ and $\Lambda' := A^c \cap (N \setminus \Lambda) \subseteq N$. Thus $E^c = A' \cup \Lambda' \in \tilde{\mathcal{F}}$.
+   * **Countable Unions:** Let $E_n = A_n \cup \Lambda_n \in \tilde{\mathcal{F}}$ with $\Lambda_n \subseteq N_n$ and $\mu(N_n) = 0$. Then:
+     $$
+     \bigcup_{n=1}^\infty E_n = \left( \bigcup_{n=1}^\infty A_n \right) \cup \left( \bigcup_{n=1}^\infty \Lambda_n \right).
+     $${#eq-completion-union-identity}
+     Here $\bigcup A_n \in \mathcal{F}$ and $\bigcup \Lambda_n \subseteq \bigcup N_n \in \mathcal{F}$ with $\mu(\bigcup N_n) \le \sum \mu(N_n) = 0$. Thus $\bigcup E_n \in \tilde{\mathcal{F}}$.
+
+2. **Well-Definedness of $\tilde{\mu}$:**
+   Suppose $A_1 \cup \Lambda_1 = A_2 \cup \Lambda_2$ with $\Lambda_1 \subseteq N_1, \Lambda_2 \subseteq N_2$ and $\mu(N_1) = \mu(N_2) = 0$. Then:
+   $$
+   \begin{align*}
+   &A_1 \subseteq A_1 \cup \Lambda_1 = A_2 \cup \Lambda_2 \subseteq A_2 \cup N_2 \\
+   &\implies \mu(A_1) \le \mu(A_2) + \mu(N_2) = \mu(A_2).
+   \end{align*}
+   $${#eq-well-defined-ineq1}
+   By symmetry, $\mu(A_2) \le \mu(A_1)$, so $\mu(A_1) = \mu(A_2)$.
+
+3. **Countable Additivity:**
+   Follows directly from the disjointness of base sets $A_n \in \mathcal{F}$ and sub-null terms $\Lambda_n$. Completion is established by construction. $\blacksquare$
+:::
+
+---
+
+## The Lebesgue $\sigma$-Algebra $\mathcal{M}$
+
+When defined via Carathéodory's criterion, the **Lebesgue $\sigma$-algebra** $\mathcal{M}$ is defined as:
+$$
+\mathcal{M} := \{ E \subseteq \mathbb{R} : \lambda^*(A) = \lambda^*(A \cap E) + \lambda^*(A \cap E^c) \quad \forall A \subseteq \mathbb{R} \}.
+$${#eq-caratheodory-lebesgue-algebra}
+
+* **Properties:** $\mathcal{B}(\mathbb{R}) \subsetneq \mathcal{M}$. $\mathcal{M}$ is complete and represents the formal completion of $\mathcal{B}(\mathbb{R})$ under $\lambda$.
+* **Course Convention:** Throughout this course, Lebesgue measure is treated as a Borel measure on $\mathcal{B}(\mathbb{R})$ unless completion is explicitly invoked.
+
+::: {#note-closure-pseudometric}
+## Remark (Driver, Prop. 7.11)
+In a finite (pre)measure space $(\Omega, \mathcal{A}, \mu)$, the Carathéodory measurable $\sigma$-field $\mathcal{M}_\mu$ coincides with $\overline{\mathcal{A}}$, the closure of the algebra $\mathcal{A}$ under the pseudo-metric $d_\mu(E, F) = \mu^*(E \Delta F)$.
+:::
+
+---
+

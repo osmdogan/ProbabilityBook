@@ -1,0 +1,228 @@
+# Lecture 18.2: Kolmogorov Convergence Criterion
+
+## $L^2$ Convergence of Uncorrelated Sums
+
+Let $\{Y_n\}_{n=1}^\infty$ be a sequence of uncorrelated random variables in $L^2(\Omega, \mathcal{F}, P)$, meaning $\operatorname{Cov}(Y_n, Y_m) = 0$ for all $n \neq m$. Define $\dot{Y}_n \triangleq Y_n - \mathbb{E}[Y_n]$, so that $\{\dot{Y}_n\}$ forms an orthogonal sequence in the Hilbert space $L^2(\Omega, \mathcal{F}, P)$.
+
+::: {#prp-l2-uncorrelated-convergence}
+If $\{Y_n\}_{n=1}^\infty$ are uncorrelated $L^2$ random variables and $\sum_{n=1}^\infty \operatorname{Var}(Y_n) < \infty$, then the centered series $\sum_{n=1}^\infty (Y_n - \mathbb{E}[Y_n])$ converges in $L^2$.
+:::
+
+::: {.proof}
+## Proof of @prp-l2-uncorrelated-convergence
+Let $\dot{S}_n \triangleq \sum_{j=1}^n \dot{Y}_j$. For $n > m$, by orthogonality of $\{\dot{Y}_j\}$:
+$$
+\begin{aligned}
+\|\dot{S}_n - \dot{S}_m\|_{L^2}^2 &= \left\| \sum_{j=m+1}^n \dot{Y}_j \right\|_{L^2}^2\\
+& = \sum_{j=m+1}^n \|\dot{Y}_j\|_{L^2}^2\\
+& = \sum_{j=m+1}^n \operatorname{Var}(Y_j) \xrightarrow{m, n \to \infty} 0
+\end{aligned}
+$$ {#eq-l2-cauchy-proof}
+Thus, $\{\dot{S}_n\}$ is a Cauchy sequence in the complete metric space $L^2$, guaranteeing $L^2$ convergence.
+:::
+
+:::{#exm-orthogonal-sums}
+## Orthogonal Sums in $L^2$
+Let $Y_n$ be independent random variables defined by $P(Y_n=2^{-n})=P(Y_n=-2^{-n})=\frac{1}{2}$. Then $\mathbb E[Y_n]=0$ so $\dot Y_n=Y_n$. Also, $\operatorname{Var}(Y_n) = \mathbb{E}[Y_n^2] = 4^{-n}$. Therefore,
+$$
+\sum_{n=1}^\infty \operatorname{Var}(Y_n) = \sum_{n=1}^\infty 4^{-n} = \frac{1}{1 - 4^{-1}} - 1 = \frac{1}{3} < \infty.
+$$
+Because the $Y_n$'s are independent and centered, they are uncorrelated: $\operatorname{Cov}(Y_n,Y_m)=0$ for  all $n\neq m$. Thus the proposition tells us that
+$\sum_{n=1}^\infty Y_n$ converges in $L^2$.
+:::
+
+
+Orthogonal sums in $L^2$ generally fail to converge almost surely without additional independence structure. To bridge $L^2$ convergence to almost sure convergence, we require Kolmogorov's Maximal Inequality.
+
+---
+
+## Kolmogorov's Maximal Inequality
+
+::: {#thm-kolmogorov-maximal-inequality}
+## Kolmogorov's Maximal Inequality
+
+Let $\{Y_n\}_{n=1}^\infty$ be independent random variables in $L^2$ with $E[Y_n] = 0$. Set $S_n \triangleq \sum_{j=1}^n Y_j$ and $S_n^* \triangleq \max_{1 \le j \le n} |S_j|$. Then for every $\epsilon > 0$:
+$$
+\begin{aligned}
+P(S_n^* \ge \epsilon) &\le \frac{1}{\epsilon^2} \mathbb{E}[S_n^2 \mathbf{1}_{\{S_n^* \ge \epsilon\}}] \\
+&\le \frac{1}{\epsilon^2} \mathbb{E}[S_n^2] \\
+&= \frac{1}{\epsilon^2} \sum_{j=1}^n \operatorname{Var}(Y_j)
+\end{aligned}
+$$ {#eq-kolmogorov-maximal-inequality-def}
+:::
+
+::: {.proof}
+## Proof of @thm-kolmogorov-maximal-inequality
+Fix $\epsilon > 0$ and define the stopping time $\tau \triangleq \inf \{ j \in \{1, \dots, n\} \mid |S_j| \ge \epsilon \}$ (with $\inf \emptyset \triangleq \infty$). Note that:
+$$
+\begin{aligned}
+&\{\tau = j\} \\
+&= \{ |S_1| < \epsilon, \dots, |S_{j-1}| < \epsilon, |S_j| \ge \epsilon \}\\
+& \in \sigma(Y_1, \dots, Y_j).
+\end{aligned}
+$$ {#eq-stopping-time-event}
+Since $\{S_n^* \ge \epsilon\} = \{\tau \le n\} = \bigsqcup_{j=1}^n \{\tau = j\}$, we decompose $\mathbb{E}[S_n^2 \mathbf{1}_{\{S_n^* \ge \epsilon\}}]$:
+$$
+\mathbb{E}[S_n^2 \mathbf{1}_{\{\tau \le n\}}] = \sum_{j=1}^n \mathbb{E}[S_n^2 \mathbf{1}_{\{\tau = j\}}]
+$$ {#eq-maximal-expectation-sum}
+
+Using the identity $S_n = S_j + (S_n - S_j)$:
+$$
+S_n^2 = S_j^2 + (S_n - S_j)^2 + 2 S_j (S_n - S_j)
+$$ {#eq-sn-square-expansion}
+Because $S_j \mathbf{1}_{\{\tau = j\}}$ is $\sigma(Y_1, \dots, Y_j)$-measurable and $(S_n - S_j) = \sum_{k=j+1}^n Y_k$ is independent of $\sigma(Y_1, \dots, Y_j)$ with zero expectation:
+$$
+\begin{aligned}
+\mathbb{E}[S_j (S_n - S_j) \mathbf{1}_{\{\tau = j\}}] &= \mathbb{E}[S_n - S_j] \cdot \mathbb{E}[S_j \mathbf{1}_{\{\tau = j\}}] \\
+&= 0 \cdot \mathbb{E}[S_j \mathbf{1}_{\{\tau = j\}}] = 0.
+\end{aligned}
+$$ {#eq-cross-term-zero}
+
+Dropping the non-negative term $(S_n - S_j)^2 \ge 0$ yields:
+$$
+\mathbb{E}[S_n^2 \mathbf{1}_{\{\tau = j\}}] \ge \mathbb{E}[S_j^2 \mathbf{1}_{\{\tau = j\}}] \ge \epsilon^2 P(\tau = j)
+$$ {#eq-lower-bound-tau-j}
+
+Summing over $j = 1, \dots, n$ gives:
+$$
+\begin{aligned}
+\mathbb{E}[S_n^2] &\ge \mathbb{E}[S_n^2 \mathbf{1}_{\{S_n^* \ge \epsilon\}}] \\
+&= \sum_{j=1}^n \mathbb{E}[S_n^2 \mathbf{1}_{\{\tau = j\}}] \\
+&\ge \sum_{j=1}^n \epsilon^2 P(\tau = j) \\
+&= \epsilon^2 P(\tau \le n)\\
+&= \epsilon^2 P(S_n^* \ge \epsilon)
+\end{aligned}
+$$ {#eq-kolmogorov-maximal-finish}
+
+Dividing by $\epsilon^2$ completes the proof.
+:::
+
+:::{#exm-simple-random-walk}
+## Kolmogorov's Maximal Inequality for a Simple Random Walk
+Let $\{Y_j\}$ be independent random variables such that $P(Y_j=1)=P(Y_j=-1)=\frac12$. Then, $\mathbb{E}[Y_j]=0$ and $\operatorname{Var}(Y_j)=1$. Define the partial sums $S_k\triangleq\sum_{j=1}^kY_j$ so that ${S_k}$ is a simple symmetric random walk. Also define
+$$
+S_n^*\triangleq\max_{1\le k\le n}|S_k|.
+$$
+Thus, $S_n^*$ is the largest distance from zero that the random walk reaches during its first $n$ steps. Take $n=100$ and $\epsilon=20$. By Kolmogorov's maximal inequality,
+$$
+\begin{aligned}
+P(S_{100}^*\ge20)
+&\le
+\frac{1}{20^2}
+\sum_{j=1}^{100}\operatorname{Var}(Y_j)=\frac14.
+\end{aligned}
+$$
+Therefore, $P\left(\max_{1\le k\le100}|S_k|\ge20\right)\le\frac14$. In other words, the probability that the random walk reaches either $20$ or $-20$ at some point during its first $100$ steps is at most $25%$. Equivalently, $P\left(|S_k|<20\text{ for every }1\le k\le100\right)\ge\frac34$.
+
+Chebyshev's inequality applied to the final value $S_{100}$ gives
+$$
+P(|S_{100}|\ge20)
+\le
+\frac{\operatorname{Var}(S_{100})}{20^2}
+=
+\frac{100}{400}
+=
+\frac14.
+$$
+However,
+$$
+\{|S_{100}|\ge20\}
+\subseteq
+\left\{\max_{1\le k\le100}|S_k|\ge20\right\}.
+$$
+The event on the left asks whether the random walk is at least $20$ units from zero **at time $100$**, whereas the event on the right asks whether it was at least $20$ units from zero **at any time up to time $100$**. Kolmogorov's maximal inequality controls this larger, pathwise event. For example, suppose the first ten increments are
+$$
+1,\ 1,\ -1,\ 1,\ 1,\ -1,\ -1,\ 1,\ 1,\ -1.
+$$
+Then the corresponding partial sums are
+$$
+1,\ 2,\ 1,\ 2,\ 3,\ 2,\ 1,\ 2,\ 3,\ 2.
+$$
+Hence, $S_{10}=2$ and $S_{10}^*=3$. Although the final value is only $2$, the random walk reached a distance of $3$ from zero earlier. This illustrates why the maximum
+$S_n^*=\max_{1\le k\le n}|S_k|$ is different from the final value $|S_n|$.
+
+**Takeaway**:
+
+Kolmogorov's maximal inequality provides a bound on the probability that a partial-sum process ever crosses a specified boundary:
+$$
+\boxed{
+P\left(\max_{1\le k\le n}|S_k|\ge\epsilon\right)
+\le
+\frac{1}{\epsilon^2}
+\sum_{j=1}^n\operatorname{Var}(Y_j).
+}
+$$
+Thus, it can be viewed as a **maximal analogue of Chebyshev's inequality** for partial sums.
+:::
+
+
+---
+
+## Kolmogorov's Convergence Criterion
+
+::: {#thm-kolmogorov-convergence-criterion}
+## Kolmogorov's Convergence Criterion
+
+Let $\{Y_n\}_{n=1}^\infty$ be independent $L^2$ random variables. If $\sum_{n=1}^\infty \operatorname{Var}(Y_n) < \infty$, then:
+$$
+\sum_{n=1}^\infty (Y_n - \mathbb{E}[Y_n]) \quad \text{converges almost surely.}
+$$ {#eq-kolmogorov-convergence-criterion-statement}
+If in addition the deterministic real series $\sum_{n=1}^\infty \mathbb{E}[Y_n]$ converges (to a finite limit, not necessarily absolutely), then $\sum_{n=1}^\infty Y_n$ converges almost surely and in $L^2$.
+:::
+
+::: {.proof}
+## Proof of @thm-kolmogorov-convergence-criterion
+1. Assume without loss of generality $\mathbb{E}[Y_n] = 0$ by setting $\dot{Y}_n = Y_n - \mathbb{E}[Y_n]$. Let $S_n = \sum_{j=1}^n \dot{Y}_j$.
+2. For $m < n$, apply Kolmogorov's Maximal Inequality (@thm-kolmogorov-maximal-inequality) to the sequence $\{\dot{Y}_{m+1}, \dots, \dot{Y}_n\}$:
+   $$
+   P\left( \max_{m < j \le n} |S_j - S_m| \ge \frac{\epsilon}{2} \right) \le \frac{4}{\epsilon^2} \sum_{j=m+1}^n \operatorname{Var}(Y_j)
+   $$ {#eq-finite-max-diff-bound}
+3. Taking $n \to \infty$ by continuity of measure:
+   $$
+   P\left( \sup_{j > m} |S_j - S_m| \ge \frac{\epsilon}{2} \right) \le \frac{4}{\epsilon^2} \sum_{j=m+1}^\infty \operatorname{Var}(Y_j) \xrightarrow{m \to \infty} 0
+   $$ {#eq-sup-tail-bound}
+4. Since $\sup_{j, k \ge m} |S_j - S_k| \le 2 \sup_{j > m} |S_j - S_m|$:
+   $$
+   P\left( \sup_{j, k \ge m} |S_j - S_k| \ge \epsilon \right) \le P\left( \sup_{j > m} |S_j - S_m| \ge \frac{\epsilon}{2} \right) \xrightarrow{m \to \infty} 0
+   $$ {#eq-cauchy-event-prob-vanish}
+5. Define the tail oscillation random variable $R_m \triangleq \sup_{j, k \ge m} |S_j - S_k|$. $R_m \downarrow R \triangleq \limsup_{j, k \to \infty} |S_j - S_k|$ almost surely.
+6. Step 4 implies $P(R \ge \epsilon) = 0$ for every $\epsilon > 0$, so $R = 0$ a.s. Thus $\{S_n(\omega)\}$ is a Cauchy sequence in $\mathbb{R}$ for almost every $\omega \in \Omega$, proving almost sure convergence.
+7. For the second assertion, write $Y_n = \dot{Y}_n + \mathbb{E}[Y_n]$, so that $\sum_{j=1}^n Y_j = S_n + \sum_{j=1}^n \mathbb{E}[Y_j]$. By Step 6, $S_n$ converges a.s. to some limit $S_\infty$; by @prp-l2-uncorrelated-convergence, $S_n$ also converges in $L^2$ to $S_\infty$. Since the deterministic sequence $\sum_{j=1}^n \mathbb{E}[Y_j]$ converges to a finite constant $c$ by hypothesis, and convergent constants trivially converge in both the a.s. and $L^2$ senses, the sum $\sum_{j=1}^n Y_j \to S_\infty + c$ both almost surely and in $L^2$.
+:::
+
+:::{#rem-important-distinction}
+The theorem is really about random fluctuations versus deterministic drift:
+$$ 
+\underbrace{\sum_{n=1}^{\infty}Y_n}_{\text{random series}} = \underbrace{\sum_{n=1}^{\infty}(Y_n-\mathbb E[Y_n])}_{\text{random fluctuations}} + \underbrace{\sum_{n=1}^{\infty}\mathbb E[Y_n]}_{\text{deterministic drift}}. 
+$$
+The theorem says: Finite total variance controls the random part:
+$$ 
+\sum_n\operatorname{Var}(Y_n)<\infty \quad\Longrightarrow\quad \sum_n(Y_n-\mathbb E[Y_n]) \text{ converges a.s.} 
+$$
+If the deterministic drift also converges,
+$$ 
+\sum_n\mathbb E[Y_n]<\infty, 
+$$
+then the entire series converges a.s. and in $L^2$. So a nice one-sentence takeaway would be:
+
+- Kolmogorov's convergence criterion says that for independent random variables, summable variances are enough to ensure that the cumulative random fluctuations converge almost surely.
+:::
+
+::: {#exm-rademacher-harmonic}
+Let $\{X_n\}_{n=1}^\infty$ be i.i.d. Rademacher random variables with $P(X_n = 1) = P(X_n = -1) = \frac{1}{2}$. Define $Y_n \triangleq \frac{X_n}{n}$.
+
+* **Expectation and Variance:** $\mathbb{E}[Y_n] = 0$ and $\operatorname{Var}(Y_n) = \frac{1}{n^2} \operatorname{Var}(X_n) = \frac{1}{n^2}$.
+* **Convergence:** $\sum_{n=1}^\infty \operatorname{Var}(Y_n) = \sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6} < \infty$.
+* **Conclusion:** By Kolmogorov's Convergence Criterion, the random harmonic series $\sum_{n=1}^\infty \frac{X_n}{n}$ converges almost surely.
+:::
+
+---
+
+## Takeaways
+
+- **Uncorrelated is enough for $L^2$, but not for a.s.** @prp-l2-uncorrelated-convergence shows that summable variances alone give $L^2$ convergence of the centered series via completeness of $L^2$ (Cauchy criterion). Getting almost sure convergence out of the same hypothesis requires the stronger structure of independence, packaged through Kolmogorov's Maximal Inequality.
+- **The Maximal Inequality controls the whole path, not just the endpoint.** Unlike Chebyshev's inequality, which bounds $P(|S_n|\ge\epsilon)$, @thm-kolmogorov-maximal-inequality bounds the probability that the *running maximum* $S_n^* = \max_{j\le n}|S_j|$ ever exceeds $\epsilon$, at the same variance cost $\frac{1}{\epsilon^2}\sum \operatorname{Var}(Y_j)$. The stopping-time decomposition at $\tau$ is what upgrades a single-time bound into a uniform, path-wise one.
+- **Maximal inequality $\Rightarrow$ Cauchy tails $\Rightarrow$ a.s. convergence.** @thm-kolmogorov-convergence-criterion chains the maximal inequality over shrinking tails $(m,n]\to(m,\infty)$ to show the oscillation $R_m = \sup_{j,k\ge m}|S_j - S_k|$ vanishes in probability, hence a.s.; this is exactly the Cauchy criterion for real sequences applied pathwise.
+- **Centering can be added back for free.** Since the mean series $\sum \mathbb{E}[Y_n]$ is a deterministic (non-random) sequence, once it converges, adding it back to the a.s./$L^2$-convergent centered series preserves both modes of convergence — so the criterion applies equally to $\sum Y_n$ itself whenever the means don't obstruct convergence.
+- **Random harmonic series is the paradigmatic example.** $\sum \frac{X_n}{n}$ for i.i.d. Rademacher $X_n$ has $\operatorname{Var}(Y_n) = 1/n^2$, summable, and zero mean, so the criterion immediately gives almost sure convergence — a result that fails for the ordinary (non-random sign) harmonic series, highlighting how independence and cancellation, not absolute summability, drive a.s. convergence here.
+- **Looking ahead:** this variance-summability criterion is one half of the machinery (together with truncation from [18-1-SLLN1.qmd](18-1-SLLN1.qmd)) needed to prove the full Kolmogorov Strong Law of Large Numbers in [19-1-SLLN2.qmd](19-1-SLLN2.qmd).

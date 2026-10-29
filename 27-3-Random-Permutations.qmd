@@ -1,0 +1,125 @@
+# Lecture 27.3: Random Permutations
+
+## Example: Independent Bernoulli Random Variables
+
+Let $\{X_k\}_{k=1}^\infty$ be a sequence of independent Bernoulli random variables $X_k \sim \operatorname{Bernoulli}(1/k)$ with
+$$
+\mathbb{P}(X_k = 1) = \frac{1}{k}, \quad \mathbb{P}(X_k = 0) = 1 - \frac{1}{k} \quad (k \ge 1).
+$$
+The expectation and variance of each variable are:
+$$
+\mathbb{E}[X_k] = \frac{1}{k}, \quad \operatorname{Var}(X_k) = \mathbb{E}[X_k^2] - \mathbb{E}[X_k]^2 = \frac{1}{k} - \frac{1}{k^2}.
+$$
+Recall the harmonic-number asymptotic behavior
+$H_n := \sum_{k=1}^n \frac{1}{k} = \log n + \gamma + o(1)$,
+where $\gamma \approx 0.5772$ is Euler's constant.
+
+Define the total variance of the sum $S_n' = \sum_{k=1}^n X_k$:
+$$
+\sigma_n^2 := \operatorname{Var}\left( \sum_{k=1}^n X_k \right) = \sum_{k=1}^n \operatorname{Var}(X_k) = \sum_{k=1}^n \frac{1}{k} - \sum_{k=1}^n \frac{1}{k^2}.
+$$
+As $n \to \infty$, $\sum_{k=1}^n \frac{1}{k^2} \to \frac{\pi^2}{6}$, so $\sigma_n^2 \sim \log n$. For $n \ge 2$, define the standardized array $\{X_{n,k}\}_{k=1}^n$ by
+$$
+X_{n,k} := \frac{1}{\sigma_n} \left( X_k - \frac{1}{k} \right).
+$$
+
+This forms a triangular array of independent, centered $L^2$ random variables. For every $n \ge 2$,
+$$
+\mathbb{E}[X_{n,k}] = 0, \quad \sigma_{n,k}^2 := \operatorname{Var}(X_{n,k}) = \frac{1}{\sigma_n^2} \operatorname{Var}(X_k), \quad \text{and} \quad \sum_{k=1}^n \sigma_{n,k}^2 = 1.
+$$
+
+---
+
+:::{#thm-lyapunov-condition}
+## Lyapunov's Condition
+The standard triangular array $\{X_{n,k}\}$ satisfies **Lyapunov's condition** with exponent $\delta = 2$:
+$$
+\lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}[X_{n,k}^4] = 0.
+$$
+:::
+
+:::{.proof}
+## Proof of @thm-lyapunov-condition
+Expanding the centered 4th moment for $X_k \sim \operatorname{Bernoulli}(1/k)$:
+$$
+\mathbb{E}\left[ \left( X_k - \frac{1}{k} \right)^4 \right] = \mathbb{E}\left[ X_k^4 - 4 X_k^3 \frac{1}{k} + 6 X_k^2 \frac{1}{k^2} - 4 X_k \frac{1}{k^3} + \frac{1}{k^4} \right].
+$$
+Since $X_k \in \{0, 1\}$, $X_k^m = X_k$ for all $m \ge 1$. Using $\mathbb{E}[X_k] = \frac{1}{k}$:
+$$
+\mathbb{E}\left[ \left( X_k - \frac{1}{k} \right)^4 \right] = \frac{1}{k} - \frac{4}{k^2} + \frac{6}{k^3} - \frac{4}{k^4} + \frac{1}{k^4} \le \frac{1}{k} + \frac{15}{k^2}.
+$$
+
+Summing over $k=1, \dots, n$ and dividing by $\sigma_n^4$:
+$$
+\sum_{k=1}^n \mathbb{E}[X_{n,k}^4] = \frac{1}{\sigma_n^4} \sum_{k=1}^n \mathbb{E}\left[ \left( X_k - \frac{1}{k} \right)^4 \right] \le \frac{1}{\sigma_n^4} \left( \sum_{k=1}^n \frac{1}{k} + 15 \sum_{k=1}^n \frac{1}{k^2} \right).
+$$
+
+Since $\sigma_n^2 \sim \log n$, for all sufficiently large $n$,
+$$
+\sigma_n^2 \ge \frac{1}{2}\log n.
+$$
+Also, $H_n \le \log n+1$ and $\sum_{k=1}^n k^{-2}<2$. Hence, for all sufficiently large $n$,
+$$
+\sum_{k=1}^n \mathbb{E}[X_{n,k}^4]
+\le \frac{4}{(\log n)^2}(\log n+31)
+\longrightarrow 0 \quad \text{as } n \to \infty.
+$$
+:::
+
+Since Lyapunov's condition implies Lindeberg's condition ($\text{Lyap} \implies \text{Lind}$), the **Lindeberg-Feller CLT** yields:
+$$
+S_n := \sum_{k=1}^n X_{n,k} = \frac{\sum_{k=1}^n X_k - H_n}{\sigma_n} \xrightarrow{w} \mathcal{N}(0, 1).
+$$
+Equivalently, the precise asymptotic-normality statement is
+$$
+\frac{\sum_{k=1}^n X_k-H_n}{\sigma_n}\xrightarrow{w}\mathcal{N}(0,1),
+\qquad H_n=\log n+\gamma+o(1),\quad \sigma_n^2\sim\log n.
+$$
+
+---
+
+## Application: Cycles in Uniformly Random Permutations
+
+Let $\mathcal{S}_n$ be the symmetric group on $n$ letters ($|\mathcal{S}_n| = n!$). Equip it with the uniform probability measure
+$$
+\mu(A)=\frac{|A|}{n!},\qquad A\subseteq\mathcal{S}_n.
+$$
+
+We are interested in the distribution of the random variable $C_n(\pi) := \text{number of disjoint cycles in } \pi$, where $1 \le C_n \le n$.
+
+**The Feller Coupling Construction (1945)**:
+
+Given independent Bernoulli variables $(X_1,\dots,X_n)$ with
+$\mathbb{P}(X_k=1)=1/k$, construct a permutation by insertion into cycles:
+
+1. Start with the cycle $(1)$.
+2. For $k=2,\dots,n$:
+   - If $X_k=1$, start a new singleton cycle $(k)$.
+   - If $X_k=0$, choose $J$ uniformly from $\{1,\dots,k-1\}$ and insert $k$ immediately after $J$ in the cycle containing $J$.
+
+Thus, a new cycle is started if and only if $X_k=1$, and
+$$
+C_n = X_1 + X_2 + \dots + X_n.
+$$
+Note that $\mathbb{E}[C_n] = H_n=\log n+\gamma+o(1)$. Also, $\text{Var}(C_n) = \sum_{k=1}^n \frac{1}{k}\left(1-\frac{1}{k}\right) = \sigma_n^2\sim\log n$.
+
+:::{#thm-feller-coupling}
+## Theorem (Feller, 1945)
+If $(X_1, \dots, X_n)$ are independent Bernoulli random variables with $\mathbb{P}(X_k = 1) = \frac{1}{k}$, then the insertion procedure generates a **uniformly random permutation** $\pi \in \mathcal{S}_n$.
+
+Indeed, suppose inductively that the permutation on $\{1,\dots,k-1\}$ is uniform. For a fixed permutation on $\{1,\dots,k\}$, if $k$ is a singleton cycle, it is obtained with probability $\frac{1}{(k-1)!}\cdot\frac{1}{k}=\frac{1}{k!}$.
+Otherwise, deleting $k$ from its cycle determines a unique predecessor $J$. The probability of obtaining the fixed permutation is then $\frac{1}{(k-1)!}\cdot\frac{k-1}{k}\cdot\frac{1}{k-1}=\frac{1}{k!}$. Thus every permutation is equally likely.
+
+Consequently, the total number of cycles $C_n$ satisfies the Central Limit Theorem:
+$$
+\frac{C_n - \log n}{\sqrt{\log n}} \xrightarrow{w} \mathcal{N}(0, 1) \quad \text{as } n \to \infty.
+$$
+
+To see this, use the preceding CLT and write
+$$
+\frac{C_n-\log n}{\sqrt{\log n}}
+=\frac{\sigma_n}{\sqrt{\log n}}\frac{C_n-H_n}{\sigma_n}
++\frac{H_n-\log n}{\sqrt{\log n}}.
+$$
+The first factor converges to $1$, the middle term converges in distribution to $\mathcal{N}(0,1)$, and the final term converges to $0$. Slutsky's theorem gives the result.
+:::

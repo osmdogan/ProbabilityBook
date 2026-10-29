@@ -1,0 +1,372 @@
+# Lecture 25.2: Fourier Inversion
+
+
+## Measure-Theoretic Foundations & Uniqueness
+
+Using **Dynkin's Complex Multiplicative Systems Theorem** (or the $\pi$-$\lambda$ System Theorem), we establish that the mapping $\mu \mapsto \hat{\mu}$ from probability measures on $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ to their characteristic functions is **injective**. 
+
+Thus, in principle, a probability measure $\mu$ can be uniquely recovered from its characteristic function $\hat{\mu}(\xi) = \mathbb{E}[e^{i\xi X}] = \int_{\mathbb{R}^d} e^{i\xi x} \mu(dx)$.
+
+---
+
+## Lévy's Fourier Inversion Theorem
+A probability distribution can be completely reconstructed from its characteristic function; Lévy's inversion formula provides an explicit Fourier-integral formula for recovering its interval probabilities.
+
+::: {#thm-levy-inversion}
+## Lévy's Inversion Theorem
+Let $\mu \in \operatorname{Prob}(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ with characteristic function $\hat{\mu}(\xi)$. For any $a < b$ in $\mathbb{R}$:
+
+$$
+\lim_{R \to \infty} \frac{1}{2\pi} \int_{-R}^{R} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \hat{\mu}(\xi) \, d\xi = \mu((a, b)) + \frac{1}{2}\mu(\{a\}) + \frac{1}{2}\mu(\{b\}),
+$$
+where 
+
+$$
+\mu(\{c\})=\lim_{R \to \infty} \frac{1}{2R} \int_{-R}^{R} e^{-i\xi c} \hat{\mu}(\xi) \, d\xi, \quad c \in \{a, b\}.
+$$
+
+In particular, if $a$ and $b$ are continuity points of the cumulative distribution function $F(x) = \mu((-\infty, x])$, then:
+
+$$
+\mu((a, b)) = \lim_{R \to \infty} \frac{1}{2\pi} \int_{-R}^{R} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \hat{\mu}(\xi) \, d\xi
+$$
+:::
+
+**Note on Boundedness**: The integrand kernel $\frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} = \int_a^b e^{-i\xi x} dx$ is bounded by $|b - a|$ because
+$$
+\left| \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \right| = \left| \int_a^b e^{-i\xi x} dx \right| \le \int_a^b |e^{-i\xi x}| dx = |b - a|.
+$$
+However, it is generally **not** integrable on $\mathbb{R}$ with respect to Lebesgue measure ($\notin L^1(\mathbb{R})$), which is why we must compute the symmetric limit as $R \to \infty$.
+
+---
+
+## Key Technical Lemma: The Sine Integral Trick
+
+::: {#lem-sine-integral}
+## Properties of the Sine Integral Function
+For $r \ge 0$, define the sine integral, interpreting $\sin(\xi)/\xi$ at $\xi=0$ by its continuous extension with value $1$:
+
+$$
+S(r) := \int_{-r}^{r} \frac{\sin(\xi)}{\xi} \, d\xi = 2 \int_{0}^{r} \frac{\sin(\xi)}{\xi} \, d\xi
+$$
+
+Then $S(r)$ is continuous on $[0, \infty)$, and $\lim_{r \to \infty} S(r) = \pi$.
+:::
+
+:::{.proof}
+## Proof via the "One Simple Trick"
+
+We express $\frac{1}{\xi}$ as an exponential integral $\int_{0}^{\infty} e^{-\xi t} \, dt = \frac{1}{\xi}$ (for $\xi > 0$), and substitute directly:
+
+$$
+\int_{0}^{r} \frac{\sin(\xi)}{\xi} \, d\xi = \int_{0}^{r} \sin(\xi) \left( \int_{0}^{\infty} e^{-\xi t} \, dt \right) d\xi
+$$
+
+By Fubini's Theorem (justified since $\int_0^r\int_0^\infty e^{-\xi t}|\sin\xi|\,dt\,d\xi \le r < \infty$):
+
+$$
+= \int_{0}^{\infty} \left( \int_{0}^{r} e^{-\xi t} \sin(\xi) \, d\xi \right) dt
+$$
+
+Evaluating the inner integral via integration by parts:
+
+$$
+\int_{0}^{r} e^{-\xi t} \sin(\xi) \, d\xi = \frac{1}{1+t^2} \left[ 1 - e^{-rt}(\cos r + t \sin r) \right]
+$$
+
+Substituting back and recalling $S(r) = 2\int_{0}^{r} \frac{\sin(\xi)}{\xi} \, d\xi$:
+
+$$
+S(r) = 2 \int_{0}^{\infty} \frac{1}{1+t^2} \left[ 1 - e^{-rt}(\cos r + t \sin r) \right] dt
+$$
+
+We now let $r\to\infty$. For every $t>0$, $e^{-rt}(\cos r+t\sin r)\longrightarrow0$. Moreover, for $r\ge1$,
+$$ 
+\left| \frac{e^{-rt}(\cos r+t\sin r)} {1+t^2} \right| \le e^{-t}\frac{1+t}{1+t^2}. 
+$$
+Note that $e^{-t}\frac{1+t}{1+t^2} \le 2 e^{-t}$ for $t \ge 0$. Thus,
+$$ 
+\int_0^\infty e^{-t}\frac{1+t}{1+t^2}\,dt<\infty. 
+$$
+Hence, by the Dominated Convergence Theorem,
+$$
+\int_0^\infty \frac{e^{-rt}(\cos r+t\sin r)}{1+t^2}\,dt \longrightarrow 0.
+$$
+Therefore,
+$$
+\lim_{r \to \infty} S(r) = 2 \int_{0}^{\infty} \frac{1}{1+t^2} \, dt = 2 \left[ \arctan(t) \right]_{0}^{\infty} = 2 \cdot \frac{\pi}{2} = \pi.
+$$
+:::
+
+
+---
+
+## Complete Proof of Lévy's Inversion Formula
+
+Let $I(R)$ be defined as:
+
+$$
+I(R) := \frac{1}{2\pi} \int_{-R}^{R} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \hat{\mu}(\xi) \, d\xi
+$$
+
+The quotient at $\xi=0$ is understood by continuous extension, with value $b-a$. We first record the atom identity used in the theorem. For any $c\in\mathbb R$, Fubini's theorem gives
+$$
+\begin{align*}
+\frac{1}{2R}\int_{-R}^{R}e^{-i\xi c}\hat\mu(\xi)\,d\xi
+&=\int_{\mathbb R}\frac{1}{2R}\int_{-R}^{R}e^{i\xi(x-c)}\,d\xi\,\mu(dx)\\
+&=\int_{\mathbb R}\frac{\sin(R(x-c))}{R(x-c)}\,\mu(dx),
+\end{align*}
+$$
+where the quotient is defined to be $1$ at $x=c$. Its absolute value is at most $1$, and it converges pointwise to $\mathbf 1_{\{c\}}(x)$. The Dominated Convergence Theorem therefore yields
+$$
+\mu(\{c\})=\lim_{R\to\infty}\frac{1}{2R}\int_{-R}^{R}e^{-i\xi c}\hat\mu(\xi)\,d\xi.
+$$
+
+Substitute $\hat{\mu}(\xi) = \int_{\mathbb{R}} e^{i\xi x} \, \mu(dx)$:
+
+$$
+I(R) = \frac{1}{2\pi} \int_{-R}^{R} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \left( \int_{\mathbb{R}} e^{i\xi x} \, \mu(dx) \right) d\xi
+$$
+
+Applying Fubini's Theorem to swap integration order (justified since $\left|\frac{e^{i\xi(x-a)}-e^{i\xi(x-b)}}{i\xi}\right| \le |b-a|$, so the double integral over $[-R,R]\times\mathbb{R}$ is absolutely bounded by $2R|b-a|\mu(\mathbb{R}) < \infty$):
+
+$$
+I(R) = \frac{1}{2\pi} \int_{\mathbb{R}} \left( \int_{-R}^{R} \frac{e^{i\xi(x-a)} - e^{i\xi(x-b)}}{i\xi} \, d\xi \right) \mu(dx)
+$$
+
+## Step 1: Imaginary Term Cancellation
+Expanding via Euler's identity $e^{i\theta} = \cos(\theta) + i\sin(\theta)$:
+
+$$
+\begin{align*}
+\frac{e^{i\xi(x-a)} - e^{i\xi(x-b)}}{i\xi} &= \frac{\sin(\xi(x-a)) - \sin(\xi(x-b))}{\xi}\\
+& - i \frac{\cos(\xi(x-a)) - \cos(\xi(x-b))}{\xi}
+\end{align*}
+$$
+
+The imaginary part is an odd function of $\xi$, so its symmetric integral over $[-R, R]$ vanishes identically:
+
+$$
+\int_{-R}^{R} \frac{\cos(\xi(x-a)) - \cos(\xi(x-b))}{\xi} \, d\xi = 0
+$$
+
+## Step 2: Change of Variables
+The remaining real integrand becomes:
+
+$$
+I(R) = \frac{1}{2\pi} \int_{\mathbb{R}} \left( \int_{-R}^{R} \frac{\sin(\xi(x-a)) - \sin(\xi(x-b))}{\xi} \, d\xi \right) \mu(dx)
+$$
+
+For $x\ne a$, set $u=\xi(x-a)$. Then
+$$
+\frac{\sin(\xi(x-a))}{\xi}\,d\xi=\frac{\sin u}{u}\,du.
+$$
+If $x-a<0$, the transformed limits are reversed, which produces the factor $\operatorname{sgn}(x-a)$. For $x=a$, the integrand is identically zero. Thus, in all cases:
+
+$$
+\begin{align*}
+\int_{-R}^{R} \frac{\sin(\xi(x-a))}{\xi} \, d\xi &= \operatorname{sgn}(x-a) \int_{-R|x-a|}^{R|x-a|} \frac{\sin(u)}{u} \, du\\
+ &= \operatorname{sgn}(x-a)\, S(R|x-a|)
+\end{align*}
+$$
+
+Thus:
+
+$$
+I(R) = \frac{1}{2\pi} \int_{\mathbb{R}} \left[ \operatorname{sgn}(x-a) S(R|x-a|) - \operatorname{sgn}(x-b) S(R|x-b|) \right] \mu(dx)
+$$
+
+## Step 3: Pointwise Limit and Dominated Convergence
+
+As $R \to \infty$, $S(R|y|) \to \pi$ for any $y \neq 0$. The inner integrand converges pointwise to:
+
+$$
+\Psi(x) = \lim_{R \to \infty} \frac{1}{2\pi} \left[ \operatorname{sgn}(x-a) S(R|x-a|) - \operatorname{sgn}(x-b) S(R|x-b|) \right]
+$$
+
+Evaluating $\Psi(x)$ region by region:
+
+| Interval / Point | $\operatorname{sgn}(x-a)$ | $\operatorname{sgn}(x-b)$ | Limiting Value $\Psi(x)$ |
+| :--- | :---: | :---: | :---: |
+| $x < a$ | $-1$ | $-1$ | $\frac{1}{2\pi} [-\pi - (-\pi)] = 0$ |
+| $x = a$ | $0$ | $-1$ | $\frac{1}{2\pi} [0 - (-\pi)] = \frac{1}{2}$ |
+| $a < x < b$ | $1$ | $-1$ | $\frac{1}{2\pi} [\pi - (-\pi)] = 1$ |
+| $x = b$ | $1$ | $0$ | $\frac{1}{2\pi} [\pi - 0] = \frac{1}{2}$ |
+| $x > b$ | $1$ | $1$ | $\frac{1}{2\pi} [\pi - \pi] = 0$ |
+
+Since $S$ is continuous on $[0,\infty)$ and has the finite limit $\pi$, it is bounded; write $C:=\sup_{r\ge0}|S(r)|<\infty$. The integrand in the last display is therefore bounded in absolute value by $C/\pi$, which is $\mu$-integrable because $\mu$ is a probability measure. By Lebesgue's Dominated Convergence Theorem:
+
+$$
+\lim_{R \to \infty} I(R) = \int_{\mathbb{R}} \Psi(x) \, \mu(dx) = \mu((a, b)) + \frac{1}{2}\mu(\{a\}) + \frac{1}{2}\mu(\{b\}) \quad \blacksquare
+$$
+
+---
+
+## Continuous Densities ($L^1$ Integrable Characteristic Functions)
+If a probability distribution has a sufficiently well-behaved characteristic function—specifically, an integrable characteristic function—then the distribution must have a continuous density, and that density can be recovered explicitly from the characteristic function by Fourier inversion.
+
+::: {#cor-density-inversion}
+## Density Inversion Formula
+If $\mu \in \operatorname{Prob}(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ and its characteristic function satisfies $\hat{\mu} \in L^1(\mathbb{R})$ (i.e., $\int_{\mathbb{R}} |\hat{\mu}(\xi)| d\xi < \infty$), then $\mu$ is absolutely continuous with respect to Lebesgue measure ($\mu \ll \lambda$), and its continuous density function $g(x) = \frac{d\mu}{dx}$ is given by:
+
+$$
+g(x) = \frac{1}{2\pi} \int_{\mathbb{R}} e^{-i\xi x} \hat{\mu}(\xi) \, d\xi
+$$
+:::
+
+**Some Observations**:
+
+1. In other words, the corollary establishes the chain
+$$ 
+\boxed{ \hat\mu\in L^1 \quad\Longrightarrow\quad \mu\ll\lambda \quad\Longrightarrow\quad \mu(dx)=g(x)\,dx } 
+$$
+with the density explicitly given by
+$$ 
+\boxed{ g(x)=\frac{1}{2\pi}\int_{\mathbb R}e^{-i\xi x}\hat\mu(\xi)\,d\xi. } 
+$$
+
+2. So there are really two messages:
+
+    - **Existence**: An integrable characteristic function rules out discrete or singular components; the distribution has a density.
+
+    - **Recovery**: The density is not merely known to exist—it can be reconstructed directly from the characteristic function.
+
+3. The characteristic function contains the entire distribution. When it is integrable, Fourier inversion allows us to recover the distribution's density directly. This is the key bridge between characteristic functions and densities.
+
+
+:::{.proof}
+## Proof of @cor-density-inversion
+Define $g(x) := \frac{1}{2\pi} \int_{\mathbb{R}} e^{-i\xi x} \hat{\mu}(\xi) \, d\xi$. Since $\hat{\mu} \in L^1(\mathbb{R})$, $g(x)$ is continuous and bounded by the Riemann-Lebesgue Lemma (@thm-riemann-lebesgue) ($g \in C_0(\mathbb{R})$).
+
+For every finite interval $(a,b)$, Fubini's theorem applies because
+$$
+\int_a^b\int_{\mathbb R}|e^{-i\xi x}\hat\mu(\xi)|\,d\xi\,dx
+=(b-a)\|\hat\mu\|_{L^1}<\infty.
+$$
+Therefore,
+
+$$
+\begin{align*}
+\int_a^b g(x) \, dx &= \int_a^b \left( \frac{1}{2\pi} \int_{\mathbb{R}} e^{-i\xi x} \hat{\mu}(\xi) \, d\xi \right) dx \\
+&= \frac{1}{2\pi} \int_{\mathbb{R}} \left( \int_a^b e^{-i\xi x} dx \right) \hat{\mu}(\xi) \, d\xi \\
+&= \frac{1}{2\pi} \int_{\mathbb{R}} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \hat{\mu}(\xi) \, d\xi\\
+& = \lim_{R\to\infty}\frac{1}{2\pi}\int_{-R}^{R}\frac{e^{-i\xi a}-e^{-i\xi b}}{i\xi}\hat\mu(\xi)\,d\xi
+\end{align*}
+$$
+If $a$ and $b$ are continuity points of $F$, Lévy's inversion theorem gives
+$$
+\int_a^b g(x)\,dx=\mu((a,b)).
+$$
+The discontinuities of the monotone function $F$ are countable. Hence, for arbitrary $a<b$, choose continuity points $a_n\downarrow a$ and $b_n\uparrow b$ with $a_n<b_n$. The intervals $(a_n,b_n)$ increase to $(a,b)$. Continuity from below gives the result for $\mu$, while the result for the integral of $g$ follows from the Dominated Convergence Theorem on the bounded interval $(a,b)$, since $g$ is bounded:
+$$
+\int_a^b g(x)\,dx=\mu((a,b)).
+$$
+In particular, the integral of $g$ over every bounded interval is real and nonnegative. Since $g$ is continuous, this implies that $g$ is real-valued and nonnegative everywhere. Letting the intervals increase to $\mathbb R$ gives $\int_{\mathbb R}g\,dx=1$, so $g\,dx$ is a probability measure. Equality on all bounded intervals then implies $\mu(dx)=g(x)\,dx$ on $\mathcal B(\mathbb R)$.
+Thus, $g(x)$ is indeed the density of $\mu$.
+:::
+
+---
+
+## Example 1: Triangular Density & Squared Sinc Characteristic Function
+
+Consider the continuous triangular density centered at zero:
+
+$$
+g(x) = (1 - |x|)_+ = \begin{cases} 1 - |x| & \text{if } |x| \le 1 \\ 0 & \text{otherwise} \end{cases}
+$$
+
+### Step 1: Compute Characteristic Function $\hat{g}(\xi)$
+$$
+\hat{g}(\xi) = \int_{-1}^{1} (1 - |x|) e^{i\xi x} \, dx = 2 \operatorname{Re} \int_{0}^{1} (1 - x) e^{i\xi x} \, dx
+$$
+
+Using integration by parts:
+
+$$
+\hat{g}(\xi) = 2 \cdot \frac{1 - \cos(\xi)}{\xi^2} = \left( \frac{\sin(\xi/2)}{\xi/2} \right)^2 = \operatorname{sinc}^2(\xi/2)
+$$
+where $\operatorname{sinc}(u):=\sin(u)/u$ for $u\ne0$ and $\operatorname{sinc}(0):=1$.
+
+### Step 2: Duality and Inversion
+By @cor-density-inversion, since $\hat{g}(\xi) \in L^1(\mathbb{R})$:
+
+$$
+g(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{-i\xi x} \left( \frac{\sin(\xi/2)}{\xi/2} \right)^2 d\xi
+$$
+
+This validates the Fourier inversion duality between triangular densities and squared sinc functions.
+
+---
+
+## Example 2: Gaussian / Normal Distribution Verification
+
+Let $X \sim \mathcal{N}(0, 1)$ with density $f_X(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$ and characteristic function $\phi_X(\xi) = e^{-\xi^2/2}$.
+
+Since $e^{-\xi^2/2} \in L^1(\mathbb{R})$, applying density inversion:
+
+$$
+f_X(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{-i\xi x} e^{-\xi^2/2} \, d\xi
+$$
+
+Define
+$$
+J(x):=\int_{\mathbb R}e^{-i\xi x}e^{-\xi^2/2}\,d\xi.
+$$
+Since $|\xi|e^{-\xi^2/2}\in L^1(\mathbb R)$, differentiation under the integral sign is justified by the Dominated Convergence Theorem. Thus
+$$
+J'(x)=-i\int_{\mathbb R}\xi e^{-i\xi x}e^{-\xi^2/2}\,d\xi.
+$$
+Using $\frac{d}{d\xi}e^{-\xi^2/2}=-\xi e^{-\xi^2/2}$ and integration by parts, we have
+$$ 
+\begin{aligned} 
+\int_{\mathbb R}\xi e^{-i\xi x}e^{-\xi^2/2}\,d\xi &=-\int_{\mathbb R}e^{-i\xi x} \frac{d}{d\xi}e^{-\xi^2/2}\,d\xi\\ 
+&=-\left[e^{-i\xi x}e^{-\xi^2/2}\right]_{-\infty}^{\infty} -\;ix\int_{\mathbb R}e^{-i\xi x}e^{-\xi^2/2}\,d\xi\\ 
+&=-ixJ(x). 
+\end{aligned} 
+$$
+Therefore $J'(x)=-xJ(x)\implies J(x)=Ce^{-x^2/2}$. Since $J(0)=\int_{\mathbb R}e^{-\xi^2/2}\,d\xi=\sqrt{2\pi}$, solving this differential equation gives
+$$
+J(x)=\sqrt{2\pi}\,e^{-x^2/2}.
+$$
+Consequently,
+$$
+f_X(x)=\frac{1}{2\pi}J(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}.
+$$
+
+The inverted density matches the target distribution. The particularly nice feature of this example is
+$$ 
+\boxed{ \phi_X(\xi)=e^{-\xi^2/2} \quad\xrightarrow{\text{Fourier inversion}}\quad f_X(x)=\frac1{\sqrt{2\pi}}e^{-x^2/2}. } 
+$$
+Thus, the characteristic function and density are Fourier-transform pairs (up to the $2\pi$ normalization). The Gaussian is especially elegant because the Fourier transform of a Gaussian is another Gaussian.
+
+---
+
+## Example 3: Laplace Distribution
+
+Let $X$ have characteristic function $\phi_X(\xi)=\frac{1}{1+\xi^2}$. We have
+$$ 
+\int_{\mathbb R}|\phi_X(\xi)|\,d\xi = \int_{-\infty}^{\infty}\frac{1}{1+\xi^2}\,d\xi. 
+$$
+Since $\frac{d}{d\xi}\arctan(\xi)=\frac{1}{1+\xi^2}$, we obtain
+$$ 
+\begin{aligned} \int_{-\infty}^{\infty}\frac{1}{1+\xi^2}\,d\xi &= \lim_{a\to\infty} \int_{-a}^{a}\frac{1}{1+\xi^2}\,d\xi\\ 
+&= \lim_{a\to\infty} \left[\arctan(\xi)\right]_{-a}^{a}\\ 
+&= \lim_{a\to\infty} \left(\arctan(a)-\arctan(-a)\right)\\ 
+&= \lim_{a\to\infty}2\arctan(a)\\ 
+&=2\cdot\frac{\pi}{2}=\pi. 
+\end{aligned} 
+$$
+Thus, the density inversion formula applies. Therefore $X$ has a continuous density
+$$ 
+f_X(x) = \frac{1}{2\pi} \int_{\mathbb R} \frac{e^{-i\xi x}}{1+\xi^2}\,d\xi. 
+$$
+We can evaluate this integral using the known Fourier transform pair
+$$ 
+\int_{\mathbb R}\frac{e^{-i\xi x}}{1+\xi^2}\,d\xi = \pi e^{-|x|}. 
+$$
+Hence $f_X(x)=\frac12e^{-|x|}$. Thus the inversion formula recovers the Laplace density directly from its characteristic function:
+$$ 
+\boxed{ \phi_X(\xi)=\frac{1}{1+\xi^2} \quad\Longrightarrow\quad f_X(x)=\frac12e^{-|x|}. } 
+$$
+
+---

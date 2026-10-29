@@ -1,0 +1,265 @@
+# Lecture 8.2: The Lebesgue Integral and the MC Theorem
+
+## Definitions and Basic Properties
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space. We denote the space of non-negative $\mathcal{F}/\mathcal{B}([0, \infty])$-measurable functions by:
+$$
+\begin{align*}
+L^+ &= L^+(\Omega, \mathcal{F}) \\
+&:= \{ f: \Omega \to [0, \infty] \mid f \text{ is } \mathcal{F}/\mathcal{B}([0, \infty])\text{-measurable} \}
+\end{align*}
+$$ {#eq-lplus-def}
+
+::: {#def-lebesgue-integral-nonnegative}
+## Lebesgue Integral for Non-Negative Functions 
+For any $f \in L^+$, the **Lebesgue integral** of $f$ with respect to $\mu$ is defined by:
+$$
+\begin{align*}
+\int f \, d\mu &= \int_{\Omega} f(\omega) \, \mu(d\omega) \\
+&:= \sup \left\{ \int \varphi \, d\mu \mid \varphi \in \mathbb{S}_{\mathcal{F}}, \, 0 \le \varphi \le f \right\}
+\end{align*}
+$$ {#eq-lebesgue-integral-def}
+where $\mathbb{S}_{\mathcal{F}}$ is the space of simple $\mathcal{F}/\mathcal{B}(\mathbb{R})$-measurable functions.
+
+If $\mu = \mathbb{P}$ is a probability measure, the integral is also denoted as the expectation:
+$$
+\mathbb{E}[f] = \mathbb{E}_{\mathbb{P}}[f] := \int f \, d\mathbb{P}
+$$
+:::
+:::{#rem-lebesgue-integral-values}
+The integral $\int f \, d\mu$ takes values in $[0, \infty]$. If $f = 0$ pointwise, then the only simple function $0 \le \varphi \le 0$ is $\varphi = 0$, giving $\int 0 \, d\mu = 0$.
+:::
+
+::: {#prp-basic-properties-lplus}
+## Basic Properties of the Integral on $L^+$
+Let $f, g \in L^+$ and $\alpha \ge 0$.
+
+1. **Homogeneity:** $\int \alpha f \, d\mu = \alpha \int f \, d\mu$ (with the convention $0 \cdot \infty = 0$).
+2. **Additivity:** $\int (f + g) \, d\mu = \int f \, d\mu + \int g \, d\mu$.
+3. **Monotonicity:** If $f \le g$ pointwise, then $\int f \, d\mu \le \int g \, d\mu$.
+:::
+
+::: {.proof}
+## Proof of @prp-basic-properties-lplus
+We prove Properties 1 and 3 first, postponing Property 2 until after establishing the Monotone Convergence Theorem.
+
+### Proof of Property 1 (Homogeneity)
+*Case $\alpha = 0$:* If $\alpha = 0$, then $\alpha f = 0$ pointwise. Thus $\int 0 \cdot f \, d\mu = \int 0 \, d\mu = 0 = 0 \cdot \int f \, d\mu$.
+
+*Case $\alpha > 0$:* By definition of the Lebesgue integral:
+$$
+\begin{aligned}
+\int \alpha f \, d\mu &= \sup \left\{ \int \varphi \, d\mu \mid \varphi \in \mathbb{S}_{\mathcal{F}}, \, 0 \le \varphi \le \alpha f \right\} \\
+&= \sup \left\{ \int \alpha \psi \, d\mu \mid \psi \in \mathbb{S}_{\mathcal{F}}, \, 0 \le \psi \le f \right\} \quad (\text{setting } \psi = \alpha^{-1} \varphi) \\
+&= \alpha \cdot \sup \left\{ \int \psi \, d\mu \mid \psi \in \mathbb{S}_{\mathcal{F}}, \, 0 \le \psi \le f \right\} \\
+&= \alpha \int f \, d\mu
+\end{aligned}
+$$
+
+### Proof of Property 3 (Monotonicity)
+Assume $0 \le f \le g$ pointwise. If $\varphi \in \mathbb{S}_{\mathcal{F}}$ satisfies $0 \le \varphi \le f$, then by transitivity $0 \le \varphi \le g$. 
+
+Hence, the set of simple functions bounded by $f$ is a subset of those bounded by $g$:
+$$
+\{ \varphi \in \mathbb{S}_{\mathcal{F}} \mid 0 \le \varphi \le f \} \subseteq \{ \varphi \in \mathbb{S}_{\mathcal{F}} \mid 0 \le \varphi \le g \}
+$$
+Taking the supremum over both sets yields:
+$$
+\int f \, d\mu = \sup_{\varphi \le f} \int \varphi \, d\mu \le \sup_{\varphi \le g} \int \varphi \, d\mu = \int g \, d\mu
+$$
+:::
+
+---
+
+## The Monotone Convergence Theorem
+
+To establish full additivity and compute limits for general non-negative measurable functions, we require a foundational convergence result.
+
+::: {#thm-mct}
+## Monotone Convergence Theorem 
+Let $(f_n)_{n=1}^\infty \subset L^+$ be a non-decreasing sequence of functions, i.e., $0 \le f_1 \le f_2 \le \dots \le f_n \le \dots$ pointwise. Define $f(\omega) := \lim_{n \to \infty} f_n(\omega)$ for all $\omega \in \Omega$. Then $f \in L^+$ and:
+$$
+\int f_n \, d\mu \uparrow \int f \, d\mu \quad \text{as } n \to \infty
+$$ {#eq-mct}
+That is, $\lim_{n \to \infty} \int f_n \, d\mu = \int \lim_{n \to \infty} f_n \, d\mu=\int f \, d\mu$.
+:::
+
+::: {.proof}
+## Proof of @thm-mct
+We divide the proof into two directional inequalities.
+
+### Step 1: Upper Bound ($\lim_{n \to \infty} \int f_n \, d\mu \le \int f \, d\mu$)
+Since $f_n \le f_{n+1} \le f$ for all $n \in \mathbb{N}$, monotonicity (Property 3) implies that $(\int f_n \, d\mu)_{n=1}^\infty$ is a non-decreasing sequence in $[0, \infty]$ bounded above by $\int f \, d\mu$. 
+
+Therefore, the limit exists in $[0, \infty]$ and satisfies:
+$$
+\lim_{n \to \infty} \int f_n \, d\mu \le \int f \, d\mu
+$$ {#eq-mct-step1}
+
+### Step 2: Lower Bound ($\lim_{n \to \infty} \int f_n \, d\mu \ge \int f \, d\mu$)
+Fix an arbitrary simple function $\varphi \in \mathbb{S}_{\mathcal{F}}$ such that $0 \le \varphi \le f$, and fix a constant parameter $\alpha \in (0, 1)$. Define the sequence of sets:
+$$
+\Omega_n := \{ \omega \in \Omega \mid f_n(\omega) \ge \alpha \varphi(\omega) \} = (f_n - \alpha \varphi)^{-1}([0, \infty]) \in \mathcal{F}
+$$ {#eq-omegan-def}
+
+We observe two critical properties of $\Omega_n$:
+
+1. **Monotonicity:** Since $f_n \le f_{n+1}$, we have $\Omega_n \subseteq \Omega_{n+1}$ for all $n$.
+2. **Exhaustion of $\Omega$:** Fix $\omega \in \Omega$. If $\varphi(\omega) = 0$, then $\alpha \varphi(\omega) = 0 \le f_1(\omega)$, so $\omega \in \Omega_1$. If $\varphi(\omega) > 0$, then $\alpha \varphi(\omega) < \varphi(\omega) \le f(\omega) = \lim_{n \to \infty} f_n(\omega)$. Thus, there exists $n(\omega) \in \mathbb{N}$ such that $f_n(\omega) \ge \alpha \varphi(\omega)$ for all $n \ge n(\omega)$, implying $\omega \in \Omega_n$. Hence, $\bigcup_{n=1}^\infty \Omega_n = \Omega$.
+
+For each $n \in \mathbb{N}$, since $f_n \ge f_n \mathbf{1}_{\Omega_n} \ge \alpha \mathbf{1}_{\Omega_n} \varphi \ge 0$, monotonicity gives:
+$$
+\int f_n \, d\mu \ge \int \alpha \mathbf{1}_{\Omega_n} \varphi \, d\mu = \alpha \int \mathbf{1}_{\Omega_n} \varphi \, d\mu
+$$ {#eq-mct-step2-ineq}
+
+Since $\varphi$ is a simple function, we represent it as $\varphi = \sum_{t > 0} t \mathbf{1}_{\{\varphi = t\}}$. Then:
+$$
+\int \mathbf{1}_{\Omega_n} \varphi \, d\mu = \sum_{t > 0} t \, \mu(\{\varphi = t\} \cap \Omega_n)
+$$
+
+Taking the limit as $n \to \infty$, continuity of the measure $\mu$ from below on the expanding sequence $(\{\varphi = t\} \cap \Omega_n)_{n=1}^\infty \uparrow \{\varphi = t\}$ yields:
+$$
+\lim_{n \to \infty} \mu(\{\varphi = t\} \cap \Omega_n) = \mu(\{\varphi = t\})
+$$
+
+Substituting this back into @eq-mct-step2-ineq gives:
+$$
+\lim_{n \to \infty} \int f_n \, d\mu \ge \alpha \sum_{t > 0} t \, \mu(\{\varphi = t\}) = \alpha \int \varphi \, d\mu
+$$
+
+Since this holds for any $\alpha \in (0, 1)$, taking $\alpha \uparrow 1$ yields:
+$$
+\lim_{n \to \infty} \int f_n \, d\mu \ge \int \varphi \, d\mu
+$$
+
+Finally, taking the supremum over all simple functions $0 \le \varphi \le f$ gives:
+$$
+\lim_{n \to \infty} \int f_n \, d\mu \ge \sup_{0 \le \varphi \le f} \int \varphi \, d\mu = \int f \, d\mu
+$$ {#eq-mct-step2}
+
+Combining @eq-mct-step1 and @eq-mct-step2 completes the proof.
+:::
+
+---
+
+## Explicit Standard Approximation & Additivity
+
+Using the Monotone Convergence Theorem, we can construct an explicit simple-function approximation sequence for any $f \in L^+$.
+
+::: {#prp-standard-approximation}
+## Standard Approximation Sequence
+For $f \in L^+$, define the sequence $(\varphi_n)_{n=1}^\infty \subset \mathbb{S}_{\mathcal{F}}$ by:
+$$
+\varphi_n := \sum_{k=0}^{2^{2n}-1} \frac{k}{2^n} \mathbf{1}_{\left\{ \frac{k}{2^n} < f \le \frac{k+1}{2^n} \right\}} + 2^n \mathbf{1}_{\{f > 2^n\}}
+$$ {#eq-standard-approx}
+
+Then $\varphi_n \in \mathbb{S}_{\mathcal{F}}$, $0 \le \varphi_n \uparrow f$ pointwise as $n \to \infty$, and:
+$$
+\begin{align*}
+\int f \, d\mu &= \lim_{n \to \infty} \int \varphi_n \, d\mu \\
+&= \lim_{n \to \infty} \left[ \sum_{k=0}^{2^{2n}-1} \frac{k}{2^n} \mu\left( \left\{ \frac{k}{2^n} < f \le \frac{k+1}{2^n} \right\} \right) + 2^n \mu(\{f > 2^n\}) \right]
+\end{align*}
+$$ {#eq-standard-approx-limit}
+*(Note: This limit always exists in $[0, \infty]$ as a non-decreasing sequence.)*
+:::
+
+::: {#cor-additivity-lplus}
+## Additivity of the Lebesgue Integral on $L^+$
+For any $f, g \in L^+$:
+$$
+\int (f + g) \, d\mu = \int f \, d\mu + \int g \, d\mu
+$$ {#eq-additivity-lplus}
+:::
+
+::: {.proof}
+Let $(\psi_n)_{n=1}^\infty, (\varphi_n)_{n=1}^\infty \subset \mathbb{S}_{\mathcal{F}}$ be standard approximation sequences such that $0 \le \psi_n \uparrow f$ and $0 \le \varphi_n \uparrow g$. Then $(\psi_n + \varphi_n)_{n=1}^\infty \subset \mathbb{S}_{\mathcal{F}}$ satisfies $0 \le (\psi_n + \varphi_n) \uparrow (f + g)$.
+
+By linearity of simple integrals (@eq-linearity) and the Monotone Convergence Theorem (@thm-mct):
+$$
+\begin{align*}
+\int (f + g) \, d\mu &= \lim_{n \to \infty} \int (\psi_n + \varphi_n) \, d\mu\\
+ &= \lim_{n \to \infty} \int \psi_n \, d\mu + \lim_{n \to \infty} \int \varphi_n \, d\mu \\
+ &= \int f \, d\mu + \int g \, d\mu.
+\end{align*}
+$$
+:::
+
+::: {#cor-infinite-sums-lplus}
+## Integration of Infinite Series in $L^+$
+Let $(f_n)_{n=1}^\infty \subset L^+$. Then:
+$$
+\int \left( \sum_{n=1}^{\infty} f_n \right) d\mu = \sum_{n=1}^{\infty} \int f_n \, d\mu
+$$ {#eq-infinite-series-integration}
+:::
+
+::: {.proof}
+Let $g_N := \sum_{n=1}^{N} f_n \in L^+$. Since $f_n \ge 0$, the partial sums satisfy $0 \le g_N \uparrow g := \sum_{n=1}^{\infty} f_n$ pointwise.
+
+By finite additivity (@cor-additivity-lplus) and the Monotone Convergence Theorem (@thm-mct):
+$$
+\begin{align*}
+\int \left( \sum_{n=1}^{\infty} f_n \right) d\mu &= \int \lim_{N \to \infty} g_N \, d\mu\\
+& = \lim_{N \to \infty} \int g_N \, d\mu \\
+&= \lim_{N \to \infty} \sum_{n=1}^{N} \int f_n \, d\mu \\
+&= \sum_{n=1}^{\infty} \int f_n \, d\mu
+\end{align*}
+$$
+:::
+
+---
+
+## Application: Integration with Respect to Discrete Measures
+
+::: {#exm-discrete-measure}
+Let $\Omega$ be a **countable set** and let $\rho: \Omega \to [0, \infty]$ be a weight function. Define a measure $\mu$ on $(\Omega, 2^\Omega)$ by:
+$$
+\mu = \sum_{\omega \in \Omega} \rho(\omega) \delta_\omega \implies \mu(A) = \sum_{\omega \in A} \rho(\omega), \quad \forall A \subseteq \Omega
+$$ {#eq-discrete-measure}
+
+*(For example, if $\Omega = \{\omega_1, \omega_2, \dots\}$, $0 \le \rho_n \le 1$, and $\sum_{n=1}^\infty \rho_n = 1$, then $\mu$ is a discrete probability measure.)*
+
+Then for any $f \in L^+$, the integral reduces to a weighted sum:
+$$
+\int f \, d\mu = \sum_{\omega \in \Omega} f(\omega) \rho(\omega)
+$$ {#eq-discrete-integral-identity}
+:::
+
+::: {.proof}
+## Proof of @exm-discrete-measure
+We prove @eq-discrete-integral-identity by showing two inequalities.
+
+### Lower Inequality ($\int f \, d\mu \le \sum_{\omega \in \Omega} f(\omega) \rho(\omega)$)
+First assume $\varphi \in \mathbb{S}_{\mathcal{F}}$ is a non-negative simple function $\varphi = \sum_{t > 0} t \mathbf{1}_{\{\varphi = t\}}$. Then:
+$$
+\begin{aligned}
+\int \varphi \, d\mu &= \sum_{t > 0} t \, \mu(\{\varphi = t\}) = \sum_{t > 0} t \sum_{\omega \in \Omega} \rho(\omega) \mathbf{1}_{\{\varphi(\omega) = t\}} \\
+&= \sum_{\omega \in \Omega} \rho(\omega) \sum_{t > 0} t \mathbf{1}_{\{\varphi(\omega) = t\}} = \sum_{\omega \in \Omega} \varphi(\omega) \rho(\omega)
+\end{aligned}
+$$
+
+If $0 \le \varphi \le f$, then $\varphi(\omega) \rho(\omega) \le f(\omega) \rho(\omega)$ for all $\omega \in \Omega$. Taking the supremum over all simple $0 \le \varphi \le f$ gives:
+$$
+\int f \, d\mu = \sup_{0 \le \varphi \le f} \int \varphi \, d\mu \le \sum_{\omega \in \Omega} f(\omega) \rho(\omega)
+$$
+
+### Upper Inequality ($\int f \, d\mu \ge \sum_{\omega \in \Omega} f(\omega) \rho(\omega)$)
+Fix an arbitrary finite subset $\Lambda \subseteq \Omega$ and a constant $N \in \mathbb{N}$. Define the truncated simple function:
+$$
+\varphi_{N, \Lambda} := \mathbf{1}_{\Lambda} \min\{f, N\} \in \mathbb{S}_{\mathcal{F}}
+$$
+
+Since $0 \le \varphi_{N, \Lambda} \le f$ pointwise:
+$$
+\int f \, d\mu \ge \int \varphi_{N, \Lambda} \, d\mu = \sum_{\omega \in \Lambda} \min\{f(\omega), N\} \rho(\omega)
+$$
+
+Taking $N \to \infty$ via Monotone Convergence on the finite sum yields $\sum_{\omega \in \Lambda} f(\omega) \rho(\omega) \le \int f \, d\mu$. Finally, taking the supremum over all finite subsets $\Lambda \subseteq \Omega$ yields:
+$$
+\sum_{\omega \in \Omega} f(\omega) \rho(\omega) \le \int f \, d\mu
+$$
+
+Combining both inequalities establishes @eq-discrete-integral-identity.
+:::
+
+---
+

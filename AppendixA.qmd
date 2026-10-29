@@ -1,0 +1,598 @@
+# Limsups, Liminfs and Extended Limits
+
+## Basic Definitions and Operational Conventions
+
+::: {#def-extended-reals}
+### Extended Real Numbers
+The **extended real number line** is defined as the set
+$$
+\overline{\mathbb{R}} := \mathbb{R} \cup \{-\infty, +\infty\},
+$$
+formed by adjoining two distinct elements, $-\infty$ and $+\infty$, to the real line $\mathbb{R}$. 
+
+We adopt the following arithmetic conventions:
+
+1. **Addition and Subtraction**:
+   $$
+   \begin{aligned}
+   &+\infty + a = +\infty \quad \text{and} \quad -\infty + a = -\infty \quad \text{for any } a \in \mathbb{R}, \\
+   &+\infty + (+\infty) = +\infty,\,-\infty + (-\infty) = -\infty.
+   \end{aligned}
+   $$
+   The expressions $(+\infty) - (+\infty)$ and $(+\infty) + (-\infty)$ are **undefined**.
+
+2. **Multiplication**:
+   $$
+   0 \cdot (\pm\infty) = 0.
+   $$
+   For any $a \in \mathbb{R}$ with $a > 0$:
+   $$
+   (\pm\infty) \cdot a = \pm\infty \quad \text{and} \quad (\pm\infty) \cdot (-a) = \mp\infty.
+   $$
+   Furthermore:
+   $$
+   (\pm\infty) \cdot (\pm\infty) = +\infty \quad \text{and} \quad (\pm\infty) \cdot (\mp\infty) = -\infty.
+   $$
+
+3. **Limits involving infinity**:
+   A sequence $\{a_n\}_{n=1}^\infty \subset \mathbb{R}$ is said to converge to $+\infty$ (denoted $\lim_{n \to \infty} a_n = +\infty$) if for every $M \in \mathbb{R}$, there exists $N \in \mathbb{N}$ such that $a_n \ge M$ for all $n \ge N$.
+   Similarly, $\{a_n\}_{n=1}^\infty$ converges to $-\infty$ (denoted $\lim_{n \to \infty} a_n = -\infty$) if for every $M \in \mathbb{R}$, there exists $N \in \mathbb{N}$ such that $a_n \le M$ for all $n \ge N$.
+:::
+
+::: {#def-almost-all}
+### Almost All (a.a.)
+We write "$a_n \le b_n$ for **almost all** $n$" (abbreviated $a_n \le b_n$ a.a. $n$) if there exists an integer $N < \infty$ such that $a_n \le b_n$ for all $n \ge N$.
+:::
+
+---
+
+## Limit Laws in $\overline{\mathbb{R}}$
+
+::: {#lem-extended-limit-laws}
+### Extended Limit Laws
+Suppose $\{a_n\}_{n=1}^\infty$ and $\{b_n\}_{n=1}^\infty$ are convergent sequences in $\overline{\mathbb{R}}$. Then:
+
+1. If $a_n \le b_n$ for a.a. $n$, then 
+   $$
+   \lim_{n \to \infty} a_n \le \lim_{n \to \infty} b_n.
+   $$
+2. If $c \in \mathbb{R}$, then $\{c a_n\}_{n=1}^\infty$ converges in $\overline{\mathbb{R}}$ and
+   $$
+   \lim_{n \to \infty} (c a_n) = c \lim_{n \to \infty} a_n.
+   $$
+3. The sum sequence $\{a_n + b_n\}_{n=1}^\infty$ converges in $\overline{\mathbb{R}}$ and
+   $$
+   \lim_{n \to \infty} (a_n + b_n) = \lim_{n \to \infty} a_n + \lim_{n \to \infty} b_n,
+   $${#eq-sum-limit-law}
+   provided the right-hand side is not of the undefined form $\infty - \infty$.
+4. The product sequence $\{a_n b_n\}_{n=1}^\infty$ converges in $\overline{\mathbb{R}}$ and
+   $$
+   \lim_{n \to \infty} (a_n b_n) = \left(\lim_{n \to \infty} a_n\right) \cdot \left(\lim_{n \to \infty} b_n\right),
+   $${#eq-prod-limit-law}
+   provided the right-hand side is not of the form $\pm\infty \cdot 0$ or $0 \cdot (\pm\infty)$.
+:::
+
+::: {.proof}
+## Proof of @lem-extended-limit-laws
+
+**Proof of Items 1 and 2:**
+Left as an exercise to the reader.
+
+**Proof of Item 3 (@eq-sum-limit-law):**
+Let $a := \lim_{n \to \infty} a_n$ and $b := \lim_{n \to \infty} b_n$.
+
+* *Case 1 ($a, b \in \mathbb{R}$):*
+  Given any $\epsilon > 0$, there exist $N_1, N_2 \in \mathbb{N}$ such that $|a_n - a| \le \epsilon$ for all $n \ge N_1$ and $|b_n - b| \le \epsilon$ for all $n \ge N_2$. Setting $N = \max(N_1, N_2)$, the triangle inequality gives
+  $$
+  |(a_n + b_n) - (a + b)| = |(a_n - a) + (b_n - b)| \le |a_n - a| + |b_n - b| \le 2\epsilon
+  $$
+  for all $n \ge N$. Since $\epsilon > 0$ is arbitrary, $\lim_{n \to \infty} (a_n + b_n) = a + b$.
+
+* *Case 2 ($b = +\infty$ and $a > -\infty$):*
+  For any $M > 0$, choose $N_1 \in \mathbb{N}$ such that $b_n \ge M - a + 1$ for $n \ge N_1$. Since $a > -\infty$, choose $N_2 \in \mathbb{N}$ such that $a_n \ge a - 1$ for all $n \ge N_2$ (if $a = +\infty$, we choose $a_n \ge 0$). Thus, for $n \ge N = \max(N_1, N_2)$,
+  $$
+  a_n + b_n \ge (a - 1) + (M - a + 1) = M.
+  $$
+  Since $M > 0$ is arbitrary, $\lim_{n \to \infty} (a_n + b_n) = +\infty = a + b$.
+  The cases where $b = -\infty$ or $a = \pm\infty$ follow symmetrically.
+
+**Proof of Item 4 (@eq-prod-limit-law):**
+We consider the extended case where $a = \lim_{n \to \infty} a_n > 0$ and $b = \lim_{n \to \infty} b_n = +\infty$. 
+
+Let $\alpha := \min(a/2, 1) > 0$. Given any $M < \infty$, there exists $N \in \mathbb{N}$ such that $a_n \ge \alpha$ and $b_n \ge M / \alpha$ for all $n \ge N$. Thus, for all $n \ge N$,
+$$
+a_n b_n \ge \alpha \cdot \frac{M}{\alpha} = M.
+$$
+Since $M$ is arbitrary, $\lim_{n \to \infty} (a_n b_n) = +\infty = a \cdot b$. The case $a < 0$ is handled analogously. 
+:::
+
+::: {#rem-necessity-of-conditions}
+To see the necessity of excluding indeterminate forms:
+
+1. **Sum Indeterminacy ($\infty - \infty$):** Let $a_n = n$ and $b_n = -\alpha n$ for $\alpha > 0$. Here $\lim a_n = \infty$ and $\lim b_n = -\infty$, but
+   $$
+   \lim_{n \to \infty} (a_n + b_n) = \lim_{n \to \infty} (1 - \alpha) n = 
+   \begin{cases}
+   +\infty & \text{if } \alpha < 1, \\
+   0 & \text{if } \alpha = 1, \\
+   -\infty & \text{if } \alpha > 1.
+   \end{cases}
+   $$
+2. **Product Indeterminacy ($\infty \cdot 0$):** Let $a_n = n$ and $b_n = n^{-\alpha}$ with $\alpha > 0$. Then $\lim a_n = \infty$ and $\lim b_n = 0$, while $\lim (a_n b_n) = \lim n^{1-\alpha}$ can be $0, 1,$ or $+\infty$ depending on $\alpha$.
+:::
+
+---
+
+## Liminfs, Limsups, and Supremum Conventions
+
+::: {#def-sup-inf-conventions}
+For any subset $\Lambda \subset \overline{\mathbb{R}}$, $\sup \Lambda$ denotes the least upper bound and $\inf \Lambda$ denotes the greatest lower bound. We enforce the following extended conventions:
+
+* $\sup \Lambda = +\infty$ if $+\infty \in \Lambda$ or if $\Lambda$ is not bounded above in $\mathbb{R}$.
+* $\inf \Lambda = -\infty$ if $-\infty \in \Lambda$ or if $\Lambda$ is not bounded below in $\mathbb{R}$.
+* $\sup \emptyset = -\infty$ and $\inf \emptyset = +\infty$.
+:::
+
+::: {#def-limsup-liminf}
+### Limit Superior and Limit Inferior
+For a sequence of real numbers $\{x_n\}_{n=1}^\infty \subset \mathbb{R}$, we define:
+$$
+\liminf_{n \to \infty} x_n := \lim_{n \to \infty} \left( \inf \{x_k : k \ge n\} \right) = \sup_{n \ge 1} \inf_{k \ge n} x_k,
+$${#eq-liminf-def}
+$$
+\limsup_{n \to \infty} x_n := \lim_{n \to \infty} \left( \sup \{x_k : k \ge n\} \right) = \inf_{n \ge 1} \sup_{k \ge n} x_k.
+$${#eq-limsup-def}
+We also write $\varliminf_{n \to \infty} x_n$ for $\liminf_{n \to \infty} x_n$, and $\varlimsup_{n \to \infty} x_n$ for $\limsup_{n \to \infty} x_n$.
+:::
+
+::: {#rem-monotonicity-of-bounds}
+Let $a_n := \inf \{x_k : k \ge n\}$ and $b_n := \sup \{x_k : k \ge n\}$. Since the set $\{x_k : k \ge n+1\} \subset \{x_k : k \ge n\}$, taking infima and suprema yields that $\{a_n\}$ is non-decreasing ($a_n \le a_{n+1}$) and $\{b_n\}$ is non-increasing ($b_n \ge b_{n+1}$). Monotone sequences in $\overline{\mathbb{R}}$ always have well-defined limits in $\overline{\mathbb{R}}$, which establishes why the limits in @eq-liminf-def and @eq-limsup-def always exist.
+:::
+
+::: {#prp-properties-limsup-liminf}
+Let $\{a_n\}_{n=1}^\infty$ and $\{b_n\}_{n=1}^\infty$ be sequences in $\mathbb{R}$.
+
+1. $\liminf_{n \to \infty} a_n \le \limsup_{n \to \infty} a_n$. Furthermore, $\lim_{n \to \infty} a_n = A \in \overline{\mathbb{R}}$ exists if and only if
+   $$
+   \liminf_{n \to \infty} a_n = \limsup_{n \to \infty} a_n = A.
+   $$
+2. There exists a subsequence $\{a_{n_k}\}_{k=1}^\infty$ such that $\lim_{k \to \infty} a_{n_k} = \limsup_{n \to \infty} a_n$. Similarly, there exists a subsequence $\{a_{m_k}\}_{k=1}^\infty$ such that $\lim_{k \to \infty} a_{m_k} = \liminf_{n \to \infty} a_n$.
+3. The subadditivity of $\limsup$ holds:
+   $$
+   \limsup_{n \to \infty} (a_n + b_n) \le \limsup_{n \to \infty} a_n + \limsup_{n \to \infty} b_n,
+   $${#eq-limsup-subadditive}
+   provided the right-hand side is not of the indeterminate form $\infty - \infty$.
+4. If $a_n \ge 0$ and $b_n \ge 0$ for all $n \in \mathbb{N}$, then
+   $$
+   \limsup_{n \to \infty} (a_n b_n) \le \left( \limsup_{n \to \infty} a_n \right) \cdot \left( \limsup_{n \to \infty} b_n \right),
+   $${#eq-limsup-multiplicative}
+   provided the right-hand side is not of the form $0 \cdot \infty$ or $\infty \cdot 0$.
+:::
+
+::: {.proof}
+## Proof of @prp-properties-limsup-liminf
+
+**Proof of Item 1:**
+Since $\inf\{a_k : k \ge n\} \le \sup\{a_k : k \ge n\}$ for all $n \in \mathbb{N}$, taking $n \to \infty$ shows $\liminf_{n \to \infty} a_n \le \limsup_{n \to \infty} a_n$.
+
+Now suppose $\lim_{n \to \infty} a_n = A \in \mathbb{R}$ exists. For every $\epsilon > 0$, there exists $N(\epsilon) \in \mathbb{N}$ such that $|A - a_n| \le \epsilon$ for all $n \ge N(\epsilon)$, which implies
+$$
+A - \epsilon \le a_k \le A + \epsilon \quad \text{for all } k \ge N(\epsilon).
+$$
+Taking infimum and supremum over $k \ge N(\epsilon)$ gives
+$$
+A - \epsilon \le \inf_{k \ge N(\epsilon)} a_k \le \sup_{k \ge N(\epsilon)} a_k \le A + \epsilon.
+$$
+Taking $n \to \infty$, we obtain
+$$
+A - \epsilon \le \liminf_{n \to \infty} a_n \le \limsup_{n \to \infty} a_n \le A + \epsilon.
+$$
+Since $\epsilon > 0$ is arbitrary, $A = \liminf_{n \to \infty} a_n = \limsup_{n \to \infty} a_n$. 
+
+If $A = +\infty$, then for any $M > 0$, $a_k \ge M$ for all $k \ge N(M)$. Thus $\inf_{k \ge N} a_k \ge M$, which implies $\liminf_{n \to \infty} a_n \ge M$. As $M$ is arbitrary, $\liminf_{n \to \infty} a_n = \limsup_{n \to \infty} a_n = +\infty$. The case $A = -\infty$ is symmetric.
+
+Conversely, if $\liminf_{n \to \infty} a_n = \limsup_{n \to \infty} a_n = A \in \mathbb{R}$, then for any $\epsilon > 0$, there exists $N \in \mathbb{N}$ such that $A - \epsilon \le \inf_{k \ge N} a_k \le \sup_{k \ge N} a_k \le A + \epsilon$. Consequently, $A - \epsilon \le a_n \le A + \epsilon$ for all $n \ge N$, proving that $\lim_{n \to \infty} a_n = A$.
+
+**Proof of Items 2–4:** Left as an exercise. 
+:::
+
+::: {#exm-limsup-strict-inequality}
+To illustrate strict inequality in @eq-limsup-subadditive, set $a_n = (-1)^n$ and $b_n = (-1)^{n+1}$. Then $a_n + b_n = 0$ for all $n$, so
+$$
+\lim_{n \to \infty} (a_n + b_n) = \limsup_{n \to \infty} (a_n + b_n) = \liminf_{n \to \infty} (a_n + b_n) = 0.
+$$
+However, $\limsup_{n \to \infty} a_n = 1$ and $\limsup_{n \to \infty} b_n = 1$. Thus:
+$$
+0 = \limsup_{n \to \infty} (a_n + b_n) < \limsup_{n \to \infty} a_n + \limsup_{n \to \infty} b_n = 1 + 1 = 2.
+$$
+Similarly, $\liminf_{n \to \infty} a_n = -1$ and $\liminf_{n \to \infty} b_n = -1$, yielding:
+$$
+0 = \liminf_{n \to \infty} (a_n + b_n) > \liminf_{n \to \infty} a_n + \liminf_{n \to \infty} b_n = -2.
+$$
+:::
+
+::: {#rem-tail-equivalence}
+If $a_n \le b_n$ for a.a. $n$, then
+$$
+\limsup_{n \to \infty} a_n \le \limsup_{n \to \infty} b_n \quad \text{and} \quad \liminf_{n \to \infty} a_n \le \liminf_{n \to \infty} b_n.
+$$
+In particular, if $a_n = b_n$ for a.a. $n$, their limsups and liminfs are equal. Furthermore, for any constant $b \in \mathbb{R}$, $\limsup_{n \to \infty} (a_n + b) = \limsup_{n \to \infty} a_n + b$ and $\liminf_{n \to \infty} (a_n + b) = \liminf_{n \to \infty} a_n + b$.
+:::
+
+::: {#lem-liminf-addition}
+If $\{a_n\}_{n=1}^\infty \subset \mathbb{R}$ and $\{b_n\}_{n=1}^\infty \subset \mathbb{R}$ such that $b = \lim_{n \to \infty} b_n$ exists in $\mathbb{R}$, then
+$$
+\liminf_{n \to \infty} (a_n + b_n) = \liminf_{n \to \infty} a_n + b.
+$$
+:::
+
+::: {.proof}
+## Proof of @lem-liminf-addition
+Given $\epsilon > 0$, choose $N \in \mathbb{N}$ such that $b - \epsilon \le b_n \le b + \epsilon$ for all $n \ge N$. Then for all $n \ge N$,
+$$
+a_n + b - \epsilon \le a_n + b_n \le a_n + b + \epsilon.
+$$
+Taking the $\liminf$ across this inequality and using @rem-tail-equivalence yields
+$$
+\liminf_{n \to \infty} a_n + b - \epsilon \le \liminf_{n \to \infty} (a_n + b_n) \le \liminf_{n \to \infty} a_n + b + \epsilon.
+$$
+Since $\epsilon > 0$ is arbitrary, taking $\epsilon \downarrow 0$ yields $\liminf_{n \to \infty} (a_n + b_n) = \liminf_{n \to \infty} a_n + b$. $\blacksquare$
+:::
+
+---
+
+## Infinite Sums and Classical Convergence Theorems
+
+## Non-negative Infinite Sums
+
+::: {#def-infinite-sum-nonnegative}
+For any sequence $a_n \in [0, \infty]$, we define the infinite sum as
+$$
+\sum_{n=1}^\infty a_n := \lim_{N \to \infty} \sum_{n=1}^N a_n = \sup_{N \in \mathbb{N}} \sum_{n=1}^N a_n.
+$${#eq-nonnegative-sum-def}
+:::
+
+::: {#rem-linearity-nonnegative-sums}
+If $a_n, b_n \in [0, \infty]$ and $\lambda > 0$, then
+$$
+\sum_{n=1}^\infty (a_n + \lambda b_n) = \sum_{n=1}^\infty a_n + \lambda \sum_{n=1}^\infty b_n.
+$$
+Indeed, finite sums are linear, and taking limits of non-decreasing sequences preserves linear combinations:
+$$
+\begin{aligned}
+\sum_{n=1}^\infty (a_n + \lambda b_n) &= \lim_{N \to \infty} \sum_{n=1}^N (a_n + \lambda b_n) = \lim_{N \to \infty} \left[ \sum_{n=1}^N a_n + \lambda \sum_{n=1}^N b_n \right] \\
+&= \lim_{N \to \infty} \sum_{n=1}^N a_n + \lambda \lim_{N \to \infty} \sum_{n=1}^N b_n = \sum_{n=1}^\infty a_n + \lambda \sum_{n=1}^\infty b_n.
+\end{aligned}
+$$
+:::
+
+::: {#prp-mct-sums}
+### Monotone Convergence Theorem (MCT) for Sums
+Suppose that for each $n \in \mathbb{N}$, $\{f_n(i)\}_{i=1}^\infty$ is a sequence in $[0, \infty]$ such that $f_n(i) \uparrow f(i)$ as $n \to \infty$ for each $i \in \mathbb{N}$ (i.e., $f_n(i)$ is non-decreasing in $n$ and $\lim_{n \to \infty} f_n(i) = f(i)$). Then
+$$
+\lim_{n \to \infty} \sum_{i=1}^\infty f_n(i) = \sum_{i=1}^\infty \lim_{n \to \infty} f_n(i) = \sum_{i=1}^\infty f(i).
+$${#eq-mct-sums}
+:::
+
+::: {.proof}
+## Proof of @prp-mct-sums
+Let $M := \lim_{n \to \infty} \sum_{i=1}^\infty f_n(i)$ (which exists in $[0, \infty]$ as the sequence of sums is non-decreasing). 
+
+Since $f_n(i) \le f(i)$ for all $n$ and $i$, taking sums yields $\sum_{i=1}^\infty f_n(i) \le \sum_{i=1}^\infty f(i)$ for all $n$. Taking $n \to \infty$ yields
+$$
+M \le \sum_{i=1}^\infty f(i).
+$$
+Conversely, for any fixed $N \in \mathbb{N}$, using the linearity of finite limits gives
+$$
+\sum_{i=1}^N f(i) = \sum_{i=1}^N \lim_{n \to \infty} f_n(i) = \lim_{n \to \infty} \sum_{i=1}^N f_n(i) \le \lim_{n \to \infty} \sum_{i=1}^\infty f_n(i) = M.
+$$
+Taking $N \to \infty$ on the left side shows $\sum_{i=1}^\infty f(i) \le M$. Combining both inequalities yields $M = \sum_{i=1}^\infty f(i)$. $\blacksquare$
+:::
+
+::: {#prp-tonelli-sums}
+## Tonelli's Theorem for Sums
+If $\{a_{k,n}\}_{k,n=1}^\infty \subset [0, \infty]$, then
+$$
+\sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n} = \sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n}.
+$${#eq-tonelli-sums}
+:::
+
+::: {.proof}
+## Proof of @prp-tonelli-sums
+*Proof 1 (via MCT).* For each $k$, define $S_N(k) := \sum_{n=1}^N a_{k,n}$. Notice that $S_N(k) \ge 0$ and $S_N(k) \uparrow \sum_{n=1}^\infty a_{k,n}$ as $N \to \infty$. Applying the Monotone Convergence Theorem for sums (@prp-mct-sums) with $f_N(k) = S_N(k)$ yields
+$$
+\lim_{N \to \infty} \sum_{k=1}^\infty S_N(k) = \sum_{k=1}^\infty \lim_{N \to \infty} S_N(k) = \sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n}.
+$$
+On the other hand, interchanging finite sums gives
+$$
+\sum_{k=1}^\infty S_N(k) = \sum_{k=1}^\infty \sum_{n=1}^N a_{k,n} = \sum_{n=1}^N \sum_{k=1}^\infty a_{k,n}.
+$$
+Taking $N \to \infty$ yields $\lim_{N \to \infty} \sum_{k=1}^\infty S_N(k) = \sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n}$, proving @eq-tonelli-sums.
+
+*Proof 2 (via Supremum).* Let $M := \sup \left\{ \sum_{k=1}^K \sum_{n=1}^N a_{k,n} : K, N \in \mathbb{N} \right\}$ and $L := \sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n}$. 
+
+For any fixed $K, N \in \mathbb{N}$:
+$$
+\sum_{k=1}^K \sum_{n=1}^N a_{k,n} \le \sum_{k=1}^K \sum_{n=1}^\infty a_{k,n} \le \sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n} = L.
+$$
+Taking the supremum over $K, N$ yields $M \le L$. 
+
+Conversely, $L = \lim_{K \to \infty} \lim_{N \to \infty} \sum_{k=1}^K \sum_{n=1}^N a_{k,n}$. Since $\sum_{k=1}^K \sum_{n=1}^N a_{k,n} \le M$ for all $K, N$, taking limits yields $L \le M$. Thus $L = M$. By exact symmetry of indices in the definition of $M$, $\sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n} = M = L$. $\blacksquare$
+:::
+
+---
+
+## Summable Sequences and Linearity
+
+::: {#def-summability}
+## Absolute Summability
+A sequence $\{a_n\}_{n=1}^\infty \subset \mathbb{R}$ is said to be **summable** (or **absolutely convergent**) if $\sum_{n=1}^\infty |a_n| < \infty$. 
+
+For a summable sequence $\{a_n\}_{n=1}^\infty$, we define its positive and negative parts by $a_n^+ := \max(a_n, 0)$ and $a_n^- := \max(-a_n, 0)$, so that $a_n = a_n^+ - a_n^-$ and $|a_n| = a_n^+ + a_n^-$. The sum is defined as:
+$$
+\sum_{n=1}^\infty a_n := \sum_{n=1}^\infty a_n^+ - \sum_{n=1}^\infty a_n^-.
+$${#eq-summable-def}
+:::
+
+::: {#rem-triangle-inequality-sums}
+From @eq-summable-def, the triangle inequality for infinite series holds:
+$$
+\begin{align*}
+\left| \sum_{n=1}^\infty a_n \right| &= \left| \sum_{n=1}^\infty a_n^+ - \sum_{n=1}^\infty a_n^- \right| \\
+&\le \sum_{n=1}^\infty a_n^+ + \sum_{n=1}^\infty a_n^- \\
+&= \sum_{n=1}^\infty (a_n^+ + a_n^-) \\
+&= \sum_{n=1}^\infty |a_n|.
+\end{align*}
+$$
+:::
+
+::: {#prp-linearity-sums}
+## Linearity of Infinite Sums
+If $\{a_n\}_{n=1}^\infty$ and $\{b_n\}_{n=1}^\infty$ are summable sequences in $\mathbb{R}$ and $\lambda \in \mathbb{R}$, then $\{a_n + \lambda b_n\}_{n=1}^\infty$ is summable, and
+$$
+\sum_{n=1}^\infty (a_n + \lambda b_n) = \sum_{n=1}^\infty a_n + \lambda \sum_{n=1}^\infty b_n.
+$$
+:::
+
+::: {.proof}
+*Proof.* Let $c_n := a_n + \lambda b_n$. By the triangle inequality, $|c_n| \le |a_n| + |\lambda| |b_n|$. Thus:
+$$
+\sum_{n=1}^\infty |c_n| \le \sum_{n=1}^\infty |a_n| + |\lambda| \sum_{n=1}^\infty |b_n| < \infty,
+$$
+proving $\{c_n\}$ is summable.
+
+First, assume $\lambda \ge 0$. Since $c_n = c_n^+ - c_n^- = a_n^+ - a_n^- + \lambda(b_n^+ - b_n^-)$, rearranging terms yields non-negative identities:
+$$
+c_n^+ + a_n^- + \lambda b_n^- = c_n^- + a_n^+ + \lambda b_n^+.
+$$
+Summing both sides over $n \in \mathbb{N}$ and using @rem-linearity-nonnegative-sums gives
+$$
+\sum_{n=1}^\infty c_n^+ + \sum_{n=1}^\infty a_n^- + \lambda \sum_{n=1}^\infty b_n^- = \sum_{n=1}^\infty c_n^- + \sum_{n=1}^\infty a_n^+ + \lambda \sum_{n=1}^\infty b_n^+.
+$$
+Rearranging finite real quantities gives
+$$
+\sum_{n=1}^\infty c_n^+ - \sum_{n=1}^\infty c_n^- = \left( \sum_{n=1}^\infty a_n^+ - \sum_{n=1}^\infty a_n^- \right) + \lambda \left( \sum_{n=1}^\infty b_n^+ - \sum_{n=1}^\infty b_n^- \right),
+$$
+which is $\sum_{n=1}^\infty c_n = \sum_{n=1}^\infty a_n + \lambda \sum_{n=1}^\infty b_n$.
+
+Finally, for $\lambda = -1$, observe that $(-a_n)^+ = a_n^-$ and $(-a_n)^- = a_n^+$. Thus,
+$$
+\sum_{n=1}^\infty (-a_n) = \sum_{n=1}^\infty a_n^- - \sum_{n=1}^\infty a_n^+ = -\left( \sum_{n=1}^\infty a_n^+ - \sum_{n=1}^\infty a_n^- \right) = -\sum_{n=1}^\infty a_n.
+$$
+Combining this with $\lambda \ge 0$ completes the proof for all $\lambda \in \mathbb{R}$. 
+:::
+
+::: {#prp-fubini-sums}
+## Fubini's Theorem for Sums
+Suppose $\{a_{k,n}\}_{k,n=1}^\infty \subset \mathbb{R}$ is double-indexed and satisfies
+$$
+\sum_{k=1}^\infty \sum_{n=1}^\infty |a_{k,n}| < \infty.
+$$
+Then:
+$$
+\sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n} = \sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n}.
+$${#eq-fubini-sums}
+:::
+
+---
+
+## Convergence Theorems: Fatou and DCT for Sums
+
+::: {#prp-fatou-sums}
+### Fatou's Lemma for Sums
+Suppose that for each $n \in \mathbb{N}$, $\{h_n(i)\}_{i=1}^\infty$ is a sequence in $[0, \infty]$. Then
+$$
+\sum_{i=1}^\infty \liminf_{n \to \infty} h_n(i) \le \liminf_{n \to \infty} \sum_{i=1}^\infty h_n(i).
+$${#eq-fatou-sums}
+:::
+
+::: {#prp-dct-sums}
+### Dominated Convergence Theorem (DCT) for Sums
+Suppose that for each $n \in \mathbb{N}$, $\{f_n(i)\}_{i=1}^\infty \subset \mathbb{R}$ and $\{g_n(i)\}_{i=1}^\infty \subset [0, \infty)$ satisfy:
+
+1. $\sum_{i=1}^\infty g_n(i) < \infty$ for all $n \in \mathbb{N}$.
+2. Pointwise limits $f(i) := \lim_{n \to \infty} f_n(i)$ and $g(i) := \lim_{n \to \infty} g_n(i)$ exist for every $i \in \mathbb{N}$.
+3. Domination condition: $|f_n(i)| \le g_n(i)$ for all $i, n \in \mathbb{N}$.
+4. $\lim_{n \to \infty} \sum_{i=1}^\infty g_n(i) = \sum_{i=1}^\infty g(i) < \infty$.
+
+Then:
+$$
+\lim_{n \to \infty} \sum_{i=1}^\infty f_n(i) = \sum_{i=1}^\infty \lim_{n \to \infty} f_n(i) = \sum_{i=1}^\infty f(i).
+$${#eq-dct-sums}
+:::
+
+---
+
+## Examples and counterexamples
+
+::: {#exm-fubini-counterexample}
+## Failure of Fubini / Interchanging Limits
+Let $\{S_{m,n}\}_{m,n=1}^\infty$ be a double sequence of real numbers such that $\lim_{m \to \infty} S_{m,n} = 1$ for all $n$ and $\lim_{n \to \infty} S_{m,n} = 0$ for all $m$. For instance, take $S_{m,n} = \mathbf{1}_{\{m \ge n\}}$ or $S_{m,n} = \frac{m}{m+n}$. 
+
+Define $\{a_{i,j}\}_{i,j=1}^\infty$ via discrete mixed differences (with $S_{m,0} = S_{0,n} = 0$):
+$$
+a_{m,n} := S_{m,n} - S_{m-1,n} - S_{m,n-1} + S_{m-1,n-1}.
+$$
+This choice ensures that $S_{m,n} = \sum_{i=1}^m \sum_{j=1}^n a_{i,j}$. Consequently:
+$$
+\begin{align*}
+&\sum_{i=1}^\infty \sum_{j=1}^\infty a_{i,j} = \lim_{i \to \infty} \lim_{j \to \infty} S_{i,j} = 0\\
+& \neq 1 = \lim_{j \to \infty} \lim_{i \to \infty} S_{i,j} = \sum_{j=1}^\infty \sum_{i=1}^\infty a_{i,j}.
+\end{align*}
+$${#eq-counterexample-sum-order}
+
+Evaluating $a_{m,n}$ explicitly for $S_{m,n} = \mathbf{1}_{\{m \ge n\}}$ gives:
+$$
+\begin{align*}
+a_{m,n} &= \mathbf{1}_{\{m \ge n\}} - \mathbf{1}_{\{m-1 \ge n\}} - \mathbf{1}_{\{m \ge n-1\}} + \mathbf{1}_{\{m-1 \ge n-1\}} \\
+&= \mathbf{1}_{\{m = n\}} - \mathbf{1}_{\{m = n-1\}}.
+\end{align*}
+$${#eq-amn-explicit}
+Thus, $a_{m,n} = 1$ if $m = n$, $a_{m,n} = -1$ if $n = m+1$, and $a_{m,n} = 0$ otherwise.
+
+Fixing $n$, the row sum yields $\sum_{m=1}^\infty a_{m,n} = \mathbf{1}_{\{n = 1\}}$.
+Fixing $m$, the column sum yields $\sum_{n=1}^\infty a_{m,n} = 0$.
+Thus:
+$$
+\sum_{n=1}^\infty \sum_{m=1}^\infty a_{m,n} = 1 \quad \neq \quad 0 = \sum_{m=1}^\infty \sum_{n=1}^\infty a_{m,n}.
+$$
+Notice that $\sum_{m=1}^\infty \sum_{n=1}^\infty |a_{m,n}| = \infty$, confirming why Fubini's Theorem (@prp-fubini-sums) does not apply.
+:::
+
+::: {#exm-integral-variant}
+### Continuous Counterexample on $\mathbb{R}_+^2$
+A continuous analog of @exm-fubini-counterexample is constructed on $[0, \infty)^2$ via:
+$$
+h(x,y) = \mathbf{1}_{\{x \le y \le x+1\}} - \mathbf{1}_{\{x+1 < y \le x+2\}}.
+$${#eq-continuous-h-def}
+
+Integrating with respect to $y$ for a fixed $x \ge 0$:
+$$
+\int_0^\infty h(x,y) \, dy = \int_x^{x+1} 1 \, dy - \int_{x+1}^{x+2} 1 \, dy = 1 - 1 = 0.
+$$
+Integrating with respect to $x$ for a fixed $y \ge 0$:
+$$
+\int_0^\infty h(x,y) \, dx = y \mathbf{1}_{\{y \le 1\}} + (2-y) \mathbf{1}_{\{1 \le y \le 2\}}.
+$$
+Taking iterated integrals yields:
+$$
+\int_0^\infty \left( \int_0^\infty h(x,y) \, dy \right) dx = \int_0^\infty 0 \, dx = 0,
+$$
+while
+$$
+\int_0^\infty \left( \int_0^\infty h(x,y) \, dx \right) dy = \int_0^1 y \, dy + \int_1^2 (2-y) \, dy = \frac{1}{2} + \frac{1}{2} = 1.
+$$
+Hence, $\int_0^\infty \int_0^\infty h(x,y) \, dy \, dx = 0 \neq 1 = \int_0^\infty \int_0^\infty h(x,y) \, dx \, dy$.
+:::
+
+---
+
+## Exercises and Proof Solutions
+
+## Exercise 1.1: Fubini's Theorem for Sums
+
+::: {#exr-fubini-proof}
+Prove Proposition 1.15 (@prp-fubini-sums).
+:::
+
+::: {.proof}
+*Solution / Proof.*
+Let $a_{k,n}^+ := \max(a_{k,n}, 0)$ and $a_{k,n}^- := \max(-a_{k,n}, 0)$. Then $a_{k,n} = a_{k,n}^+ - a_{k,n}^-$ and $|a_{k,n}| = a_{k,n}^+ + a_{k,n}^-$. Since $a_{k,n}^+, a_{k,n}^- \le |a_{k,n}|$, Tonelli's Theorem for non-negative double sums (@prp-tonelli-sums) implies:
+$$
+\sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n}^+ = \sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n}^+ \le \sum_{k=1}^\infty \sum_{n=1}^\infty |a_{k,n}| < \infty,
+$$
+and
+$$
+\sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n}^- = \sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n}^- \le \sum_{k=1}^\infty \sum_{n=1}^\infty |a_{k,n}| < \infty.
+$$
+For each $k \in \mathbb{N}$, $\sum_{n=1}^\infty |a_{k,n}| < \infty$, so $S_k := \sum_{n=1}^\infty a_{k,n}$ converges absolutely and equals $\sum_{n=1}^\infty a_{k,n}^+ - \sum_{n=1}^\infty a_{k,n}^-$. By @prp-linearity-sums, $\{S_k\}_{k=1}^\infty$ is summable because $\sum_{k=1}^\infty |S_k| \le \sum_{k=1}^\infty \sum_{n=1}^\infty |a_{k,n}| < \infty$. 
+
+Using the linearity of summable series:
+$$
+\begin{aligned}
+\sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n} &= \sum_{k=1}^\infty \left( \sum_{n=1}^\infty a_{k,n}^+ - \sum_{n=1}^\infty a_{k,n}^- \right) = \sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n}^+ - \sum_{k=1}^\infty \sum_{n=1}^\infty a_{k,n}^- \\
+&= \sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n}^+ - \sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n}^- = \sum_{n=1}^\infty \left( \sum_{k=1}^\infty a_{k,n}^+ - \sum_{k=1}^\infty a_{k,n}^- \right) \\
+&= \sum_{n=1}^\infty \sum_{k=1}^\infty a_{k,n}.
+\end{aligned}
+$$
+This completes the proof. 
+:::
+
+---
+
+## Exercise 1.2: Fatou's Lemma for Sums
+
+::: {#exr-fatou-proof}
+Prove Proposition 1.17 (@prp-fatou-sums).
+:::
+
+::: {.proof}
+*Solution / Proof.*
+For each $n \in \mathbb{N}$ and $i \in \mathbb{N}$, define $f_n(i) := \inf_{m \ge n} h_m(i)$. 
+
+By construction:
+
+1. $f_n(i) \le h_n(i)$ for all $n, i \in \mathbb{N}$.
+2. $f_n(i)$ is non-decreasing in $n$ for each $i \in \mathbb{N}$.
+3. $\lim_{n \to \infty} f_n(i) = \sup_{n \ge 1} \inf_{m \ge n} h_m(i) = \liminf_{n \to \infty} h_n(i)$.
+
+Applying the Monotone Convergence Theorem for sums (@prp-mct-sums) to the non-decreasing sequence $f_n(i)$ yields:
+$$
+\sum_{i=1}^\infty \liminf_{n \to \infty} h_n(i) = \sum_{i=1}^\infty \lim_{n \to \infty} f_n(i) = \lim_{n \to \infty} \sum_{i=1}^\infty f_n(i) = \liminf_{n \to \infty} \sum_{i=1}^\infty f_n(i).
+$$
+Since $f_n(i) \le h_n(i)$ for all $i$, monotonicity of sums implies $\sum_{i=1}^\infty f_n(i) \le \sum_{i=1}^\infty h_n(i)$ for all $n$. Taking the $\liminf$ as $n \to \infty$ gives:
+$$
+\liminf_{n \to \infty} \sum_{i=1}^\infty f_n(i) \le \liminf_{n \to \infty} \sum_{i=1}^\infty h_n(i).
+$$
+Combining these two results proves @eq-fatou-sums. 
+:::
+
+---
+
+## Exercise 1.3: Dominated Convergence Theorem for Sums
+
+::: {#exr-dct-proof}
+Prove Proposition 1.18 (@prp-dct-sums).
+:::
+
+::: {.proof}
+*Solution / Proof.*
+Since $|f_n(i)| \le g_n(i)$, we have $g_n(i) + f_n(i) \ge 0$ and $g_n(i) - f_n(i) \ge 0$ for all $n, i \in \mathbb{N}$.
+
+**Step 1: Lower bound via $g_n + f_n$.**
+Define $h_n(i) := g_n(i) + f_n(i) \ge 0$. Applying Fatou's Lemma (@prp-fatou-sums) to $h_n$:
+$$
+\sum_{i=1}^\infty \liminf_{n \to \infty} (g_n(i) + f_n(i)) \le \liminf_{n \to \infty} \sum_{i=1}^\infty (g_n(i) + f_n(i)).
+$$
+Since $\lim_{n \to \infty} g_n(i) = g(i)$ exists, $\liminf_{n \to \infty} (g_n(i) + f_n(i)) = g(i) + \liminf_{n \to \infty} f_n(i) = g(i) + f(i)$. Using @lem-liminf-addition with $b_n = \sum_{i=1}^\infty g_n(i) \to \sum_{i=1}^\infty g(i) < \infty$:
+$$
+\sum_{i=1}^\infty g(i) + \sum_{i=1}^\infty f(i) \le \sum_{i=1}^\infty g(i) + \liminf_{n \to \infty} \sum_{i=1}^\infty f_n(i).
+$$
+Subtracting the finite quantity $\sum_{i=1}^\infty g(i)$ from both sides yields:
+$$
+\sum_{i=1}^\infty f(i) \le \liminf_{n \to \infty} \sum_{i=1}^\infty f_n(i).
+$${#eq-dct-step1}
+
+**Step 2: Upper bound via $g_n - f_n$.**
+Define $k_n(i) := g_n(i) - f_n(i) \ge 0$. Applying Fatou's Lemma (@prp-fatou-sums) to $k_n$:
+$$
+\sum_{i=1}^\infty \liminf_{n \to \infty} (g_n(i) - f_n(i)) \le \liminf_{n \to \infty} \sum_{i=1}^\infty (g_n(i) - f_n(i)).
+$$
+Using $\liminf_{n \to \infty} (g_n(i) - f_n(i)) = g(i) - \limsup_{n \to \infty} f_n(i) = g(i) - f(i)$ and $\liminf (-a_n) = -\limsup a_n$:
+$$
+\sum_{i=1}^\infty g(i) - \sum_{i=1}^\infty f(i) \le \sum_{i=1}^\infty g(i) - \limsup_{n \to \infty} \sum_{i=1}^\infty f_n(i).
+$$
+Subtracting $\sum_{i=1}^\infty g(i)$ and multiplying by $-1$ reverses the inequality:
+$$
+\limsup_{n \to \infty} \sum_{i=1}^\infty f_n(i) \le \sum_{i=1}^\infty f(i).
+$${#eq-dct-step2}
+
+**Step 3: Conclusion.**
+Combining @eq-dct-step1 and @eq-dct-step2 with @prp-properties-limsup-liminf (Item 1) gives:
+$$
+\sum_{i=1}^\infty f(i) \le \liminf_{n \to \infty} \sum_{i=1}^\infty f_n(i) \le \limsup_{n \to \infty} \sum_{i=1}^\infty f_n(i) \le \sum_{i=1}^\infty f(i).
+$$
+Thus $\lim_{n \to \infty} \sum_{i=1}^\infty f_n(i) = \sum_{i=1}^\infty f(i)$, completing the proof. 
+:::
+
+---

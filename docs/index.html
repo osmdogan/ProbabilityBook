@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Osman Doğan">
+<meta name="author" content="Süleyman Taşpınar">
+<meta name="dcterms.date" content="2026-10-29">
+
+<title>Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Probability-Theory-I.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#probability-theory-i" id="toc-probability-theory-i" class="nav-link" data-scroll-target="#probability-theory-i">Probability Theory I</a></li>
+  <li><a href="#probability-theory-ii" id="toc-probability-theory-ii" class="nav-link" data-scroll-target="#probability-theory-ii">Probability Theory II</a></li>
+  <li><a href="#probability-theory-iii" id="toc-probability-theory-iii" class="nav-link" data-scroll-target="#probability-theory-iii">Probability Theory III</a></li>
+  <li><a href="#definitions-examples-and-theorems" id="toc-definitions-examples-and-theorems" class="nav-link" data-scroll-target="#definitions-examples-and-theorems">Definitions, Examples, and Theorems</a></li>
+  <li><a href="#proofs" id="toc-proofs" class="nav-link" data-scroll-target="#proofs">Proofs</a></li>
+  <li><a href="#notation" id="toc-notation" class="nav-link" data-scroll-target="#notation">Notation</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Probability Theory</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://sites.google.com/view/osmandogan/home">Osman Doğan</a> </p>
+             <p><a href="https://sites.google.com/site/gcsuleymantaspinar/">Süleyman Taşpınar</a> </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 29, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+
+<section id="preface" class="level1 unnumbered">
+<h1 class="unnumbered">Preface</h1><p><img src="cover3.jfif" title="Probability Theory" class="quarto-cover-image nolightbox img-fluid"></p>
+<p>In this book, we collect the lecture notes provided by <a href="https://mathweb.ucsd.edu/~tkemp/ProbabilityTube/">Todd Kemp</a>. These notes are based on the book <a href="https://mathweb.ucsd.edu/~tkemp/280B/Driver-Probability-Lecture-Notes.pdf">Probability Tools with Examples</a> by Bruce Driver and were developed for a full-year graduate course on probability theory and stochastic processes. Our aim is to make these lecture notes more accessible by providing a more structured and organized presentation of the material. We also provide additional explanations, illustrations, and examples to help readers better understand the concepts. The book consists of three main parts: Probability Theory I, II, and III.</p>
+</section>
+<section id="probability-theory-i" class="level1">
+<h1>Probability Theory I</h1>
+<p>The first part consists of 41 lectures on the fundamentals of probability theory. We begin with the Banach–Tarski paradox by showing that we cannot define a set function on all subsets of a unit circle in the complex plane that satisfies the usual properties of a measure. This motivates the need for a rigorous theory of measure, which forms the foundation of probability theory. We then introduce sigma-algebras, measures, and related concepts, and discuss the construction of measures from pre-measures defined on algebras, showing how these measures can be extended to complete measures on sigma-algebras, including the construction of Lebesgue and Radon measures. This part then continues with measurable functions (random variables) and their properties. We introduce integration theory for measurable functions, including the Lebesgue integral, and develop three important convergence theorems: the Monotone Convergence Theorem, Fatou’s Lemma, and the Dominated Convergence Theorem. We then cover product measures and Tonelli’s and Fubini’s theorems for iterated integration, followed by independence of events and random variables.</p>
+<p>We then discuss Kolmogorov’s extension theorem for constructing stochastic processes with specified finite-dimensional distributions, Kolmogorov’s zero-one law governing the long-run behavior of independent sequences, and convolution as a tool for computing the distribution of a sum of independent random variables. We introduce Kolmogorov’s convergence criterion, which paves the way for the Strong Law of Large Numbers and the study of almost sure convergence of series of independent random variables. We finally close this part by applying the Strong Law of Large Numbers to basic concepts in renewal theory.</p>
+<div id="fig-probability-theory-i" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-probability-theory-i-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="part1.jfif" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-probability-theory-i-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Probability Theory I
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="probability-theory-ii" class="level1">
+<h1>Probability Theory II</h1>
+<p>The second part consists of 44 lectures. We start with Cramér’s Large Deviations Principle, which provides a framework for understanding the probabilities of rare events in terms of the Legendre transform of the cumulant generating function. We then introduce total variation distance and Wasserstein distance for quantifying the difference between probability measures. We then move on to study weak and vague convergence of probability measures, and explore their implications for the convergence of random variables. We cover Prokhorov’s theorem and its applications to tightness and relative compactness of probability measures. The skorokhod representation theorem is also discussed, providing a powerful tool for constructing almost surely convergent sequences of random variables that mirror the weak convergence of their distributions.</p>
+<p>We then discuss characteristic functions and their role in studying the distributions of random variables. Characteristic functions provide a powerful tool for analyzing convergence in distribution, as well as for deriving properties of sums of independent random variables. This sets the stage for the central limit theorem and other limit theorems in probability theory.</p>
+<p>The conditional probability and expectation are covered in detail, including their definitions and fundamental properties through seven lectures. We cover probability kernels and their role in defining conditional distributions and constructing new probability measures from existing ones through three lectures. This sets the stage for a rigorous treatment of stochastic processes: we introduce the Poisson process, the Markov property, and the construction of Markov processes from transition kernels via Kolmogorov’s extension theorem on path space. We close this part by specializing to time-homogeneous Markov chains on finite or countable state spaces, where transition probabilities are encoded by Markov matrices and their continuous-time analogues by infinitesimal generators and the matrix exponential.</p>
+<div id="fig-probability-theory-ii" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-probability-theory-ii-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="part2.jfif" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-probability-theory-ii-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Probability Theory II
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="probability-theory-iii" class="level1">
+<h1>Probability Theory III</h1>
+<p>This part is the newest, and still actively growing, section of the book.</p>
+</section>
+<section id="definitions-examples-and-theorems" class="level1">
+<h1>Definitions, Examples, and Theorems</h1>
+<p>To separate definitions, examples, propositions, and theorems from the main text, we use boxes with a white background for better visual distinction. The following examples illustrate this approach.</p>
+<div id="def-measure" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.1 (Measure and Measure Space)</strong></span> Let <span class="math inline">\(\Omega\)</span> be a sample space and <span class="math inline">\(\mathcal{F}\)</span> be a <span class="math inline">\(\sigma\)</span>-field (<span class="math inline">\(\sigma\)</span>-algebra) over <span class="math inline">\(\Omega\)</span>. The pair <span class="math inline">\((\Omega, \mathcal{F})\)</span> is called a <strong>measurable space</strong>, and elements <span class="math inline">\(E \in \mathcal{F}\)</span> are called <strong>measurable sets</strong> (or <strong>events</strong>).</p>
+<p>A set function <span class="math inline">\(\mu: \mathcal{F} \to [0, \infty]\)</span> is called a <strong>measure</strong> if it satisfies the following two conditions:</p>
+<ul>
+<li><strong>Empty Set:</strong> <span class="math inline">\(\mu(\emptyset) = 0\)</span>.</li>
+<li><strong>Countable Additivity</strong> (<span class="math inline">\(\sigma\)</span>-additivity): For any countable sequence of pairwise disjoint sets <span class="math inline">\(\{E_j\}_{j=1}^\infty \subseteq \mathcal{F}\)</span> (i.e., <span class="math inline">\(E_i \cap E_j = \emptyset\)</span> for all <span class="math inline">\(i \neq j\)</span>): <span id="eq-countable-additivity"><span class="math display">\[
+\mu\left( \bigcup_{j=1}^\infty E_j \right) = \sum_{j=1}^\infty \mu(E_j).
+\tag{4.1}\]</span></span></li>
+</ul>
+<p>Note that these two conditions are independent: countable additivity alone does not rule out the degenerate set function <span class="math inline">\(\mu \equiv \infty\)</span>, which satisfies <a href="2-1-Measures-Definition-Examples.html#eq-countable-additivity" class="quarto-xref">Equation&nbsp;<span>4.1</span></a> vacuously but violates <span class="math inline">\(\mu(\emptyset) = 0\)</span>.</p>
+<p>The triple <span class="math inline">\((\Omega, \mathcal{F}, \mu)\)</span> is called a <strong>measure space</strong>.</p>
+</div>
+<div id="prp-dirac-validity" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 4.1 (Validity of Dirac Measure)</strong></span> Fix <span class="math inline">\(\omega_0 \in \Omega\)</span> and define the <strong>Dirac (point-mass) measure</strong> at <span class="math inline">\(\omega_0\)</span> by <span class="math inline">\(\delta_{\omega_0}(E) := \mathbb{I}_E(\omega_0)\)</span> for <span class="math inline">\(E \in \mathcal{F}\)</span>, i.e., <span class="math inline">\(\delta_{\omega_0}(E) = 1\)</span> if <span class="math inline">\(\omega_0 \in E\)</span> and <span class="math inline">\(\delta_{\omega_0}(E) = 0\)</span> otherwise. Then <span class="math inline">\(\delta_{\omega_0}\)</span> is a valid probability measure on <span class="math inline">\((\Omega, \mathcal{F})\)</span>.</p>
+</div>
+</section>
+<section id="proofs" class="level1">
+<h1>Proofs</h1>
+<p>To state proofs, we use the Quarto div proof environment. This environment ends with a filled black square as the QED symbol to indicate the conclusion of the proof.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="2-1-Measures-Definition-Examples.html#prp-dirac-validity" class="quarto-xref">Proposition&nbsp;<span>4.1</span></a>). </span>First, <span class="math inline">\(\delta_{\omega_0}(\emptyset) = 0\)</span> since <span class="math inline">\(\omega_0 \notin \emptyset\)</span>, and <span class="math inline">\(\delta_{\omega_0}(\Omega) = 1\)</span> since <span class="math inline">\(\omega_0 \in \Omega\)</span>; this verifies the <strong>Empty Set</strong> axiom and normalization to a probability measure.</p>
+<p>Next, let <span class="math inline">\(\{E_j\}_{j=1}^\infty \subseteq \mathcal{F}\)</span> be a countable sequence of pairwise disjoint measurable sets. Since the sets are disjoint, the point <span class="math inline">\(\omega_0\)</span> can belong to at most one set <span class="math inline">\(E_k\)</span>:</p>
+<ul>
+<li><strong>Case 1:</strong> There exists a unique index <span class="math inline">\(k \ge 1\)</span> such that <span class="math inline">\(\omega_0 \in E_k\)</span>. Then <span class="math inline">\(\omega_0 \in \bigcup_{j=1}^\infty E_j\)</span>, so <span class="math inline">\(\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = 1\)</span>. On the sum side, <span class="math inline">\(\delta_{\omega_0}(E_k) = 1\)</span> and <span class="math inline">\(\delta_{\omega_0}(E_j) = 0\)</span> for all <span class="math inline">\(j \neq k\)</span>. Thus: <span class="math display">\[\sum_{j=1}^\infty \delta_{\omega_0}(E_j) = \delta_{\omega_0}(E_k) + \sum_{j \neq k} 0 = 1 + 0 = 1.\]</span></li>
+<li><strong>Case 2:</strong> <span class="math inline">\(\omega_0 \notin E_j\)</span> for all <span class="math inline">\(j \ge 1\)</span>. Then <span class="math inline">\(\omega_0 \notin \bigcup_{j=1}^\infty E_j\)</span>, so <span class="math inline">\(\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = 0\)</span>. On the sum side, <span class="math inline">\(\delta_{\omega_0}(E_j) = 0\)</span> for all <span class="math inline">\(j \ge 1\)</span>, yielding <span class="math inline">\(\sum_{j=1}^\infty \delta_{\omega_0}(E_j) = 0\)</span>.</li>
+</ul>
+<p>In both cases, <span class="math inline">\(\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = \sum_{j=1}^\infty \delta_{\omega_0}(E_j)\)</span>, proving countable additivity. Together with the Empty Set axiom verified above, <span class="math inline">\(\delta_{\omega_0}\)</span> is a measure; since <span class="math inline">\(\delta_{\omega_0}(\Omega) = 1\)</span>, it is a probability measure.</p>
+</div>
+</section>
+<section id="notation" class="level1">
+<h1>Notation</h1>
+<p>In this section, we summarize the most frequently used notation in this book. We present the notation in a series of tables, each with a short description of the meaning and usage of the symbols. The tables are organized by topic, and we encourage readers to refer to them as needed while reading the book. These tables are</p>
+<ul>
+<li><a href="#tbl-number-systems1" class="quarto-xref">Table&nbsp;<span>6.1</span></a>: Number Systems and Euclidean Spaces</li>
+<li><a href="#tbl-set-operations" class="quarto-xref">Table&nbsp;<span>6.2</span></a>: Set Operations</li>
+<li><a href="#tbl-measurable-spaces" class="quarto-xref">Table&nbsp;<span>6.3</span></a>: Measurable Spaces and <span class="math inline">\(\sigma\)</span>-Fields</li>
+<li><a href="#tbl-measures-integration" class="quarto-xref">Table&nbsp;<span>6.4</span></a>: Measures and Integration</li>
+<li><a href="#tbl-function-spaces" class="quarto-xref">Table&nbsp;<span>6.5</span></a>: Function Spaces</li>
+<li><a href="#tbl-probability-events-random-variables" class="quarto-xref">Table&nbsp;<span>6.6</span></a>: Probability, Events, and Random Variables</li>
+<li><a href="#tbl-named-distributions" class="quarto-xref">Table&nbsp;<span>6.7</span></a>: Named Distributions</li>
+<li><a href="#tbl-expectations-moments" class="quarto-xref">Table&nbsp;<span>6.8</span></a>: Expectations and Moments</li>
+<li><a href="#tbl-transforms-generating-functions" class="quarto-xref">Table&nbsp;<span>6.9</span></a>: Transforms and Generating Functions</li>
+<li><a href="#tbl-modes-convergence" class="quarto-xref">Table&nbsp;<span>6.10</span></a>: Modes of Convergence</li>
+<li><a href="#tbl-probability-metrics" class="quarto-xref">Table&nbsp;<span>6.11</span></a>: Probability Metrics</li>
+<li><a href="#tbl-probability-kernels" class="quarto-xref">Table&nbsp;<span>6.12</span></a>: Probability Kernels</li>
+<li><a href="#tbl-stochastic-processes-filtrations" class="quarto-xref">Table&nbsp;<span>6.13</span></a>: Stochastic Processes and Filtrations</li>
+</ul>
+<div style="font-size: 80%">
+<div id="tbl-number-systems1" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-number-systems1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.1: Number Systems and Euclidean Spaces
+</figcaption>
+<div aria-describedby="tbl-number-systems1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{N}\)</span></td>
+<td style="text-align: left;">Natural numbers <span class="math inline">\(\{0, 1, 2, \ldots\}\)</span></td>
+<td style="text-align: left;">Index sets for sequences; <span class="math inline">\(\mathbb{N}\)</span> includes <span class="math inline">\(0\)</span> throughout.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{Z}\)</span></td>
+<td style="text-align: left;">Integers <span class="math inline">\(\{\ldots, -1, 0, 1, \ldots\}\)</span></td>
+<td style="text-align: left;">Lattice-valued processes.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{Q}\)</span></td>
+<td style="text-align: left;">Rational numbers</td>
+<td style="text-align: left;">E.g., the dense rotation subgroup <span class="math inline">\(T \subset S^1\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{R}\)</span></td>
+<td style="text-align: left;">Real numbers</td>
+<td style="text-align: left;">The default state space and range of random variables.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{R}^d\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(d\)</span>-dimensional Euclidean space</td>
+<td style="text-align: left;">State space for multivariate random variables and processes.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{C}\)</span></td>
+<td style="text-align: left;">Complex numbers</td>
+<td style="text-align: left;">Used for characteristic functions; identified with <span class="math inline">\(\mathbb{R}^2\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(S^1\)</span></td>
+<td style="text-align: left;">Unit circle <span class="math inline">\(\{z \in \mathbb{C} : |z| = 1\}\)</span></td>
+<td style="text-align: left;">Used in the Banach–Tarski motivation and Fourier analysis.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\([0,\infty)\)</span>, <span class="math inline">\([0, b]\)</span></td>
+<td style="text-align: left;">Non-negative reals, bounded interval</td>
+<td style="text-align: left;">Typical index sets <span class="math inline">\(T\)</span> for continuous-time processes.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-set-operations" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-set-operations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.2: Set Operations
+</figcaption>
+<div aria-describedby="tbl-set-operations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(2^\Omega\)</span></td>
+<td style="text-align: left;">Power set of <span class="math inline">\(\Omega\)</span></td>
+<td style="text-align: left;">The collection of all subsets; a valid <span class="math inline">\(\sigma\)</span>-field, but too large to support a consistent measure in general.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(A^c\)</span></td>
+<td style="text-align: left;">Complement of <span class="math inline">\(A\)</span> in <span class="math inline">\(\Omega\)</span></td>
+<td style="text-align: left;">Used in <span class="math inline">\(\sigma\)</span>-field closure axioms.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(A \setminus B\)</span></td>
+<td style="text-align: left;">Set difference <span class="math inline">\(\{x \in A : x \notin B\}\)</span></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(A \triangle B\)</span></td>
+<td style="text-align: left;">Symmetric difference <span class="math inline">\((A \setminus B) \cup (B \setminus A)\)</span></td>
+<td style="text-align: left;">Used in measure-theoretic convergence arguments.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\bigcup_{j} A_j\)</span>, <span class="math inline">\(\bigcap_{j} A_j\)</span></td>
+<td style="text-align: left;">Countable union and intersection</td>
+<td style="text-align: left;">Central in the <span class="math inline">\(\sigma\)</span>-additivity axiom.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(A_n \uparrow A\)</span></td>
+<td style="text-align: left;">Increasing sequence of sets with <span class="math inline">\(A = \bigcup_n A_n\)</span></td>
+<td style="text-align: left;">Continuity-from-below of measures.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(A_n \downarrow A\)</span></td>
+<td style="text-align: left;">Decreasing sequence of sets with <span class="math inline">\(A = \bigcap_n A_n\)</span></td>
+<td style="text-align: left;">Continuity-from-above of measures.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-measurable-spaces" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-measurable-spaces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.3: Measurable Spaces and <span class="math inline">\(\sigma\)</span>-Fields
+</figcaption>
+<div aria-describedby="tbl-measurable-spaces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\((\Omega, \mathcal{F})\)</span></td>
+<td style="text-align: left;">Measurable space</td>
+<td style="text-align: left;"><span class="math inline">\(\Omega\)</span> is the sample space; <span class="math inline">\(\mathcal{F} \subseteq 2^\Omega\)</span> is a <span class="math inline">\(\sigma\)</span>-field of events.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\sigma(\mathcal{E})\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\sigma\)</span>-field generated by the collection <span class="math inline">\(\mathcal{E}\)</span></td>
+<td style="text-align: left;">Smallest <span class="math inline">\(\sigma\)</span>-field containing <span class="math inline">\(\mathcal{E}\)</span>; defined as <span class="math inline">\(\bigcap\{\mathcal{F} : \mathcal{F} \text{ is a } \sigma\text{-field}, \mathcal{E} \subseteq \mathcal{F}\}\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\sigma(X)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\sigma\)</span>-field generated by the random variable <span class="math inline">\(X\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\sigma(X) = \sigma(\{X^{-1}(B) : B \in \mathcal{B}_S\})\)</span>; the smallest <span class="math inline">\(\sigma\)</span>-field making <span class="math inline">\(X\)</span> measurable.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\sigma(X_s : s \le t)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\sigma\)</span>-field generated by the process up to time <span class="math inline">\(t\)</span></td>
+<td style="text-align: left;">Denoted <span class="math inline">\(\mathcal{F}_t^X\)</span>; defines the natural filtration.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{B}(S)\)</span></td>
+<td style="text-align: left;">Borel <span class="math inline">\(\sigma\)</span>-algebra on a topological space <span class="math inline">\(S\)</span></td>
+<td style="text-align: left;">Generated by the open sets of <span class="math inline">\(S\)</span>; default <span class="math inline">\(\sigma\)</span>-field on <span class="math inline">\(\mathbb{R}^d\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{B}(\mathbb{R}^d)\)</span></td>
+<td style="text-align: left;">Borel <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(\mathbb{R}^d\)</span></td>
+<td style="text-align: left;">Generated by open balls, or equivalently by open rectangles.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{B}_1 \otimes \mathcal{B}_2\)</span></td>
+<td style="text-align: left;">Product <span class="math inline">\(\sigma\)</span>-field on <span class="math inline">\(S_1 \times S_2\)</span></td>
+<td style="text-align: left;">Generated by measurable rectangles <span class="math inline">\(B_1 \times B_2\)</span>; used for joint distributions.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{G} \subseteq \mathcal{F}\)</span></td>
+<td style="text-align: left;">Sub-<span class="math inline">\(\sigma\)</span>-field</td>
+<td style="text-align: left;">Represents partial information; used in conditional expectations.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-measures-integration" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-measures-integration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.4: Measures and Integration
+</figcaption>
+<div aria-describedby="tbl-measures-integration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\((\Omega, \mathcal{F}, \mu)\)</span></td>
+<td style="text-align: left;">Measure space</td>
+<td style="text-align: left;"><span class="math inline">\(\mu : \mathcal{F} \to [0,\infty]\)</span> countably additive, <span class="math inline">\(\mu(\emptyset) = 0\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span></td>
+<td style="text-align: left;">Probability space</td>
+<td style="text-align: left;"><span class="math inline">\(\mathbb{P}\)</span> is a probability measure: <span class="math inline">\(\mu\)</span> with <span class="math inline">\(\mu(\Omega) = 1\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mu(A)\)</span></td>
+<td style="text-align: left;">Measure of the set <span class="math inline">\(A\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mathbb{P}(A)\)</span> denotes the probability of event <span class="math inline">\(A\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\int_A f \, d\mu\)</span></td>
+<td style="text-align: left;">Lebesgue integral of <span class="math inline">\(f\)</span> over <span class="math inline">\(A\)</span> w.r.t. <span class="math inline">\(\mu\)</span></td>
+<td style="text-align: left;">Also written <span class="math inline">\(\int_A f(x) \, \mu(dx)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mu \ll \nu\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mu\)</span> is absolutely continuous w.r.t. <span class="math inline">\(\nu\)</span></td>
+<td style="text-align: left;">Every <span class="math inline">\(\nu\)</span>-null set is also <span class="math inline">\(\mu\)</span>-null.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(d\mu = f \, d\nu\)</span></td>
+<td style="text-align: left;">Radon-Nikodym representation</td>
+<td style="text-align: left;"><span class="math inline">\(f = d\mu/d\nu\)</span> is the Radon-Nikodym derivative; <span class="math inline">\(\mu(A) = \int_A f \, d\nu\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\delta_a\)</span></td>
+<td style="text-align: left;">Dirac (point-mass) measure at <span class="math inline">\(a\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\delta_a(B) = \mathbb{I}_{\{a \in B\}}\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\lambda\)</span></td>
+<td style="text-align: left;">Lebesgue measure</td>
+<td style="text-align: left;">Default reference measure on <span class="math inline">\(\mathbb{R}^d\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mu \otimes \nu\)</span></td>
+<td style="text-align: left;">Product measure on <span class="math inline">\((S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)\)</span></td>
+<td style="text-align: left;">Characterised by <span class="math inline">\((\mu \otimes \nu)(B_1 \times B_2) = \mu(B_1)\nu(B_2)\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mu \otimes Q\)</span></td>
+<td style="text-align: left;">Semi-direct product of measure <span class="math inline">\(\mu\)</span> and kernel <span class="math inline">\(Q\)</span></td>
+<td style="text-align: left;"><span class="math inline">\((\mu \otimes Q)(A \times B) = \int_A Q(x,B) \, \mu(dx)\)</span>; joint distribution when <span class="math inline">\(\mu_{(X,Y)} = \mu_X \otimes Q\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mu * \nu\)</span></td>
+<td style="text-align: left;">Convolution of measures</td>
+<td style="text-align: left;"><span class="math inline">\((\mu * \nu)(B) = \int \mu(B - y) \, \nu(dy)\)</span>; distribution of <span class="math inline">\(X + Y\)</span> for independent <span class="math inline">\(X \sim \mu\)</span>, <span class="math inline">\(Y \sim \nu\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{P}(S, \mathcal{B})\)</span></td>
+<td style="text-align: left;">Set of probability measures on <span class="math inline">\((S, \mathcal{B})\)</span></td>
+<td style="text-align: left;">Also written <span class="math inline">\(\mathcal{P}(S)\)</span> when the <span class="math inline">\(\sigma\)</span>-field is clear; often equipped with the topology of weak convergence.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-function-spaces" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-function-spaces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.5: Function Spaces
+</figcaption>
+<div aria-describedby="tbl-function-spaces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(L^p(\Omega, \mathcal{F}, \mu)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(L^p\)</span> space, <span class="math inline">\(1 \le p \le \infty\)</span></td>
+<td style="text-align: left;">For <span class="math inline">\(1 \le p &lt; \infty\)</span>: equivalence classes of <span class="math inline">\(\mathcal{F}\)</span>-measurable functions with <span class="math inline">\(\int |f|^p \, d\mu &lt; \infty\)</span>. For <span class="math inline">\(p = \infty\)</span>: equivalence classes with <span class="math inline">\(\operatorname{ess\,sup}_\omega|f(\omega)| &lt; \infty\)</span> (essentially bounded functions). Abbreviated <span class="math inline">\(L^p(\mu)\)</span> or <span class="math inline">\(L^p(\mathbb{P})\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\|f\|_{L^p}\)</span> or <span class="math inline">\(\|f\|_p\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(L^p\)</span> norm: <span class="math inline">\(\bigl(\int |f|^p \, d\mu\bigr)^{1/p}\)</span></td>
+<td style="text-align: left;">Also written <span class="math inline">\(\|f\|_{L^p(\mu)}\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\|f\|_\infty\)</span></td>
+<td style="text-align: left;">Supremum norm</td>
+<td style="text-align: left;">For <span class="math inline">\(f \in L^\infty(\mu)\)</span> (an equivalence class), <span class="math inline">\(\|f\|_\infty := \operatorname{ess\,sup}_\omega|f(\omega)| = \inf\{M \ge 0 : \mu(|f| &gt; M) = 0\}\)</span>, the essential supremum; this is the norm well-defined on a.e.-equivalence classes. For an everywhere-defined function on <span class="math inline">\(S\)</span> in <span class="math inline">\(\mathcal{B}_b(S)\)</span> or <span class="math inline">\(C_b(S)\)</span> (no a.e. quotienting), <span class="math inline">\(\|f\|_\infty = \sup_{x \in S} |f(x)|\)</span> (the literal pointwise supremum), which coincides with the essential supremum relative to any fully-supported reference measure.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{B}_b(S, \mathcal{B})\)</span></td>
+<td style="text-align: left;">Bounded <span class="math inline">\(\mathcal{B}\)</span>-measurable functions <span class="math inline">\(f: S \to \mathbb{R}\)</span></td>
+<td style="text-align: left;">Abbreviated <span class="math inline">\(\mathcal{B}_b(S)\)</span>; with the sup norm, it is a Banach space.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(C_b(S)\)</span></td>
+<td style="text-align: left;">Bounded continuous functions on a metric space <span class="math inline">\(S\)</span></td>
+<td style="text-align: left;">The natural test-function class for weak convergence.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(C_c(S)\)</span></td>
+<td style="text-align: left;">Continuous functions on <span class="math inline">\(S\)</span> with compact support</td>
+<td style="text-align: left;">Test-function class for <em>vague</em> convergence (<a href="#tbl-modes-convergence" class="quarto-xref">Table&nbsp;<span>6.10</span></a>); for probability measures, vague convergence to a limit of full mass <span class="math inline">\(1\)</span> is equivalent to weak convergence, but <span class="math inline">\(C_c(S)\)</span> alone does not suffice for weak convergence in general (mass may escape to infinity, e.g.&nbsp;<span class="math inline">\(\delta_n \to 0\)</span> vaguely on <span class="math inline">\(\mathbb{R}\)</span>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(C_c^\infty(S)\)</span></td>
+<td style="text-align: left;">Smooth (<span class="math inline">\(C^\infty\)</span>) functions with compact support, for <span class="math inline">\(S = \mathbb{R}^d\)</span> (or a smooth manifold)</td>
+<td style="text-align: left;">Dense in <span class="math inline">\(L^1(\mathbb{R}^d, \lambda)\)</span> (Lebesgue measure) and used in Fourier analysis.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Lip}_b(S)\)</span></td>
+<td style="text-align: left;">Bounded Lipschitz functions on <span class="math inline">\((S, d)\)</span></td>
+<td style="text-align: left;">Test-function class for the Wasserstein-1 distance and the bounded Lipschitz metric.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-probability-events-random-variables" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-probability-events-random-variables-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.6: Probability, Events, and Random Variables
+</figcaption>
+<div aria-describedby="tbl-probability-events-random-variables-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{P}(A_n)\)</span></td>
+<td style="text-align: left;">Probability of an event <span class="math inline">\(A_n \in \mathcal{F}\)</span>, <span class="math inline">\(n \ge 1\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\{A_n\}\)</span> is called a sequence of <strong>rare events</strong> if <span class="math inline">\(\mathbb{P}(A_n) \to 0\)</span> as <span class="math inline">\(n \to \infty\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{P}(A \mid B)\)</span></td>
+<td style="text-align: left;">Conditional probability: <span class="math inline">\(\mathbb{P}(A \cap B)/\mathbb{P}(B)\)</span></td>
+<td style="text-align: left;">Defined when <span class="math inline">\(\mathbb{P}(B) &gt; 0\)</span>; equals <span class="math inline">\(\mathbb{P}_B(A)\)</span> where <span class="math inline">\(\mathbb{P}_B\)</span> is the conditional measure.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">a.s.</td>
+<td style="text-align: left;">Almost surely (<span class="math inline">\(\mathbb{P}\)</span>-almost surely)</td>
+<td style="text-align: left;">An event holds a.s. if its probability is <span class="math inline">\(1\)</span>; e.g., <span class="math inline">\(X = Y\)</span> a.s. means <span class="math inline">\(\mathbb{P}(X \ne Y) = 0\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">i.i.d.</td>
+<td style="text-align: left;">Independent and identically distributed</td>
+<td style="text-align: left;">E.g., <span class="math inline">\(\{X_n\}\)</span> i.i.d. means all <span class="math inline">\(X_n\)</span> share the same distribution and are mutually independent.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(X: (\Omega, \mathcal{F}) \to (S, \mathcal{B}_S)\)</span></td>
+<td style="text-align: left;">Random variable (measurable map)</td>
+<td style="text-align: left;"><span class="math inline">\(X^{-1}(B) \in \mathcal{F}\)</span> for every <span class="math inline">\(B \in \mathcal{B}_S\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mu_X\)</span> or <span class="math inline">\(\mathrm{Law}(X)\)</span></td>
+<td style="text-align: left;">Distribution (law) of <span class="math inline">\(X\)</span></td>
+<td style="text-align: left;">The pushforward <span class="math inline">\(\mu_X = \mathbb{P} \circ X^{-1}\)</span>; <span class="math inline">\(\mu_X(B) = \mathbb{P}(X \in B)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(X^* \mathbb{P}\)</span></td>
+<td style="text-align: left;">Pushforward of <span class="math inline">\(\mathbb{P}\)</span> through <span class="math inline">\(X\)</span></td>
+<td style="text-align: left;">Another notation for <span class="math inline">\(\mu_X = \mathrm{Law}(X)\)</span>; note this book’s superscript-star convention for pushforward differs from the subscript-star (<span class="math inline">\(X_*\mathbb{P}\)</span>) convention common in other areas of analysis, where a superscript star more often denotes pullback.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(X \sim \mu\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(X\)</span> has distribution <span class="math inline">\(\mu\)</span></td>
+<td style="text-align: left;">Shorthand for <span class="math inline">\(\mu_X = \mu\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(X \stackrel{d}{=} Y\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> have the same distribution</td>
+<td style="text-align: left;">Does not imply <span class="math inline">\(X = Y\)</span> pathwise.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{I}_A\)</span> or <span class="math inline">\(\mathbf{1}_A\)</span></td>
+<td style="text-align: left;">Indicator function of event <span class="math inline">\(A\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mathbb{I}_A(\omega) = 1\)</span> if <span class="math inline">\(\omega \in A\)</span>, <span class="math inline">\(0\)</span> otherwise. Both notations appear in the book.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(X^+\)</span>, <span class="math inline">\(X^-\)</span></td>
+<td style="text-align: left;">Positive and negative parts of <span class="math inline">\(X\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(X^+ = \max(X,0)\)</span>, <span class="math inline">\(X^- = \max(-X,0)\)</span>; <span class="math inline">\(X = X^+ - X^-\)</span>, <span class="math inline">\(|X| = X^+ + X^-\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(X \wedge Y\)</span></td>
+<td style="text-align: left;">Pointwise minimum <span class="math inline">\(\min(X, Y)\)</span></td>
+<td style="text-align: left;">Also written <span class="math inline">\(X \wedge n\)</span> for truncation at level <span class="math inline">\(n\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(X \vee Y\)</span></td>
+<td style="text-align: left;">Pointwise maximum <span class="math inline">\(\max(X, Y)\)</span></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\dot{X}\)</span></td>
+<td style="text-align: left;">Centered random variable <span class="math inline">\(X - \mathbb{E}[X]\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\dot{S}_n = S_n - n\mathbb{E}[X_1]\)</span> is the centered partial sum; used in the CLT and LDP.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(F_X(t)\)</span> or <span class="math inline">\(F_\mu(t)\)</span></td>
+<td style="text-align: left;">Cumulative distribution function (CDF)</td>
+<td style="text-align: left;"><span class="math inline">\(F_X(t) = \mathbb{P}(X \le t)\)</span>; right-continuous with left limits.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(F^\leftarrow(u)\)</span></td>
+<td style="text-align: left;">Quantile function (left-continuous inverse of <span class="math inline">\(F\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\(F^\leftarrow(u) = \inf\{x : F(x) \ge u\}\)</span>; used in the Skorohod representation theorem.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-named-distributions" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-named-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.7: Named Distributions
+</figcaption>
+<div aria-describedby="tbl-named-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{N}(\mu, \sigma^2)\)</span></td>
+<td style="text-align: left;">Normal (Gaussian) distribution</td>
+<td style="text-align: left;">Mean <span class="math inline">\(\mu \in \mathbb{R}\)</span>, variance <span class="math inline">\(\sigma^2 &gt; 0\)</span>; <span class="math inline">\(\mathcal{N}(0,1)\)</span> is the standard normal.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Bernoulli}(p)\)</span></td>
+<td style="text-align: left;">Bernoulli distribution</td>
+<td style="text-align: left;"><span class="math inline">\(\mathbb{P}(X=1) = p\)</span>, <span class="math inline">\(\mathbb{P}(X=0) = 1-p\)</span>, <span class="math inline">\(p \in [0,1]\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Binomial}(n, p)\)</span></td>
+<td style="text-align: left;">Binomial distribution</td>
+<td style="text-align: left;">Sum of <span class="math inline">\(n\)</span> independent <span class="math inline">\(\operatorname{Bernoulli}(p)\)</span> variables.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Poisson}(\lambda)\)</span></td>
+<td style="text-align: left;">Poisson distribution</td>
+<td style="text-align: left;">Rate <span class="math inline">\(\lambda &gt; 0\)</span>; approximates <span class="math inline">\(\operatorname{Binomial}(n, \lambda/n)\)</span> as <span class="math inline">\(n \to \infty\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Unif}([a, b])\)</span></td>
+<td style="text-align: left;">Uniform distribution on <span class="math inline">\([a, b]\)</span></td>
+<td style="text-align: left;">Lebesgue measure on <span class="math inline">\([a,b]\)</span>, normalised.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Exp}(\lambda)\)</span></td>
+<td style="text-align: left;">Exponential distribution</td>
+<td style="text-align: left;">Rate <span class="math inline">\(\lambda &gt; 0\)</span>; <span class="math inline">\(\mathbb{P}(\xi &gt; t) = e^{-\lambda t}\)</span> for <span class="math inline">\(t \ge 0\)</span> (and <span class="math inline">\(=1\)</span> for <span class="math inline">\(t&lt;0\)</span>); memoryless property; building block for renewal processes.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-expectations-moments" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-expectations-moments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.8: Expectations and Moments
+</figcaption>
+<div aria-describedby="tbl-expectations-moments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{E}[X]\)</span></td>
+<td style="text-align: left;">Expectation of <span class="math inline">\(X\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mathbb{E}[X] = \int_\Omega X \, d\mathbb{P}\)</span>; defined when <span class="math inline">\(X \in L^1(\mathbb{P})\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{E}[X; A]\)</span> or <span class="math inline">\(\mathbb{E}[X \mathbb{I}_A]\)</span></td>
+<td style="text-align: left;">Expectation of <span class="math inline">\(X\)</span> on the event <span class="math inline">\(A\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mathbb{E}[X; A] = \int_A X \, d\mathbb{P} = \mathbb{E}[X \mathbb{I}_A]\)</span>. Both notations are used.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{E}[X \mid A]\)</span></td>
+<td style="text-align: left;">Conditional expectation given event <span class="math inline">\(A\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(= \mathbb{E}[X \mathbb{I}_A] / \mathbb{P}(A)\)</span>; defined when <span class="math inline">\(\mathbb{P}(A) &gt; 0\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{E}[X \mid \mathcal{G}]\)</span> or <span class="math inline">\(\mathbb{E}_\mathcal{G}[X]\)</span></td>
+<td style="text-align: left;">Conditional expectation given sub-<span class="math inline">\(\sigma\)</span>-field <span class="math inline">\(\mathcal{G}\)</span></td>
+<td style="text-align: left;">For <span class="math inline">\(X \in L^1(\mathbb{P})\)</span>, the unique <span class="math inline">\(\mathcal{G}\)</span>-measurable <span class="math inline">\(L^1\)</span> random variable satisfying <span class="math inline">\(\mathbb{E}[\mathbb{E}[X \mid \mathcal{G}] \cdot Y] = \mathbb{E}[XY]\)</span> for all bounded <span class="math inline">\(\mathcal{G}\)</span>-measurable <span class="math inline">\(Y\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{E}[X \mid Y]\)</span></td>
+<td style="text-align: left;">Conditional expectation given random variable <span class="math inline">\(Y\)</span></td>
+<td style="text-align: left;">Defined as <span class="math inline">\(\mathbb{E}[X \mid \sigma(Y)]\)</span> (requires <span class="math inline">\(X \in L^1(\mathbb{P})\)</span>); by the Doob–Dynkin lemma, equals <span class="math inline">\(g(Y)\)</span> for some measurable <span class="math inline">\(g\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{E}[X \mid Y = y]\)</span> or <span class="math inline">\(g(y)\)</span></td>
+<td style="text-align: left;">Conditional expectation evaluated at <span class="math inline">\(Y = y\)</span></td>
+<td style="text-align: left;">The measurable function <span class="math inline">\(g : S \to \mathbb{R}\)</span> satisfying <span class="math inline">\(\mathbb{E}[X \mid Y] = g(Y)\)</span> a.s.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Var}(X)\)</span></td>
+<td style="text-align: left;">Variance <span class="math inline">\(\mathbb{E}[X^2] - (\mathbb{E}[X])^2\)</span></td>
+<td style="text-align: left;">Defined for <span class="math inline">\(X \in L^2(\mathbb{P})\)</span>. Also written <span class="math inline">\(\operatorname{Var}[X]\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Cov}(X, Y)\)</span></td>
+<td style="text-align: left;">Covariance <span class="math inline">\(\mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y]\)</span></td>
+<td style="text-align: left;">Defined for <span class="math inline">\(X, Y \in L^2(\mathbb{P})\)</span> (so <span class="math inline">\(XY \in L^1(\mathbb{P})\)</span> by Cauchy–Schwarz).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\langle X, Y \rangle\)</span></td>
+<td style="text-align: left;">Inner product <span class="math inline">\(\mathbb{E}[XY]\)</span> on <span class="math inline">\(L^2(\mathbb{P})\)</span></td>
+<td style="text-align: left;">Makes <span class="math inline">\(L^2(\Omega, \mathcal{F}, \mathbb{P})\)</span> a Hilbert space; <span class="math inline">\(\|X\|_{L^2}^2 = \langle X, X \rangle\)</span>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-transforms-generating-functions" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-transforms-generating-functions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.9: Transforms and Generating Functions
+</figcaption>
+<div aria-describedby="tbl-transforms-generating-functions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(M_X(t)\)</span></td>
+<td style="text-align: left;">Moment generating function (MGF): <span class="math inline">\(\mathbb{E}[e^{tX}]\)</span></td>
+<td style="text-align: left;">Defined for <span class="math inline">\(t \in \mathbb{R}\)</span> when <span class="math inline">\(X\)</span> is exponentially integrable.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\Psi_X(t)\)</span></td>
+<td style="text-align: left;">Cumulant generating function (CGF): <span class="math inline">\(\log \mathbb{E}[e^{tX}]\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\Psi_X'(0) = \mathbb{E}[X]\)</span>, <span class="math inline">\(\Psi_X''(0) = \operatorname{Var}(X)\)</span>; the <span class="math inline">\(k\)</span>-th cumulant is <span class="math inline">\(C_k(X) = \Psi_X^{(k)}(0)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\Psi_X^*(\epsilon)\)</span></td>
+<td style="text-align: left;">Legendre–Fenchel transform of <span class="math inline">\(\Psi_X\)</span>: <span class="math inline">\(\sup_{t \in \mathbb{R}}\{\epsilon t - \Psi_X(t)\}\)</span></td>
+<td style="text-align: left;">The <strong>rate function</strong> in Cramér’s large deviations theorem; <span class="math inline">\(\Psi_X^*(\epsilon) \ge 0\)</span> always, with <span class="math inline">\(\Psi_X^*(\mathbb{E}[X])=0\)</span>. For <span class="math inline">\(\epsilon \ge \mathbb{E}[X]\)</span>, convexity of <span class="math inline">\(\Psi_X\)</span> (with <span class="math inline">\(\Psi_X'(0)=\mathbb{E}[X]\)</span>) implies the supremum is attained at some <span class="math inline">\(t \ge 0\)</span>, so <span class="math inline">\(\Psi_X^*(\epsilon) = \sup_{t \ge 0}\{\epsilon t - \Psi_X(t)\}\)</span> — the restricted form used in the Chernoff/Cramér upper-tail bound.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\hat{\mu}(\xi)\)</span></td>
+<td style="text-align: left;">Characteristic function of <span class="math inline">\(\mu\)</span>: <span class="math inline">\(\int e^{i\xi \cdot x} \, \mu(dx)\)</span></td>
+<td style="text-align: left;">Defined for <span class="math inline">\(\xi \in \mathbb{R}^d\)</span>; always exists and is bounded by <span class="math inline">\(1\)</span>. Also written <span class="math inline">\(\varphi_X(\xi) = \mathbb{E}[e^{i\xi \cdot X}]\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\hat{f}(\xi)\)</span></td>
+<td style="text-align: left;">Fourier transform of <span class="math inline">\(f \in L^1(\mathbb{R}^d)\)</span>: <span class="math inline">\(\int e^{i\xi \cdot x} f(x) \, dx\)</span></td>
+<td style="text-align: left;">When <span class="math inline">\(\mu\)</span> has density <span class="math inline">\(f\)</span>, <span class="math inline">\(\hat{\mu} = \hat{f}\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{P}_t\)</span></td>
+<td style="text-align: left;">Exponentially tilted measure: <span class="math inline">\(d\mathbb{P}_t = e^{tY}/M_Y(t) \, d\mathbb{P}\)</span></td>
+<td style="text-align: left;">Key tool in the proof of the lower bound in Cramér’s theorem.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-modes-convergence" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modes-convergence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.10: Modes of Convergence
+</figcaption>
+<div aria-describedby="tbl-modes-convergence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(X_n \xrightarrow{\text{a.s.}} X\)</span></td>
+<td style="text-align: left;">Almost sure convergence</td>
+<td style="text-align: left;"><span class="math inline">\(\mathbb{P}(\lim_n X_n = X) = 1\)</span>; implies convergence in probability (hence weak convergence). Not comparable to <span class="math inline">\(L^p\)</span> convergence in general — neither implies the other without an additional domination/uniform-integrability hypothesis.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(X_n \xrightarrow{L^p} X\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(L^p\)</span> convergence</td>
+<td style="text-align: left;"><span class="math inline">\(\|X_n - X\|_{L^p} \to 0\)</span>; implies convergence in probability.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(X_n \xrightarrow{\mathbb{P}} X\)</span></td>
+<td style="text-align: left;">Convergence in probability</td>
+<td style="text-align: left;"><span class="math inline">\(\mathbb{P}(|X_n - X| &gt; \epsilon) \to 0\)</span> for all <span class="math inline">\(\epsilon &gt; 0\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mu_n \Rightarrow \mu\)</span> or <span class="math inline">\(X_n \xrightarrow{w} X\)</span> or <span class="math inline">\(X_n \xrightarrow{d} X\)</span></td>
+<td style="text-align: left;">Weak convergence / convergence in distribution</td>
+<td style="text-align: left;"><span class="math inline">\(\int f \, d\mu_n \to \int f \, d\mu\)</span> for all <span class="math inline">\(f \in C_b(S)\)</span>; the weakest of the modes above.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span></td>
+<td style="text-align: left;">Vague convergence</td>
+<td style="text-align: left;"><span class="math inline">\(\int f \, d\mu_n \to \int f \, d\mu\)</span> for all <span class="math inline">\(f \in C_c(S)\)</span>; allows escape of mass to infinity.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\limsup_{n}\)</span>, <span class="math inline">\(\liminf_{n}\)</span></td>
+<td style="text-align: left;">Limit superior and inferior of a sequence</td>
+<td style="text-align: left;"><span class="math inline">\(\liminf_n a_n \le \limsup_n a_n\)</span>; equality holds iff the limit exists.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\frac{1}{n}\log \mathbb{P}(A_n) \to -c\)</span></td>
+<td style="text-align: left;">Exponential decay at rate <span class="math inline">\(c\)</span></td>
+<td style="text-align: left;">Informal/heuristic formulation of a large deviation principle; the rigorous formulation gives separate one-sided bounds, <span class="math inline">\(\liminf_n \frac1n\log\mathbb P(X_n\in O) \ge -\inf_O \Psi^*\)</span> for open <span class="math inline">\(O\)</span> and <span class="math inline">\(\limsup_n \frac1n\log\mathbb P(X_n\in C) \le -\inf_C \Psi^*\)</span> for closed <span class="math inline">\(C\)</span>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-probability-metrics" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-probability-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.11: Probability Metrics
+</figcaption>
+<div aria-describedby="tbl-probability-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(d_\text{TV}(\mu, \nu)\)</span></td>
+<td style="text-align: left;">Total variation distance</td>
+<td style="text-align: left;"><span class="math inline">\(\sup_{B \in \mathcal{B}} |\mu(B) - \nu(B)| = \tfrac{1}{2}\|u - v\|_{L^1(\alpha)}\)</span> when <span class="math inline">\(d\mu = u \, d\alpha\)</span>, <span class="math inline">\(d\nu = v \, d\alpha\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(d_\text{Kol}(\mu, \nu)\)</span></td>
+<td style="text-align: left;">Kolmogorov metric</td>
+<td style="text-align: left;"><span class="math inline">\(\sup_{t \in \mathbb{R}} |F_\mu(t) - F_\nu(t)|\)</span>; uniform distance between CDFs on <span class="math inline">\(\mathbb{R}\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(d_{W_1}(\mu, \nu)\)</span></td>
+<td style="text-align: left;">Wasserstein-1 (earth-mover) distance</td>
+<td style="text-align: left;"><span class="math inline">\(\sup_{f \in \operatorname{Lip}_1} |\int f \, d\mu - \int f \, d\nu|\)</span>; <span class="math inline">\(W_1\)</span>-convergence always implies weak convergence, but <strong>not conversely</strong> on an unbounded space like <span class="math inline">\(\mathbb{R}\)</span> — the converse needs convergence (or uniform integrability) of first moments as well (e.g.&nbsp;<span class="math inline">\(\mu_n = (1-\tfrac1n)\delta_0 + \tfrac1n\delta_n \Rightarrow \delta_0\)</span> weakly, but <span class="math inline">\(d_{W_1}(\mu_n,\delta_0)=1 \not\to 0\)</span>). On a <em>bounded</em> metric space, <span class="math inline">\(d_{W_1}\)</span> does metrise weak convergence.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(d_{BL}(\mu, \nu)\)</span></td>
+<td style="text-align: left;">Bounded Lipschitz metric</td>
+<td style="text-align: left;"><span class="math inline">\(\sup_{\|f\|_\infty \le 1,\, \operatorname{Lip}(f) \le 1} |\int f \, d\mu - \int f \, d\nu|\)</span>; metrises weak convergence on general metric spaces.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-probability-kernels" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-probability-kernels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.12: Probability Kernels
+</figcaption>
+<div aria-describedby="tbl-probability-kernels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(Q: S_1 \times \mathcal{B}_2 \to [0,1]\)</span></td>
+<td style="text-align: left;">Probability kernel from <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> to <span class="math inline">\((S_2, \mathcal{B}_2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(Q(x, \cdot)\)</span> is a probability measure for each <span class="math inline">\(x\)</span>; <span class="math inline">\(Q(\cdot, B)\)</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable for each <span class="math inline">\(B\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\int_{S_2} f(y) \, Q(x, dy)\)</span></td>
+<td style="text-align: left;">Integration against a kernel</td>
+<td style="text-align: left;">Defines the Markov generator operator <span class="math inline">\(L_Q\)</span> acting on <span class="math inline">\(\mathcal{B}_b(S_2)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\((L_Q f)(x)\)</span></td>
+<td style="text-align: left;">Markov generator: <span class="math inline">\(\int_{S_2} f(y) \, Q(x, dy)\)</span></td>
+<td style="text-align: left;">Maps <span class="math inline">\(\mathcal{B}_b(S_2, \mathcal{B}_2) \to \mathcal{B}_b(S_1, \mathcal{B}_1)\)</span>; <span class="math inline">\(\|L_Q f\|_\infty \le \|f\|_\infty\)</span>. Note: this “generator” of a single kernel <span class="math inline">\(Q\)</span> is a <em>different</em> (though related) notion from the <strong>infinitesimal generator</strong> <span class="math inline">\(A = \lim_{t\to0^+}(Q_t - I)/t\)</span> of a continuous-time semigroup <span class="math inline">\(\{Q_t\}_{t\ge0}\)</span>, introduced later for Markov processes.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(Q(x, B) = (L \mathbb{I}_B)(x)\)</span></td>
+<td style="text-align: left;">Recovery formula: kernel from generator</td>
+<td style="text-align: left;">The unique probability kernel giving rise to a Markov generator <span class="math inline">\(L\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(Q_1 Q_2\)</span> or <span class="math inline">\(Q_1 \cdot Q_2\)</span></td>
+<td style="text-align: left;">Composition of kernels</td>
+<td style="text-align: left;"><span class="math inline">\((Q_1 Q_2)(x, B) = \int Q_2(y, B) \, Q_1(x, dy)\)</span>; corresponds to <span class="math inline">\(L_{Q_1 Q_2} = L_{Q_1} \circ L_{Q_2}\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mu \otimes Q\)</span></td>
+<td style="text-align: left;">Semi-direct (skew) product measure</td>
+<td style="text-align: left;">The joint measure with marginal <span class="math inline">\(\mu\)</span> on <span class="math inline">\(S_1\)</span> and conditional <span class="math inline">\(Q(x, \cdot)\)</span> on <span class="math inline">\(S_2\)</span> given <span class="math inline">\(x\)</span>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div style="font-size: 80%">
+<div id="tbl-stochastic-processes-filtrations" class="striped hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-stochastic-processes-filtrations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.13: Stochastic Processes and Filtrations
+</figcaption>
+<div aria-describedby="tbl-stochastic-processes-filtrations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Usage / Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\{X_t\}_{t \in T}\)</span></td>
+<td style="text-align: left;">Stochastic process indexed by <span class="math inline">\(T\)</span></td>
+<td style="text-align: left;">Each <span class="math inline">\(X_t : (\Omega, \mathcal{F}) \to (S, \mathcal{B}_S)\)</span> is a measurable map.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{F}_t\)</span> or <span class="math inline">\(\{\mathcal{F}_t\}_{t \in T}\)</span></td>
+<td style="text-align: left;">Filtration</td>
+<td style="text-align: left;">Increasing family of sub-<span class="math inline">\(\sigma\)</span>-fields: <span class="math inline">\(\mathcal{F}_s \subseteq \mathcal{F}_t\)</span> for <span class="math inline">\(s \le t\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{F}_t^X = \sigma(X_s : s \le t)\)</span></td>
+<td style="text-align: left;">Natural filtration of <span class="math inline">\(\{X_t\}\)</span></td>
+<td style="text-align: left;">Smallest filtration to which <span class="math inline">\(\{X_t\}\)</span> is adapted.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathbb{F} = \{\mathcal{F}_t\}_{t \in T}\)</span></td>
+<td style="text-align: left;">Filtration (as a single object)</td>
+<td style="text-align: left;"><span class="math inline">\((\Omega, \mathcal{F}, \mathbb{F}, \mathbb{P})\)</span> is a filtered probability space.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathrm{Law}(X_{t_1}, \ldots, X_{t_n})\)</span></td>
+<td style="text-align: left;">Finite-dimensional distribution (f.d.d.)</td>
+<td style="text-align: left;">Joint law of <span class="math inline">\((X_{t_1}, \ldots, X_{t_n})\)</span>; <span class="math inline">\(= \mathbb{P} \circ (X_{t_1}, \ldots, X_{t_n})^{-1}\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(N_t = \sup\{n \ge 0 : X_n \le t\}\)</span></td>
+<td style="text-align: left;">Counting process</td>
+<td style="text-align: left;">Here <span class="math inline">\(X_n\)</span> denotes the <span class="math inline">\(n\)</span>-th arrival/renewal time (with convention <span class="math inline">\(X_0 := 0\)</span>), not a generic <span class="math inline">\(n\)</span>-th term of a sequence as elsewhere in this table; counts arrivals up to time <span class="math inline">\(t\)</span> and satisfies the duality <span class="math inline">\(\{N_t \ge n\} = \{X_n \le t\}\)</span>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="acknowledgements" class="level1">
+<h1>Acknowledgements</h1>
+<p>We use the theme from the book <a href="https://r4ds.hadley.nz/">R for Data Science (2e)</a> as the foundation for producing this book.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Probability-Theory-I.html" class="pagination-link" aria-label="Probability Theory I">
+        <span class="nav-page-text">Probability Theory I</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

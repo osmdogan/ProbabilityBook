@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>14&nbsp; Lecture 6.2: Measurable Functions – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./7-1-Robustness-Measurability.html" rel="next">
+<link href="./6-1-Random-Variables-Motivation.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-I.html">Probability Theory I</a></li><li class="breadcrumb-item"><a href="./6-2-Measurable-Functions.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#preimages-vs.-images" id="toc-preimages-vs.-images" class="nav-link active" data-scroll-target="#preimages-vs.-images"><span class="header-section-number">14.1</span> Preimages vs.&nbsp;Images</a></li>
+  <li><a href="#pull-back-and-push-forward-sigma-algebras" id="toc-pull-back-and-push-forward-sigma-algebras" class="nav-link" data-scroll-target="#pull-back-and-push-forward-sigma-algebras"><span class="header-section-number">14.2</span> Pull-Back and Push-Forward <span class="math inline">\(\sigma\)</span>-Algebras</a></li>
+  <li><a href="#measurable-functions" id="toc-measurable-functions" class="nav-link" data-scroll-target="#measurable-functions"><span class="header-section-number">14.3</span> Measurable Functions</a></li>
+  <li><a href="#real-valued-measurable-functions-and-random-variables" id="toc-real-valued-measurable-functions-and-random-variables" class="nav-link" data-scroll-target="#real-valued-measurable-functions-and-random-variables"><span class="header-section-number">14.4</span> Real-Valued Measurable Functions and Random Variables</a></li>
+  <li><a href="#compositions-and-continuous-functions" id="toc-compositions-and-continuous-functions" class="nav-link" data-scroll-target="#compositions-and-continuous-functions"><span class="header-section-number">14.5</span> Compositions and Continuous Functions</a></li>
+  <li><a href="#information-and-push-forward-distributions" id="toc-information-and-push-forward-distributions" class="nav-link" data-scroll-target="#information-and-push-forward-distributions"><span class="header-section-number">14.6</span> Information and Push-Forward Distributions</a>
+  <ul class="collapse">
+  <li><a href="#current-information-sigma-algebra-generated-by-random-variables" id="toc-current-information-sigma-algebra-generated-by-random-variables" class="nav-link" data-scroll-target="#current-information-sigma-algebra-generated-by-random-variables"><span class="header-section-number">14.6.1</span> Current Information (<span class="math inline">\(\sigma\)</span>-Algebra Generated by Random Variables)</a></li>
+  <li><a href="#push-forward-measure-distribution" id="toc-push-forward-measure-distribution" class="nav-link" data-scroll-target="#push-forward-measure-distribution"><span class="header-section-number">14.6.2</span> Push-Forward Measure (Distribution)</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/6-2-Measurable-Functions.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-I.html">Probability Theory I</a></li><li class="breadcrumb-item"><a href="./6-2-Measurable-Functions.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="preimages-vs.-images" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="preimages-vs.-images"><span class="header-section-number">14.1</span> Preimages vs.&nbsp;Images</h2>
+<p>Let <span class="math inline">\(f: \Omega \to S\)</span> be a function between two arbitrary sets.</p>
+<p>The function <span class="math inline">\(f\)</span> naturally induces two set maps:</p>
+<ol type="1">
+<li><strong>Image Map:</strong> <span class="math inline">\(2^\Omega \to 2^S\)</span>, defined by <span class="math inline">\(A \mapsto f(A) = \{f(\omega) : \omega \in A\} \subseteq S\)</span>.</li>
+<li><strong>Preimage Map:</strong> <span class="math inline">\(2^S \to 2^\Omega\)</span>, defined by <span class="math inline">\(E \mapsto f^{-1}(E) = \{\omega \in \Omega : f(\omega) \in E\} \subseteq \Omega\)</span>.</li>
+</ol>
+<p>The image set map is not well-behaved with respect to set operations: one always has <span class="math inline">\(f(A \cap B) \subseteq f(A) \cap f(B)\)</span>, but the inclusion may be strict unless <span class="math inline">\(f\)</span> is injective. By contrast, the preimage map <span class="math inline">\(E \mapsto f^{-1}(E)\)</span> preserves all standard set operations: for any family <span class="math inline">\(\{E_\alpha\} \subseteq 2^S\)</span> and any <span class="math inline">\(E \subseteq S\)</span>, <span class="math display">\[
+\begin{align*}
+&amp;f^{-1}\left( \bigcup_\alpha E_\alpha \right) = \bigcup_\alpha f^{-1}(E_\alpha), \\
+&amp;f^{-1}\left( \bigcap_\alpha E_\alpha \right) = \bigcap_\alpha f^{-1}(E_\alpha),\\
+&amp;f^{-1}(S \setminus E) = \Omega \setminus f^{-1}(E).
+\end{align*}
+\]</span></p>
+<hr>
+</section>
+<section id="pull-back-and-push-forward-sigma-algebras" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="pull-back-and-push-forward-sigma-algebras"><span class="header-section-number">14.2</span> Pull-Back and Push-Forward <span class="math inline">\(\sigma\)</span>-Algebras</h2>
+<p>Pull-back and push-forward <span class="math inline">\(\sigma\)</span>-algebras are two fundamental constructions in measure theory that allow us to transfer <span class="math inline">\(\sigma\)</span>-algebra structures between different measurable spaces via a function.</p>
+<div id="def-pullback-pushforward" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 14.1 (Pull-Back and Push-Forward <span class="math inline">\(\sigma\)</span>-Algebras)</strong></span> Let <span class="math inline">\((\Omega, \mathcal{F})\)</span> and <span class="math inline">\((S, \mathcal{B})\)</span> be measurable spaces, and let <span class="math inline">\(f: \Omega \to S\)</span> be a function.</p>
+<ol type="1">
+<li>The <strong>pull-back</strong> of <span class="math inline">\(\mathcal{B}\)</span> to <span class="math inline">\(\Omega\)</span> by <span class="math inline">\(f\)</span> is: <span class="math display">\[
+f^* \mathcal{B} := \{ f^{-1}(B) \subseteq \Omega : B \in \mathcal{B} \} \subseteq 2^\Omega.
+\]</span></li>
+<li>The <strong>push-forward</strong> of <span class="math inline">\(\mathcal{F}\)</span> to <span class="math inline">\(S\)</span> by <span class="math inline">\(f\)</span> is: <span class="math display">\[
+f_* \mathcal{F} := \{ E \subseteq S : f^{-1}(E) \in \mathcal{F} \} \subseteq 2^S.
+\]</span></li>
+</ol>
+</div>
+<div id="prp-pullback-pushforward-sigma" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 14.1 (Both Constructions Yield <span class="math inline">\(\sigma\)</span>-Algebras)</strong></span> In the setting of <a href="#def-pullback-pushforward" class="quarto-xref">Definition&nbsp;<span>14.1</span></a>, <span class="math inline">\(f^* \mathcal{B}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(\Omega\)</span> and <span class="math inline">\(f_* \mathcal{F}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(S\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-pullback-pushforward-sigma" class="quarto-xref">Proposition&nbsp;<span>14.1</span></a>). </span>Both claims follow from the fact that preimages commute with complements and countable unions.</p>
+<p>For <span class="math inline">\(f^* \mathcal{B}\)</span>: we have <span class="math inline">\(\Omega = f^{-1}(S) \in f^* \mathcal{B}\)</span>; if <span class="math inline">\(A = f^{-1}(B)\)</span> with <span class="math inline">\(B \in \mathcal{B}\)</span>, then <span class="math inline">\(\Omega \setminus A = f^{-1}(S \setminus B) \in f^* \mathcal{B}\)</span>; and if <span class="math inline">\(A_n = f^{-1}(B_n)\)</span> with <span class="math inline">\(B_n \in \mathcal{B}\)</span>, then <span class="math inline">\(\bigcup_{n} A_n = f^{-1}\left( \bigcup_{n} B_n \right) \in f^* \mathcal{B}\)</span>.</p>
+<p>For <span class="math inline">\(f_* \mathcal{F}\)</span>: we have <span class="math inline">\(f^{-1}(S) = \Omega \in \mathcal{F}\)</span>, so <span class="math inline">\(S \in f_* \mathcal{F}\)</span>; if <span class="math inline">\(f^{-1}(E) \in \mathcal{F}\)</span>, then <span class="math inline">\(f^{-1}(S \setminus E) = \Omega \setminus f^{-1}(E) \in \mathcal{F}\)</span>; and if <span class="math inline">\(f^{-1}(E_n) \in \mathcal{F}\)</span> for all <span class="math inline">\(n\)</span>, then <span class="math inline">\(f^{-1}\left( \bigcup_{n} E_n \right) = \bigcup_{n} f^{-1}(E_n) \in \mathcal{F}\)</span>.</p>
+</div>
+<p><strong>Some Remarks:</strong></p>
+<ul>
+<li>The pull-back <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(f^* \mathcal{B}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(\Omega\)</span> formed by taking the preimages of all sets in <span class="math inline">\(\mathcal{B}\)</span>.</li>
+<li>The push-forward <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(f_* \mathcal{F}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(S\)</span> consisting of all subsets of <span class="math inline">\(S\)</span> whose preimages under <span class="math inline">\(f\)</span> are in <span class="math inline">\(\mathcal{F}\)</span>.</li>
+</ul>
+<div id="fig-pullback-pushforward" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pullback-pushforward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-pullback-pushforward" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-pullback" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-pullback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="pull.png" class="img-fluid figure-img" data-ref-parent="fig-pullback-pushforward">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-pullback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Pull-back
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-pullback-pushforward" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-pushforward" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-pushforward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="push.png" class="img-fluid figure-img" data-ref-parent="fig-pullback-pushforward">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-pushforward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Push-forward
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pullback-pushforward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14.1: Pull-Back and Push-Forward <span class="math inline">\(\sigma\)</span>-Algebras
+</figcaption>
+</figure>
+</div>
+<div id="exm-pullback-pushforward" class="theorem example">
+<p><span class="theorem-title"><strong>Example 14.1</strong></span> Let <span class="math inline">\(\Omega=\mathbb R\)</span>, <span class="math inline">\(\mathcal F=\mathcal B(\mathbb R)\)</span>, <span class="math inline">\(S=[0,\infty)\)</span>, and <span class="math inline">\(\mathcal B=\mathcal B([0,\infty))\)</span>. Define <span class="math inline">\(f:\mathbb{R} \to [0,\infty)\)</span> by <span class="math inline">\(f(x) = x^2\)</span>.</p>
+<p>Take a Borel set <span class="math inline">\(B\subseteq[0,\infty)\)</span>. Its pull-back is <span class="math display">\[
+f^{-1}(B) = \{x\in\mathbb R:x^2\in B\}.
+\]</span> For example, take <span class="math inline">\(B=[0,1]\)</span>. Then <span class="math display">\[
+f^{-1}([0,1]) = \{x:x^2\leq1\} = [-1,1].
+\]</span> Thus <span class="math inline">\([-1,1] \in f^* \mathcal{B}\)</span>. If <span class="math inline">\(B=(1,4]\)</span>, then its pull-back is <span class="math display">\[
+f^{-1}((1,4]) = \{x:1&lt;x^2\leq4\} = [-2,-1)\cup(1,2].
+\]</span> Therefore, <span class="math inline">\([-2,-1)\cup(1,2] \in f^* \mathcal{B}\)</span>.</p>
+<p>Now start with <span class="math inline">\(\mathcal F=\mathcal B(\mathbb R)\)</span> and push it forward to <span class="math inline">\(S=[0,\infty)\)</span>: <span class="math display">\[
+f_*\mathcal F = \{E\subseteq[0,\infty): f^{-1}(E)\in\mathcal B(\mathbb R)\}.
+\]</span> Take any Borel set <span class="math inline">\(E\in\mathcal B([0,\infty))\)</span>. Because <span class="math inline">\(f(x)=x^2\)</span> is continuous, <span class="math inline">\(f^{-1}(E)\)</span> is Borel in <span class="math inline">\(\mathbb R\)</span>. Therefore, <span class="math inline">\(E\in f_*\mathcal F\)</span>. Thus <span class="math display">\[
+\mathcal B([0,\infty)) \subseteq f_*\mathcal F.
+\]</span> But in fact we have equality: <span class="math display">\[
+f_* \mathcal{B}(\mathbb{R}) = \mathcal{B}([0,\infty)).
+\]</span></p>
+</div>
+<p>More generally, for any collection of subsets <span class="math inline">\(\mathcal{E} \subseteq 2^S\)</span>, we can define the pull-back collection: <span class="math display">\[
+f^* \mathcal{E} := \{ f^{-1}(E) \subseteq \Omega : E \in \mathcal{E} \} \subseteq 2^\Omega.
+\]</span></p>
+<div id="lem-pullback-generation" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 14.1 (Pull-Back and <span class="math inline">\(\sigma\)</span>-Algebra Generation)</strong></span> Let <span class="math inline">\(\Omega\)</span> and <span class="math inline">\(S\)</span> be arbitrary sets, let <span class="math inline">\(f: \Omega \to S\)</span> be an arbitrary map, and let <span class="math inline">\(\mathcal{E} \subseteq 2^S\)</span> be a family of subsets. Then: <span class="math display">\[
+\sigma(f^* \mathcal{E}) = f^* \left( \sigma(\mathcal{E}) \right).
+\]</span> No measurability assumption on <span class="math inline">\(f\)</span> is required; this is what makes the lemma applicable <em>before</em> measurability is known.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-pullback-generation" class="quarto-xref">Lemma&nbsp;<span>14.1</span></a>). </span>We prove two-way inclusion:</p>
+<ol type="1">
+<li><p><strong>Inclusion <span class="math inline">\((\subseteq)\)</span>:</strong> By <a href="#prp-pullback-pushforward-sigma" class="quarto-xref">Proposition&nbsp;<span>14.1</span></a>, <span class="math inline">\(f^*(\sigma(\mathcal{E}))\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(\Omega\)</span>. Since <span class="math inline">\(\mathcal{E} \subseteq \sigma(\mathcal{E})\)</span>, we have: <span class="math display">\[
+f^* \mathcal{E} \subseteq f^*(\sigma(\mathcal{E})).
+\]</span> Since <span class="math inline">\(\sigma(f^* \mathcal{E})\)</span> is the <em>smallest</em> <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(f^* \mathcal{E}\)</span>, it follows that: <span class="math display">\[
+\sigma(f^* \mathcal{E}) \subseteq f^*(\sigma(\mathcal{E})).
+\]</span></p></li>
+<li><p><strong>Inclusion <span class="math inline">\((\supseteq)\)</span>:</strong> Define the set collection: <span class="math display">\[
+\mathcal{G} := \{ B \in \sigma(\mathcal{E}) : f^{-1}(B) \in \sigma(f^* \mathcal{E}) \}.
+\]</span> We show that <span class="math inline">\(\mathcal{G}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(S\)</span>:</p>
+<ul>
+<li><span class="math inline">\(S \in \mathcal{G}\)</span> since <span class="math inline">\(f^{-1}(S) = \Omega \in \sigma(f^* \mathcal{E})\)</span>.</li>
+<li>If <span class="math inline">\(B \in \mathcal{G}\)</span>, then <span class="math inline">\(f^{-1}(B^c) = (f^{-1}(B))^c \in \sigma(f^* \mathcal{E})\)</span>, so <span class="math inline">\(B^c \in \mathcal{G}\)</span>.</li>
+<li>If <span class="math inline">\(\{B_n\}_{n=1}^\infty \subseteq \mathcal{G}\)</span>, then <span class="math inline">\(f^{-1}\left( \bigcup_{n=1}^\infty B_n \right) = \bigcup_{n=1}^\infty f^{-1}(B_n) \in \sigma(f^* \mathcal{E})\)</span>, so <span class="math inline">\(\bigcup_{n=1}^\infty B_n \in \mathcal{G}\)</span>.</li>
+</ul>
+<p>Moreover <span class="math inline">\(\mathcal{E} \subseteq \mathcal{G}\)</span>: for every <span class="math inline">\(E \in \mathcal{E}\)</span> we have <span class="math inline">\(E \in \sigma(\mathcal{E})\)</span>, and <span class="math inline">\(f^{-1}(E) \in f^* \mathcal{E} \subseteq \sigma(f^* \mathcal{E})\)</span>.</p>
+<p>Thus <span class="math inline">\(\mathcal{G}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(S\)</span> containing <span class="math inline">\(\mathcal{E}\)</span>. Therefore, by minimality of the generated <span class="math inline">\(\sigma\)</span>-algebra, <span class="math inline">\(\sigma(\mathcal{E}) \subseteq \mathcal{G}\)</span>, which implies that for every <span class="math inline">\(B \in \sigma(\mathcal{E})\)</span>, <span class="math inline">\(f^{-1}(B) \in \sigma(f^* \mathcal{E})\)</span>. Consequently: <span class="math display">\[
+f^*(\sigma(\mathcal{E})) \subseteq \sigma(f^* \mathcal{E}).
+\]</span> Both inclusions yield equality.</p></li>
+</ol>
+</div>
+<hr>
+</section>
+<section id="measurable-functions" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="measurable-functions"><span class="header-section-number">14.3</span> Measurable Functions</h2>
+<div id="def-measurable-function" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 14.2 (Measurable Function)</strong></span> Let <span class="math inline">\((\Omega, \mathcal{F})\)</span> and <span class="math inline">\((S, \mathcal{B})\)</span> be measurable spaces. A function <span class="math inline">\(f: \Omega \to S\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B})\)</span>-<strong>measurable</strong> if: <span class="math display">\[
+f^* \mathcal{B} \subseteq \mathcal{F}, \quad \text{i.e., } \forall B \in \mathcal{B}, \; f^{-1}(B) \in \mathcal{F}.
+\]</span></p>
+</div>
+<p><strong>Some Remarks:</strong></p>
+<ul>
+<li>A measurable function is one for which the preimage of every measurable set in <span class="math inline">\(S\)</span> is a measurable set in <span class="math inline">\(\Omega\)</span>.</li>
+<li>If <span class="math inline">\(f:(\Omega,f^*\mathcal{B})\to (S,\mathcal{B})\)</span> then, by definition, <span class="math inline">\(f\)</span> is measurable. In this sense, the pull-back <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(f^*\mathcal{B}\)</span> is the “smallest” <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(\Omega\)</span> that makes <span class="math inline">\(f\)</span> measurable.</li>
+<li>If <span class="math inline">\(f:(\Omega,\mathcal{F})\to (S,f_*\mathcal{F})\)</span> then, by definition, <span class="math inline">\(f\)</span> is measurable. In this sense, the push-forward <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(f_*\mathcal{F}\)</span> is the largest <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(S\)</span> with respect to inclusion that makes <span class="math inline">\(f\)</span> measurable: every other such <span class="math inline">\(\sigma\)</span>-algebra is contained in <span class="math inline">\(f_*\mathcal{F}\)</span>.</li>
+</ul>
+<div id="exm-indicator" class="theorem example">
+<p><span class="theorem-title"><strong>Example 14.2</strong></span> <strong>Indicator Functions.</strong> Let <span class="math inline">\(A \subseteq \Omega\)</span> and consider the indicator function <span class="math inline">\(\mathbf{1}_A: \Omega \to \mathbb{R}\)</span>. Then <span class="math inline">\(\mathbf{1}_A\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B}(\mathbb{R}))\)</span>-measurable if and only if <span class="math inline">\(A \in \mathcal{F}\)</span>.</p>
+<p><em>Proof.</em> For any <span class="math inline">\(B \in \mathcal{B}(\mathbb{R})\)</span> the preimage <span class="math inline">\((\mathbf{1}_A)^{-1}(B)\)</span> depends only on <span class="math inline">\(B \cap \{0, 1\}\)</span>, and the four resulting cases are exhaustive and mutually exclusive: <span class="math display">\[
+(\mathbf{1}_A)^{-1}(B) = \begin{cases}
+\Omega &amp; \text{if } 0 \in B \text{ and } 1 \in B, \\
+A &amp; \text{if } 1 \in B \text{ and } 0 \notin B, \\
+A^c &amp; \text{if } 0 \in B \text{ and } 1 \notin B, \\
+\emptyset &amp; \text{if } 0 \notin B \text{ and } 1 \notin B.
+\end{cases}
+\]</span> If <span class="math inline">\(A \in \mathcal{F}\)</span>, then each of <span class="math inline">\(\Omega, A, A^c, \emptyset\)</span> lies in <span class="math inline">\(\mathcal{F}\)</span>, so every preimage is in <span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(\mathbf{1}_A\)</span> is measurable. Conversely, if <span class="math inline">\(\mathbf{1}_A\)</span> is measurable, then taking <span class="math inline">\(B = \{1\} \in \mathcal{B}(\mathbb{R})\)</span> gives <span class="math inline">\(A = (\mathbf{1}_A)^{-1}(\{1\}) \in \mathcal{F}\)</span>.</p>
+</div>
+<div id="prp-generating-measurability" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 14.2 (Criterion for Measurability on Generators)</strong></span> Let <span class="math inline">\((\Omega, \mathcal{F})\)</span> and <span class="math inline">\((S, \mathcal{B})\)</span> be measurable spaces, and let <span class="math inline">\(\mathcal{E} \subseteq 2^S\)</span> be a collection of subsets such that <span class="math inline">\(\sigma(\mathcal{E}) = \mathcal{B}\)</span>. A function <span class="math inline">\(f: \Omega \to S\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B})\)</span>-measurable if and only if <span class="math inline">\(f^* \mathcal{E} \subseteq \mathcal{F}\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-generating-measurability" class="quarto-xref">Proposition&nbsp;<span>14.2</span></a>). </span></p>
+<ul>
+<li>(<span class="math inline">\(\Rightarrow\)</span>) If <span class="math inline">\(f\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B})\)</span>-measurable, then <span class="math inline">\(f^* \mathcal{B} \subseteq \mathcal{F}\)</span>. Since <span class="math inline">\(\mathcal{E} \subseteq \mathcal{B}\)</span>, it immediately follows that <span class="math inline">\(f^* \mathcal{E} \subseteq \mathcal{F}\)</span>.</li>
+<li>(<span class="math inline">\(\Leftarrow\)</span>) Assume <span class="math inline">\(f^* \mathcal{E} \subseteq \mathcal{F}\)</span>. Since <span class="math inline">\(\mathcal{F}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(f^* \mathcal{E}\)</span>, minimality of the generated <span class="math inline">\(\sigma\)</span>-algebra gives <span class="math inline">\(\sigma(f^* \mathcal{E}) \subseteq \mathcal{F}\)</span>. By <a href="#lem-pullback-generation" class="quarto-xref">Lemma&nbsp;<span>14.1</span></a>: <span class="math display">\[
+f^* \mathcal{B} = f^*(\sigma(\mathcal{E})) = \sigma(f^* \mathcal{E}) \subseteq \mathcal{F}.
+\]</span> Hence <span class="math inline">\(f\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B})\)</span>-measurable.</li>
+</ul>
+</div>
+<hr>
+</section>
+<section id="real-valued-measurable-functions-and-random-variables" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="real-valued-measurable-functions-and-random-variables"><span class="header-section-number">14.4</span> Real-Valued Measurable Functions and Random Variables</h2>
+<div id="exm-borel-real-generators" class="theorem example">
+<p><span class="theorem-title"><strong>Example 14.3</strong></span> <strong>Important Characterizations on <span class="math inline">\(\mathbb{R}\)</span>.</strong> A function <span class="math inline">\(X: \Omega \to \mathbb{R}\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B}(\mathbb{R}))\)</span>-measurable if and only if any one of the following equivalent conditions holds:</p>
+<ol type="1">
+<li><span class="math inline">\(X^{-1}((-\infty, t]) = \{\omega \in \Omega : X(\omega) \le t\} = \{X \le t\} \in \mathcal{F}\)</span> for all <span class="math inline">\(t \in \mathbb{R}\)</span>;</li>
+<li><span class="math inline">\(X^{-1}((a, b]) = \{a &lt; X \le b\} \in \mathcal{F}\)</span> for all <span class="math inline">\(a, b \in \mathbb{R}\)</span> with <span class="math inline">\(a &lt; b\)</span>;</li>
+<li><span class="math inline">\(X^{-1}((a, \infty)) = \{X &gt; a\} \in \mathcal{F}\)</span> for all <span class="math inline">\(a \in \mathbb{R}\)</span>.</li>
+</ol>
+<p>These are equivalent by <a href="#prp-generating-measurability" class="quarto-xref">Proposition&nbsp;<span>14.2</span></a>, because each of the three displayed collections generates <span class="math inline">\(\mathcal{B}(\mathbb{R})\)</span>. For the first two this is <a href="1-2-Sigma-Algebra.html#prp-borel-generators" class="quarto-xref">Proposition&nbsp;<span>3.2</span></a>. For the third, <span class="math inline">\((a, \infty) = \mathbb{R} \setminus (-\infty, a]\)</span>, so the two collections generate the same <span class="math inline">\(\sigma\)</span>-algebra: <span class="math display">\[
+\sigma(\{(a, \infty) : a \in \mathbb{R}\}) = \sigma(\{(-\infty, a] : a \in \mathbb{R}\}) = \mathcal{B}(\mathbb{R}).
+\]</span></p>
+</div>
+<div id="def-borel-rv" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 14.3 (Borel Random Variable)</strong></span> Given a probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span>, a <strong>(Borel) random variable</strong> is an <span class="math inline">\((\mathcal{F}/\mathcal{B}(\mathbb{R}))\)</span>-measurable function <span class="math inline">\(X: \Omega \to \mathbb{R}\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="compositions-and-continuous-functions" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="compositions-and-continuous-functions"><span class="header-section-number">14.5</span> Compositions and Continuous Functions</h2>
+<div id="prp-composition-measurable" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 14.3 (Composition of Measurable Functions)</strong></span> Let <span class="math inline">\((\Omega, \mathcal{F})\)</span>, <span class="math inline">\((S, \mathcal{B})\)</span>, and <span class="math inline">\((T, \mathcal{C})\)</span> be measurable spaces. If <span class="math inline">\(f: \Omega \to S\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B})\)</span>-measurable and <span class="math inline">\(g: S \to T\)</span> is <span class="math inline">\((\mathcal{B}/\mathcal{C})\)</span>-measurable, then the composition <span class="math inline">\(g \circ f: \Omega \to T\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{C})\)</span>-measurable.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-composition-measurable" class="quarto-xref">Proposition&nbsp;<span>14.3</span></a>). </span>For any <span class="math inline">\(C \in \mathcal{C}\)</span>, using the preimage composition property: <span class="math display">\[
+(g \circ f)^{-1}(C) = f^{-1}(g^{-1}(C)).
+\]</span> Since <span class="math inline">\(g\)</span> is <span class="math inline">\((\mathcal{B}/\mathcal{C})\)</span>-measurable, <span class="math inline">\(g^{-1}(C) \in \mathcal{B}\)</span>. Since <span class="math inline">\(f\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B})\)</span>-measurable, <span class="math inline">\(f^{-1}(g^{-1}(C)) \in \mathcal{F}\)</span>. Thus <span class="math inline">\((g \circ f)^{-1}(C) \in \mathcal{F}\)</span>.</p>
+</div>
+<div id="cor-continuous-transformations" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 14.1 (Continuous Transformations of Random Variables)</strong></span> Let <span class="math inline">\(X_1, X_2, \dots, X_d\)</span> be random variables on <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span>. If <span class="math inline">\(f: \mathbb{R}^d \to \mathbb{R}\)</span> is Borel measurable (in particular, if it is continuous), then <span class="math inline">\(Y = f(X_1, \dots, X_d)\)</span> is a random variable.</p>
+<p><em>(Examples: <span class="math inline">\(X_1 + X_2\)</span>, <span class="math inline">\(X_1 X_2\)</span>, <span class="math inline">\(\max(X_1, X_2)\)</span>, etc.)</em></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#cor-continuous-transformations" class="quarto-xref">Corollary&nbsp;<span>14.1</span></a>). </span>If <span class="math inline">\(f\)</span> is assumed Borel measurable, its <span class="math inline">\((\mathcal{B}(\mathbb{R}^d)/\mathcal{B}(\mathbb{R}))\)</span>-measurability is part of the hypothesis. If <span class="math inline">\(f\)</span> is continuous, then <span class="math inline">\(f^{-1}((-\infty, t])\)</span> is closed, because <span class="math inline">\((-\infty, t]\)</span> is closed, and closed sets are Borel; since <span class="math inline">\(\{(-\infty, t] : t \in \mathbb{R}\}\)</span> generates <span class="math inline">\(\mathcal{B}(\mathbb{R})\)</span> by <a href="1-2-Sigma-Algebra.html#prp-borel-generators" class="quarto-xref">Proposition&nbsp;<span>3.2</span></a>, <a href="#prp-generating-measurability" class="quarto-xref">Proposition&nbsp;<span>14.2</span></a> shows that <span class="math inline">\(f\)</span> is <span class="math inline">\((\mathcal{B}(\mathbb{R}^d)/\mathcal{B}(\mathbb{R}))\)</span>-measurable.</p>
+<p>Define the joint map <span class="math inline">\(\mathbf{X} = (X_1, \dots, X_d): \Omega \to \mathbb{R}^d\)</span> and let <span class="math display">\[
+\mathcal{E} := \left\{ \prod_{j=1}^d (a_j, b_j) \;:\; a_j, b_j \in \mathbb{Q}, \; a_j &lt; b_j \right\}
+\]</span> be the countable collection of open boxes with rational vertices. Exactly as in <a href="1-2-Sigma-Algebra.html#prp-borel-generators" class="quarto-xref">Proposition&nbsp;<span>3.2</span></a>, <span class="math inline">\(\mathcal{E}\)</span> is a base for the topology of <span class="math inline">\(\mathbb{R}^d\)</span>: every open <span class="math inline">\(U \subseteq \mathbb{R}^d\)</span> is the union of those members of <span class="math inline">\(\mathcal{E}\)</span> contained in <span class="math inline">\(U\)</span>, and that union is countable because <span class="math inline">\(\mathcal{E}\)</span> is countable. Hence <span class="math inline">\(\mathcal{B}(\mathbb{R}^d) \subseteq \sigma(\mathcal{E})\)</span>, and since every box is open the reverse inclusion also holds, so <span class="math inline">\(\sigma(\mathcal{E}) = \mathcal{B}(\mathbb{R}^d)\)</span>.</p>
+<p>Each <span class="math inline">\(X_j\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B}(\mathbb{R}))\)</span>-measurable, so for every box in <span class="math inline">\(\mathcal{E}\)</span>, <span class="math display">\[
+\mathbf{X}^{-1}\left( \prod_{j=1}^d (a_j, b_j) \right) = \bigcap_{j=1}^d X_j^{-1}((a_j, b_j)) \in \mathcal{F},
+\]</span> being a finite intersection of sets in <span class="math inline">\(\mathcal{F}\)</span>. By <a href="#prp-generating-measurability" class="quarto-xref">Proposition&nbsp;<span>14.2</span></a>, <span class="math inline">\(\mathbf{X}\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B}(\mathbb{R}^d))\)</span>-measurable. Since <span class="math inline">\(Y = f \circ \mathbf{X}\)</span>, by <a href="#prp-composition-measurable" class="quarto-xref">Proposition&nbsp;<span>14.3</span></a>, <span class="math inline">\(Y\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B}(\mathbb{R}))\)</span>-measurable, so <span class="math inline">\(Y\)</span> is a random variable.</p>
+</div>
+<hr>
+</section>
+<section id="information-and-push-forward-distributions" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="information-and-push-forward-distributions"><span class="header-section-number">14.6</span> Information and Push-Forward Distributions</h2>
+<p>In the “background” (inaccessible) probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span>, we observe random variables <span class="math inline">\(X_1, X_2, \dots, X_d\)</span>. What is actually knowable?</p>
+<p>Two primary structures emerge:</p>
+<section id="current-information-sigma-algebra-generated-by-random-variables" class="level3" data-number="14.6.1">
+<h3 data-number="14.6.1" class="anchored" data-anchor-id="current-information-sigma-algebra-generated-by-random-variables"><span class="header-section-number">14.6.1</span> Current Information (<span class="math inline">\(\sigma\)</span>-Algebra Generated by Random Variables)</h3>
+<div id="def-generated-sigma" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 14.4 (Generated <span class="math inline">\(\sigma\)</span>-Algebra)</strong></span> The <span class="math inline">\(\sigma\)</span>-algebra generated by a collection of random variables <span class="math inline">\(\{X_j\}_{j=1}^d\)</span> on <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> is: <span class="math display">\[
+\sigma(X_1, \dots, X_d) := \sigma\left( \bigcup_{j=1}^d X_j^* \mathcal{B}(\mathbb{R}) \right) \subseteq \mathcal{F},
+\]</span> where the inclusion holds because each <span class="math inline">\(X_j\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B}(\mathbb{R}))\)</span>-measurable, so that <span class="math inline">\(\bigcup_{j=1}^d X_j^* \mathcal{B}(\mathbb{R}) \subseteq \mathcal{F}\)</span>.</p>
+<p>This is the <strong>smallest <span class="math inline">\(\sigma\)</span>-algebra</strong> on <span class="math inline">\(\Omega\)</span> with respect to which <span class="math inline">\(X_1, \dots, X_d\)</span> are all measurable: a <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{G}\)</span> on <span class="math inline">\(\Omega\)</span> makes every <span class="math inline">\(X_j\)</span> measurable if and only if <span class="math inline">\(X_j^* \mathcal{B}(\mathbb{R}) \subseteq \mathcal{G}\)</span> for each <span class="math inline">\(j\)</span>, i.e.&nbsp;if and only if <span class="math inline">\(\mathcal{G} \supseteq \bigcup_{j=1}^d X_j^* \mathcal{B}(\mathbb{R})\)</span>, and the smallest such <span class="math inline">\(\sigma\)</span>-algebra is by definition the one generated by that union.</p>
+</div>
+<p><strong>Equivalent and very useful characterizations</strong>:</p>
+<p><span class="math display">\[
+\begin{align*}
+\sigma(X_1, \dots, X_d) &amp;= \sigma\left(\bigcup_{j=1}^d \{X^{-1}_j(B): B \in \mathcal{B}(\mathbb{R})\}\right)\\
+&amp;=  \sigma\left(\{X^{-1}_j(B): B \in \mathcal{B}(\mathbb{R}), j = 1, \dots, d\}\right)\\
+&amp;=\sigma\left(\bigcup_{j=1}^d \{X^{-1}_j((-\infty, t]): t \in \mathbb{R}\}\right)\\
+&amp;=\sigma\left(\bigcup_{j=1}^d \{\{X_j \le t\}: t \in \mathbb{R}\}\right).
+\end{align*}
+\]</span></p>
+<p>The first two lines merely rewrite the same collection of sets. The passage to the third line is not a rewriting and uses <a href="#lem-pullback-generation" class="quarto-xref">Lemma&nbsp;<span>14.1</span></a>. Put <span class="math inline">\(\mathcal{E} := \{(-\infty, t] : t \in \mathbb{R}\}\)</span>, <span class="math inline">\(\mathcal{A} := \bigcup_{j=1}^d X_j^* \mathcal{E}\)</span> and <span class="math inline">\(\mathcal{C} := \bigcup_{j=1}^d X_j^* \mathcal{B}(\mathbb{R})\)</span>. Since <span class="math inline">\(\mathcal{A} \subseteq \mathcal{C}\)</span>, we get <span class="math inline">\(\sigma(\mathcal{A}) \subseteq \sigma(\mathcal{C})\)</span>. Conversely, for each <span class="math inline">\(j\)</span>, <span class="math display">\[
+X_j^* \mathcal{B}(\mathbb{R}) = X_j^*\left( \sigma(\mathcal{E}) \right) = \sigma\left( X_j^* \mathcal{E} \right) \subseteq \sigma(\mathcal{A}),
+\]</span> using <span class="math inline">\(\sigma(\mathcal{E}) = \mathcal{B}(\mathbb{R})\)</span> from <a href="1-2-Sigma-Algebra.html#prp-borel-generators" class="quarto-xref">Proposition&nbsp;<span>3.2</span></a> and <a href="#lem-pullback-generation" class="quarto-xref">Lemma&nbsp;<span>14.1</span></a> for the middle equality. Hence <span class="math inline">\(\mathcal{C} \subseteq \sigma(\mathcal{A})\)</span>, so <span class="math inline">\(\sigma(\mathcal{C}) \subseteq \sigma(\mathcal{A})\)</span> and the two <span class="math inline">\(\sigma\)</span>-algebras agree.</p>
+<p>Note that the outer <span class="math inline">\(\sigma(\cdot)\)</span> cannot be dropped: <span class="math inline">\(\bigcup_{j=1}^d \sigma\left( X_j^* \mathcal{E} \right)\)</span> is in general <strong>not</strong> a <span class="math inline">\(\sigma\)</span>-algebra.</p>
+<hr>
+</section>
+<section id="push-forward-measure-distribution" class="level3" data-number="14.6.2">
+<h3 data-number="14.6.2" class="anchored" data-anchor-id="push-forward-measure-distribution"><span class="header-section-number">14.6.2</span> Push-Forward Measure (Distribution)</h3>
+<p>The next natural question is: what is the probability distribution of the random vector <span class="math inline">\((X_1, \dots, X_d)\)</span>? This is captured by the <strong>push-forward measure</strong>. It is the probability measure on <span class="math inline">\(\mathbb{R}^d\)</span> induced by the random vector <span class="math inline">\((X_1, \dots, X_d)\)</span>.</p>
+<div id="prp-pushforward-measure" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 14.4 (Push-Forward Probability Measure)</strong></span> If <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> is a probability space and <span class="math inline">\(f: \Omega \to S\)</span> is <span class="math inline">\((\mathcal{F}/\mathcal{B})\)</span>-measurable, then <span class="math inline">\(f^{-1}(B) \in \mathcal{F}\)</span> for every <span class="math inline">\(B \in \mathcal{B}\)</span>, and the map <span class="math inline">\(\mu_f: \mathcal{B} \to [0, 1]\)</span> defined by: <span class="math display">\[
+\mu_f(B) := (f_*\mathbb{P})(B) = \mathbb{P}(f^{-1}(B)) = \mathbb{P}(\{f \in B\})
+\]</span> is a probability measure on <span class="math inline">\((S, \mathcal{B})\)</span> (also written as <span class="math inline">\(\mathbb{P} \circ f^{-1}\)</span>). The notation <span class="math inline">\(f_*\mathbb{P}\)</span> distinguishes this push-forward measure from the pull-back operation <span class="math inline">\(f^*\)</span> on sets.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-pushforward-measure" class="quarto-xref">Proposition&nbsp;<span>14.4</span></a>). </span>We verify the axioms of a probability measure. Note first that <span class="math inline">\(\mu_f\)</span> is well defined and non-negative: <span class="math inline">\(f^{-1}(B) \in \mathcal{F}\)</span> for every <span class="math inline">\(B \in \mathcal{B}\)</span> by measurability, and <span class="math inline">\(\mathbb{P} \ge 0\)</span>.</p>
+<ol type="1">
+<li><strong>Null empty set:</strong> <span class="math display">\[
+\mu_f(\emptyset) = \mathbb{P}(f^{-1}(\emptyset)) = \mathbb{P}(\emptyset) = 0.
+\]</span></li>
+<li><strong>Normalization:</strong> <span class="math display">\[
+\mu_f(S) = \mathbb{P}(f^{-1}(S)) = \mathbb{P}(\Omega) = 1.
+\]</span></li>
+<li><strong>Countable Additivity:</strong> Let <span class="math inline">\(\{B_n\}_{n=1}^\infty \subseteq \mathcal{B}\)</span> be a sequence of pairwise disjoint measurable sets. Since preimages preserve disjoint unions: <span class="math display">\[
+f^{-1}\left( \bigcup_{n=1}^\infty B_n \right) = \bigcup_{n=1}^\infty f^{-1}(B_n), \quad \text{with } f^{-1}(B_i) \cap f^{-1}(B_j) = \emptyset \text{ for } i \neq j.
+\]</span> By the countable additivity of <span class="math inline">\(\mathbb{P}\)</span>: <span class="math display">\[
+\mu_f\left( \bigcup_{n=1}^\infty B_n \right) = \mathbb{P}\left( \bigcup_{n=1}^\infty f^{-1}(B_n) \right) = \sum_{n=1}^\infty \mathbb{P}(f^{-1}(B_n)) = \sum_{n=1}^\infty \mu_f(B_n).
+\]</span></li>
+</ol>
+</div>
+<div id="rem-vector-law" class="proof remark">
+<p><span class="proof-title"><em>Remark 14.1</em> (The Law of a Random Vector). </span>Taking <span class="math inline">\((S, \mathcal{B}) = (\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))\)</span> and <span class="math inline">\(f = \mathbf{X} = (X_1, \dots, X_d)\)</span>, which is <span class="math inline">\((\mathcal{F}/\mathcal{B}(\mathbb{R}^d))\)</span>-measurable by the proof of <a href="#cor-continuous-transformations" class="quarto-xref">Corollary&nbsp;<span>14.1</span></a>, <a href="#prp-pushforward-measure" class="quarto-xref">Proposition&nbsp;<span>14.4</span></a> yields the <strong>joint law</strong> <span class="math inline">\(\mu_{\mathbf{X}} = \mathbf{X}_* \mathbb{P}\)</span> of the random vector. It is a probability measure on <span class="math inline">\((\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))\)</span> with <span class="math display">\[
+\mu_{\mathbf{X}}(B) = \mathbb{P}\left( (X_1, \dots, X_d) \in B \right), \qquad B \in \mathcal{B}(\mathbb{R}^d).
+\]</span></p>
+</div>
+<div id="rem-rv-pushforward-special-case" class="proof remark">
+<p><span class="proof-title"><em>Remark 14.2</em> (Special Case for Real Random Variables). </span>When <span class="math inline">\((S, \mathcal{B}) = (\mathbb{R}, \mathcal{B}(\mathbb{R}))\)</span> and <span class="math inline">\(f = X\)</span> is a real random variable, <span class="math inline">\(\mu_X = \mathbb{P} \circ X^{-1}\)</span> is the <strong>law/distribution</strong> of <span class="math inline">\(X\)</span>, and <span class="math inline">\(\mu_X(B) = \mathbb{P}(X \in B)\)</span>.</p>
+<p>The <strong>cumulative distribution function</strong> (CDF) of <span class="math inline">\(X\)</span> is defined by <span class="math inline">\(F_X(t) := \mathbb{P}(X \le t)\)</span> for <span class="math inline">\(t \in \mathbb{R}\)</span>. Evaluating the law on the rays <span class="math inline">\((-\infty, t]\)</span> recovers it: <span class="math display">\[
+\mu_X((-\infty, t]) = \mathbb{P}(X \le t) = F_X(t).
+\]</span></p>
+</div>
+<hr>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./6-1-Random-Variables-Motivation.html" class="pagination-link" aria-label="Lecture 6.1: Random Variables Motivation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./7-1-Robustness-Measurability.html" class="pagination-link" aria-label="Lecture 7.1: Robustness and Measurability">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/6-2-Measurable-Functions.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

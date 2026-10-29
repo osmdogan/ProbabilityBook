@@ -1,0 +1,128 @@
+# Lecture 7.2: Riemann-Stieltjes Integration
+
+## Motivation: General Integration Problem
+
+Given a general measure space $(\Omega, \mathcal{F}, \mu)$ and a Borel measurable function $f: \Omega \to \mathbb{R}$, our goal is to define the integral:
+$$
+\int_{\Omega} f \, d\mu.
+$$
+
+---
+
+## The Riemann–Stieltjes Integral
+
+To see why a new integration theory is necessary, we first review the classic Riemann–Stieltjes integral on $\mathbb{R}$.
+
+::: {#def-riemann-stieltjes-measure}
+### Lebesgue–Stieltjes Measure
+Let $F: \mathbb{R} \to \mathbb{R}$ be a non-decreasing, right-continuous function. The function $F$ uniquely determines a Radon measure $\mu_F$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ defined on half-open intervals by:
+$$
+\mu_F((a, b]) := F(b) - F(a) \quad \text{for all } a < b.
+$$
+:::
+
+::: {#def-riemann-stieltjes-integral}
+### Riemann–Stieltjes Upper and Lower Sums
+Let $[a, b] \subset \mathbb{R}$ be a compact interval and let $f: [a, b] \to \mathbb{R}$ be a bounded function. 
+Consider a partition $\pi$ of $[a, b]$:
+$$
+\pi = \{a = t_0 < t_1 < t_2 < \dots < t_{n-1} < t_n = b\}.
+$$
+
+We define the **upper Riemann–Stieltjes sum** $\overline{S}_\pi(f, F)$ and **lower Riemann–Stieltjes sum** $\underline{S}_\pi(f, F)$ with respect to $\pi$ by:
+$$
+\begin{align*}
+\overline{S}_\pi(f, F) &:= \sum_{k=1}^n \left( \sup_{t \in [t_{k-1}, t_k]} f(t) \right) \mu_F((t_{k-1}, t_k]) \\
+&= \sum_{k=1}^n \left( \sup_{t \in [t_{k-1}, t_k]} f(t) \right) (F(t_k) - F(t_{k-1})),
+\end{align*}
+$$
+$$
+\begin{align*}
+\underline{S}_\pi(f, F) &:= \sum_{k=1}^n \left( \inf_{t \in [t_{k-1}, t_k]} f(t) \right) \mu_F((t_{k-1}, t_k]) \\
+&= \sum_{k=1}^n \left( \inf_{t \in [t_{k-1}, t_k]} f(t) \right) (F(t_k) - F(t_{k-1})).
+\end{align*}
+$$
+
+The upper and lower Darboux integrals are defined by taking infima and suprema over all finite partitions $\mathcal{P}([a, b])$:
+$$
+\overline{\int_a^b} f \, dF := \inf_{\pi \in \mathcal{P}([a, b])} \overline{S}_\pi(f, F), \quad \underline{\int_a^b} f \, dF := \sup_{\pi \in \mathcal{P}([a, b])} \underline{S}_\pi(f, F).
+$$
+If $\overline{\int_a^b} f \, dF = \underline{\int_a^b} f \, dF$, we say $f$ is **Riemann–Stieltjes integrable** with respect to $F$ on $[a, b]$, and we write $\int_a^b f(x) \, dF(x)$ or $\int_a^b f \, d\mu_F$ for this common value.
+:::
+
+---
+
+## Limitations and Defects of the Riemann–Stieltjes Integral
+
+While simple and intuitive, the Riemann–Stieltjes integral suffers from severe structural limitations when applied to modern probability and analysis:
+
+1. **Domain Constraint:** It is fundamentally defined only on compact intervals $[a, b] \subset \mathbb{R}$.
+2. **Boundedness Constraint:** It requires the integrand $f$ to be bounded.
+3. **Weak Limit Properties:** It lacks good limit theorems (e.g., dominated convergence) and handles only finite additivity naturally.
+4. **Failure on Simple Functions:** It fails to integrate basic functions that oscillate rapidly on small scales.
+
+::: {#exm-dirichlet-failure}
+### Failure on the Dirichlet Function
+Consider the indicator function of the rational numbers on $[a, b]$, $f(x) = \mathbf{1}_{\mathbb{Q}}(x)$.
+For any interval $[t_{k-1}, t_k]$ with $t_{k-1} < t_k$, density of $\mathbb{Q}$ and $\mathbb{R} \setminus \mathbb{Q}$ implies:
+$$
+\sup_{t \in [t_{k-1}, t_k]} \mathbf{1}_{\mathbb{Q}}(t) = 1, \quad \inf_{t \in [t_{k-1}, t_k]} \mathbf{1}_{\mathbb{Q}}(t) = 0.
+$$
+
+Thus, for any partition $\pi$ of $[a, b]$:
+$$
+\overline{S}_\pi(\mathbf{1}_{\mathbb{Q}}, F) = \sum_{k=1}^n 1 \cdot (F(t_k) - F(t_{k-1})) = F(b) - F(a),
+$$
+$$
+\underline{S}_\pi(\mathbf{1}_{\mathbb{Q}}, F) = \sum_{k=1}^n 0 \cdot (F(t_k) - F(t_{k-1})) = 0.
+$$
+
+Hence $\overline{\int_a^b} \mathbf{1}_{\mathbb{Q}} \, dF = F(b) - F(a)$ and $\underline{\int_a^b} \mathbf{1}_{\mathbb{Q}} \, dF = 0$.
+Therefore, $\mathbf{1}_{\mathbb{Q}}$ is Riemann–Stieltjes integrable on $[a, b]$ **if and only if** $F(b) = F(a)$ (i.e., $F$ is constant on $[a, b]$).
+:::
+
+
+
+---
+
+## Characterization of Riemann Integrability
+
+::: {#thm-riemann-continuity-characterization}
+### Lebesgue Criterion for Riemann Integrability
+Let $f: [a, b] \to \mathbb{R}$ be a bounded function, and let $F(x) = x$ (so that $\mu_F = \lambda$, the Lebesgue measure on $\mathbb{R}$).
+
+The function $f$ is Riemann integrable on $[a, b]$ if and only if the set of discontinuity points of $f$,
+$$
+D_f := \{x \in [a, b] : f \text{ is discontinuous at } x\},
+$$
+has Lebesgue measure zero (i.e., $\bar{\lambda}(D_f) = 0$, where $\bar{\lambda}$ denotes the outer measure/completion).
+:::
+
+---
+
+## What is the Fundamental Problem and What is the Fix?
+
+### The Problem
+
+The Riemann–Stieltjes integral is designed for functions that are well-adapted to an **interval partition of the domain**.
+It works well if preimages $f^{-1}((s, t))$ are nice unions of intervals for any $s < t$ (such as continuous functions).
+
+However, functions like $\mathbf{1}_{\mathbb{Q}}$ oscillate rapidly on all scales, making domain interval partitions completely ineffective.
+
+### The Fix: Partition the Range, Not the Domain
+
+
+Instead of partitioning the domain $[a, b]$ into subintervals $[t_{k-1}, t_k]$, we **partition the range** (target space $\mathbb{R}$) into intervals $(y_{k-1}, y_k]$.
+
+For each range interval $(y_{k-1}, y_k]$, we look at its preimage under $f$:
+$$
+E_k := f^{-1}((y_{k-1}, y_k]) = \{\omega \in \Omega : y_{k-1} < f(\omega) \le y_k\}.
+$$
+
+* The set $E_k \subseteq \Omega$ is not necessarily an interval, but if $f$ is measurable, $E_k \in \mathcal{F}$ is a **measurable set**.
+* We know how to measure $E_k$ using the measure $\mu(E_k)$!
+
+This leads directly to simple function approximations of the form $\sum_k y_k \, \mu(E_k)$ and establishes the foundation for the **Lebesgue Integral**.
+
+---
+

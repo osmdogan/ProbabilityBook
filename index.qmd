@@ -1,0 +1,274 @@
+# Preface {.unnumbered}
+
+In this book, we collect the lecture notes provided by [Todd Kemp](https://mathweb.ucsd.edu/~tkemp/ProbabilityTube/). These notes are based on the book [Probability Tools with Examples](https://mathweb.ucsd.edu/~tkemp/280B/Driver-Probability-Lecture-Notes.pdf) by Bruce Driver and were developed for a full-year graduate course on probability theory and stochastic processes. Our aim is to make these lecture notes more accessible by providing a more structured and organized presentation of the material. We also provide additional explanations, illustrations, and examples to help readers better understand the concepts. The book consists of three main parts: Probability Theory I, II, and III. 
+
+
+# Probability Theory I
+The first part consists of 41 lectures on the fundamentals of probability theory. We begin with the Banach–Tarski paradox by showing that we cannot define a set function on all subsets of a unit circle in the complex plane that satisfies the usual properties of a measure. This motivates the need for a rigorous theory of measure, which forms the foundation of probability theory. We then introduce sigma-algebras, measures, and related concepts, and discuss the construction of measures from pre-measures defined on algebras, showing how these measures can be extended to complete measures on sigma-algebras, including the construction of Lebesgue and Radon measures. This part then continues with measurable functions (random variables) and their properties. We introduce integration theory for measurable functions, including the Lebesgue integral, and develop three important convergence theorems: the Monotone Convergence Theorem, Fatou's Lemma, and the Dominated Convergence Theorem. We then cover product measures and Tonelli’s and Fubini’s theorems for iterated integration, followed by independence of events and random variables.
+
+We then discuss Kolmogorov’s extension theorem for constructing stochastic processes with specified finite-dimensional distributions, Kolmogorov’s zero-one law governing the long-run behavior of independent sequences, and convolution as a tool for computing the distribution of a sum of independent random variables. We introduce Kolmogorov’s convergence criterion, which paves the way for the Strong Law of Large Numbers and the study of almost sure convergence of series of independent random variables. We finally close this part by applying the Strong Law of Large Numbers to basic concepts in renewal theory.
+
+![Probability Theory I](part1.jfif){#fig-probability-theory-i}
+
+# Probability Theory II
+The second part consists of 44 lectures. We start with Cramér's Large Deviations Principle, which provides a framework for understanding the probabilities of rare events in terms of the Legendre transform of the cumulant generating function. We then introduce total variation distance and Wasserstein distance for quantifying the difference between probability measures. We then move on to study weak and vague convergence of probability measures, and explore their implications for the convergence of random variables. We cover Prokhorov's theorem and its applications to tightness and relative compactness of probability measures. The skorokhod representation theorem is also discussed, providing a powerful tool for constructing almost surely convergent sequences of random variables that mirror the weak convergence of their distributions. 
+
+
+We then discuss characteristic functions and their role in studying the distributions of random variables. Characteristic functions provide a powerful tool for analyzing convergence in distribution, as well as for deriving properties of sums of independent random variables. This sets the stage for the central limit theorem and other limit theorems in probability theory.
+
+The conditional probability and expectation are covered in detail, including their definitions and fundamental properties through seven lectures. We cover probability kernels and their role in defining conditional distributions and constructing new probability measures from existing ones through three lectures. This sets the stage for a rigorous treatment of stochastic processes: we introduce the Poisson process, the Markov property, and the construction of Markov processes from transition kernels via Kolmogorov's extension theorem on path space. We close this part by specializing to time-homogeneous Markov chains on finite or countable state spaces, where transition probabilities are encoded by Markov matrices and their continuous-time analogues by infinitesimal generators and the matrix exponential.
+
+![Probability Theory II](part2.jfif){#fig-probability-theory-ii}
+
+# Probability Theory III
+This part is the newest, and still actively growing, section of the book. 
+
+# Definitions, Examples, and Theorems
+To separate definitions, examples, propositions, and theorems from the main text, we use boxes with a white background for better visual distinction. The following examples illustrate this approach.
+
+::: {#def-measure}
+## Measure and Measure Space
+Let $\Omega$ be a sample space and $\mathcal{F}$ be a $\sigma$-field ($\sigma$-algebra) over $\Omega$. The pair $(\Omega, \mathcal{F})$ is called a **measurable space**, and elements $E \in \mathcal{F}$ are called **measurable sets** (or **events**).
+
+A set function $\mu: \mathcal{F} \to [0, \infty]$ is called a **measure** if it satisfies the following two conditions:
+
+* **Empty Set:** $\mu(\emptyset) = 0$.
+* **Countable Additivity** ($\sigma$-additivity): For any countable sequence of pairwise disjoint sets $\{E_j\}_{j=1}^\infty \subseteq \mathcal{F}$ (i.e., $E_i \cap E_j = \emptyset$ for all $i \neq j$):
+  $$
+  \mu\left( \bigcup_{j=1}^\infty E_j \right) = \sum_{j=1}^\infty \mu(E_j).
+  $${#eq-countable-additivity}
+
+Note that these two conditions are independent: countable additivity alone does not rule out the degenerate set function $\mu \equiv \infty$, which satisfies @eq-countable-additivity vacuously but violates $\mu(\emptyset) = 0$.
+
+The triple $(\Omega, \mathcal{F}, \mu)$ is called a **measure space**.
+:::
+
+::: {#prp-dirac-validity}
+## Validity of Dirac Measure
+Fix $\omega_0 \in \Omega$ and define the **Dirac (point-mass) measure** at $\omega_0$ by $\delta_{\omega_0}(E) := \mathbb{I}_E(\omega_0)$ for $E \in \mathcal{F}$, i.e., $\delta_{\omega_0}(E) = 1$ if $\omega_0 \in E$ and $\delta_{\omega_0}(E) = 0$ otherwise. Then $\delta_{\omega_0}$ is a valid probability measure on $(\Omega, \mathcal{F})$.
+:::
+
+# Proofs
+To state proofs, we use the Quarto div proof environment. This environment ends with a filled black square as the QED symbol to indicate the conclusion of the proof.
+
+::: {.proof}
+## Proof of @prp-dirac-validity
+First, $\delta_{\omega_0}(\emptyset) = 0$ since $\omega_0 \notin \emptyset$, and $\delta_{\omega_0}(\Omega) = 1$ since $\omega_0 \in \Omega$; this verifies the **Empty Set** axiom and normalization to a probability measure.
+
+Next, let $\{E_j\}_{j=1}^\infty \subseteq \mathcal{F}$ be a countable sequence of pairwise disjoint measurable sets. Since the sets are disjoint, the point $\omega_0$ can belong to at most one set $E_k$:
+
+* **Case 1:** There exists a unique index $k \ge 1$ such that $\omega_0 \in E_k$.
+  Then $\omega_0 \in \bigcup_{j=1}^\infty E_j$, so $\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = 1$. On the sum side, $\delta_{\omega_0}(E_k) = 1$ and $\delta_{\omega_0}(E_j) = 0$ for all $j \neq k$. Thus:
+  $$\sum_{j=1}^\infty \delta_{\omega_0}(E_j) = \delta_{\omega_0}(E_k) + \sum_{j \neq k} 0 = 1 + 0 = 1.$$
+* **Case 2:** $\omega_0 \notin E_j$ for all $j \ge 1$.
+  Then $\omega_0 \notin \bigcup_{j=1}^\infty E_j$, so $\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = 0$. On the sum side, $\delta_{\omega_0}(E_j) = 0$ for all $j \ge 1$, yielding $\sum_{j=1}^\infty \delta_{\omega_0}(E_j) = 0$.
+
+In both cases, $\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = \sum_{j=1}^\infty \delta_{\omega_0}(E_j)$, proving countable additivity. Together with the Empty Set axiom verified above, $\delta_{\omega_0}$ is a measure; since $\delta_{\omega_0}(\Omega) = 1$, it is a probability measure.
+:::
+
+
+
+
+# Notation
+In this section, we summarize the most frequently used notation in this book. We present the notation in a series of tables, each with a short description of the meaning and usage of the symbols. The tables are organized by topic, and we encourage readers to refer to them as needed while reading the book. These tables are
+
+* @tbl-number-systems1: Number Systems and Euclidean Spaces
+* @tbl-set-operations: Set Operations
+* @tbl-measurable-spaces: Measurable Spaces and $\sigma$-Fields
+* @tbl-measures-integration: Measures and Integration
+* @tbl-function-spaces: Function Spaces
+* @tbl-probability-events-random-variables: Probability, Events, and Random Variables
+* @tbl-named-distributions: Named Distributions
+* @tbl-expectations-moments: Expectations and Moments
+* @tbl-transforms-generating-functions: Transforms and Generating Functions
+* @tbl-modes-convergence: Modes of Convergence 
+* @tbl-probability-metrics: Probability Metrics
+* @tbl-probability-kernels: Probability Kernels
+* @tbl-stochastic-processes-filtrations: Stochastic Processes and Filtrations
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $\mathbb{N}$ | Natural numbers $\{0, 1, 2, \ldots\}$ | Index sets for sequences; $\mathbb{N}$ includes $0$ throughout. |
+| $\mathbb{Z}$ | Integers $\{\ldots, -1, 0, 1, \ldots\}$ | Lattice-valued processes. |
+| $\mathbb{Q}$ | Rational numbers | E.g., the dense rotation subgroup $T \subset S^1$. |
+| $\mathbb{R}$ | Real numbers | The default state space and range of random variables. |
+| $\mathbb{R}^d$ | $d$-dimensional Euclidean space | State space for multivariate random variables and processes. |
+| $\mathbb{C}$ | Complex numbers | Used for characteristic functions; identified with $\mathbb{R}^2$. |
+| $S^1$ | Unit circle $\{z \in \mathbb{C} : |z| = 1\}$ | Used in the Banach–Tarski motivation and Fourier analysis. |
+| $[0,\infty)$, $[0, b]$ | Non-negative reals, bounded interval | Typical index sets $T$ for continuous-time processes. |
+:  Number Systems and Euclidean Spaces {#tbl-number-systems1 .striped .hover}
+:::
+
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $2^\Omega$ | Power set of $\Omega$ | The collection of all subsets; a valid $\sigma$-field, but too large to support a consistent measure in general. |
+| $A^c$ | Complement of $A$ in $\Omega$ | Used in $\sigma$-field closure axioms. |
+| $A \setminus B$ | Set difference $\{x \in A : x \notin B\}$ | |
+| $A \triangle B$ | Symmetric difference $(A \setminus B) \cup (B \setminus A)$ | Used in measure-theoretic convergence arguments. |
+| $\bigcup_{j} A_j$, $\bigcap_{j} A_j$ | Countable union and intersection | Central in the $\sigma$-additivity axiom. |
+| $A_n \uparrow A$ | Increasing sequence of sets with $A = \bigcup_n A_n$ | Continuity-from-below of measures. |
+| $A_n \downarrow A$ | Decreasing sequence of sets with $A = \bigcap_n A_n$ | Continuity-from-above of measures. |
+:  Set Operations {#tbl-set-operations .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $(\Omega, \mathcal{F})$ | Measurable space | $\Omega$ is the sample space; $\mathcal{F} \subseteq 2^\Omega$ is a $\sigma$-field of events. |
+| $\sigma(\mathcal{E})$ | $\sigma$-field generated by the collection $\mathcal{E}$ | Smallest $\sigma$-field containing $\mathcal{E}$; defined as $\bigcap\{\mathcal{F} : \mathcal{F} \text{ is a } \sigma\text{-field}, \mathcal{E} \subseteq \mathcal{F}\}$. |
+| $\sigma(X)$ | $\sigma$-field generated by the random variable $X$ | $\sigma(X) = \sigma(\{X^{-1}(B) : B \in \mathcal{B}_S\})$; the smallest $\sigma$-field making $X$ measurable. |
+| $\sigma(X_s : s \le t)$ | $\sigma$-field generated by the process up to time $t$ | Denoted $\mathcal{F}_t^X$; defines the natural filtration. |
+| $\mathcal{B}(S)$ | Borel $\sigma$-algebra on a topological space $S$ | Generated by the open sets of $S$; default $\sigma$-field on $\mathbb{R}^d$. |
+| $\mathcal{B}(\mathbb{R}^d)$ | Borel $\sigma$-algebra on $\mathbb{R}^d$ | Generated by open balls, or equivalently by open rectangles. |
+| $\mathcal{B}_1 \otimes \mathcal{B}_2$ | Product $\sigma$-field on $S_1 \times S_2$ | Generated by measurable rectangles $B_1 \times B_2$; used for joint distributions. |
+| $\mathcal{G} \subseteq \mathcal{F}$ | Sub-$\sigma$-field | Represents partial information; used in conditional expectations. |
+:  Measurable Spaces and $\sigma$-Fields {#tbl-measurable-spaces .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $(\Omega, \mathcal{F}, \mu)$ | Measure space | $\mu : \mathcal{F} \to [0,\infty]$ countably additive, $\mu(\emptyset) = 0$. |
+| $(\Omega, \mathcal{F}, \mathbb{P})$ | Probability space | $\mathbb{P}$ is a probability measure: $\mu$ with $\mu(\Omega) = 1$. |
+| $\mu(A)$ | Measure of the set $A$ | $\mathbb{P}(A)$ denotes the probability of event $A$. |
+| $\int_A f \, d\mu$ | Lebesgue integral of $f$ over $A$ w.r.t. $\mu$ | Also written $\int_A f(x) \, \mu(dx)$. |
+| $\mu \ll \nu$ | $\mu$ is absolutely continuous w.r.t. $\nu$ | Every $\nu$-null set is also $\mu$-null. |
+| $d\mu = f \, d\nu$ | Radon-Nikodym representation | $f = d\mu/d\nu$ is the Radon-Nikodym derivative; $\mu(A) = \int_A f \, d\nu$. |
+| $\delta_a$ | Dirac (point-mass) measure at $a$ | $\delta_a(B) = \mathbb{I}_{\{a \in B\}}$. |
+| $\lambda$ | Lebesgue measure | Default reference measure on $\mathbb{R}^d$. |
+| $\mu \otimes \nu$ | Product measure on $(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$ | Characterised by $(\mu \otimes \nu)(B_1 \times B_2) = \mu(B_1)\nu(B_2)$. |
+| $\mu \otimes Q$ | Semi-direct product of measure $\mu$ and kernel $Q$ | $(\mu \otimes Q)(A \times B) = \int_A Q(x,B) \, \mu(dx)$; joint distribution when $\mu_{(X,Y)} = \mu_X \otimes Q$. |
+| $\mu * \nu$ | Convolution of measures | $(\mu * \nu)(B) = \int \mu(B - y) \, \nu(dy)$; distribution of $X + Y$ for independent $X \sim \mu$, $Y \sim \nu$. |
+| $\mathcal{P}(S, \mathcal{B})$ | Set of probability measures on $(S, \mathcal{B})$ | Also written $\mathcal{P}(S)$ when the $\sigma$-field is clear; often equipped with the topology of weak convergence. |
+:  Measures and Integration {#tbl-measures-integration .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $L^p(\Omega, \mathcal{F}, \mu)$ | $L^p$ space, $1 \le p \le \infty$ | For $1 \le p < \infty$: equivalence classes of $\mathcal{F}$-measurable functions with $\int |f|^p \, d\mu < \infty$. For $p = \infty$: equivalence classes with $\operatorname{ess\,sup}_\omega|f(\omega)| < \infty$ (essentially bounded functions). Abbreviated $L^p(\mu)$ or $L^p(\mathbb{P})$. |
+| $\|f\|_{L^p}$ or $\|f\|_p$ | $L^p$ norm: $\bigl(\int |f|^p \, d\mu\bigr)^{1/p}$ | Also written $\|f\|_{L^p(\mu)}$. |
+| $\|f\|_\infty$ | Supremum norm | For $f \in L^\infty(\mu)$ (an equivalence class), $\|f\|_\infty := \operatorname{ess\,sup}_\omega|f(\omega)| = \inf\{M \ge 0 : \mu(|f| > M) = 0\}$, the essential supremum; this is the norm well-defined on a.e.-equivalence classes. For an everywhere-defined function on $S$ in $\mathcal{B}_b(S)$ or $C_b(S)$ (no a.e. quotienting), $\|f\|_\infty = \sup_{x \in S} |f(x)|$ (the literal pointwise supremum), which coincides with the essential supremum relative to any fully-supported reference measure. |
+| $\mathcal{B}_b(S, \mathcal{B})$ | Bounded $\mathcal{B}$-measurable functions $f: S \to \mathbb{R}$ | Abbreviated $\mathcal{B}_b(S)$; with the sup norm, it is a Banach space. |
+| $C_b(S)$ | Bounded continuous functions on a metric space $S$ | The natural test-function class for weak convergence. |
+| $C_c(S)$ | Continuous functions on $S$ with compact support | Test-function class for *vague* convergence (@tbl-modes-convergence); for probability measures, vague convergence to a limit of full mass $1$ is equivalent to weak convergence, but $C_c(S)$ alone does not suffice for weak convergence in general (mass may escape to infinity, e.g. $\delta_n \to 0$ vaguely on $\mathbb{R}$). |
+| $C_c^\infty(S)$ | Smooth ($C^\infty$) functions with compact support, for $S = \mathbb{R}^d$ (or a smooth manifold) | Dense in $L^1(\mathbb{R}^d, \lambda)$ (Lebesgue measure) and used in Fourier analysis. |
+| $\operatorname{Lip}_b(S)$ | Bounded Lipschitz functions on $(S, d)$ | Test-function class for the Wasserstein-1 distance and the bounded Lipschitz metric. |
+:  Function Spaces {#tbl-function-spaces .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $\mathbb{P}(A_n)$ | Probability of an event $A_n \in \mathcal{F}$, $n \ge 1$ | $\{A_n\}$ is called a sequence of **rare events** if $\mathbb{P}(A_n) \to 0$ as $n \to \infty$. |
+| $\mathbb{P}(A \mid B)$ | Conditional probability: $\mathbb{P}(A \cap B)/\mathbb{P}(B)$ | Defined when $\mathbb{P}(B) > 0$; equals $\mathbb{P}_B(A)$ where $\mathbb{P}_B$ is the conditional measure. |
+| a.s. | Almost surely ($\mathbb{P}$-almost surely) | An event holds a.s. if its probability is $1$; e.g., $X = Y$ a.s. means $\mathbb{P}(X \ne Y) = 0$. |
+| i.i.d. | Independent and identically distributed | E.g., $\{X_n\}$ i.i.d. means all $X_n$ share the same distribution and are mutually independent. |
+| $X: (\Omega, \mathcal{F}) \to (S, \mathcal{B}_S)$ | Random variable (measurable map) | $X^{-1}(B) \in \mathcal{F}$ for every $B \in \mathcal{B}_S$. |
+| $\mu_X$ or $\mathrm{Law}(X)$ | Distribution (law) of $X$ | The pushforward $\mu_X = \mathbb{P} \circ X^{-1}$; $\mu_X(B) = \mathbb{P}(X \in B)$. |
+| $X^* \mathbb{P}$ | Pushforward of $\mathbb{P}$ through $X$ | Another notation for $\mu_X = \mathrm{Law}(X)$; note this book's superscript-star convention for pushforward differs from the subscript-star ($X_*\mathbb{P}$) convention common in other areas of analysis, where a superscript star more often denotes pullback. |
+| $X \sim \mu$ | $X$ has distribution $\mu$ | Shorthand for $\mu_X = \mu$. |
+| $X \stackrel{d}{=} Y$ | $X$ and $Y$ have the same distribution | Does not imply $X = Y$ pathwise. |
+| $\mathbb{I}_A$ or $\mathbf{1}_A$ | Indicator function of event $A$ | $\mathbb{I}_A(\omega) = 1$ if $\omega \in A$, $0$ otherwise. Both notations appear in the book. |
+| $X^+$, $X^-$ | Positive and negative parts of $X$ | $X^+ = \max(X,0)$, $X^- = \max(-X,0)$; $X = X^+ - X^-$, $|X| = X^+ + X^-$. |
+| $X \wedge Y$ | Pointwise minimum $\min(X, Y)$ | Also written $X \wedge n$ for truncation at level $n$. |
+| $X \vee Y$ | Pointwise maximum $\max(X, Y)$ | |
+| $\dot{X}$ | Centered random variable $X - \mathbb{E}[X]$ | $\dot{S}_n = S_n - n\mathbb{E}[X_1]$ is the centered partial sum; used in the CLT and LDP. |
+| $F_X(t)$ or $F_\mu(t)$ | Cumulative distribution function (CDF) | $F_X(t) = \mathbb{P}(X \le t)$; right-continuous with left limits. |
+| $F^\leftarrow(u)$ | Quantile function (left-continuous inverse of $F$) | $F^\leftarrow(u) = \inf\{x : F(x) \ge u\}$; used in the Skorohod representation theorem. |
+: Probability, Events, and Random Variables {#tbl-probability-events-random-variables .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Parameters |
+|:---|:---|:---|
+| $\mathcal{N}(\mu, \sigma^2)$ | Normal (Gaussian) distribution | Mean $\mu \in \mathbb{R}$, variance $\sigma^2 > 0$; $\mathcal{N}(0,1)$ is the standard normal. |
+| $\operatorname{Bernoulli}(p)$ | Bernoulli distribution | $\mathbb{P}(X=1) = p$, $\mathbb{P}(X=0) = 1-p$, $p \in [0,1]$. |
+| $\operatorname{Binomial}(n, p)$ | Binomial distribution | Sum of $n$ independent $\operatorname{Bernoulli}(p)$ variables. |
+| $\operatorname{Poisson}(\lambda)$ | Poisson distribution | Rate $\lambda > 0$; approximates $\operatorname{Binomial}(n, \lambda/n)$ as $n \to \infty$. |
+| $\operatorname{Unif}([a, b])$ | Uniform distribution on $[a, b]$ | Lebesgue measure on $[a,b]$, normalised. |
+| $\operatorname{Exp}(\lambda)$ | Exponential distribution | Rate $\lambda > 0$; $\mathbb{P}(\xi > t) = e^{-\lambda t}$ for $t \ge 0$ (and $=1$ for $t<0$); memoryless property; building block for renewal processes. |
+: Named Distributions {#tbl-named-distributions .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $\mathbb{E}[X]$ | Expectation of $X$ | $\mathbb{E}[X] = \int_\Omega X \, d\mathbb{P}$; defined when $X \in L^1(\mathbb{P})$. |
+| $\mathbb{E}[X; A]$ or $\mathbb{E}[X \mathbb{I}_A]$ | Expectation of $X$ on the event $A$ | $\mathbb{E}[X; A] = \int_A X \, d\mathbb{P} = \mathbb{E}[X \mathbb{I}_A]$. Both notations are used. |
+| $\mathbb{E}[X \mid A]$ | Conditional expectation given event $A$ | $= \mathbb{E}[X \mathbb{I}_A] / \mathbb{P}(A)$; defined when $\mathbb{P}(A) > 0$. |
+| $\mathbb{E}[X \mid \mathcal{G}]$ or $\mathbb{E}_\mathcal{G}[X]$ | Conditional expectation given sub-$\sigma$-field $\mathcal{G}$ | For $X \in L^1(\mathbb{P})$, the unique $\mathcal{G}$-measurable $L^1$ random variable satisfying $\mathbb{E}[\mathbb{E}[X \mid \mathcal{G}] \cdot Y] = \mathbb{E}[XY]$ for all bounded $\mathcal{G}$-measurable $Y$. |
+| $\mathbb{E}[X \mid Y]$ | Conditional expectation given random variable $Y$ | Defined as $\mathbb{E}[X \mid \sigma(Y)]$ (requires $X \in L^1(\mathbb{P})$); by the Doob–Dynkin lemma, equals $g(Y)$ for some measurable $g$. |
+| $\mathbb{E}[X \mid Y = y]$ or $g(y)$ | Conditional expectation evaluated at $Y = y$ | The measurable function $g : S \to \mathbb{R}$ satisfying $\mathbb{E}[X \mid Y] = g(Y)$ a.s. |
+| $\operatorname{Var}(X)$ | Variance $\mathbb{E}[X^2] - (\mathbb{E}[X])^2$ | Defined for $X \in L^2(\mathbb{P})$. Also written $\operatorname{Var}[X]$. |
+| $\operatorname{Cov}(X, Y)$ | Covariance $\mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y]$ | Defined for $X, Y \in L^2(\mathbb{P})$ (so $XY \in L^1(\mathbb{P})$ by Cauchy–Schwarz). |
+| $\langle X, Y \rangle$ | Inner product $\mathbb{E}[XY]$ on $L^2(\mathbb{P})$ | Makes $L^2(\Omega, \mathcal{F}, \mathbb{P})$ a Hilbert space; $\|X\|_{L^2}^2 = \langle X, X \rangle$. |
+: Expectations and Moments {#tbl-expectations-moments .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $M_X(t)$ | Moment generating function (MGF): $\mathbb{E}[e^{tX}]$ | Defined for $t \in \mathbb{R}$ when $X$ is exponentially integrable. |
+| $\Psi_X(t)$ | Cumulant generating function (CGF): $\log \mathbb{E}[e^{tX}]$ | $\Psi_X'(0) = \mathbb{E}[X]$, $\Psi_X''(0) = \operatorname{Var}(X)$; the $k$-th cumulant is $C_k(X) = \Psi_X^{(k)}(0)$. |
+| $\Psi_X^*(\epsilon)$ | Legendre–Fenchel transform of $\Psi_X$: $\sup_{t \in \mathbb{R}}\{\epsilon t - \Psi_X(t)\}$ | The **rate function** in Cramér's large deviations theorem; $\Psi_X^*(\epsilon) \ge 0$ always, with $\Psi_X^*(\mathbb{E}[X])=0$. For $\epsilon \ge \mathbb{E}[X]$, convexity of $\Psi_X$ (with $\Psi_X'(0)=\mathbb{E}[X]$) implies the supremum is attained at some $t \ge 0$, so $\Psi_X^*(\epsilon) = \sup_{t \ge 0}\{\epsilon t - \Psi_X(t)\}$ — the restricted form used in the Chernoff/Cramér upper-tail bound. |
+| $\hat{\mu}(\xi)$ | Characteristic function of $\mu$: $\int e^{i\xi \cdot x} \, \mu(dx)$ | Defined for $\xi \in \mathbb{R}^d$; always exists and is bounded by $1$. Also written $\varphi_X(\xi) = \mathbb{E}[e^{i\xi \cdot X}]$. |
+| $\hat{f}(\xi)$ | Fourier transform of $f \in L^1(\mathbb{R}^d)$: $\int e^{i\xi \cdot x} f(x) \, dx$ | When $\mu$ has density $f$, $\hat{\mu} = \hat{f}$. |
+| $\mathbb{P}_t$ | Exponentially tilted measure: $d\mathbb{P}_t = e^{tY}/M_Y(t) \, d\mathbb{P}$ | Key tool in the proof of the lower bound in Cramér's theorem. |
+: Transforms and Generating Functions {#tbl-transforms-generating-functions .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Remarks |
+|:---|:---|:---|
+| $X_n \xrightarrow{\text{a.s.}} X$ | Almost sure convergence | $\mathbb{P}(\lim_n X_n = X) = 1$; implies convergence in probability (hence weak convergence). Not comparable to $L^p$ convergence in general — neither implies the other without an additional domination/uniform-integrability hypothesis. |
+| $X_n \xrightarrow{L^p} X$ | $L^p$ convergence | $\|X_n - X\|_{L^p} \to 0$; implies convergence in probability. |
+| $X_n \xrightarrow{\mathbb{P}} X$ | Convergence in probability | $\mathbb{P}(|X_n - X| > \epsilon) \to 0$ for all $\epsilon > 0$. |
+| $\mu_n \Rightarrow \mu$ or $X_n \xrightarrow{w} X$ or $X_n \xrightarrow{d} X$ | Weak convergence / convergence in distribution | $\int f \, d\mu_n \to \int f \, d\mu$ for all $f \in C_b(S)$; the weakest of the modes above. |
+| $\mu_n \xrightarrow{v} \mu$ | Vague convergence | $\int f \, d\mu_n \to \int f \, d\mu$ for all $f \in C_c(S)$; allows escape of mass to infinity. |
+| $\limsup_{n}$, $\liminf_{n}$ | Limit superior and inferior of a sequence | $\liminf_n a_n \le \limsup_n a_n$; equality holds iff the limit exists. |
+| $\frac{1}{n}\log \mathbb{P}(A_n) \to -c$ | Exponential decay at rate $c$ | Informal/heuristic formulation of a large deviation principle; the rigorous formulation gives separate one-sided bounds, $\liminf_n \frac1n\log\mathbb P(X_n\in O) \ge -\inf_O \Psi^*$ for open $O$ and $\limsup_n \frac1n\log\mathbb P(X_n\in C) \le -\inf_C \Psi^*$ for closed $C$. |
+: Modes of Convergence {#tbl-modes-convergence .striped .hover}
+:::
+
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Definition |
+|:---|:---|:---|
+| $d_\text{TV}(\mu, \nu)$ | Total variation distance | $\sup_{B \in \mathcal{B}} |\mu(B) - \nu(B)| = \tfrac{1}{2}\|u - v\|_{L^1(\alpha)}$ when $d\mu = u \, d\alpha$, $d\nu = v \, d\alpha$. |
+| $d_\text{Kol}(\mu, \nu)$ | Kolmogorov metric | $\sup_{t \in \mathbb{R}} |F_\mu(t) - F_\nu(t)|$; uniform distance between CDFs on $\mathbb{R}$. |
+| $d_{W_1}(\mu, \nu)$ | Wasserstein-1 (earth-mover) distance | $\sup_{f \in \operatorname{Lip}_1} |\int f \, d\mu - \int f \, d\nu|$; $W_1$-convergence always implies weak convergence, but **not conversely** on an unbounded space like $\mathbb{R}$ — the converse needs convergence (or uniform integrability) of first moments as well (e.g. $\mu_n = (1-\tfrac1n)\delta_0 + \tfrac1n\delta_n \Rightarrow \delta_0$ weakly, but $d_{W_1}(\mu_n,\delta_0)=1 \not\to 0$). On a *bounded* metric space, $d_{W_1}$ does metrise weak convergence. |
+| $d_{BL}(\mu, \nu)$ | Bounded Lipschitz metric | $\sup_{\|f\|_\infty \le 1,\, \operatorname{Lip}(f) \le 1} |\int f \, d\mu - \int f \, d\nu|$; metrises weak convergence on general metric spaces. |
+: Probability Metrics {#tbl-probability-metrics .striped .hover}
+:::
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $Q: S_1 \times \mathcal{B}_2 \to [0,1]$ | Probability kernel from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$ | $Q(x, \cdot)$ is a probability measure for each $x$; $Q(\cdot, B)$ is $\mathcal{B}_1$-measurable for each $B$. |
+| $\int_{S_2} f(y) \, Q(x, dy)$ | Integration against a kernel | Defines the Markov generator operator $L_Q$ acting on $\mathcal{B}_b(S_2)$. |
+| $(L_Q f)(x)$ | Markov generator: $\int_{S_2} f(y) \, Q(x, dy)$ | Maps $\mathcal{B}_b(S_2, \mathcal{B}_2) \to \mathcal{B}_b(S_1, \mathcal{B}_1)$; $\|L_Q f\|_\infty \le \|f\|_\infty$. Note: this "generator" of a single kernel $Q$ is a *different* (though related) notion from the **infinitesimal generator** $A = \lim_{t\to0^+}(Q_t - I)/t$ of a continuous-time semigroup $\{Q_t\}_{t\ge0}$, introduced later for Markov processes. |
+| $Q(x, B) = (L \mathbb{I}_B)(x)$ | Recovery formula: kernel from generator | The unique probability kernel giving rise to a Markov generator $L$. |
+| $Q_1 Q_2$ or $Q_1 \cdot Q_2$ | Composition of kernels | $(Q_1 Q_2)(x, B) = \int Q_2(y, B) \, Q_1(x, dy)$; corresponds to $L_{Q_1 Q_2} = L_{Q_1} \circ L_{Q_2}$. |
+| $\mu \otimes Q$ | Semi-direct (skew) product measure | The joint measure with marginal $\mu$ on $S_1$ and conditional $Q(x, \cdot)$ on $S_2$ given $x$. |
+: Probability Kernels {#tbl-probability-kernels .striped .hover}
+:::
+
+
+::: {style="font-size: 80%"}
+| Notation | Meaning | Usage / Remarks |
+|:---|:---|:---|
+| $\{X_t\}_{t \in T}$ | Stochastic process indexed by $T$ | Each $X_t : (\Omega, \mathcal{F}) \to (S, \mathcal{B}_S)$ is a measurable map. |
+| $\mathcal{F}_t$ or $\{\mathcal{F}_t\}_{t \in T}$ | Filtration | Increasing family of sub-$\sigma$-fields: $\mathcal{F}_s \subseteq \mathcal{F}_t$ for $s \le t$. |
+| $\mathcal{F}_t^X = \sigma(X_s : s \le t)$ | Natural filtration of $\{X_t\}$ | Smallest filtration to which $\{X_t\}$ is adapted. |
+| $\mathbb{F} = \{\mathcal{F}_t\}_{t \in T}$ | Filtration (as a single object) | $(\Omega, \mathcal{F}, \mathbb{F}, \mathbb{P})$ is a filtered probability space. |
+| $\mathrm{Law}(X_{t_1}, \ldots, X_{t_n})$ | Finite-dimensional distribution (f.d.d.) | Joint law of $(X_{t_1}, \ldots, X_{t_n})$; $= \mathbb{P} \circ (X_{t_1}, \ldots, X_{t_n})^{-1}$. |
+| $N_t = \sup\{n \ge 0 : X_n \le t\}$ | Counting process | Here $X_n$ denotes the $n$-th arrival/renewal time (with convention $X_0 := 0$), not a generic $n$-th term of a sequence as elsewhere in this table; counts arrivals up to time $t$ and satisfies the duality $\{N_t \ge n\} = \{X_n \le t\}$. |
+: Stochastic Processes and Filtrations {#tbl-stochastic-processes-filtrations .striped .hover}
+:::
+
+# Acknowledgements
+We use the theme from the book [R for Data Science (2e)](https://r4ds.hadley.nz/) as the foundation for producing this book. 

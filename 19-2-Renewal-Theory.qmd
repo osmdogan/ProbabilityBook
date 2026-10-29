@@ -1,0 +1,131 @@
+# Lecture 19.2: Renewal Theory
+
+## Frequentist Interpretation of Probability
+
+The Strong Law of Large Numbers (SLLN) provides mathematical justification for the frequentist interpretation of probability. Given an event $A \in \mathcal{F}$, let $\{X_n\}_{n=1}^\infty$ be an i.i.d. sequence of indicator random variables $X_n \triangleq \mathbf{1}_A^{(n)}$ representing independent trials. Since $E[X_1] = E[\mathbf{1}_A] = P(A)$, SLLN establishes:
+$$
+\frac{1}{n} \sum_{k=1}^n X_k \xrightarrow{\text{a.s.}} P(A) \quad \text{as } n \to \infty
+$$ {#eq-frequentist-slln}
+
+---
+
+## Elementary Renewal Theorem
+
+Consider a sequence $\{X_n\}_{n=1}^\infty$ of non-negative, independent, identically distributed $L^1$ random variables representing inter-arrival times or lifetime durations. Assume $P(X_n > 0) > 0$, so $\mathbb{E}[X_1] \in (0, \infty)$.
+
+Define the $n$-th arrival time $S_n \triangleq \sum_{k=1}^n X_k$ (with $S_0 \triangleq 0$). The **renewal process** $\{N_t\}_{t \ge 0}$ counts the total number of renewals occurring in the time interval $[0, t]$:
+$$
+N_t \triangleq \sup \{ n \in \mathbb{N}_0 \mid S_n \le t \}
+$$ {#eq-renewal-process-def}
+
+::: {#prp-first-order-renewal-rate}
+## First-Order Renewal Rate
+
+Under the assumptions above, the renewal process satisfies:
+$$
+\lim_{t \to \infty} \frac{N_t}{t} = \frac{1}{\mathbb{E}[X_1]} \quad \text{almost surely.}
+$$ {#eq-first-order-renewal-rate-statement}
+:::
+
+::: {.proof}
+## Proof of @prp-first-order-renewal-rate
+
+1. **Finiteness and Growth of $N_t$:** Since $X_1 \ge 0$ with $P(X_1>0)>0$, $\mathbb{E}[X_1] > 0$. By Kolmogorov's SLLN, $\frac{S_n}{n} \xrightarrow{\text{a.s.}} \mathbb{E}[X_1] > 0$, which forces $S_n \to \infty$ almost surely (since $S_n \sim n\,\mathbb{E}[X_1] \to \infty$). Consequently, for a.e. $\omega$: given any fixed $t \ge 0$, since $S_n(\omega) \to \infty$ there is a smallest $n$ with $S_n(\omega) > t$, so $N_t(\omega) < \infty$; and given any fixed $m$, since $S_m(\omega) < \infty$ we have $N_t(\omega) \ge m$ for all $t \ge S_m(\omega)$, so $N_t(\omega) \to \infty$ as $t \to \infty$. Thus $N_t < \infty$ a.s. for all $t \ge 0$, and $N_t \xrightarrow{\text{a.s.}} \infty$ as $t \to \infty$.
+
+2. **Fundamental Renewal Inequality:** By definition of $N_t$, $S_{N_t} \le t < S_{N_t + 1}$. For $N_t > 0$, dividing by $N_t$ and using $\mathbb{E}$ notation yields:
+   $$
+   \frac{S_{N_t}}{N_t} \le \frac{t}{N_t} < \frac{S_{N_t + 1}}{N_t} = \frac{S_{N_t + 1}}{N_t + 1} \cdot \left( 1 + \frac{1}{N_t} \right)
+   $$ {#eq-fundamental-renewal-sandwich}
+
+3. **Taking Limits via SLLN:** By Kolmogorov's SLLN, $\frac{S_n}{n} \xrightarrow{\text{a.s.}} \mathbb{E}[X_1]$, i.e., for a.e. $\omega$ the real sequence $a_n(\omega) \triangleq S_n(\omega)/n$ converges to $\mathbb{E}[X_1]$. Since $N_t(\omega) \to \infty$ as $t \to \infty$ for the same a.e. $\omega$ (Step 1), the elementary composition-of-limits fact for real sequences (if $a_n \to L$ and $k_t \to \infty$ through positive integers as $t \to \infty$, then $a_{k_t} \to L$) applies pathwise and yields:
+   $$
+   \begin{aligned}
+   &\lim_{t \to \infty} \frac{S_{N_t}}{N_t} = \mathbb{E}[X_1] \quad \text{a.s.} \quad \text{and}\\
+   &\lim_{t \to \infty} \frac{S_{N_t + 1}}{N_t + 1} \cdot \left( 1 + \frac{1}{N_t} \right) = \mathbb{E}[X_1] \cdot 1 = \mathbb{E}[X_1] \quad \text{a.s.},
+   \end{aligned}
+   $$ {#eq-renewal-sandwich-limits}
+   where the second line applies the composition fact to $a_n = S_n/n$ at the index $N_t+1 \to \infty$, together with $1/N_t \to 0$. Applying the Squeeze Theorem to @eq-fundamental-renewal-sandwich gives $\lim_{t \to \infty} \frac{t}{N_t} = \mathbb{E}[X_1]$ a.s.; since $\mathbb{E}[X_1] \in (0,\infty)$, inverting (by continuity of $x \mapsto 1/x$ away from $0$) gives $\lim_{t \to \infty} \frac{N_t}{t} = \frac{1}{\mathbb{E}[X_1]}$ a.s.
+:::
+
+---
+
+## Alternating Renewal Processes: Lightbulb with Replacement Delays
+
+Consider a system operating in alternating operational and delay phases:
+
+* Operational durations $\{X_n\}_{n=1}^\infty \stackrel{\text{i.i.d.}}{\sim} X \in L^1$, with $X_n \ge 0$ and $\mathbb{P}(X_n > 0) > 0$.
+* Replacement delays $\{Y_n\}_{n=1}^\infty \stackrel{\text{i.i.d.}}{\sim} Y \in L^1$, with $Y_n \ge 0$ and $\mathbb{P}(Y_n > 0) > 0$.
+
+The $(n+1)$-th replacement finishes at $S_n \triangleq \sum_{k=1}^n (X_k + Y_k)$. The total operational time during $[0, t]$ is given by:
+$$
+T_t \triangleq \sum_{n=1}^{N_t} X_n + \left( X_{N_t + 1} \wedge (t - S_{N_t}) \right)
+$$ {#eq-total-uptime-def}
+
+::: {#thm-alternating-renewal-fraction}
+## Operational Asymptotic Fraction
+
+The asymptotic fraction of operational time satisfies:
+$$
+\lim_{t \to \infty} \frac{T_t}{t} = \frac{\mathbb{E}[X_1]}{\mathbb{E}[X_1] + \mathbb{E}[Y_1]} \quad \text{almost surely.}
+$$ {#eq-alternating-renewal-limit-statement}
+:::
+
+::: {.proof}
+## Proof of @thm-alternating-renewal-fraction
+Define the simplified total operational sum $\widetilde{T}_t \triangleq \sum_{n=1}^{N_t} X_n$. Since the cycle lengths $\{X_n+Y_n\}_{n=1}^\infty$ are i.i.d., nonnegative, in $L^1$, with $P(X_n+Y_n>0)>0$ (because $P(X_n>0)>0$), and $N_t$ is exactly the renewal counting process for this cycle-length sequence with arrival times $S_n = \sum_{k=1}^n (X_k+Y_k)$, @prp-first-order-renewal-rate applies directly:
+   $$
+   \frac{N_t}{t} \xrightarrow{\text{a.s.}} \frac{1}{\mathbb{E}[X_1] + \mathbb{E}[Y_1]}, 
+   $$
+   hence also
+   $$
+   \frac{N_t+1}{t} = \frac{N_t}{t} + \frac1t \xrightarrow{\text{a.s.}} \frac{1}{\mathbb{E}[X_1] + \mathbb{E}[Y_1]}.
+   $$ {#eq-cycle-renewal-rate}
+   Both facts are used freely in Steps 2 and 3 below.
+
+1. **Bounding Operational Time:** Since $0 \le X_{N_t + 1} \wedge (t - S_{N_t}) \le X_{N_t + 1}$:
+   $$
+   \frac{\widetilde{T}_t}{t} \le \frac{T_t}{t} \le \frac{\widetilde{T}_t}{t} + \frac{X_{N_t + 1}}{t}
+   $$ {#eq-uptime-bounds}
+
+2. **Vanishing Tail Ratio:** Rewrite $\frac{X_{N_t + 1}}{t} = \frac{X_{N_t + 1}}{N_t + 1} \cdot \frac{N_t + 1}{t}$. By @lem-xn-over-n-zero, $\frac{X_n}{n} \xrightarrow{\text{a.s.}} 0$ as a deterministic real sequence for a.e. $\omega$; since $N_t + 1 \to \infty$ a.s. as $t \to \infty$ (from @eq-cycle-renewal-rate), the pathwise composition-of-limits argument gives $\frac{X_{N_t + 1}}{N_t + 1} \xrightarrow{\text{a.s.}} 0$. Combined with $\frac{N_t + 1}{t} \xrightarrow{\text{a.s.}} \frac{1}{E[X_1] + E[Y_1]}$ from @eq-cycle-renewal-rate, the product $\frac{X_{N_t+1}}{t}$ vanishes a.s. as $t \to \infty$.
+
+3. **Main Ratio Limit:** Factor the main ratio $\frac{\widetilde{T}_t}{t}$:
+   $$
+   \begin{aligned}
+   \frac{\widetilde{T}_t}{t} = \frac{N_t}{t} \cdot \left( \frac{1}{N_t} \sum_{n=1}^{N_t} X_n \right) &\xrightarrow{\text{a.s.}} \frac{1}{\mathbb{E}[X_1] + \mathbb{E}[Y_1]} \cdot \mathbb{E}[X_1]\\
+   & = \frac{\mathbb{E}[X_1]}{\mathbb{E}[X_1] + \mathbb{E}[Y_1]}.
+   \end{aligned}
+   $$ {#eq-main-uptime-ratio-limit}
+   The first factor's limit is @eq-cycle-renewal-rate. The second factor's limit uses that, by Kolmogorov's SLLN, $\frac1n\sum_{k=1}^n X_k \to \mathbb{E}[X_1]$ a.s. as a deterministic real sequence, composed pathwise at the random index $N_t \to \infty$ a.s.; this composition is valid regardless of any dependence between $N_t$ (which depends on both $\{X_n\}$ and $\{Y_n\}$) and $\{X_n\}$ itself, since for a.e. fixed $\omega$ it is simply evaluating one convergent deterministic sequence along an index sequence that tends to infinity. By the Squeeze Theorem applied to @eq-uptime-bounds, $\frac{T_t}{t} \xrightarrow{\text{a.s.}} \frac{\mathbb{E}[X_1]}{\mathbb{E}[X_1] + \mathbb{E}[Y_1]}$.
+:::
+
+---
+
+## Supporting Lemma on $L^1$ Sequences
+
+::: {#lem-xn-over-n-zero}
+If $X \in L^1(\Omega, \mathcal{F}, P)$ and $\{X_n\}_{n=1}^\infty$ are i.i.d. with $X_n \sim X$, then:
+$$
+\frac{X_n}{n} \xrightarrow{\text{a.s.}} 0 \quad \text{as } n \to \infty
+$$ {#eq-xn-over-n-limit}
+:::
+
+::: {.proof}
+## Proof of @lem-xn-over-n-zero
+Fix $\epsilon > 0$. By @lem-l1-tail-sum-bound:
+$$
+\sum_{n=1}^\infty P\left( \frac{|X_n|}{n} \ge \epsilon \right) = \sum_{n=1}^\infty P(|X| \ge n\epsilon) \le \frac{1}{\epsilon} \mathbb{E}[|X|] < \infty
+$$ {#eq-xn-over-n-borel-cantelli-sum}
+By the Borel-Cantelli Lemma I, $P\left( \frac{|X_n|}{n} \ge \epsilon \text{ i.o.} \right) = 0$. Taking the countable intersection across $\epsilon_k = \frac{1}{k}$ for $k \in \mathbb{N}$ completes the proof.
+:::
+
+---
+
+## Takeaways
+
+- **SLLN is the frequentist interpretation's mathematical backbone.** Applying SLLN to indicator variables $\mathbf{1}_A^{(n)}$ shows that the long-run relative frequency of an event converges almost surely to its probability — turning "probability as long-run frequency" from an informal heuristic into a theorem.
+- **Renewal counts are the functional inverse of arrival times.** $N_t$ and $S_n$ are related by the sandwich $S_{N_t} \le t < S_{N_t+1}$, and this single inequality is the mechanical device that converts the SLLN statement about $S_n/n$ (indexed by $n$) into a statement about $N_t/t$ (indexed by $t$) — the Elementary Renewal Theorem is essentially SLLN viewed through the "inverse" of the arrival-time process.
+- **Composition with a random time index is pathwise, not probabilistic.** The recurring technique — "if $a_n \to L$ a.s. and $N_t \to \infty$ a.s., then $a_{N_t} \to L$ a.s." — is just ordinary real-sequence composition applied to almost every fixed $\omega$ separately. It requires no independence between the index process $N_t$ and the sequence $a_n$, which is what lets it apply even when $N_t$ is built from *both* $\{X_n\}$ and $\{Y_n\}$ in the alternating renewal setting.
+- **Alternating renewal processes reduce to a ratio of means.** The long-run operational fraction $\mathbb{E}[X_1]/(\mathbb{E}[X_1]+\mathbb{E}[Y_1])$ falls out of two applications of the same machinery: the Elementary Renewal Theorem applied to the combined cycle length $X_n+Y_n$ (for the rate $N_t/t$), and SLLN applied to $\{X_n\}$ alone (for the average uptime per cycle) — the partial/incomplete final cycle contributes nothing in the limit, by @lem-xn-over-n-zero.
+- **The $L^1$ tail lemma keeps reappearing.** @lem-xn-over-n-zero is proved by the same tail-sum-plus-Borel-Cantelli pattern used throughout the SLLN lectures ([18-1-SLLN1.qmd](18-1-SLLN1.qmd), [19-1-SLLN2.qmd](19-1-SLLN2.qmd)): bound $\sum_n P(|X_n|/n \ge \epsilon)$ using @lem-l1-tail-sum-bound, then upgrade "eventually small" to "convergent to $0$" via a countable intersection over $\epsilon_k = 1/k$.
+- **Net effect:** renewal theory is a direct application area for the Strong Law machinery built in Lectures 18–19, translating discrete-index a.s. convergence results into continuous-time (in $t$) a.s. convergence statements about counting and occupation-time processes.

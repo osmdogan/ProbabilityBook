@@ -1,0 +1,202 @@
+
+# Lecture 2.1: Measures, Definition, Examples
+
+## Definition of Measure and Measure Spaces
+
+Measure theory generalizes the intuitive geometric concepts of length, area, volume, and probability mass to abstract set structures.
+
+::: {#def-measure}
+## Measure and Measure Space
+Let $\Omega$ be a sample space and $\mathcal{F}$ be a $\sigma$-field ($\sigma$-algebra) over $\Omega$. The pair $(\Omega, \mathcal{F})$ is called a **measurable space**, and elements $E \in \mathcal{F}$ are called **measurable sets** (or **events**).
+
+A set function $\mu: \mathcal{F} \to [0, \infty]$ is called a **measure** if it satisfies the following two conditions:
+
+* **Empty Set:** $\mu(\emptyset) = 0$.
+* **Countable Additivity ($\sigma$-additivity):** For any countable sequence of pairwise disjoint sets $\{E_j\}_{j=1}^\infty \subseteq \mathcal{F}$ (i.e., $E_i \cap E_j = \emptyset$ for all $i \neq j$):
+  $$
+  \mu\left( \bigcup_{j=1}^\infty E_j \right) = \sum_{j=1}^\infty \mu(E_j).
+  $${#eq-countable-additivity}
+
+::: {.callout-note}
+The condition $\mu(\emptyset)=0$ is independent of countable additivity for general measures: without it, the constant function $\mu \equiv \infty$ satisfies countable additivity but violates the empty-set condition. For finite measures $\mu(\Omega)<\infty$, the condition can be derived by applying countable additivity to $\Omega = \Omega \cup \emptyset \cup \emptyset \cup \cdots$.
+:::
+
+The triple $(\Omega, \mathcal{F}, \mu)$ is called a **measure space**.
+:::
+
+::: {#def-finite-prob-measure}
+## Finite and Probability Measures
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space.
+
+1. $\mu$ is a **finite measure** if $\mu(\Omega) < \infty$.
+2. $\mu$ is a **probability measure** if $\mu(\Omega) = 1$. In this case, $(\Omega, \mathcal{F}, \mu)$ is called a **probability space**.
+:::
+
+---
+
+## Canonical Examples of Measures
+
+### Trivial Measure
+On any measurable space $(\Omega, \mathcal{F})$, the constant zero function $\mu(E) \equiv 0$ for all $E \in \mathcal{F}$ is trivially a valid measure.
+
+### Point Mass (Dirac Measure)
+
+::: {#def-dirac-measure}
+## Dirac / Point Mass Measure
+Let $(\Omega, \mathcal{F})$ be a measurable space and fix a point $\omega_0 \in \Omega$. The **Dirac measure** (or point mass) at $\omega_0$, denoted by $\delta_{\omega_0}: \mathcal{F} \to [0, 1]$, is defined by:
+$$
+\delta_{\omega_0}(E) := \begin{cases}  1 & \text{if } \omega_0 \in E, \\  0 & \text{if } \omega_0 \notin E.  \end{cases}
+$${#eq-dirac-def}
+:::
+
+::: {#prp-dirac-validity}
+## Validity of Dirac Measure
+For any $\omega_0 \in \Omega$, $\delta_{\omega_0}$ is a valid probability measure on $(\Omega, \mathcal{F})$.
+:::
+
+::: {.proof}
+## Proof of @prp-dirac-validity
+First, $\delta_{\omega_0}(\Omega) = 1$ since $\omega_0 \in \Omega$.
+
+Next, let $\{E_j\}_{j=1}^\infty \subseteq \mathcal{F}$ be a countable sequence of pairwise disjoint measurable sets. Since the sets are disjoint, the point $\omega_0$ can belong to at most one set $E_k$:
+
+* **Case 1:** There exists a unique index $k \ge 1$ such that $\omega_0 \in E_k$.
+  Then $\omega_0 \in \bigcup_{j=1}^\infty E_j$, so $\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = 1$. On the sum side, $\delta_{\omega_0}(E_k) = 1$ and $\delta_{\omega_0}(E_j) = 0$ for all $j \neq k$. Thus:
+  $$\sum_{j=1}^\infty \delta_{\omega_0}(E_j) = \delta_{\omega_0}(E_k) + \sum_{j \neq k} 0 = 1 + 0 = 1.$$
+* **Case 2:** $\omega_0 \notin E_j$ for all $j \ge 1$.
+  Then $\omega_0 \notin \bigcup_{j=1}^\infty E_j$, so $\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = 0$. On the sum side, $\delta_{\omega_0}(E_j) = 0$ for all $j \ge 1$, yielding $\sum_{j=1}^\infty \delta_{\omega_0}(E_j) = 0$.
+
+In both cases, $\delta_{\omega_0}\left(\bigcup_{j=1}^\infty E_j\right) = \sum_{j=1}^\infty \delta_{\omega_0}(E_j)$, proving countable additivity.
+:::
+
+---
+
+## Constructing New Measures from Existing Measures
+
+::: {#thm-measure-linear-combinations}
+## Linear Combinations and Sums of Measures
+Let $(\Omega, \mathcal{F})$ be a measurable space.
+
+1. **Scalar Multiplication:** If $\mu$ is a measure on $(\Omega, \mathcal{F})$ and $a \in (0, \infty)$, then $a\mu$ defined by $(a\mu)(E) := a \cdot \mu(E)$ is a valid measure.
+2. **Countable Linear Combinations:** If $\{\mu_j\}_{j=1}^\infty$ is a countable collection of measures on $(\Omega, \mathcal{F})$ and $\{c_j\}_{j=1}^\infty \subseteq [0, \infty)$, then the set function:
+   $$
+   \mu := \sum_{j=1}^\infty c_j \mu_j
+   $${#eq-measure-sum-def}
+   defined by $\mu(E) := \sum_{j=1}^\infty c_j \mu_j(E)$ for $E \in \mathcal{F}$ is a valid measure on $(\Omega, \mathcal{F})$.
+:::
+
+::: {.proof}
+## Proof of @thm-measure-linear-combinations
+Because all terms $c_j \mu_j(E)$ are non-negative ($c_j \mu_j(E) \in [0, \infty]$), all infinite sums consist of non-negative real/extended terms, which guarantees that sums are well-defined and order of summation can be interchanged by Tonelli's theorem for series.
+
+Let $\{E_k\}_{k=1}^\infty \subseteq \mathcal{F}$ be pairwise disjoint events. Using countable additivity of each individual measure $\mu_j$:
+$$
+\begin{aligned} 
+\mu\left( \bigcup_{k=1}^\infty E_k \right) &= \sum_{j=1}^\infty c_j \mu_j\left( \bigcup_{k=1}^\infty E_k \right) \\ &= \sum_{j=1}^\infty c_j \left( \sum_{k=1}^\infty \mu_j(E_k) \right) \\ &= \sum_{k=1}^\infty \sum_{j=1}^\infty c_j \mu_j(E_k) \quad \text{(interchanging non-negative double summation)} \\ &= \sum_{k=1}^\infty \mu(E_k). 
+\end{aligned}
+$$
+Hence, $\mu$ is countably additive and constitutes a valid measure.
+:::
+
+---
+
+## Discrete Probability Measures
+
+::: {#cor-discrete-prob}
+## Discrete Probability Measures
+Let $\Omega$ be a sample space and let $\{\omega_j\}_{j=1}^\infty \subseteq \Omega$ be a countable sequence of points. Let $\{p_j\}_{j=1}^\infty \subseteq [0, 1]$ be weights satisfying $\sum_{j=1}^\infty p_j = 1$.
+
+Then $\mu := \sum_{j=1}^\infty p_j \delta_{\omega_j}$ is a valid probability measure on $(\Omega, \mathcal{F})$.
+:::
+
+::: {.proof}
+## Proof of @cor-discrete-prob
+By @thm-measure-linear-combinations, $\mu$ is a valid measure. Evaluating $\mu$ on the entire space $\Omega$ gives:
+$$
+\mu(\Omega) = \sum_{j=1}^\infty p_j \delta_{\omega_j}(\Omega) = \sum_{j=1}^\infty p_j (1) = 1.
+$$
+Thus, $\mu$ is a normalized probability measure.
+:::
+
+---
+
+## Basic Properties of Measures
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space.
+
+::: {#prp-measure-properties}
+## Fundamental Properties of Measures
+1. **Monotonicity:**
+   If $A, B \in \mathcal{F}$ with $A \subseteq B$, then:
+   $$
+   \mu(A) \le \mu(B).
+   $${#eq-monotonicity}
+   If $\mu(A) < \infty$, then $\mu(B \setminus A) = \mu(B) - \mu(A)$.
+
+2. **Inclusion-Exclusion Rule (Addition Rule):**
+   For any $A, B \in \mathcal{F}$:
+   $$
+   \mu(A \cup B) + \mu(A \cap B) = \mu(A) + \mu(B).
+   $${#eq-inclusion-exclusion}
+   When $\mu(A \cap B) < \infty$, this is written as $\mu(A \cup B) = \mu(A) + \mu(B) - \mu(A \cap B)$.
+
+3. **Countable Sub-Additivity (Boole's Inequality):**
+   For any countable sequence of measurable sets $\{B_n\}_{n=1}^\infty \subseteq \mathcal{F}$ (not necessarily disjoint):
+   $$
+   \mu\left( \bigcup_{n=1}^\infty B_n \right) \le \sum_{n=1}^\infty \mu(B_n).
+   $${#eq-subadditivity}
+:::
+
+::: {.proof}
+## Proof of @prp-measure-properties
+1. **Monotonicity:**
+   Decompose $B$ into the disjoint union $B = A \cup (B \setminus A)$. By countable additivity (applied to the two-set partition, using $\mu(\emptyset)=0$ to pad with empty sets):
+   $$
+   \mu(B) = \mu(A) + \mu(B \setminus A).
+   $$
+   Since $\mu(B \setminus A) \ge 0$, it immediately follows that $\mu(A) \le \mu(B)$. If $\mu(A) < \infty$, subtracting $\mu(A)$ from both sides gives $\mu(B \setminus A) = \mu(B) - \mu(A)$.
+
+2. **Inclusion-Exclusion:**
+   Decompose $A \cup B = A \cup (B \setminus A)$ (disjoint) and $B = (A \cap B) \cup (B \setminus A)$ (disjoint).
+   By countable additivity applied to each two-set partition:
+   $$
+   \mu(A \cup B) = \mu(A) + \mu(B \setminus A), \quad \text{and} \quad \mu(B) = \mu(A \cap B) + \mu(B \setminus A).
+   $$
+   The second equation gives $\mu(B \setminus A) = \mu(B) - \mu(A \cap B)$ (valid when $\mu(A \cap B) < \infty$, which is the stated hypothesis). Substituting into the first:
+   $$
+   \mu(A \cup B) + \mu(A \cap B) = \mu(A) + \mu(B \setminus A) + \mu(A \cap B) = \mu(A) + \mu(B).
+   $$
+
+3. **Countable Sub-additivity:**
+   Disjointify the sequence $\{B_n\}_{n=1}^\infty$ by defining:
+   $$
+   A_1 := B_1, \quad A_n := B_n \setminus \left( \bigcup_{j=1}^{n-1} B_j \right) \quad \text{for } n \ge 2.
+   $${#eq-disjointify}
+   By construction, $\{A_n\}_{n=1}^\infty$ are pairwise disjoint measurable sets, $A_n \subseteq B_n$ for all $n$, and $\bigcup_{n=1}^\infty A_n = \bigcup_{n=1}^\infty B_n$.
+   Applying countable additivity and monotonicity ($A_n \subseteq B_n \implies \mu(A_n) \le \mu(B_n)$):
+   $$
+   \mu\left( \bigcup_{n=1}^\infty B_n \right) = \mu\left( \bigcup_{n=1}^\infty A_n \right) = \sum_{n=1}^\infty \mu(A_n) \le \sum_{n=1}^\infty \mu(B_n).
+   $$
+:::
+
+---
+
+## Takeaways
+
+:::{.callout-note icon=false}
+## Summary
+
+**1. What a measure is.** A measure on a measurable space $(\Omega,\mathcal{F})$ is a set function $\mu:\mathcal{F}\to[0,\infty]$ satisfying $\mu(\emptyset)=0$ and countable additivity. The empty-set condition is independent of countable additivity for general (infinite) measures and must be stated as a separate axiom.
+
+**2. Finite additivity is a consequence.** Applying countable additivity to a two-set disjoint union padded with empty sets (using $\mu(\emptyset)=0$) gives $\mu(A\cup B)=\mu(A)+\mu(B)$ whenever $A\cap B=\emptyset$. All "finite additivity" steps in the Properties proof rely on this.
+
+**3. The Dirac measure.** $\delta_{\omega_0}$ is the simplest non-trivial probability measure: it places unit mass at a single point. Countable additivity holds because a point can belong to at most one member of a disjoint family.
+
+**4. Building new measures by linear combination.** Non-negative countable linear combinations $\mu = \sum_j c_j\mu_j$ are again measures. The key step is interchanging the order of two non-negative summations, which is always valid (Tonelli). Normalization ($\mu(\Omega)=1$) is then checked separately, giving the class of discrete probability measures.
+
+**5. Derived properties from the axioms.**
+
+- *Monotonicity*: $A\subseteq B\implies\mu(A)\le\mu(B)$, via the disjoint decomposition $B=A\cup(B\setminus A)$.
+- *Inclusion-exclusion*: $\mu(A\cup B)+\mu(A\cap B)=\mu(A)+\mu(B)$; rearranges the same two disjoint decompositions.
+- *Sub-additivity (Boole's inequality)*: $\mu(\bigcup B_n)\le\sum\mu(B_n)$ for arbitrary (not necessarily disjoint) sets, proved by the disjointification $A_n=B_n\setminus\bigcup_{j<n}B_j$ which reduces to countable additivity followed by monotonicity $\mu(A_n)\le\mu(B_n)$.
+:::

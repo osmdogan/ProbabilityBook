@@ -1,0 +1,247 @@
+
+# Lecture 4.1: Outer Pseudo-Metric
+
+## Introduction and Motivation
+
+Let $(\Omega, \mathcal{A}, \mu)$ be a premeasure space, and let $\mu^*: 2^\Omega \to [0, \infty]$ be the Carathéodory outer measure defined for any $E \subseteq \Omega$ by:
+$$
+\mu^*(E) := \inf \left\{ \sum_{j=1}^\infty \mu(A_j) : \{A_j\}_{j=1}^\infty \subseteq \mathcal{A}, \, E \subseteq \bigcup_{j=1}^\infty A_j \right\}.
+$${#eq-caratheodory-outer-def}
+
+::: {#thm-measure-extension-general}
+## Measure Extension Theorem (Fréchet, Carathéodory, Hopf, Kolmogorov, 1920s)
+There exists a $\sigma$-algebra $\mathcal{M} \subseteq 2^\Omega$ containing $\sigma(\mathcal{A})$ such that $\mu^*\vert{}_{\mathcal{M}}$ is a measure extending $\mu$.
+:::
+
+Historically, the extension of a premeasure to a measure developed through contributions from several mathematicians.
+
+   - Carathéodory provided the fundamental outer-measure construction that underlies the modern extension theorem: starting from a premeasure on an algebra, his method constructs an outer measure whose restriction to the Carathéodory measurable sets is a complete measure extending the original premeasure. 
+   - Fréchet made important early contributions to the abstract theory of measure and extension problems, while Hopf and Kolmogorov contributed to the subsequent development and abstraction of measure theory and its applications to probability. 
+   - Although these contributions are historically connected, the extension theorem in the outer-measure form used here is most appropriately attributed to Carathéodory.
+
+## Comparison of Proof Strategies
+
+1. **Standard Approach (Carathéodory Split Condition):**
+   Define the class of measurable sets as:
+   $$
+   \mathcal{M} := \left\{ E \subseteq \Omega : \mu^*(T) = \mu^*(T \cap E) + \mu^*(T \cap E^c) \text{ for all } T \subseteq \Omega \right\}.
+   $${#eq-caratheodory-split-condition}
+   * **Advantages:** Works directly for arbitrary (including infinite) premeasures.
+   * **Disadvantages:** Finicky, highly technical, and unmotivated ("too clever by half"). Proving that $\mathcal{M}$ is a $\sigma$-algebra containing $\mathcal{A}$ typically requires the Monotone Class Theorem or Dynkin's $\pi$-$\lambda$ Theorem.
+
+2. **Driver's Topological Approach (For Finite Premeasures):**
+   Restricting first to finite premeasures $\mu: \mathcal{A} \to [0, \mu(\Omega)]$:
+   * Equip $2^\Omega$ with a natural pseudo-metric $d_\mu$ induced by $\mu^*$.
+   * Define $\overline{\mathcal{A}}$ as the closure of the field $\mathcal{A}$ under $d_\mu$.
+   * Show that $\mu: \mathcal{A} \to [0, \infty)$ is uniformly continuous (Lipschitz) on $\mathcal{A}$ and extends uniquely to $\overline{\mu} = \mu^*$ on $\overline{\mathcal{A}}$.
+   * Use metric and topological tools to prove that $\overline{\mathcal{A}}$ is a $\sigma$-algebra and $\overline{\mu}$ is a measure.
+
+---
+
+## Pseudo-Metric Spaces and Extension Preliminaries
+
+::: {#def-pseudo-metric}
+## Pseudo-Metric Space
+A function $d: X \times X \to [0, \infty)$ is called a **pseudo-metric** on a set $X$ if for all $x, y, z \in X$:
+
+1. $d(x, x) = 0$ (note that $d(x, y) = 0$ does not necessarily imply $x = y$),
+2. **Symmetry:** $d(x, y) = d(y, x)$,
+3. **Triangle Inequality:** $d(x, z) \le d(x, y) + d(y, z)$.
+:::
+
+::: {#def-closure-lipschitz}
+## Sequential Limits, Closure, and Lipschitz Extensions
+Let $(X, d)$ be a pseudo-metric space.
+
+1. A sequence $(x_n)_{n=1}^\infty \subseteq X$ converges to a limit $x \in X$ (denoted $x_n \xrightarrow{d} x$) if $\lim_{n \to \infty} d(x_n, x) = 0$.
+2. For $V \subseteq X$, its **closure** $\overline{V}$ is the set of all sequential limits of sequences in $V$:
+   $$
+   \overline{V} := \{x \in X : \exists (x_n)_{n=1}^\infty \subseteq V \text{ such that } d(x_n, x) \to 0\}.
+   $$
+
+3. A function $f: V \to \mathbb{R}$ is $K$-Lipschitz if there exists $K \in (0, \infty)$ such that $\vert{}f(x) - f(y)\vert{} \le K d(x, y)$ for all $x, y \in V$.
+:::
+
+::: {#prp-lipschitz-extension}
+## Unique Extension of Lipschitz Functions
+If $f: V \to \mathbb{R}$ is Lipschitz on a non-empty subset $V \subseteq X$, then $f$ extends uniquely to a continuous function $\overline{f}: \overline{V} \to \mathbb{R}$ preserving the Lipschitz constant $K$.
+:::
+
+---
+
+## The Outer Pseudo-Metric $d_\mu$
+
+Let $(\Omega, \mathcal{A}, \mu)$ be a finite premeasure space (so $\mu(\Omega) < \infty$), and let $\mu^*: 2^\Omega \to [0, \mu(\Omega)]$ be the Carathéodory outer measure induced by $\mu$.
+
+::: {#def-outer-pseudo-metric}
+## Outer Pseudo-Metric
+Define $d_\mu: 2^\Omega \times 2^\Omega \to [0, \mu(\Omega)]$ by:
+$$
+d_\mu(E, F) := \mu^*(E \Delta F),
+$${#eq-outer-pseudometric-def}
+where $E \Delta F = (E \setminus F) \cup (F \setminus E)$ denotes the symmetric difference between $E$ and $F$.
+:::
+
+::: {#prp-d-is-pseudometric}
+## Verification of Pseudo-Metric Axioms
+The set function $d_\mu$ is a valid pseudo-metric on $2^\Omega$.
+:::
+
+::: {.proof}
+## Proof of @prp-d-is-pseudometric
+
+1. **Non-negativity and Zero Distance:** $d_\mu(E, E) = \mu^*(E \Delta E) = \mu^*(\emptyset) = 0$.
+2. **Symmetry:** Since $E \Delta F = F \Delta E$, we have $d_\mu(E, F) = \mu^*(E \Delta F) = \mu^*(F \Delta E) = d_\mu(F, E)$.
+3. **Triangle Inequality:** For any $E, F, G \in 2^\Omega$, we have the set inclusion $E \Delta G \subseteq (E \Delta F) \cup (F \Delta G)$. By monotonicity and countable subadditivity of $\mu^*$:
+   $$
+   \begin{align*}
+   d_\mu(E, G) &= \mu^*(E \Delta G) \\
+   &\le \mu^*((E \Delta F) \cup (F \Delta G))\\
+   & \le \mu^*(E \Delta F) + \mu^*(F \Delta G)\\
+   & = d_\mu(E, F) + d_\mu(F, G).
+   \end{align*}
+   $$
+Thus $d_\mu$ is a pseudo-metric on $2^\Omega$. 
+:::
+
+## Key Algebraic Properties of $d_\mu$
+
+::: {#prp-pseudometric-algebraic-properties}
+## Fundamental Set-Operation Inequalities
+For any $A, B, A_n, B_n \in 2^\Omega$:
+
+1. **Complements:** $d_\mu(A, B) = d_\mu(A^c, B^c)$.
+2. **Countable Unions:** 
+   $$
+   d_\mu\left(\bigcup_{n=1}^\infty A_n, \bigcup_{n=1}^\infty B_n\right) \le \sum_{n=1}^\infty d_\mu(A_n, B_n).
+   $${#eq-union-pseudometric-bound}
+3. **Countable Intersections:**
+   $$
+   d_\mu\left(\bigcap_{n=1}^\infty A_n, \bigcap_{n=1}^\infty B_n\right) \le \sum_{n=1}^\infty d_\mu(A_n, B_n).
+   $${#eq-intersection-pseudometric-bound}
+:::
+
+::: {.proof}
+## Proof of @prp-pseudometric-algebraic-properties
+
+1. **Complements:** Note that $A^c \Delta B^c = (A^c \setminus B^c) \cup (B^c \setminus A^c) = (B \setminus A) \cup (A \setminus B) = B \Delta A = A \Delta B$. Thus:
+   $$
+   d_\mu(A^c, B^c) = \mu^*(A^c \Delta B^c) = \mu^*(A \Delta B) = d_\mu(A, B).
+   $$
+
+2. **Countable Unions:** Using the set identity $\left(\bigcup_{n=1}^\infty A_n\right) \Delta \left(\bigcup_{n=1}^\infty B_n\right) \subseteq \bigcup_{n=1}^\infty (A_n \Delta B_n)$, subadditivity of $\mu^*$ yields:
+   $$
+   \begin{align*}
+   d_\mu\left(\bigcup_{n=1}^\infty A_n, \bigcup_{n=1}^\infty B_n\right) &= \mu^*\left( \left(\bigcup_{n=1}^\infty A_n\right) \Delta \left(\bigcup_{n=1}^\infty B_n\right) \right)\\
+   & \le \mu^*\left( \bigcup_{n=1}^\infty (A_n \Delta B_n) \right) \\
+   & \le \sum_{n=1}^\infty \mu^*(A_n \Delta B_n)\\
+   & = \sum_{n=1}^\infty d_\mu(A_n, B_n).
+   \end{align*}
+   $$
+
+3. **Countable Intersections:** By De Morgan's Laws combined with Parts 1 and 2:
+   $$
+   \begin{align*}
+   d_\mu\left(\bigcap_{n=1}^\infty A_n, \bigcap_{n=1}^\infty B_n\right) &= d_\mu\left(\left(\bigcup_{n=1}^\infty A_n^c\right)^c, \left(\bigcup_{n=1}^\infty B_n^c\right)^c\right)\\
+   &= d_\mu\left(\bigcup_{n=1}^\infty A_n^c, \bigcup_{n=1}^\infty B_n^c\right)\\
+   & \le \sum_{n=1}^\infty d_\mu(A_n^c, B_n^c) \\
+   &= \sum_{n=1}^\infty d_\mu(A_n, B_n).
+   \end{align*}
+   $$
+
+:::
+
+## Distance Convergence for Incremental Disjoint Unions
+
+::: {#lem-increasing-union-convergence}
+## Approximation Lemma
+Let $(\Omega, \mathcal{A}, \mu)$ be a finite premeasure space. If $\{D_n\}_{n=1}^\infty \subseteq \mathcal{A}$ is a sequence of pairwise disjoint sets in $\mathcal{A}$ and $A = \bigcup_{n=1}^\infty D_n$, let $A_N := \bigcup_{n=1}^N D_n \in \mathcal{A}$. Then $A_N \uparrow A$ and:
+$$
+d_\mu(A_N, A) = \mu^*(A) - \mu(A_N) \xrightarrow{N \to \infty} 0.
+$${#eq-increasing-union-limit}
+:::
+
+::: {.proof}
+## Proof of @lem-increasing-union-convergence
+By definition of the outer measure $\mu^*$ on $A = \bigcup_{n=1}^\infty D_n$:
+$$
+\begin{align*}
+\mu^*(A) &\le \sum_{n=1}^\infty \mu(D_n)\\
+& = \lim_{N \to \infty} \sum_{n=1}^N \mu(D_n)\\
+& = \lim_{N \to \infty} \mu\left(\bigcup_{n=1}^N D_n\right) \\
+&= \lim_{N \to \infty} \mu(A_N).
+\end{align*}
+$$
+
+Conversely, since $A_N \in \mathcal{A}$ and $A_N \subseteq A$, monotonicity of $\mu^*$ gives $\mu(A_N) = \mu^*(A_N) \le \mu^*(A)$ for all $N \in \mathbb{N}$. Taking limits yields $\lim_{N \to \infty} \mu(A_N) = \mu^*(A)$.
+
+Now fix $N \in \mathbb{N}$. Note that $A \setminus A_N = \bigcup_{n=N+1}^\infty D_n$. Thus:
+$$
+\begin{align*}
+d_\mu(A, A_N) &= \mu^*(A \Delta A_N) \\
+&= \mu^*(A \setminus A_N) \\
+&\le \sum_{n=N+1}^\infty \mu(D_n) \\
+&= \mu^*(A) - \mu(A_N) \xrightarrow{N \to \infty} 0.
+\end{align*}
+$$
+
+:::
+
+::: {#cor-disjoint-union-closure}
+## Disjoint Union Belongs to Closure
+If $\{D_n\}_{n=1}^\infty \subseteq \mathcal{A}$ are pairwise disjoint, then $A = \bigcup_{n=1}^\infty D_n \in \overline{\mathcal{A}}$.
+:::
+
+---
+
+## Proving that $\overline{\mathcal{A}}$ is a $\sigma$-Algebra
+
+::: {#thm-closure-is-sigma-algebra}
+## Structure of $\overline{\mathcal{A}}$
+Let $(\Omega, \mathcal{A}, \mu)$ be a finite premeasure space. The closure $\overline{\mathcal{A}}$ of the field $\mathcal{A}$ in the pseudo-metric space $(2^\Omega, d_\mu)$ is a $\sigma$-algebra.
+:::
+
+::: {.proof}
+## Proof of @thm-closure-is-sigma-algebra
+We verify the three axioms of a $\sigma$-algebra:
+
+1. **Empty Set:** $\emptyset \in \mathcal{A} \subseteq \overline{\mathcal{A}}$.
+2. **Closure under Complement:** Let $B \in \overline{\mathcal{A}}$. By definition of closure, there exists a sequence $(A_n)_{n=1}^\infty \subseteq \mathcal{A}$ such that $d_\mu(A_n, B) \to 0$. By Property 1 of @prp-pseudometric-algebraic-properties:
+   $$
+   d_\mu(A_n^c, B^c) = d_\mu(A_n, B) \xrightarrow{n \to \infty} 0.
+   $$
+
+   Since $\mathcal{A}$ is a field, $A_n^c \in \mathcal{A}$ for all $n$. Thus $B^c$ is the limit of a sequence in $\mathcal{A}$, so $B^c \in \overline{\mathcal{A}}$.
+
+3. **Closure under Countable Unions:** Let $\{B_n\}_{n=1}^\infty \subseteq \overline{\mathcal{A}}$. We need to show that $B := \bigcup_{n=1}^\infty B_n \in \overline{\mathcal{A}}$.
+
+   Fix $\epsilon > 0$. For each $n \in \mathbb{N}$, since $B_n \in \overline{\mathcal{A}}$, there exists a set $A_n \in \mathcal{A}$ such that:
+   $$
+   d_\mu(A_n, B_n) < \frac{\epsilon}{2^{n+1}}.
+   $${#eq-an-bn-approx}
+   
+   By Property 2 of @prp-pseudometric-algebraic-properties:
+   $$
+   d_\mu\left(\bigcup_{n=1}^\infty A_n, \bigcup_{n=1}^\infty B_n\right) \le \sum_{n=1}^\infty d_\mu(A_n, B_n) < \sum_{n=1}^\infty \frac{\epsilon}{2^{n+1}} = \frac{\epsilon}{2}.
+   $${#eq-union-approx-half-eps}
+
+   Now consider $A := \bigcup_{n=1}^\infty A_n$. Although each $A_n \in \mathcal{A}$, the infinite union $\bigcup_{n=1}^\infty A_n$ is not guaranteed to be in $\mathcal{A}$. However, we can disjointify $\{A_n\}_{n=1}^\infty$ by setting $D_1 = A_1$ and $D_n = A_n \setminus (\bigcup_{j=1}^{n-1} A_j) \in \mathcal{A}$ for $n \ge 2$. Then $A = \bigcup_{n=1}^\infty D_n$ with $\{D_n\} \subseteq \mathcal{A}$ pairwise disjoint.
+
+   By @lem-increasing-union-convergence, setting $A^{(N)} := \bigcup_{n=1}^N D_n = \bigcup_{n=1}^N A_n \in \mathcal{A}$, we can pick $N \in \mathbb{N}$ sufficiently large such that:
+   $$
+   d_\mu\left( A^{(N)}, \bigcup_{n=1}^\infty A_n \right) < \frac{\epsilon}{2}.
+   $${#eq-truncation-approx-half-eps}
+
+   Combining @eq-union-approx-half-eps and @eq-truncation-approx-half-eps via the triangle inequality:
+   $$
+   \begin{align*}
+   d_\mu\left( A^{(N)}, \bigcup_{n=1}^\infty B_n \right) &\le d_\mu\left( A^{(N)}, \bigcup_{n=1}^\infty A_n \right) + d_\mu\left( \bigcup_{n=1}^\infty A_n, \bigcup_{n=1}^\infty B_n \right) \\
+   &< \frac{\epsilon}{2} + \frac{\epsilon}{2} = \epsilon.
+   \end{align*}
+   $$
+   Since $A^{(N)} \in \mathcal{A}$ and $\epsilon > 0$ was arbitrary, $\bigcup_{n=1}^\infty B_n$ lies in the closure $\overline{\mathcal{A}}$.
+
+Hence, $\overline{\mathcal{A}}$ is a $\sigma$-algebra. $\blacksquare$
+:::
+
+---

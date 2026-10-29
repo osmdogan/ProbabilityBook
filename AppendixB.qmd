@@ -1,0 +1,510 @@
+# Basic Metric and Topological Space Notions
+
+These notes cover fundamental concepts in metric and topological space theory essential for advanced probability and measure theory.
+
+## Pseudo-Metrics and Metric Spaces
+
+::: {#def-pseudo-metric}
+### Pseudo-Metric and Metric Spaces
+
+Let $X$ be a non-empty set. A function $d \colon X \times X \to [0, \infty)$ is called a **pseudo-metric** on $X$ if $d$ is symmetric and satisfies the triangle inequality:
+
+1. **Symmetry:** $d(x, y) = d(y, x)$ for all $x, y \in X$.
+2. **Triangle Inequality:** $d(x, z) \le d(x, y) + d(y, z)$ for all $x, y, z \in X$.
+
+If we further assume that $d$ is non-degenerate in the sense that $d(x, y) = 0$ if and only if $x = y$, then $d$ is called a **metric** on $X$. The pair $(X, d)$ is called a metric space.
+
+Any subset $Y \subseteq X$ of a (pseudo-)metric space $(X, d)$ is naturally a (pseudo-)metric space equipped with the restricted function $\left.d\right|_{Y \times Y}$.
+:::
+
+::: {#exm-metric-examples}
+### Standard Metric Spaces
+
+1. Let $X = \mathbb{R}$. The standard metric is $d(x, y) = |y - x|$. Another bounded metric on $\mathbb{R}$ is given by $d(x, y) = |\tan^{-1}(y) - \tan^{-1}(x)|$.
+2. Let $X = \mathbb{R}^d$. The standard Euclidean distance metric is given by $d(x, y) = \sqrt{\sum_{j=1}^{d}(y_j - x_j)^2}$. Subspaces such as the unit sphere $S^{d-1} \subset \mathbb{R}^d$ inherit this metric.
+3. Let $X = C([0, 1], \mathbb{C})$ denote the space of continuous complex-valued functions on $[0, 1]$. Then
+   $$d(f, g) := \max_{x \in [0, 1]} |f(x) - g(x)|$$
+   is a metric on $X$, whereas
+   $$d_{1/2}(f, g) := \max_{x \in [0, 1/2]} |f(x) - g(x)|$$
+   is a pseudo-metric on $X$ (since non-zero functions vanishing on $[0, 1/2]$ satisfy $d_{1/2}(f, 0) = 0$).
+4. Any normed vector space $(X, \|\cdot\|)$ is a metric space with induced metric $d(x, y) := \|x - y\|$. In particular, $L^p(\mu)$ spaces (for $p \in [1, \infty]$) are metric spaces.
+5. Let $X$ denote the space of $C^1$-periodic functions on $\mathbb{R}$ with period $1$. Then
+   $$d(f, g) := \max_{x \in [0, 1]} |f'(x) - g'(x)|$$
+   defines a pseudo-metric on $X$.
+:::
+
+Throughout this chapter, $(X, d)$ denotes a pseudo-metric space. We frequently refer to $(X, d)$ simply as a metric space even when $d$ is allowed to be degenerate, unless explicitly noted otherwise.
+
+::: {#def-balls}
+### Open and Closed Balls
+
+Let $(X, d)$ be a metric space.
+
+1. The **open ball** centered at $x \in X$ with radius $\delta > 0$ is defined by
+   $$B(x, \delta) \equiv B_x(\delta) := \{y \in X \colon d(x, y) < \delta\}.$$
+2. The **closed ball** centered at $x \in X$ with radius $\delta > 0$ is defined by
+   $$C_x(\delta) := \{y \in X \colon d(x, y) \le \delta\}.$$
+:::
+
+::: {#def-convergence}
+### Sequence Convergence
+
+A sequence $\{x_n\}_{n=1}^{\infty} \subset X$ is said to **converge** to a point $x \in X$ (denoted $x_n \to x$ as $n \to \infty$) if $\lim_{n \to \infty} d(x, x_n) = 0$.
+
+If $x_n \to x$ and $x_n \to y$, then by the triangle inequality:
+$$d(x, y) \le d(x, x_n) + d(x_n, y) \to 0 \quad \text{as } n \to \infty,$$
+which implies $d(x, y) = 0$. When $d$ is non-degenerate (a metric), $x = y$, ensuring unique limits. For general pseudo-metrics, limits are unique up to distance zero.
+:::
+
+::: {#def-topology-basics}
+### Bounded, Closed, and Open Sets
+
+1. A set $E \subset X$ is **bounded** if $E \subset B(x, R)$ for some $x \in X$ and $R < \infty$.
+2. A set $F \subset X$ is **closed** if every convergent sequence $\{x_n\}_{n=1}^{\infty} \subset F$ has its limit in $F$. We denote this by $F \sqsubset X$.
+3. A set $V \subset X$ is **open** if its complement $V^c := X \setminus V$ is closed. We denote this by $V \subset_o X$.
+4. The collection of all open subsets of $X$ relative to $d$ is denoted by $\tau_d$.
+:::
+
+::: {#exr-closed-sets-properties}
+Let $\mathcal{F}$ be a collection of closed subsets of $X$. Show that $\bigcap \mathcal{F} := \bigcap_{F \in \mathcal{F}} F$ is closed. Furthermore, show that finite unions of closed sets are closed: if $\{F_k\}_{k=1}^{K}$ are closed sets, then $\bigcup_{k=1}^{K} F_k$ is closed. (By taking complements, this implies that $\tau_d$ is closed under finite intersections and arbitrary unions.) Show by example that a countable union of closed sets need not be closed.
+:::
+
+::: {.proof}
+1. **Arbitrary Intersections:** Let $\{x_n\} \subset \bigcap_{F \in \mathcal{F}} F$ with $x_n \to x$. For each $F \in \mathcal{F}$, $\{x_n\} \subset F$. Since $F$ is closed, $x \in F$. Thus $x \in \bigcap_{F \in \mathcal{F}} F$, proving the intersection is closed.
+2. **Finite Unions:** Let $\{x_n\} \subset \bigcup_{k=1}^{K} F_k$ with $x_n \to x$. By the pigeonhole principle, there exists at least one $k_0 \in \{1, \dots, K\}$ such that $F_{k_0}$ contains an infinite subsequence $\{x_{n_j}\}$. Since $x_{n_j} \to x$ and $F_{k_0}$ is closed, $x \in F_{k_0} \subset \bigcup_{k=1}^{K} F_k$.
+3. **Counterexample:** In $\mathbb{R}$ with the standard metric, $F_n = [1/n, 1 - 1/n]$ is closed for each $n \ge 2$, but $\bigcup_{n=2}^{\infty} F_n = (0, 1)$, which is open and not closed.
+:::
+
+::: {#exr-open-set-characterization}
+Show that $V \subset X$ is open if and only if for every $x \in V$ there exists $\delta > 0$ such that $B_x(\delta) \subset V$. In particular, show $B_x(\delta)$ is open for all $x \in X$ and $\delta > 0$.
+:::
+
+::: {.proof}
+1. $(\Rightarrow)$ Suppose $V$ is open, so $V^c$ is closed. Assume for contradiction that there exists $x \in V$ such that for every $n \in \mathbb{N}$, $B_x(1/n) \not\subset V$. Then choose $x_n \in B_x(1/n) \cap V^c$. Then $x_n \in V^c$ and $d(x_n, x) < 1/n \to 0$, so $x_n \to x$. Since $V^c$ is closed, $x \in V^c$, contradicting $x \in V$.
+2. $(\Leftarrow)$ Suppose for every $x \in V$, there exists $\delta_x > 0$ such that $B_x(\delta_x) \subset V$. Let $\{x_n\} \subset V^c$ be a sequence with $x_n \to x$. If $x \in V$, there exists $\delta > 0$ such that $B_x(\delta) \subset V$. But $x_n \to x$ implies $x_n \in B_x(\delta) \subset V$ for large $n$, contradicting $x_n \in V^c$. Thus $x \in V^c$, so $V^c$ is closed and $V$ is open.
+3. **Open Ball Openness:** Let $y \in B_x(\delta)$ and set $\epsilon = \delta - d(x, y) > 0$. If $z \in B_y(\epsilon)$, then $d(x, z) \le d(x, y) + d(y, z) < d(x, y) + \epsilon = \delta$. Thus $B_y(\epsilon) \subset B_x(\delta)$, proving $B_x(\delta)$ is open.
+:::
+
+::: {#def-neighborhood}
+### Neighborhoods
+
+A subset $A \subset X$ is a **neighborhood** of $x \in X$ if there exists an open set $V \subset_o X$ such that $x \in V \subset A$. $A$ is an **open neighborhood** of $x$ if $A$ is open and $x \in A$.
+:::
+
+::: {#lem-dist-to-set}
+### Continuity of Distance to a Set
+
+For any non-empty subset $A \subset X$, define the distance function $d_A \colon X \to [0, \infty)$ by
+$$d_A(x) := \inf \{d(x, a) \colon a \in A\}.$$
+Then $d_A$ is 1-Lipschitz continuous:
+$$|d_A(x) - d_A(y)| \le d(x, y) \quad \forall x, y \in X.$$ {#eq-dist-lipschitz}
+
+In particular, if $x_n \to x$ in $X$, then $d_A(x_n) \to d_A(x)$ as $n \to \infty$. Moreover, for any $\epsilon > 0$, the set $F_\epsilon := \{x \in X \colon d_A(x) \ge \epsilon\}$ is closed in $X$.
+:::
+
+::: {.proof}
+Let $a \in A$ and $x, y \in X$. By the triangle inequality:
+$$d_A(x) \le d(x, a) \le d(x, y) + d(y, a).$$
+Taking the infimum over $a \in A$ yields
+$$d_A(x) \le d(x, y) + d_A(y) \implies d_A(x) - d_A(y) \le d(x, y).$$
+Swapping $x$ and $y$ gives $d_A(y) - d_A(x) \le d(x, y)$, establishing @eq-dist-lipschitz.
+
+If $x_n \to x$, then $|d_A(x) - d_A(x_n)| \le d(x, x_n) \to 0$, proving continuity.
+
+Now let $\{x_n\} \subset F_\epsilon$ with $x_n \to x$. Since $d_A(x_n) \ge \epsilon$ for all $n$, continuity implies
+$$d_A(x) = \lim_{n \to \infty} d_A(x_n) \ge \epsilon,$$
+so $x \in F_\epsilon$, proving that $F_\epsilon$ is closed.
+:::
+
+::: {#cor-metric-continuity}
+### Joint Continuity of Metric
+
+The metric function $d \colon X \times X \to [0, \infty)$ satisfies
+$$|d(x, y) - d(x', y')| \le d(x, x') + d(y, y').$$ {#eq-metric-reverse-triangle}
+:::
+
+::: {.proof}
+Applying @lem-dist-to-set with singletons $A = \{y\}$ and $A = \{y'\}$ alongside the real triangle inequality:
+\begin{align*}
+|d(x, y) - d(x', y')| &\le |d(x, y) - d(x, y')| + |d(x, y') - d(x', y')| \\
+&\le d(y, y') + d(x, x'). \tag*{$\blacksquare$}
+\end{align*}
+
+:::
+
+::: {#exm-closed-balls}
+For $x \in X$ and $\delta > 0$, $C_x(\delta)$ and $B_x(\delta)^c$ are closed. Indeed, if $\{y_n\} \subset C_x(\delta)$ with $y_n \to y$, then $d(y_n, x) \le \delta$ for all $n$. By @cor-metric-continuity, $d(y, x) = \lim_{n \to \infty} d(y_n, x) \le \delta$, so $y \in C_x(\delta)$.
+:::
+
+::: {#lem-interior-approximation}
+### Approximating Open Sets from Inside by Closed Sets
+
+Let $A \subset X$ be closed and let $F_\epsilon := \{x \in X \colon d_A(x) \ge \epsilon\}$. Then $F_\epsilon \uparrow A^c$ as $\epsilon \downarrow 0$.
+:::
+
+::: {.proof}
+For any $x \in A$, $d_A(x) = 0$, so $F_\epsilon \subset A^c$ for all $\epsilon > 0$, implying $\bigcup_{\epsilon > 0} F_\epsilon \subset A^c$. Conversely, let $x \in A^c$. Since $A^c$ is open, there exists $\epsilon > 0$ such that $B_x(\epsilon) \subset A^c$, which means $d(x, y) \ge \epsilon$ for all $y \in A$. Thus $d_A(x) \ge \epsilon$, so $x \in F_\epsilon$. Finally, $F_\epsilon \subset F_{\epsilon'}$ whenever $\epsilon' \le \epsilon$, completing the monotonic union $F_\epsilon \uparrow A^c$.
+:::
+
+::: {#def-closure-density}
+### Closure, Density, and Separability
+
+Let $A \subset X$.
+
+1. The **closure** of $A$, denoted $\overline{A}$, is defined as
+   $$\overline{A} := \{x \in X \colon \exists \{x_n\}_{n=1}^{\infty} \subset A \text{ with } x_n \to x\}.$$
+2. $A$ is **dense** in $X$ if $\overline{A} = X$.
+3. A metric space $(X, d)$ is **separable** if it contains a countable dense subset $D \subset X$.
+:::
+
+::: {#exr-closure-properties}
+Given $A \subset X$, show that $\overline{A}$ is closed and satisfies
+$$\overline{A} = \bigcap \{F \subset X \colon A \subset F \text{ and } F \text{ is closed}\}.$$ {#eq-closure-intersection}
+That is, $\overline{A}$ is the smallest closed set containing $A$.
+:::
+
+::: {.proof}
+Let $C = \bigcap \{F \subset X \colon A \subset F, F \text{ is closed}\}$.
+
+1. **$\overline{A} \subset C$:** Let $x \in \overline{A}$, so $x_n \to x$ for some $\{x_n\} \subset A$. If $F$ is any closed set containing $A$, then $\{x_n\} \subset F$, so its limit $x \in F$. Thus $x \in C$.
+2. **$C \subset \overline{A}$:** It suffices to show $\overline{A}$ is closed (since $A \subset \overline{A}$ trivially). Let $\{y_k\} \subset \overline{A}$ with $y_k \to y$. For each $k$, choose $x_k \in A$ with $d(x_k, y_k) < 1/k$. Then $d(x_k, y) \le d(x_k, y_k) + d(y_k, y) \to 0$, so $x_k \to y \implies y \in \overline{A}$. Hence $\overline{A}$ is closed, which implies $C \subset \overline{A}$.
+:::
+
+::: {#exr-transitive-density}
+Let $D \subset X$ be dense in $(X, d)$ and let $E \subset X$ be such that for every $x \in D$, there exists a sequence $\{x_n\} \subset E$ converging to $x$. Show that $E$ is dense in $X$.
+:::
+
+::: {.proof}
+Let $x \in X$ and $\epsilon > 0$. Since $D$ is dense in $X$, there exists $y \in D$ with $d(x, y) < \epsilon / 2$. Since $E$ approximates $D$, there exists $z \in E$ with $d(y, z) < \epsilon / 2$. By the triangle inequality, $d(x, z) < \epsilon$. Thus $x \in \overline{E}$, proving $\overline{E} = X$.
+:::
+
+::: {#exr-uncountable-separated-nonseparable}
+Suppose $(X, d)$ contains an uncountable subset $\Lambda \subset X$ such that there exists $\epsilon > 0$ with $d(a, b) \ge \epsilon$ for all $a, b \in \Lambda$ with $a \neq b$. Show that $(X, d)$ is not separable.
+:::
+
+::: {.proof}
+Suppose $D \subset X$ is dense. For each $a \in \Lambda$, the open ball $B_a(\epsilon/2)$ must contain at least one point $d_a \in D$. Since $d(a, b) \ge \epsilon$ for distinct $a, b \in \Lambda$, the balls $\{B_a(\epsilon/2)\}_{a \in \Lambda}$ are pairwise disjoint. Thus the map $a \mapsto d_a$ is an injection from the uncountable set $\Lambda$ into $D$, implying $D$ must be uncountable. Hence no countable dense subset exists.
+:::
+
+---
+
+## Metric Spaces as Topological Spaces
+
+::: {#def-topological-space}
+### Topological Space
+
+Let $X$ be a set. A **topology** on $X$ is a collection $\tau$ of subsets of $X$ satisfying:
+
+1. $\emptyset \in \tau$ and $X \in \tau$.
+2. $\tau$ is closed under arbitrary unions: if $\{V_\alpha\}_{\alpha \in A} \subset \tau$, then $\bigcup_{\alpha \in A} V_\alpha \in \tau$.
+3. $\tau$ is closed under finite intersections: if $V_1, \dots, V_n \in \tau$, then $\bigcap_{i=1}^{n} V_i \in \tau$.
+
+The pair $(X, \tau)$ is a **topological space**, and sets $V \in \tau$ are called **open**. A set $F \subset X$ is **closed** if $F^c \in \tau$. Let $\tau_x = \{V \in \tau \colon x \in V\}$ denote the open neighborhoods of $x$. Every metric space $(X, d)$ naturally forms a topological space $(X, \tau_d)$.
+:::
+
+::: {#def-topological-notions}
+### Topological Operations
+
+Let $(X, \tau)$ be a topological space and $A \subset X$.
+
+1. **Closure:** $\overline{A} := \bigcap \{F \subset X \colon A \subset F, F^c \in \tau\}$.
+2. **Interior:** $A^\circ := \bigcup \{V \in \tau \colon V \subset A\}$.
+3. **Neighborhood:** $A$ is a neighborhood of $x$ if $x \in A^\circ$.
+4. **Accumulation Points:** $\mathrm{acc}(A) := \{x \in X \colon V \cap (A \setminus \{x\}) \neq \emptyset \text{ for all } V \in \tau_x\}$.
+5. **Boundary:** $\mathrm{bd}(A) := \overline{A} \setminus A^\circ$.
+:::
+
+::: {#rem-duality}
+The dual relations between interior and closure are given by:
+$$(A^\circ)^c = \overline{A^c} \quad \text{and} \quad (\overline{A})^c = (A^c)^\circ.$$ {#eq-interior-closure-duality}
+Hence the boundary satisfies $\mathrm{bd}(A) = \overline{A} \cap \overline{A^c}$.
+:::
+
+### Continuity
+
+::: {#def-metric-continuity}
+### Pointwise Continuity (Metric)
+
+Let $(X, \rho)$ and $(Y, d)$ be metric spaces. A function $f \colon X \to Y$ is **continuous at $x \in X$** if for all $\epsilon > 0$, there exists $\delta > 0$ such that
+$$d(f(x), f(x')) < \epsilon \quad \text{whenever} \quad \rho(x, x') < \delta.$$ {#eq-eps-delta-continuity}
+$f$ is **continuous** if it is continuous at every $x \in X$.
+:::
+
+::: {#lem-local-continuity}
+### Local Continuity Characterizations
+
+Let $(X, \rho)$ and $(Y, d)$ be metric spaces and $f \colon X \to Y$. The following are equivalent for $x \in X$:
+
+1. $f$ is continuous at $x$.
+2. For all neighborhoods $A \subset Y$ of $f(x)$, $f^{-1}(A)$ is a neighborhood of $x$.
+3. For all sequences $\{x_n\} \subset X$ with $x_n \to x$, $f(x_n) \to f(x)$ in $Y$.
+:::
+
+::: {.proof}
+* **$(1 \Rightarrow 2)$:** If $A$ is a neighborhood of $f(x)$, there exists $\epsilon > 0$ such that $B_{f(x)}(\epsilon) \subset A$. By continuity, pick $\delta > 0$ satisfying @eq-eps-delta-continuity. Then $B_x(\delta) \subset f^{-1}(B_{f(x)}(\epsilon)) \subset f^{-1}(A)$, so $f^{-1}(A)$ is a neighborhood of $x$.
+* **$(2 \Rightarrow 3)$:** Suppose $x_n \to x$. For any $\epsilon > 0$, $B_{f(x)}(\epsilon)$ is a neighborhood of $f(x)$, so $f^{-1}(B_{f(x)}(\epsilon))$ is a neighborhood of $x$, containing $B_x(\delta)$ for some $\delta > 0$. Since $x_n \to x$, $x_n \in B_x(\delta)$ for almost all $n$, so $f(x_n) \in B_{f(x)}(\epsilon)$ for almost all $n$. Thus $f(x_n) \to f(x)$.
+* **$(3 \Rightarrow 1)$:** We prove $\neg 1 \Rightarrow \neg 3$. If $f$ is not continuous at $x$, there exists $\epsilon > 0$ such that for each $n \in \mathbb{N}$, there is $x_n \in X$ with $\rho(x_n, x) < 1/n$ but $d(f(x_n), f(x)) \ge \epsilon$. Then $x_n \to x$ but $f(x_n) \not\to f(x)$.
+:::
+
+::: {#lem-global-continuity}
+### Global Continuity Characterizations
+
+Let $(X, \rho)$ and $(Y, d)$ be metric spaces and $f \colon X \to Y$. The following are equivalent:
+
+1. $f$ is continuous on $X$.
+2. $f^{-1}(V) \in \tau_\rho$ for all $V \in \tau_d$ (preimages of open sets are open).
+3. $f^{-1}(C)$ is closed in $X$ for all closed $C \subset Y$.
+4. For all convergent sequences $x_n \to x$ in $X$, $f(x_n) \to f(x)$ in $Y$.
+:::
+
+::: {.proof}
+Equivalence of (2) and (3) follows immediately from $f^{-1}(C^c) = [f^{-1}(C)]^c$. Equivalence of (1), (2), and (4) follows from applying @lem-local-continuity pointwise across $X$.
+:::
+
+::: {#def-topological-continuity}
+### Continuity in Topological Terms
+
+Let $(X, \tau_X)$ and $(Y, \tau_Y)$ be topological spaces.
+
+1. $f \colon X \to Y$ is **continuous at $x \in X$** if for every open neighborhood $V \in \tau_Y$ of $f(x)$, there exists an open neighborhood $U \in \tau_X$ of $x$ such that $U \subset f^{-1}(V)$.
+2. $f$ is **globally continuous** if $f^{-1}(\tau_Y) \subset \tau_X$. The set of continuous functions is denoted $C(X, Y)$.
+:::
+
+::: {#exr-top-continuity-equivalence}
+Show $f \colon X \to Y$ is continuous under Definition 2.19 if and only if $f$ is continuous at all points $x \in X$.
+:::
+
+::: {.proof}
+1. $(\Rightarrow)$ If $f^{-1}(V) \in \tau_X$ for all $V \in \tau_Y$, then given $x \in X$ and $V \in \tau_Y$ with $f(x) \in V$, set $U = f^{-1}(V) \in \tau_X$. Then $x \in U$ and $U \subset f^{-1}(V)$, so $f$ is continuous at $x$.
+2. $(\Leftarrow)$ Let $V \in \tau_Y$. For every $x \in f^{-1}(V)$, continuity at $x$ provides $U_x \in \tau_X$ with $x \in U_x \subset f^{-1}(V)$. Then $f^{-1}(V) = \bigcup_{x \in f^{-1}(V)} U_x$, which is open as an arbitrary union of open sets.
+:::
+
+::: {#exr-closed-preimage-continuity}
+Show $f \colon X \to Y$ is continuous if and only if $f^{-1}(C)$ is closed in $X$ for all closed subsets $C \subset Y$.
+:::
+
+::: {.proof}
+This follows directly from set operations: $C \subset Y$ is closed $\iff Y \setminus C$ is open. Since $f^{-1}(Y \setminus C) = X \setminus f^{-1}(C)$, $f^{-1}(Y \setminus C)$ is open $\iff f^{-1}(C)$ is closed.
+:::
+
+::: {#def-homeomorphism}
+### Homeomorphism
+
+A map $f \colon X \to Y$ between topological spaces is a **homeomorphism** if $f$ is bijective, $f$ is continuous, and its inverse $f^{-1} \colon Y \to X$ is continuous.
+:::
+
+::: {#exm-dist-continuous}
+By @lem-dist-to-set, $d_A \colon X \to [0, \infty)$ is continuous. Setting $A = \{x\}$, the map $y \mapsto d(y, x)$ is continuous for each fixed $x \in X$.
+:::
+
+::: {#exr-joint-continuity}
+### Joint Continuity Criterion
+
+Let $X, Y, Z$ be metric spaces and $F \colon X \times Y \to Z$ be a function such that:
+
+1. For each $x \in X$, $y \mapsto F(x, y)$ is continuous, and these maps are locally equi-continuous in $x$: for all $(a, b) \in X \times Y$,
+   $$\lim_{y \to b} \sup_{x \in B_X(a, r)} d(F(x, y), F(x, b)) = 0 \quad \text{for some } r > 0.$$ {#eq-equicont}
+2. There exists a dense subset $Y_0 \subset Y$ such that $x \mapsto F(x, y)$ is continuous for fixed $y \in Y_0$.
+
+Show:
+1. $x \mapsto F(x, y)$ is continuous for all $y \in Y$.
+2. $F \colon X \times Y \to Z$ is jointly continuous on $X \times Y$.
+:::
+
+::: {.proof}
+1. Fix $y \in Y$ and $a \in X$. Let $b = y$. By local equicontinuity, choose $r > 0$ such that @eq-equicont holds. For $\epsilon > 0$, choose $y_0 \in Y_0 \cap B_Y(b, \delta)$ such that $\sup_{x \in B_X(a, r)} d(F(x, y_0), F(x, y)) < \epsilon / 3$. Since $x \mapsto F(x, y_0)$ is continuous, choose $\delta_x > 0$ such that $d(F(x, y_0), F(a, y_0)) < \epsilon / 3$ whenever $d(x, a) < \delta_x$. By triangle inequality:
+   $$d(F(x, y), F(a, y)) \le d(F(x, y), F(x, y_0)) + d(F(x, y_0), F(a, y_0)) + d(F(a, y_0), F(a, y)) < \epsilon.$$
+2. To prove joint continuity at $(a, b)$, write:
+   $$d(F(x, y), F(a, b)) \le d(F(x, y), F(x, b)) + d(F(x, b), F(a, b)).$$
+   For $\epsilon > 0$, local equicontinuity bounds the first term by $\epsilon / 2$ for $y$ near $b$ uniformly in $x \in B_X(a, r)$. Continuity of $x \mapsto F(x, b)$ bounds the second term by $\epsilon / 2$ for $x$ near $a$.
+:::
+
+::: {#lem-urysohn}
+### Urysohn's Lemma for Metric Spaces
+
+Let $(X, d)$ be a metric space and let $A, B \subset X$ be disjoint closed subsets. Then
+$$f(x) = \frac{d_B(x)}{d_A(x) + d_B(x)}$$ {#eq-urysohn-function}
+defines a continuous function $f \colon X \to [0, 1]$ such that $\left.f\right|_A \equiv 1$ and $\left.f\right|_B \equiv 0$.
+:::
+
+::: {.proof}
+By @lem-dist-to-set, $d_A$ and $d_B$ are continuous. Since $A$ and $B$ are closed and disjoint, $d_A(x) + d_B(x) > 0$ for all $x \in X$. Thus $f$ is continuous as the quotient of continuous functions with a non-zero denominator. If $x \in A$, $d_A(x) = 0 \implies f(x) = 1$. If $x \in B$, $d_B(x) = 0 \implies f(x) = 0$.
+:::
+
+::: {#cor-metric-separation}
+If $A, B \subset X$ are disjoint closed sets, there exist disjoint open sets $U, V \subset X$ such that $A \subset U$ and $B \subset V$.
+:::
+
+::: {.proof}
+Let $f$ be the Urysohn function from @lem-urysohn. Set $U = \{f > 1/2\}$ and $V = \{f < 1/2\}$.
+:::
+
+---
+
+## Completeness in Metric Spaces
+
+::: {#def-cauchy-complete}
+### Cauchy Sequences and Completeness
+
+1. A sequence $\{x_n\}_{n=1}^{\infty}$ in $(X, d)$ is **Cauchy** if $\lim_{m, n \to \infty} d(x_n, x_m) = 0$.
+2. A metric space $(X, d)$ is **complete** if every Cauchy sequence converges to a limit in $X$.
+:::
+
+::: {#exr-cauchy-properties}
+Let $(X, d)$ be a pseudo-metric space.
+
+1. Show every convergent sequence is Cauchy.
+2. If $x_n \to x$ and $y_n \to y$, show $d(x_n, y_n) \to d(x, y)$.
+3. If $\{x_n\}, \{y_n\}$ are Cauchy, show $\lim_{n \to \infty} d(x_n, y_n)$ exists in $[0, \infty)$.
+:::
+
+::: {.proof}
+1. If $x_n \to x$, then $d(x_n, x_m) \le d(x_n, x) + d(x, x_m) \to 0$ as $n, m \to \infty$.
+2. By @cor-metric-continuity, $|d(x_n, y_n) - d(x, y)| \le d(x_n, x) + d(y_n, y) \to 0$.
+3. By @cor-metric-continuity, $|d(x_n, y_n) - d(x_m, y_m)| \le d(x_n, x_m) + d(y_n, y_m) \to 0$, so $\{d(x_n, y_n)\} \subset \mathbb{R}$ is Cauchy and hence converges.
+:::
+
+::: {#exr-complete-subspaces}
+Let $(X, d)$ be complete and $A \subset X$. Show $(A, \left.d\right|_{A \times A})$ is complete if and only if $A$ is closed in $X$.
+:::
+
+::: {.proof}
+1. $(\Rightarrow)$ Let $\{x_n\} \subset A$ with $x_n \to x \in X$. Then $\{x_n\}$ is Cauchy in $A$, so completeness of $A$ implies $x_n \to a \in A$. Uniqueness of limits gives $x = a \in A$, so $A$ is closed.
+2. $(\Leftarrow)$ Let $\{x_n\} \subset A$ be Cauchy. Since $X$ is complete, $x_n \to x \in X$. Since $A$ is closed, $x \in A$.
+:::
+
+::: {#exr-metric-completion}
+### Completion of a Metric Space
+
+Given a metric space $(X, d)$, construct its complete completion $(\overline{X}, \overline{d})$ with an isometry $i \colon X \to \overline{X}$ having dense image $i(X) \subset \overline{X}$.
+:::
+
+::: {.proof}
+1. Let $\mathcal{C}$ be the set of Cauchy sequences in $X$. For $a, b \in \mathcal{C}$, define $d_{\mathcal{C}}(a, b) = \lim_{n \to \infty} d(a_n, b_n)$. $d_{\mathcal{C}}$ satisfies symmetry and triangle inequality.
+2. Define $a \sim b \iff d_{\mathcal{C}}(a, b) = 0$. This is an equivalence relation. Let $\overline{X} = \mathcal{C} / \sim$ and $\overline{d}(\overline{a}, \overline{b}) = d_{\mathcal{C}}(a, b)$. $(\overline{X}, \overline{d})$ is a valid metric space.
+3. Map $i(x) = \overline{(x, x, x, \dots)}$. $i$ is isometric and $i(X)$ is dense in $\overline{X}$.
+4. Completeness of $\overline{X}$: Let $\{\overline{a}^{(m)}\}$ be Cauchy in $\overline{X}$. For each $m$, pick $b_m \in X$ such that $\overline{d}(i(b_m), \overline{a}^{(m)}) < 1/m$. Then $b = \{b_m\} \in \mathcal{C}$ and $\overline{a}^{(m)} \to \overline{b}$.
+:::
+
+::: {#def-lipschitz}
+### Lipschitz Functions
+
+Let $(X, d)$ be a pseudo-metric space and $U \subset X$. A function $f \colon U \to \mathbb{C}$ is **$\mathrm{Lip}$-$K$** on $U$ (for $K > 0$) if
+$$|f(y) - f(x)| \le K d(x, y) \quad \forall x, y \in U.$$ {#eq-lipschitz-def}
+:::
+
+::: {#lem-lipschitz-extension}
+### Extension of Lipschitz Functions
+
+Let $f \colon U \to \mathbb{C}$ be $\mathrm{Lip}$-$K$ on $U \subset X$. Then $f$ extends uniquely to a $\mathrm{Lip}$-$K$ function $\hat{f} \colon \overline{U} \to \mathbb{C}$.
+:::
+
+::: {.proof}
+For $x \in \overline{U}$, pick $\{x_n\} \subset U$ with $x_n \to x$. Since $|f(x_n) - f(x_m)| \le K d(x_n, x_m)$, $\{f(x_n)\} \subset \mathbb{C}$ is Cauchy. Define $\hat{f}(x) = \lim_{n \to \infty} f(x_n)$. This is independent of the sequence choice and satisfies $|\hat{f}(x) - \hat{f}(y)| \le K d(x, y)$ for all $x, y \in \overline{U}$.
+:::
+
+---
+
+## Sequential Compactness
+
+::: {#def-sequential-compactness}
+### Sequential Compactness
+
+A metric space $(Y, \rho)$ is **sequentially compact** if every sequence $\{y_n\} \subset Y$ contains a convergent subsequence.
+:::
+
+::: {#prop-cantor-diagonal}
+### A "Little" Tychonoff Theorem
+
+Let $\Lambda$ be a countable index set and let $(Y_\lambda, \rho_\lambda)$ be compact metric spaces for each $\lambda \in \Lambda$. Given sequences $\{y_\lambda(n) \colon n \in \mathbb{N}\} \subset Y_\lambda$, there exists an increasing sequence of indices $\{n_k\}_{k=1}^{\infty} \subset \mathbb{N}$ such that $\lim_{k \to \infty} y_\lambda(n_k)$ exists in $Y_\lambda$ for all $\lambda \in \Lambda$.
+:::
+
+::: {.proof}
+Without loss of generality, let $\Lambda = \mathbb{N}$. Since $Y_1$ is compact, there exists an infinite sequence of indices $\Gamma_1 \subset \mathbb{N}$ such that $\{y_1(n)\}_{n \in \Gamma_1}$ converges. Inductively, for $\lambda \ge 2$, choose an infinite subset $\Gamma_\lambda \subset \Gamma_{\lambda-1}$ such that $\{y_\lambda(n)\}_{n \in \Gamma_\lambda}$ converges.
+
+Construct the diagonal sequence $n_k$ by:
+$$n_1 = \min \Gamma_1, \quad n_2 = \min (\Gamma_2 \cap (n_1, \infty)), \quad \dots, \quad n_k = \min (\Gamma_k \cap (n_{k-1}, \infty)).$$
+By construction, $n_k \in \Gamma_\lambda$ for all $k \ge \lambda$. Thus $\{y_\lambda(n_k)\}_{k=1}^{\infty}$ is a tail-subsequence of $\{y_\lambda(n)\}_{n \in \Gamma_\lambda}$, so $\lim_{k \to \infty} y_\lambda(n_k)$ exists for every $\lambda \in \Lambda$.
+:::
+
+---
+
+## Supplementary Remarks
+
+### Boundary and Closed Ball Warnings
+
+::: {#lem-normed-ball-closure}
+Let $(X, \|\cdot\|)$ be a normed vector space with metric $d(x, y) = \|x - y\|$. Then
+$$\overline{B_x(\epsilon)} = C_x(\epsilon) \quad \text{and} \quad \mathrm{bd}(B_x(\epsilon)) = \{y \in X \colon d(x, y) = \epsilon\}.$$ {#eq-normed-ball-closure}
+:::
+
+::: {.proof}
+We show $C_x(\epsilon) \subset \overline{B_x(\epsilon)}$. Let $y \in C_x(\epsilon)$ and $v = y - x$, so $\|v\| \le \epsilon$. Define $\alpha_n = 1 - 1/n$ and $y_n = x + \alpha_n v$. Then $d(x, y_n) = \alpha_n \|v\| < \epsilon$, so $y_n \in B_x(\epsilon)$. Moreover, $d(y, y_n) = (1 - \alpha_n) \|v\| \to 0$, showing $y_n \to y \implies y \in \overline{B_x(\epsilon)}$.
+:::
+
+---
+
+## Chapter Exercises
+
+::: {#exr-fast-cauchy}
+### Fast Cauchy Criterion
+
+Let $\{x_n\} \subset X$ and $\epsilon_n = d(x_n, x_{n+1})$. Show that for $m > n$,
+$$d(x_n, x_m) \le \sum_{k=n}^{m-1} \epsilon_k \le \sum_{k=n}^{\infty} \epsilon_k.$$ {#eq-cauchy-sum-bound}
+Conclude that if $\sum_{n=1}^{\infty} d(x_n, x_{n+1}) < \infty$, then $\{x_n\}$ is Cauchy. Furthermore, show $d(x, x_n) \le \sum_{k=n}^{\infty} \epsilon_k$ when $x_n \to x$.
+:::
+
+::: {.proof}
+Repeated triangle inequality gives $d(x_n, x_m) \le \sum_{k=n}^{m-1} d(x_k, x_{k+1}) \le \sum_{k=n}^{\infty} \epsilon_k$. If $\sum \epsilon_k < \infty$, the tail sum goes to $0$ as $n \to \infty$, making $\{x_n\}$ Cauchy. Taking $m \to \infty$ in $d(x_n, x_m) \le \sum_{k=n}^{\infty} \epsilon_k$ yields $d(x_n, x) \le \sum_{k=n}^{\infty} \epsilon_k$.
+:::
+
+::: {#exr-complete-absolutely-summable}
+### Completeness via Absolutely Summable Series
+
+Show that $(X, d)$ is complete if and only if every sequence $\{x_n\} \subset X$ satisfying $\sum_{n=1}^{\infty} d(x_n, x_{n+1}) < \infty$ converges in $X$.
+:::
+
+::: {.proof}
+1. $(\Rightarrow)$ Follows directly from @exr-fast-cauchy.
+2. $(\Leftarrow)$ Let $\{x_n\}$ be Cauchy. Choose a subsequence $n_1 < n_2 < \dots$ such that $d(x_n, x_m) < 2^{-j}$ for all $n, m \ge n_j$. Set $y_j = x_{n_j}$. Then $d(y_j, y_{j+1}) < 2^{-j}$, so $\sum d(y_j, y_{j+1}) < \infty$. By hypothesis, $y_j \to x$. Since a Cauchy sequence with a convergent subsequence converges to the same limit, $x_n \to x$.
+:::
+
+::: {#exr-metric-transform}
+Suppose $f \colon [0, \infty) \to [0, \infty)$ is a $C^2$ function with $f(0) = 0, f' > 0, f'' \le 0$. Show that $d(x, y) = f(\rho(x, y))$ is a metric for any metric space $(X, \rho)$. In particular, $d(x, y) = \frac{\rho(x, y)}{1 + \rho(x, y)}$ is a metric.
+:::
+
+::: {.proof}
+Concavity ($f'' \le 0$) and $f(0) = 0$ imply subadditivity: $f(a + b) \le f(a) + f(b)$ for $a, b \ge 0$. Thus $d(x, z) = f(\rho(x, z)) \le f(\rho(x, y) + \rho(y, z)) \le f(\rho(x, y)) + f(\rho(y, z)) = d(x, y) + d(y, z)$.
+:::
+
+::: {#exr-product-metric}
+Let $\{(X_n, d_n)\}_{n=1}^{\infty}$ be metric spaces and $X = \prod_{n=1}^{\infty} X_n$. For $x, y \in X$, define
+$$d(x, y) = \sum_{n=1}^{\infty} 2^{-n} \frac{d_n(x(n), y(n))}{1 + d_n(x(n), y(n))}.$$ {#eq-product-metric}
+Show that:
+1. $(X, d)$ is a metric space.
+2. $x_k \to x$ in $(X, d)$ iff $x_k(n) \to x(n)$ in $X_n$ for all $n \in \mathbb{N}$.
+3. $(X, d)$ is complete if $(X_n, d_n)$ is complete for all $n$.
+:::
+
+::: {.proof}
+1. Metric properties follow from @exr-metric-transform and dominated convergence of the sum.
+2. $(\Rightarrow)$ $2^{-n} \frac{d_n(x_k(n), x(n))}{1 + d_n(x_k(n), x(n))} \le d(x_k, x) \to 0 \implies x_k(n) \to x(n)$. $(\Leftarrow)$ DCT on counting measure.
+3. Componentwise Cauchy sequences converge componentwise; their product converges in $(X, d)$.
+:::
+
+::: {#exr-continuous-extension-dense}
+Let $A \subset X$ be dense.
+
+1. If $F, G \colon X \to Y$ are continuous and $\left.F\right|_A = \left.G\right|_A$, then $F = G$ on $X$.
+2. If $Y$ is complete and $f \colon A \to Y$ is uniformly continuous, $f$ extends uniquely to a continuous $F \colon X \to Y$.
+3. Give an example of continuous $f \colon \mathbb{Q} \to \mathbb{R}$ that does not extend continuously to $\mathbb{R}$.
+:::
+
+::: {.proof}
+1. Set $C = \{x \in X \colon F(x) = G(x)\}$. $C$ is closed (as preimage of diagonal under continuous map $(F, G)$) and contains dense $A$, so $C = X$.
+2. For $x \in X$, pick $\{a_n\} \subset A$ with $a_n \to x$. Uniform continuity implies $\{f(a_n)\}$ is Cauchy in $Y$. Define $F(x) = \lim f(a_n)$.
+3. Let $f(q) = 1/(q - \sqrt{2})$ for $q \in \mathbb{Q}$. $f$ is continuous on $\mathbb{Q}$ but unbounded near $\sqrt{2}$, so no continuous extension to $\mathbb{R}$ exists.
+:::
+
+---
+

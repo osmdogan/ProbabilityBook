@@ -1,0 +1,440 @@
+# Lecture 22.1: Weak Convergence
+
+## Motivation: Limitations of Total Variation Distance
+
+In non-discrete probability settings, **Total Variation (TV) convergence** is often too strong or restrictive. 
+
+:::{#def-tv-distance} 
+## Total Variation Distance
+For two probability measures $\mu, \nu \in \mathcal{P}(S, \mathcal{B}(S))$, the total variation distance is defined as:
+$$d_{TV}(\mu, \nu) = \sup_{B \in \mathcal{B}(S)} |\mu(B) - \nu(B)|$$
+:::
+
+If $\mu(A) = 0$ and $\nu(A) = 1$ for some set $A \in \mathcal{B}(S)$, then $d_{TV}(\mu, \nu) = 1$.
+
+---
+
+:::{#exm-dirac-measures}
+## Dirac Measures (Point Masses)
+Let $a_n, a \in \mathbb{R}$ with $a_n \to a$ as $n \to \infty$, and suppose that $a_n \neq a$ for infinitely many $n$. Intuitively, Dirac measures should satisfy $\delta_{a_n} \to \delta_a$. For every $n$ such that $a_n \neq a$, evaluating their total variation distance gives:
+$$
+\begin{align*}
+d_{TV}(\delta_{a_n}, \delta_a) &= \sup_{B \in \mathcal{B}(\mathbb{R})} |\delta_{a_n}(B) - \delta_a(B)| \ge |\delta_{a_n}(\{a\}) - \delta_a(\{a\})|\\
+& = |0 - 1| = 1.
+\end{align*}
+$$
+
+Since $d_{TV}$ is at most $1$ for probability measures, $d_{TV}(\delta_{a_n}, \delta_a)=1$ whenever $a_n\neq a$. Thus it does not converge to $0$, even though $a_n \to a$. (If $a_n=a$ eventually, then the total variation distance is eventually $0$.)
+:::
+
+---
+
+:::{#exm-discrete-approximation}
+## Discrete Approximation of $\text{Unif}([0,1])$
+Consider approximating the continuous uniform measure $\lambda = \text{Unif}([0,1])$ on $[0,1]$ using discrete empirical measures:
+$$\mu_n = \frac{1}{n}\sum_{k=1}^n \delta_{k/n}$$
+
+- **Evaluating $d_{TV}$**: Let $A = \{1/n, 2/n, \dots, n/n\}$. Then $\mu_n(A) = 1$, but $\lambda(A) = 0$.
+  $$d_{TV}(\mu_n, \lambda) \ge |\mu_n(A) - \lambda(A)| = 1 - 0 = 1$$
+   Since total variation distance between probability measures is at most $1$, $d_{TV}(\mu_n, \lambda) = 1$ for every $n$.
+
+- **Evaluating via Integration (Riemann Sums)**:
+  Recall the integration bound from Lecture 21.1:
+  $$\left| \int_S h \, d\mu - \int_S h \, d\nu \right| \le 2 \, d_{TV}(\mu, \nu) \cdot \sup_{x \in S} |h(x)|$$
+  Since $d_{TV}(\mu_n, \lambda) = 1$ for every $n$, this bound degenerates to $2\sup|h|$ and carries no information. Yet the integrals themselves do converge: since $[0,1]$ is compact, $C_b([0,1]) = C([0,1])$, and every $h \in C([0,1])$ is Riemann integrable, so
+  $$\int_{[0,1]} h \, d\mu_n = \frac{1}{n}\sum_{k=1}^n h\left(\frac{k}{n}\right) \xrightarrow{n\to\infty} \int_0^1 h(x) \, dx = \int_{[0,1]} h \, d\lambda$$
+  because the left-hand side is the right-endpoint Riemann sum of $h$ over the uniform partition of $[0,1]$ into $n$ subintervals.
+  
+  Hence $\mu_n \implies \lambda$ in the sense of @def-weak-convergence below, even though $d_{TV}(\mu_n, \lambda) = 1$ for all $n$. Testing against continuous functions captures the limit, whereas $d_{TV}$ fails due to its extreme sensitivity to singular sets.
+
+:::
+
+---
+
+## Weak Convergence of Probability Measures
+
+To bypass the rigidity of $d_{TV}$, we restrict test functions to bounded continuous functions $f \in C_b(S)$, which effectively "smear out" point masses.
+
+:::{#def-weak-convergence}
+## Weak Convergence (Convergence in Distribution)
+Let $(S, d)$ be a metric space, and let $\mu_n, \mu \in \mathcal{P}(S, \mathcal{B}(S))$.
+We say $\mu_n$ **converges weakly** to $\mu$, written as $\mu_n \xrightarrow{w} \mu$ or $\mu_n \implies \mu$, if:
+$$\int_S f \, d\mu_n \longrightarrow \int_S f \, d\mu \quad \forall f \in C_b(S)$$
+:::
+
+:::{#exm-weak-convergence}
+## Dirac Measures Revisited
+If $a_n \to a$ in $S$, then for any $f \in C_b(S)$:
+$$\int_S f \, d\delta_{a_n} = f(a_n) \xrightarrow{n\to\infty} f(a) = \int_S f \, d\delta_a$$
+Thus $\delta_{a_n} \implies \delta_a$ holds under weak convergence.
+:::
+
+:::{#thm-tv-implies-weak}
+## TV Convergence Implies Weak Convergence
+If $d_{TV}(\mu_n, \mu) \to 0$, then $\mu_n \implies \mu$.
+:::
+
+:::{.proof}
+## Proof of @thm-tv-implies-weak
+
+For any $f \in C_b(S)$, $\sup |f| < \infty$. By the integration bound:
+$$\left| \int_S f \, d\mu_n - \int_S f \, d\mu \right| \le 2 \, d_{TV}(\mu_n, \mu) \cdot \sup_{x \in S} |f(x)| \xrightarrow{n\to\infty} 0$$
+Hence $\int f \, d\mu_n \to \int f \, d\mu$. 
+:::
+
+---
+
+## Convergence Modes of Random Variables
+
+Let $X_n, X: (\Omega, \mathcal{F}, P) \to (S, \mathcal{B}(S))$ be random variables/elements.
+We write $X_n \xrightarrow{w} X$ (or $X_n \xrightarrow{d} X$) if $\mu_{X_n} \implies \mu_X$, where $\mu_{X_n} = P \circ X_n^{-1}$.
+
+Throughout this section $(S,d)$ is assumed **separable**, so that $d : S \times S \to \mathbb{R}$ is $\mathcal{B}(S) \otimes \mathcal{B}(S)$-measurable and $d(X_n, X)$ is a genuine random variable. Convergence in probability then means $P(d(X_n, X) > \epsilon) \to 0$ for every $\epsilon > 0$.
+
+:::{#lem-continuous-prob-conv}
+### Lemma: Preservation of Convergence in Probability
+Let $g : S \to \mathbb{R}$ be continuous. If $X_n \xrightarrow{P} X$, then $g(X_n) \xrightarrow{P} g(X)$.
+:::
+
+:::{.proof}
+## Proof of @lem-continuous-prob-conv
+
+To prove convergence in probability, it is enough to show that every subsequence of $(g(X_n))$ has a further subsequence converging almost surely to $g(X)$. Let $(X_{n_k})$ be any subsequence. Since $X_n \xrightarrow{P} X$, there exists a further subsequence $(X_{n_{k_j}})$ such that
+$$X_{n_{k_j}} \xrightarrow{\mathrm{a.s.}} X.$$
+On the event of probability one on which this convergence holds, continuity of $g$ gives
+$$g(X_{n_{k_j}}) \longrightarrow g(X).$$
+Thus every subsequence of $(g(X_n))$ has an almost surely convergent further subsequence with limit $g(X)$, and hence $g(X_n) \xrightarrow{P} g(X)$.
+:::
+
+:::{.proof}
+## Alternative Proof of @lem-continuous-prob-conv
+
+Fix $\epsilon>0$. For $\delta>0$, define
+$$
+B_{\epsilon,\delta}
+=\left\{x\in S: \exists\, y\in S \text{ such that } d(x,y)<\delta \text{ and } |g(x)-g(y)|>\epsilon\right\}.
+$$
+The set $B_{\epsilon,\delta}$ is open: if $x\in B_{\epsilon,\delta}$ has a witness $y$, then the same strict inequalities continue to hold for all points sufficiently close to $x$. In particular, it is Borel measurable. Moreover, as $m\to\infty$,
+$$
+B_{\epsilon,1/m}\downarrow\emptyset,
+$$
+because continuity of $g$ at each $x$ gives a neighborhood on which $|g(x)-g(y)|\le\epsilon$. Hence, by continuity from above of the probability measure,
+$$
+P(X\in B_{\epsilon,1/m})\longrightarrow0.
+$$
+
+For every $\delta>0$,
+$$
+\{|g(X_n)-g(X)|>\epsilon\}
+\subseteq
+\{d(X_n,X)\ge\delta\}\cup\{X\in B_{\epsilon,\delta}\}.
+$$
+Indeed, if $d(X_n,X)<\delta$ and $X\notin B_{\epsilon,\delta}$, take $x=X$ and $y=X_n$ in the definition of $B_{\epsilon,\delta}$ to obtain $|g(X_n)-g(X)|\le\epsilon$.
+
+Let $\eta>0$. First choose $m$ such that $P(X\in B_{\epsilon,1/m})<\eta/2$. Since $X_n\xrightarrow{P}X$, there exists $N$ such that, for every $n\ge N$,
+$$
+P\bigl(d(X_n,X)\ge1/m\bigr)<\eta/2.
+$$
+The preceding inclusion then gives
+$$
+P\bigl(|g(X_n)-g(X)|>\epsilon\bigr)<\eta\qquad(n\ge N),
+$$
+which proves $g(X_n)\xrightarrow{P}g(X)$.
+:::
+
+:::{#thm-prob-implies-weak}
+## Convergence in Probability Implies Weak Convergence
+If $X_n \xrightarrow{P} X$, then $X_n \xrightarrow{w} X$.
+:::
+
+:::{.proof}
+## Proof of @thm-prob-implies-weak
+Let $f \in C_b(S)$.
+
+1. By @lem-continuous-prob-conv, $X_n \xrightarrow{P} X \implies f(X_n) \xrightarrow{P} f(X)$.
+2. If $M=\|f\|_\infty$, then $|f(X_n)-f(X)|\le 2M$. Split the expectation on $\{|f(X_n)-f(X)|>\epsilon\}$ and its complement: for every $\epsilon>0$,
+   $$
+   \begin{align*}
+   \mathbb{E}\left[|f(X_n)-f(X)|\right]
+   &=\mathbb{E}\bigl[|f(X_n)-f(X)|
+   \mathbf{1}_{\{|f(X_n)-f(X)|\le\epsilon\}}\bigr]\\
+   & +\mathbb{E}\bigl[|f(X_n)-f(X)|
+   \mathbf{1}_{\{|f(X_n)-f(X)|>\epsilon\}}\bigr]\\
+   & \le \epsilon+2M\,P\bigl(|f(X_n)-f(X)|>\epsilon\bigr).
+   \end{align*}
+   $$
+   The probability on the right tends to $0$, so $\limsup_n\mathbb{E}|f(X_n)-f(X)|\le\epsilon$. Letting $\epsilon\downarrow0$ shows that $f(X_n)\to f(X)$ in $L^1$, and therefore
+   $$\mathbb{E}[f(X_n)] \longrightarrow \mathbb{E}[f(X)].$$
+3. Rewriting in terms of pushforward measures:
+   $$\int_S f \, d\mu_{X_n} = \mathbb{E}[f(X_n)] \longrightarrow \mathbb{E}[f(X)] = \int_S f \, d\mu_X$$
+Hence $X_n \xrightarrow{w} X$. 
+:::
+
+:::{#cor-as-lp-implies-weak}
+## Almost Sure and $L^p$ Convergence
+If $X_n \xrightarrow{\text{a.s.}} X$, then $X_n \xrightarrow{w} X$. If in addition $S$ is a normed space (e.g. $S = \mathbb{R}^d$) and $X_n \xrightarrow{L^p} X$ for some $p \ge 1$, then $X_n \xrightarrow{w} X$.
+:::
+
+:::{.proof}
+## Proof of @cor-as-lp-implies-weak
+Almost sure convergence implies convergence in probability: $\mathbf{1}_{\{d(X_n,X) > \epsilon\}} \to 0$ a.s., so $P(d(X_n,X)>\epsilon) \to 0$ by dominated convergence. Convergence in $L^p$ implies convergence in probability by Markov's inequality, $P(\|X_n - X\| > \epsilon) \le \epsilon^{-p}\,\mathbb{E}\|X_n - X\|^p \to 0$. In either case @thm-prob-implies-weak applies. 
+:::
+
+---
+
+## Continuity Sets
+
+Total variation distance $d_{TV}$ fails for sequences of distributions because it evaluates arbitrary sets, including "discontinuity sets".
+
+:::{#def-continuity-set}
+### Continuity Set
+Let $\mu$ be a Borel probability measure on a metric space $S$. A set $A \in \mathcal{B}(S)$ is called a **$\mu$-continuity set** if:
+$$\mu(\partial A) = 0$$
+where $\partial A = \bar{A} \setminus \text{int}(A)$ is the boundary of $A$.
+Since $\text{int}(A) \subseteq A \subseteq \bar{A}$ and $\bar{A} \setminus \text{int}(A) = \partial A$, this implies $\mu(A) = \mu(\bar{A}) = \mu(\text{int}(A))$.
+:::
+
+:::{#exm-continuity-sets}
+## Examples of Continuity and Non-Continuity Sets
+
+- **Dirac Measure**: $(-\infty, a]$ is **not** a continuity set for $\delta_a$, since $\overline{(-\infty,a]} = (-\infty,a]$ and $\text{int}(-\infty,a] = (-\infty,a)$, so $\partial(-\infty, a] = \{a\}$ and $\delta_a(\{a\}) = 1 \neq 0$.
+- **Continuous Distribution on $\mathbb{R}$**: If $\mu$ has a continuous CDF $F_\mu$ (equivalently, $\mu(\{a\}) = 0$ for all $a \in \mathbb{R}$), then every interval $I$ with endpoints $\alpha \le \beta$ is a $\mu$-continuity set, because $\partial I \subseteq \{\alpha, \beta\}$ and $\mu(\{\alpha,\beta\}) = 0$.
+- **Rational Numbers**: $A = \mathbb{Q} \cap [0,1]$ is **not** a continuity set for any measure $\mu$ with $\mu([0,1]) > 0$. Indeed $\bar{A} = [0,1]$ by density of the rationals and $\text{int}(A) = \emptyset$ since $A$ contains no interval, so $\partial A = [0,1] \setminus \emptyset = [0,1]$ and $\mu(\partial A) = \mu([0,1]) > 0$.
+:::
+
+
+---
+
+## The Portmanteau Theorem
+The Portmanteau Theorem provides several equivalent characterizations of weak convergence of probability measures.
+
+:::{#thm-portmanteau}
+## Portmanteau Theorem
+Let $(S,d)$ be a metric space and let $\mu_n, \mu \in \mathcal{P}(S, \mathcal{B}(S))$. The following statements are equivalent:
+
+1. **Definition**: $\int_S f \, d\mu_n \to \int_S f \, d\mu \quad \forall f \in C_b(S)$ ($\mu_n \xrightarrow{w} \mu$).
+2. **Lipschitz continuous functions**: $\int_S f \, d\mu_n \to \int_S f \, d\mu \quad \forall f \in \text{Lip}_b(S)$ (bounded Lipschitz continuous functions).
+3. **Upper bound on closed sets**: $\limsup_{n\to\infty} \mu_n(F) \le \mu(F) \quad \forall \text{ closed } F \subseteq S$.
+4. **Lower bound on open sets**: $\liminf_{n\to\infty} \mu_n(G) \ge \mu(G) \quad \forall \text{ open } G \subseteq S$.
+5. **Continuity sets**: $\lim_{n\to\infty} \mu_n(A) = \mu(A) \quad \forall \mu\text{-continuity sets } A \in \mathcal{B}(S)$.
+:::
+
+---
+
+## Complete Step-by-Step Proof of @thm-portmanteau
+
+We establish the cycle $(1) \implies (2) \implies (3) \iff (4) \implies (5) \implies (1)$, which yields the equivalence of all five statements.
+
+## Step 1: Proof of $(1 \implies 2)$
+Since every bounded Lipschitz function is bounded and continuous, $\text{Lip}_b(S) \subseteq C_b(S)$. Thus $(1 \implies 2)$ is immediate.
+
+---
+
+## Step 2: Proof of $(2 \implies 3)$
+
+**Goal.** Assume $\int_S f \, d\mu_n \to \int_S f \, d\mu$ for every $f \in \text{Lip}_b(S)$. Show that $\limsup_{n\to\infty} \mu_n(F) \le \mu(F)$ for every closed $F \subseteq S$.
+
+**The obstruction.** We would like to plug $f = \mathbf{1}_F$ into hypothesis (2), but $\mathbf{1}_F$ is not continuous (unless $F$ is also open). The remedy is to *approximate* $\mathbf{1}_F$ from above by a sequence of bounded Lipschitz functions $f_k \downarrow \mathbf{1}_F$. Each $f_k$ is a legitimate test function, and the approximation is one-sided, which is exactly why we obtain the one-sided conclusion $\limsup \mu_n(F) \le \mu(F)$ rather than equality.
+
+If $F = \emptyset$ both sides equal $0$, so assume $F \neq \emptyset$ from now on (this is needed for $d(x,F)$ to be well defined).
+
+---
+
+### Step 2a: Construction of the test functions
+
+Define the **distance to $F$** by
+$$d(x, F) := \inf_{y \in F} d(x, y),$$
+let $\psi(t) := \max(0, 1 - t)$ for $t \ge 0$, and set
+$$f_k(x) := \psi\bigl(k \cdot d(x, F)\bigr), \qquad k \ge 1.$$
+
+Explicitly,
+$$
+f_k(x) =
+\begin{cases}
+1 - k\,d(x,F), & \text{if } d(x,F) < 1/k,\\[2pt]
+0, & \text{if } d(x,F) \ge 1/k.
+\end{cases}
+$$
+So $f_k$ equals $1$ on $F$, decays linearly to $0$ as $x$ moves away from $F$, and vanishes entirely outside the open $\tfrac1k$-neighborhood $F^{1/k} := \{x : d(x,F) < 1/k\}$. As $k$ grows, this collar shrinks down onto $F$.
+
+---
+
+### Step 2b: Verification that $f_k \in \text{Lip}_b(S)$
+
+**(i) $x \mapsto d(x,F)$ is $1$-Lipschitz.** For any $z \in F$, the triangle inequality gives $d(x, z) \le d(x, y) + d(y, z)$, hence $d(x, F) \le d(x,y) + d(y,z)$. Taking the infimum over $z \in F$ on the right yields
+$$d(x, F) - d(y, F) \le d(x, y).$$
+Swapping $x$ and $y$ gives the reverse bound, so $|d(x,F) - d(y,F)| \le d(x,y)$.
+
+**(ii) $\psi$ is $1$-Lipschitz.** Both $t \mapsto 0$ and $t \mapsto 1-t$ are $1$-Lipschitz, and the pointwise maximum of two $1$-Lipschitz functions is $1$-Lipschitz.
+
+**(iii) $f_k$ is $k$-Lipschitz.** Composing (i) and (ii):
+$$|f_k(x) - f_k(y)| \le \bigl| k\,d(x, F) - k\,d(y, F) \bigr| = k\,\bigl|d(x,F) - d(y,F)\bigr| \le k\, d(x, y).$$
+
+**(iv) $f_k$ is bounded.** Since $d(x,F) \ge 0$, we have $\psi(k\,d(x,F)) \in [0,1]$, so $0 \le f_k \le 1$.
+
+Together, (iii) and (iv) give $f_k \in \text{Lip}_b(S)$, so hypothesis (2) may be applied to each $f_k$.
+
+---
+
+### Step 2c: $f_k$ decreases pointwise to $\mathbf{1}_F$
+
+**$f_k \ge \mathbf{1}_F$ everywhere.** If $x \in F$ then $d(x,F) = 0$, so $f_k(x) = \psi(0) = 1 = \mathbf{1}_F(x)$. If $x \notin F$ then $f_k(x) \ge 0 = \mathbf{1}_F(x)$.
+
+**Monotonicity in $k$.** The quantity $k \, d(x,F)$ is nondecreasing in $k$ (because $d(x,F) \ge 0$), and $\psi$ is nonincreasing on $[0,\infty)$. Hence $f_{k+1}(x) \le f_k(x)$ for every $x$.
+
+**Pointwise limit.** For $x \in F$, $f_k(x) = 1$ for all $k$. For $x \notin F$: since $F$ is **closed**, its complement is open, so there is $r > 0$ with $B(x, r) \subseteq F^c$; every $y \in F$ therefore satisfies $d(x,y) \ge r$, giving $d(x, F) \ge r > 0$. Consequently, as soon as $k > 1/d(x,F)$ we have $k\,d(x,F) > 1$ and thus $f_k(x) = 0$. In particular $f_k(x) \to 0$.
+
+::: {.callout-note}
+This is the only place where closedness of $F$ is used, and it is essential. If $F$ were not closed, points of $\bar{F} \setminus F$ would satisfy $d(x,F) = 0$, forcing $f_k(x) = 1$ for all $k$; the limit would then be $\mathbf{1}_{\bar{F}}$ rather than $\mathbf{1}_F$.
+:::
+
+Combining the three bullets:
+$$f_k \downarrow \mathbf{1}_F \quad \text{pointwise on } S.$$
+
+---
+
+### Step 2d: Passing to the limit, first in $n$, then in $k$
+
+**Fix $k$.** Since $f_k \ge \mathbf{1}_F$ pointwise and integration is monotone, for every $n$:
+$$\mu_n(F) = \int_S \mathbf{1}_F \, d\mu_n \le \int_S f_k \, d\mu_n.$$
+
+Hypothesis (2) applies to $f_k \in \text{Lip}_b(S)$, so $\lim_{n\to\infty}\int_S f_k \, d\mu_n$ exists and equals $\int_S f_k \, d\mu$. Taking $\limsup_{n\to\infty}$ of the displayed inequality (the $\limsup$ of the left side exists in $[0,1]$ even though $\mu_n(F)$ itself need not converge) gives
+$$\limsup_{n\to\infty} \mu_n(F) \;\le\; \limsup_{n\to\infty} \int_S f_k \, d\mu_n \;=\; \lim_{n\to\infty} \int_S f_k \, d\mu_n \;=\; \int_S f_k \, d\mu.$$
+
+**Now let $k \to \infty$.** The left-hand side is a single number $L := \limsup_{n\to\infty}\mu_n(F)$ that does not depend on $k$, so the previous display says
+$$L \le \int_S f_k \, d\mu \qquad \text{for every } k \ge 1.$$
+By Step 2c, $f_k \to \mathbf{1}_F$ pointwise with $0 \le f_k \le 1$; the constant function $1$ is $\mu$-integrable because $\mu$ is a probability measure. The **Dominated Convergence Theorem** therefore gives
+$$\int_S f_k \, d\mu \xrightarrow{k\to\infty} \int_S \mathbf{1}_F \, d\mu = \mu(F).$$
+(Equivalently, since $f_k$ is decreasing, the Monotone Convergence Theorem for decreasing sequences applies.)
+
+Taking $k \to \infty$ in $L \le \int_S f_k \, d\mu$ yields $L \le \mu(F)$, that is,
+$$\limsup_{n\to\infty} \mu_n(F) \le \mu(F) \qquad \text{for every closed } F \subseteq S. \qquad \blacksquare$$
+
+---
+
+::: {.callout-tip}
+## Why only an inequality?
+The bound $\limsup_n \mu_n(F) \le \mu(F)$ cannot be upgraded to equality. Take $S = \mathbb{R}$, $\mu_n = \delta_{1/n}$, $\mu = \delta_0$, and $F = \{0\}$, which is closed. Then $\mu_n(F) = 0$ for every $n$, while $\mu(F) = 1$, so
+$$0 = \limsup_{n\to\infty} \mu_n(F) < \mu(F) = 1.$$
+Mass can "arrive on" a closed set in the limit, but it cannot leak out of one. This is precisely the asymmetry that statement (5) repairs by restricting attention to sets $A$ with $\mu(\partial A) = 0$ — and here $\partial F = \{0\}$ has $\mu$-measure $1$.
+:::
+
+---
+
+## Step 3: Proof of $(3 \iff 4)$
+Let $G \subseteq S$ be open, so $G^c = S \setminus G$ is closed.
+Using complementation $\mu_n(G) = 1 - \mu_n(G^c)$:
+$$\liminf_{n\to\infty} \mu_n(G) = \liminf_{n\to\infty} (1 - \mu_n(G^c)) = 1 - \limsup_{n\to\infty} \mu_n(G^c)$$
+
+Applying (3) to the closed set $G^c$:
+$$\limsup_{n\to\infty} \mu_n(G^c) \le \mu(G^c) = 1 - \mu(G)$$
+
+Substituting this back gives:
+$$\liminf_{n\to\infty} \mu_n(G) \ge 1 - (1 - \mu(G)) = \mu(G)$$
+
+Conversely, if (4) holds and $F$ is closed, then $F^c$ is open. Applying (4) to $F^c$ and taking complements gives
+$$
+\limsup_{n\to\infty}\mu_n(F)
+=1-\liminf_{n\to\infty}\mu_n(F^c)
+\le 1-\mu(F^c)=\mu(F).
+$$
+Thus $(3 \iff 4)$ holds. $\blacksquare$
+
+---
+
+## Step 4: Proof of $(3 + 4 \implies 5)$
+Let $A \in \mathcal{B}(S)$ be a $\mu$-continuity set, meaning $\mu(\partial A) = 0$.
+Recall $\text{int}(A) \subseteq A \subseteq \bar{A}$, where $\text{int}(A)$ is open and $\bar{A}$ is closed.
+
+1. Using statement (4) on open $\text{int}(A)$:
+   $$\mu(\text{int}(A)) \le \liminf_{n\to\infty} \mu_n(\text{int}(A)) \le \liminf_{n\to\infty} \mu_n(A)$$
+
+2. Using statement (3) on closed $\bar{A}$:
+   $$\limsup_{n\to\infty} \mu_n(A) \le \limsup_{n\to\infty} \mu_n(\bar{A}) \le \mu(\bar{A})$$
+
+Combining the inequalities:
+$$\mu(\text{int}(A)) \le \liminf_{n\to\infty} \mu_n(A) \le \limsup_{n\to\infty} \mu_n(A) \le \mu(\bar{A})$$
+
+Since $\mu(\partial A) = 0$, we have $\mu(\text{int}(A)) = \mu(A) = \mu(\bar{A})$.
+Therefore, the lower and upper limits collapse to $\mu(A)$, yielding:
+$$\lim_{n\to\infty} \mu_n(A) = \mu(A)$$
+$\blacksquare$
+
+---
+
+## Step 5: Proof of $(5 \implies 1)$
+
+**Goal.** Assume $\mu_n(A) \to \mu(A)$ for every $\mu$-continuity set $A$. Show that $\int_S f \, d\mu_n \to \int_S f \, d\mu$ for every $f \in C_b(S)$.
+
+**Strategy.** Hypothesis (5) is a statement about *sets*, while the conclusion is a statement about *integrals*. The bridge is the layer-cake (horizontal slicing) formula, which rewrites $\int_S f \, d\mu$ purely in terms of the measures of the superlevel sets $\{f \ge t\}$. Since $f$ is continuous, these sets are closed with boundary contained in the level set $\{f = t\}$, and a counting argument shows $\{f \ge t\}$ is a $\mu$-continuity set for all but countably many $t$. Hypothesis (5) then applies for Lebesgue-a.e. $t$, and a convergence theorem in the $t$ variable finishes the proof.
+
+Fix $f \in C_b(S)$ and set $M := \|f\|_\infty = \sup_{x \in S}|f(x)| < \infty$, $a := -M$, $b := M$, so that $a \le f(x) \le b$ for all $x$. If $M = 0$ then $f \equiv 0$ and both sides vanish; assume therefore $M > 0$, so $a < b$.
+
+---
+
+### Step 5a: The layer-cake representation
+
+For each fixed $x \in S$ and $t \in [a,b]$, the indicator $\mathbf{1}_{\{f(x) \ge t\}}$ equals $1$ precisely when $t \le f(x)$, i.e. for $t \in [a, f(x)]$, an interval of length $f(x) - a$. Hence
+$$f(x) - a = \int_a^b \mathbf{1}_{\{f(x) \ge t\}} \, dt \qquad \text{for every } x \in S.$$
+This is the "horizontal slicing" identity: instead of adding up the values of $f$, we add up the heights $t$ at which $f$ still exceeds $t$.
+
+---
+
+### Step 5b: Integrating the identity (Tonelli)
+
+Let $\nu$ denote either $\mu_n$ or $\mu$. The function
+$$(x,t) \longmapsto \mathbf{1}_{\{f(x) \ge t\}}$$
+is $\mathcal{B}(S) \otimes \mathcal{B}([a,b])$-measurable, since it is the indicator of the set $\{(x,t) : f(x) - t \ge 0\}$, which is the preimage of $[0,\infty)$ under the jointly measurable map $(x,t) \mapsto f(x) - t$. The integrand is nonnegative, $\nu$ is a probability measure, and Lebesgue measure on $[a,b]$ is finite, so both measures are $\sigma$-finite and **Tonelli's Theorem** permits exchanging the order of integration:
+$$
+\int_S \bigl(f(x) - a\bigr) \, \nu(dx)
+= \int_S \!\! \int_a^b \mathbf{1}_{\{f(x) \ge t\}} \, dt \, \nu(dx)
+= \int_a^b \!\! \int_S \mathbf{1}_{\{f(x) \ge t\}} \, \nu(dx) \, dt
+= \int_a^b \nu(\{f \ge t\}) \, dt.
+$$
+Since $\nu(S) = 1$, this reads
+$$\int_S f \, d\mu_n = a + \int_a^b \mu_n(\{f \ge t\}) \, dt, \qquad \int_S f \, d\mu = a + \int_a^b \mu(\{f \ge t\}) \, dt.$$
+
+It therefore suffices to prove
+$$\int_a^b \mu_n(\{f \ge t\}) \, dt \xrightarrow{n\to\infty} \int_a^b \mu(\{f \ge t\}) \, dt.$$
+
+---
+
+### Step 5c: $\{f \ge t\}$ is a $\mu$-continuity set for all but countably many $t$
+
+**(i) The boundary sits inside the level set.** Because $f$ is continuous, $\{f \ge t\} = f^{-1}([t,\infty))$ is closed and $\{f > t\} = f^{-1}((t,\infty))$ is open. An open subset of $\{f \ge t\}$ is contained in its interior, so $\{f > t\} \subseteq \text{int}\{f \ge t\}$, and therefore
+$$\partial \{f \ge t\} = \overline{\{f \ge t\}} \setminus \text{int}\{f \ge t\} = \{f \ge t\} \setminus \text{int}\{f \ge t\} \subseteq \{f \ge t\} \setminus \{f > t\} = \{f = t\}.$$
+
+**(ii) Only countably many levels carry mass.** Put
+$$E := \{ t \in [a, b] : \mu(\{f = t\}) > 0 \}, \qquad E_m := \{t \in [a,b] : \mu(\{f = t\}) \ge 1/m\},$$
+so that $E = \bigcup_{m \ge 1} E_m$. Each $E_m$ is **finite**: if $t_1, \dots, t_j \in E_m$ are distinct, the level sets $\{f = t_1\}, \dots, \{f = t_j\}$ are pairwise disjoint, so
+$$1 = \mu(S) \ \ge \ \sum_{i=1}^j \mu(\{f = t_i\}) \ \ge \ \frac{j}{m},$$
+forcing $j \le m$. A countable union of finite sets is countable, so $E$ is at most countable and in particular has Lebesgue measure zero.
+
+**(iii) Conclusion.** For every $t \in [a,b] \setminus E$ — that is, for Lebesgue-a.e. $t$ — combining (i) and (ii) gives
+$$\mu\bigl(\partial\{f \ge t\}\bigr) \le \mu(\{f = t\}) = 0,$$
+so $\{f \ge t\}$ is a $\mu$-continuity set. Hypothesis (5) therefore yields
+$$\mu_n(\{f \ge t\}) \xrightarrow{n\to\infty} \mu(\{f \ge t\}) \qquad \text{for Lebesgue-a.e. } t \in [a,b].$$
+
+::: {.callout-note}
+The exceptional set $E$ cannot be dispensed with. Take $S = \mathbb{R}$, $\mu_n = \delta_{1/n}$, $\mu = \delta_0$ and $f(x) = e^{-x^2} \in C_b(\mathbb{R})$. At the single level $t = 1$ we have $\{f \ge 1\} = \{0\}$, so $\mu_n(\{f \ge 1\}) = 0$ for all $n$ while $\mu(\{f \ge 1\}) = 1$: convergence fails. But $E = \{1\}$ is a Lebesgue-null subset of $[a,b] = [-1,1]$, so it does not affect the integral over $t$.
+:::
+
+---
+
+### Step 5d: Passing to the limit (Bounded Convergence)
+
+For each $n$, the map $t \mapsto \mu_n(\{f \ge t\})$ is nonincreasing (as $t$ increases the sets $\{f \ge t\}$ shrink), hence Borel measurable, and it is bounded by $1$. Lebesgue measure on $[a,b]$ is finite, so the constant $1$ is an integrable dominating function and the **Bounded Convergence Theorem** applies to the a.e.-convergence established in Step 5c:
+$$\int_a^b \mu_n(\{f \ge t\}) \, dt \xrightarrow{n\to\infty} \int_a^b \mu(\{f \ge t\}) \, dt.$$
+
+Adding the constant $a$ and using the two identities from Step 5b:
+$$\int_S f \, d\mu_n = a + \int_a^b \mu_n(\{f \ge t\}) \, dt \xrightarrow{n\to\infty} a + \int_a^b \mu(\{f \ge t\}) \, dt = \int_S f \, d\mu.$$
+
+Since $f \in C_b(S)$ was arbitrary, statement (1) holds. This closes the cycle $(1) \implies (2) \implies (3) \iff (4) \implies (5) \implies (1)$, so all five statements are equivalent. $\blacksquare$
+
+## Takeaways
+
+1. Weak convergence is convergence against every bounded continuous test function. It captures limits such as $\delta_{a_n}\implies\delta_a$ when $a_n\to a$, even though total variation convergence can fail completely.
+2. Total variation convergence implies weak convergence, but not conversely: discrete approximations of $\mathrm{Unif}([0,1])$ converge weakly through Riemann sums while remaining at total variation distance $1$.
+3. For random elements on a common probability space, convergence in probability, almost sure convergence, and $L^p$ convergence ($p\ge1$) each imply convergence in distribution.
+4. The Portmanteau Theorem gives interchangeable tests for weak convergence: bounded Lipschitz functions, upper bounds on closed sets, lower bounds on open sets, and convergence on every $\mu$-continuity set.
+5. Set probabilities should generally be tested only on $\mu$-continuity sets. Boundaries with positive limiting mass are precisely where weak convergence need not determine $\mu_n(A)\to\mu(A)$.

@@ -1,0 +1,261 @@
+# Lecture 24.2: Characteristic Function
+
+## Definitions and Injectivity
+
+::: {#def-fourier-transform}
+## Fourier Transform of a Measure & Characteristic Function
+Let $\mu \in \mathcal{P}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$. For $\xi \in \mathbb{R}^d$, define the **Fourier transform of $\mu$** as:
+$$
+\hat{\mu}(\xi) := \int_{\mathbb{R}^d} e^{i \xi \cdot x} \, d\mu(x) = \int_{\mathbb{R}^d} e_\xi \, d\mu.
+$$
+
+If $X: (\Omega, \mathcal{F}, P) \to (\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ is a random vector, its **characteristic function** $\varphi_X: \mathbb{R}^d \to \mathbb{C}$ is defined as:
+$$
+\varphi_X(\xi) := \hat{\mu}_X(\xi) = \mathbb{E}\left[ e^{i \xi \cdot X} \right].
+$$
+Here $\mu_X := P \circ X^{-1}$ is the law of $X$.
+:::
+
+::: {#thm-injectivity}
+## Injectivity / Uniqueness
+The map $\mu \mapsto \hat{\mu}$ is **injective**: if $\hat{\mu}(\xi) = \hat{\nu}(\xi)$ for all $\xi \in \mathbb{R}^d$, then $\mu = \nu$.
+:::
+
+:::{.proof}
+## Proof of @thm-injectivity
+By @cor-uniqueness-characteristic-functions, if $\int_{\mathbb{R}^d} e^{i\xi \cdot x} \, d\mu(x) = \int_{\mathbb{R}^d} e^{i\xi \cdot x} \, d\nu(x)$ for all $\xi \in \mathbb{R}^d$, then $\mu(B) = \nu(B)$ for all $B \in \mathcal{B}(\mathbb{R}^d)$. Thus, $\mu$ is uniquely determined by $\hat{\mu}$ (and vice versa).
+:::
+
+::: {.callout-tip icon=false}
+## MGF vs. Characteristic Function
+* **Moment Generating Function (MGF)**: For real $t$, $M_X(t) := \mathbb{E}[e^{tX}]$ always exists as an extended nonnegative expectation, but it is finite only under the corresponding exponential-integrability condition.
+* **Characteristic Function**: $\varphi_X(\xi) = \mathbb{E}[e^{i\xi X}]$ is always finite since $|e^{i\xi X}| = 1$. If $z \mapsto \mathbb{E}[e^{zX}]$ has a well-defined complex extension to the relevant imaginary points, then its value at $z=i\xi$ equals $\varphi_X(\xi)$; this does not follow from the real-variable definition of the MGF alone. The characteristic function determines the probability law by @thm-injectivity.
+:::
+
+---
+
+## Basic Properties of Characteristic Functions
+
+::: {#thm-char-func-properties}
+## Basic Properties of Characteristic Functions
+Let $\mu \in \mathcal{P}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$.
+
+1. **Boundedness**: $\hat{\mu}(0) = 1$, and $|\hat{\mu}(\xi)| \le 1$ for all $\xi \in \mathbb{R}^d$.
+2. **Uniform Continuity**: $\hat{\mu} \in C_u(\mathbb{R}^d)$ (uniformly continuous on $\mathbb{R}^d$).
+3. **Hermitian Symmetry**: $\hat{\mu}(-\xi) = \overline{\hat{\mu}(\xi)}$ for all $\xi \in \mathbb{R}^d$. Moreover,
+   $$
+   \begin{aligned}
+   &\hat{\mu}(\xi) \in \mathbb{R}\ \text{for every }\xi \in \mathbb{R}^d\\
+   &\Longleftrightarrow \mu(B)=\mu(-B)\ \text{for every }B \in \mathcal{B}(\mathbb{R}^d).
+   \end{aligned}
+   $$
+4. **Moment Differentiation**: Let $\alpha=(\alpha_1,\ldots,\alpha_d)\in\mathbb{N}_0^d$. If
+   $$\int_{\mathbb{R}^d}\|x\|^{|\alpha|}\,d\mu(x)<\infty,$$
+   then the mixed derivative $\partial^\alpha\hat\mu$ exists and
+   $$\partial^\alpha\hat\mu(\xi)=\int_{\mathbb{R}^d}(ix_1)^{\alpha_1}\cdots(ix_d)^{\alpha_d}e^{i\xi\cdot x}\,d\mu(x).$$
+   In particular, if $\int\|x\|^k\,d\mu(x)<\infty$, then $\hat\mu\in C^k(\mathbb{R}^d)$ and the preceding formula holds for every multi-index $\alpha$ with $|\alpha|\le k$.
+:::
+
+
+:::{.proof}
+## Proof of @thm-char-func-properties
+
+1. **Boundedness**:
+   $$\hat{\mu}(0) = \int_{\mathbb{R}^d} e^{i 0 \cdot x} \, d\mu(x) = \int_{\mathbb{R}^d} 1 \, d\mu(x) = 1$$
+   $$|\hat{\mu}(\xi)| = \left| \int_{\mathbb{R}^d} e^{i \xi \cdot x} \, d\mu(x) \right| \le \int_{\mathbb{R}^d} |e^{i \xi \cdot x}| \, d\mu(x) = \int_{\mathbb{R}^d} 1 \, d\mu(x) = 1$$
+
+2. **Uniform Continuity**:
+   For $h \in \mathbb{R}^d$,
+   $$
+   \begin{aligned}
+   |\hat{\mu}(\xi+h)-\hat{\mu}(\xi)|
+   &\le \int_{\mathbb{R}^d}|e^{i(\xi+h)\cdot x}-e^{i\xi\cdot x}|\,d\mu(x)\\
+   &=\int_{\mathbb{R}^d}|e^{ih\cdot x}-1|\,d\mu(x).
+   \end{aligned}
+   $$
+   The last expression is independent of $\xi$, converges pointwise to $0$ as $h\to0$, and is dominated by $2\in L^1(\mu)$. DCT therefore shows that the supremum over $\xi$ tends to $0$, proving uniform continuity.
+
+3. **Conjugation & Symmetry**:
+   $$\overline{\hat{\mu}(\xi)} = \overline{\int_{\mathbb{R}^d} e^{i \xi \cdot x} \, d\mu(x)} = \int_{\mathbb{R}^d} e^{-i \xi \cdot x} \, d\mu(x) = \hat{\mu}(-\xi)$$
+    Let $\check\mu(B):=\mu(-B)$ be the reflected measure. If $\mu$ is symmetric, then $\check\mu=\mu$, so:
+       $$\hat{\mu}(-\xi) = \int e^{-i\xi\cdot x}\,d\mu(x) = \hat{\mu}(\xi)$$
+     Since $\hat{\mu}(-\xi) = \overline{\hat{\mu}(\xi)}$, this implies $\hat{\mu}(\xi) = \overline{\hat{\mu}(\xi)}$, so $\hat{\mu}(\xi) \in \mathbb{R}$.
+    Conversely, suppose $\hat\mu(\xi)\in\mathbb{R}$ for every $\xi$. Then $\hat\mu(-\xi)=\hat\mu(\xi)$. For the reflected measure $\check\mu$,
+       $$\hat{\check\mu}(\xi)=\int e^{i\xi\cdot x}\,d\check\mu(x)=\int e^{-i\xi\cdot y}\,d\mu(y)=\hat\mu(-\xi)=\hat\mu(\xi).$$
+       Injectivity gives $\check\mu=\mu$, which is exactly symmetry.
+
+4. **Differentiation Under the Integral**:
+   For a fixed multi-index $\alpha$, repeated differentiation under the integral sign is justified by the integrable bound $\|x\|^{|\alpha|}$, which dominates every monomial needed at an intermediate step. This gives
+   $$\partial^\alpha\hat\mu(\xi)=\int_{\mathbb{R}^d}(ix)^\alpha e^{i\xi\cdot x}\,d\mu(x).$$
+   The integrand is continuous in $\xi$ and dominated by $|x^\alpha|$, so the derivative is continuous by DCT. If instead $\int\|x\|^k\,d\mu<\infty$, the same argument applies to every multi-index with $|\alpha|\le k$, proving the stated $C^k$ conclusion.
+:::
+
+---
+
+## Convolutions & Affine Transformations
+
+::: {#thm-convolution-affine}
+## Convolutions & Affine Shifts
+Let $\mu, \nu \in \mathcal{P}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$.
+For $B\in\mathcal{B}(\mathbb{R}^d)$, define their convolution by
+$$
+(\mu*\nu)(B):=\int_{\mathbb{R}^d}\int_{\mathbb{R}^d}\mathbf{1}_B(x+y)\,d\mu(x)\,d\nu(y).
+$$
+
+1. **Convolution**: The characteristic function of a convolution $\mu * \nu$ is the product of their characteristic functions:
+   $$\widehat{\mu * \nu}(\xi) = \hat{\mu}(\xi) \cdot \hat{\nu}(\xi)$$
+   Equivalently, if $X,Y$ are independent $\mathbb{R}^d$-valued random vectors with laws $\mu$ and $\nu$, then $\mathcal{L}(X+Y)=\mu*\nu$ and:
+   $$\varphi_{X+Y}(\xi) = \varphi_X(\xi) \cdot \varphi_Y(\xi), \quad \forall \xi \in \mathbb{R}^d$$
+
+2. **Affine Transformation**: If $X$ is an $\mathbb{R}^d$-valued random vector, $a \in \mathbb{R}$, and $v \in \mathbb{R}^d$, then:
+   $$\varphi_{aX + v}(\xi) = e^{i \xi \cdot v} \, \varphi_X(a\xi)$$
+:::
+
+:::{.proof}
+## Proof of @thm-convolution-affine
+
+1. If $X$ and $Y$ are independent, then:
+   $$
+   \begin{align*}
+   \varphi_{X+Y}(\xi) &= \mathbb{E}\left[ e^{i \xi \cdot (X + Y)} \right] = \mathbb{E}\left[ e^{i \xi \cdot X} e^{i \xi \cdot Y} \right] \\
+   &= \mathbb{E}\left[ e^{i \xi \cdot X} \right] \mathbb{E}\left[ e^{i \xi \cdot Y} \right] = \varphi_X(\xi) \varphi_Y(\xi)
+   \end{align*}
+   $$
+   Since $\mathcal{L}(X+Y)=\mu*\nu$ by the definition above, this also proves $\widehat{\mu*\nu}=\hat\mu\,\hat\nu$.
+
+2. Direct expectation evaluation:
+   $$
+   \begin{align*}
+   \varphi_{aX + v}(\xi) &= \mathbb{E}\left[ e^{i \xi \cdot (aX + v)} \right] = \mathbb{E}\left[ e^{i \xi \cdot v} e^{i (a\xi) \cdot X} \right]\\
+   & = e^{i \xi \cdot v} \mathbb{E}\left[ e^{i (a\xi) \cdot X} \right] = e^{i \xi \cdot v} \varphi_X(a\xi)
+   \end{align*}
+   $$
+:::
+
+---
+
+## Uniform Distribution
+Let $a<b$ and $U \sim \operatorname{Unif}([a,b])$. Its density is $f(x) = \frac{1}{b-a} \mathbf{1}_{[a,b]}(x)$. For $\xi\ne0$,
+$$
+\begin{align*}
+\varphi_U(\xi) &= \int_a^b e^{i\xi x} \frac{1}{b-a} \, dx = \frac{e^{ib\xi} - e^{ia\xi}}{i\xi(b - a)}
+\end{align*}
+$$
+At $\xi=0$, $\varphi_U(0)=1$, which is also the continuous extension of the displayed formula.
+
+::: {.callout-tip icon=false}
+## Special Case: Symmetric Uniform $\text{Unif}([-b, b])$
+For $b>0$, setting $a=-b$ gives the sinc function:
+$$\varphi_U(\xi) = \frac{e^{ib\xi} - e^{-ib\xi}}{2ib\xi} = \frac{\sin(b\xi)}{b\xi}$$
+with value $1$ at $\xi=0$ by continuous extension.
+:::
+
+## Poisson Distribution
+Let $\lambda\ge0$ and $N \sim \operatorname{Poisson}(\lambda)$. Then $P(N = n) = e^{-\lambda} \frac{\lambda^n}{n!}$ for $n \ge 0$. The series below is absolutely convergent because the sum of the absolute values is $1$.
+$$\varphi_N(\xi) = \mathbb{E}[e^{i\xi N}] = \sum_{n=0}^\infty e^{i\xi n} e^{-\lambda} \frac{\lambda^n}{n!} = e^{-\lambda} \sum_{n=0}^\infty \frac{(e^{i\xi} \lambda)^n}{n!} = e^{-\lambda} e^{\lambda e^{i\xi}} = e^{\lambda(e^{i\xi} - 1)}$$
+
+## Exponential Distributions
+* **Standard Exponential**: Let $\lambda>0$ and $T \sim \operatorname{Exp}(\lambda)$ with density $f(x) = \lambda e^{-\lambda x} \mathbf{1}_{[0, \infty)}(x)$.
+   Its MGF is finite and equal to $M_T(t) = \frac{\lambda}{\lambda - t}$ for $t < \lambda$; it is infinite for $t\ge\lambda$.
+* **Bilateral (Laplace) Exponential**: Let $\lambda>0$ and let $T_{bi}$ have density $f(x) = \frac{\lambda}{2} e^{-\lambda |x|}$ on $\mathbb{R}$.
+  $$\varphi_{T_{bi}}(\xi) = \int_{\mathbb{R}} \frac{\lambda}{2} e^{-\lambda |x|} e^{i x \xi} \, dx = \int_0^\infty \frac{\lambda}{2} e^{-(\lambda - i\xi)x} \, dx + \int_{-\infty}^0 \frac{\lambda}{2} e^{(\lambda + i\xi)x} \, dx$$
+  $$\varphi_{T_{bi}}(\xi) = \frac{1}{2} \left( \frac{\lambda}{\lambda - i\xi} + \frac{\lambda}{\lambda + i\xi} \right) = \frac{\lambda^2}{\lambda^2 + \xi^2}$$
+
+## Rademacher Distribution
+Let $Y \sim \text{Rademacher}$ with $P(Y = 1) = P(Y = -1) = \frac{1}{2}$. Then $\mathbb{E}[Y] = 0$ and $\operatorname{Var}(Y) = 1$.
+$$\varphi_Y(\xi) = \mathbb{E}[e^{i\xi Y}] = \frac{1}{2} e^{i\xi(1)} + \frac{1}{2} e^{i\xi(-1)} = \frac{e^{i\xi} + e^{-i\xi}}{2} = \cos \xi$$
+
+If $Y_1, \dots, Y_n$ are i.i.d. Rademacher random variables, set $S_n = \sum_{j=1}^n Y_j$. Then:
+$$\varphi_{S_n}(\xi) = \prod_{j=1}^n \varphi_{Y_j}(\xi) = (\cos \xi)^n$$
+
+---
+
+## Standard Normal Distribution
+
+Let $X \sim \mathcal{N}(0, 1)$ with density $f(x) = (2\pi)^{-1/2} e^{-x^2/2}$.
+
+$$\varphi_X(\xi) = \mathbb{E}[e^{i\xi X}] = \int_{\mathbb{R}} e^{i\xi x} (2\pi)^{-1/2} e^{-x^2/2} \, dx$$
+
+Differentiating $\varphi_X(\xi)$ with respect to $\xi$ under the integral sign is justified because $|X|\in L^1$:
+$$\varphi_X'(\xi) = \mathbb{E}\left[ iX e^{i\xi X} \right] = i \int_{\mathbb{R}} x e^{i\xi x} (2\pi)^{-1/2} e^{-x^2/2} \, dx$$
+
+Take $u=i e^{i\xi x}$, $dv=x(2\pi)^{-1/2}e^{-x^2/2}\,dx$. Then
+$$ 
+du=i(i\xi)e^{i\xi x}\,dx =-\xi e^{i\xi x}\,dx, 
+$$
+and
+$$
+v=-(2\pi)^{-1/2}e^{-x^2/2}. 
+$$
+Hence
+$$ 
+\begin{aligned} 
+\varphi_X'(\xi) &=\left[ -i(2\pi)^{-1/2}e^{i\xi x}e^{-x^2/2} \right]_{-\infty}^{\infty} -\int_{\mathbb R}v\,du\\ 
+&=0-\int_{\mathbb R} \left[-(2\pi)^{-1/2}e^{-x^2/2}\right] \left[-\xi e^{i\xi x}\right]dx\\ 
+&=-\xi(2\pi)^{-1/2} \int_{\mathbb R}e^{i\xi x}e^{-x^2/2}\,dx\\ 
+&=-\xi\varphi_X(\xi). 
+\end{aligned} 
+$$
+Therefore $\varphi_X'(\xi)+\xi\varphi_X(\xi)=0$. Multiplying by $e^{\xi^2/2}$,
+$$ 
+e^{\xi^2/2}\varphi_X'(\xi) +\xi e^{\xi^2/2}\varphi_X(\xi) = \frac{d}{d\xi} \left(e^{\xi^2/2}\varphi_X(\xi)\right)=0. 
+$$
+Thus $e^{\xi^2/2}\varphi_X(\xi)=C$. Since $\varphi_X(0)=E[e^{0}]=1$, we have $C=1$, giving
+$$
+\varphi_X(\xi) = e^{-\xi^2/2}.
+$$
+
+:::{#rem-standard-normal}
+This is a particularly elegant way to derive the characteristic function of the standard normal without completing the square or evaluating the Gaussian integral. The key observation is that the Gaussian density satisfies the differential equation
+$$ 
+f'(x)=-xf(x). 
+$$
+The integration-by-parts argument transfers this differential equation from the density $f$ to the characteristic function:
+$$ 
+\boxed{\varphi_X'(\xi)=-\xi\varphi_X(\xi)}. 
+$$
+So the Gaussian characteristic function is essentially characterized by the same differential structure as the Gaussian density itself.
+:::
+
+
+---
+
+## Central Limit Theorem for Rademacher Sums
+
+Let $Y_1, Y_2, \dots$ be i.i.d. Rademacher random variables. Define the scaled sum:
+$$W_n := \frac{Y_1 + \dots + Y_n}{\sqrt{n}} = \frac{S_n}{\sqrt{n}}$$
+
+Using the scaling property of characteristic functions:
+$$\varphi_{W_n}(\xi) = \varphi_{S_n/\sqrt{n}}(\xi) = \varphi_{S_n}\left( \frac{\xi}{\sqrt{n}} \right) = \left( \cos\left( \frac{\xi}{\sqrt{n}} \right) \right)^n$$
+
+For each fixed $\xi$, choose $N(\xi)$ so that $|\xi|/\sqrt n<\pi/2$ for all $n\ge N(\xi)$. Then $\cos(\xi/\sqrt n)>0$, so the following real logarithm is defined for all sufficiently large $n$; finitely many initial terms do not affect the limit:
+$$\ln \varphi_{W_n}(\xi) = n \ln \cos\left( \frac{\xi}{\sqrt{n}} \right)$$
+
+Using the Taylor expansion of $\ln \cos(x)$ near $x = 0$:
+$$
+\cos(x) = 1 - \frac{x^2}{2} + O(x^4).
+$$
+$$
+\ln(1 + u) = u - \frac{u^2}{2} + O(u^3).
+$$
+$$
+\begin{aligned}
+&\implies \ln \cos(x) = \left(-\frac{x^2}{2} + O(x^4)\right) - \frac{1}{2}\left(-\frac{x^2}{2} + O(x^4)\right)^2 + \dots\\
+& = -\frac{x^2}{2} + O(x^4).
+\end{aligned}
+$$
+
+Substituting $x = \frac{\xi}{\sqrt{n}}$:
+$$
+\ln \varphi_{W_n}(\xi) = n \left( -\frac{\xi^2}{2n} + O_\xi\left( \frac{1}{n^2} \right) \right) = -\frac{\xi^2}{2} + O_\xi\left( \frac{1}{n} \right).
+$$
+
+Taking the limit as $n \to \infty$ for fixed $\xi$:
+$$
+\lim_{n \to \infty} \ln \varphi_{W_n}(\xi) = -\frac{\xi^2}{2} \implies \lim_{n \to \infty} \varphi_{W_n}(\xi) = e^{-\frac{\xi^2}{2}}.
+$$
+
+Since $e^{-\xi^2/2}$ is the characteristic function of $\mathcal{N}(0, 1)$, by the Continuity Theorem we conclude:
+$$
+\frac{Y_1 + \dots + Y_n}{\sqrt{n}} \xrightarrow{d} \mathcal{N}(0, 1).
+$$

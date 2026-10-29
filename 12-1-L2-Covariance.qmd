@@ -1,0 +1,304 @@
+# Lecture 12.1: $L^2$ and Covariance
+
+## The $L^2$ Space and Integral Inequalities
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space.
+
+::: {#def-l2-space}
+The space $L^2(\Omega, \mathcal{F}, \mu)$ is the collection of all real-valued, $\mathcal{F}$-measurable functions $f: \Omega \to \mathbb{R}$ that are square-integrable:
+$$
+\begin{aligned}
+&L^2(\Omega, \mathcal{F}, \mu)\\
+&\triangleq \left\{ f: \Omega \to \mathbb{R} \;\middle|\; f \text{ is } \mathcal{F}\text{-measurable and } \int_{\Omega} f^2 \, d\mu < \infty. \right\}
+\end{aligned}
+$$
+:::
+
+## Inclusions and Cauchy-Schwarz Inequality
+The following proposition shows that the product of two $L^2$ functions is integrable, which is a key fact in defining covariance and correlation.
+
+::: {#prp-l2-product-integrable}
+If $f, g \in L^2(\Omega, \mathcal{F}, \mu)$, then $fg \in L^1(\Omega, \mathcal{F}, \mu)$.
+:::
+
+::: {.proof}
+## Proof of @prp-l2-product-integrable
+For any $f, g \in \mathbb{R}$, expanding $0 \le (|f| - |g|)^2 = f^2 - 2|fg| + g^2$ yields the elementary point-wise inequality:
+$$
+|fg| \le \frac{1}{2} \left( f^2 + g^2 \right).
+$$ {#eq-youngs-elem}
+
+Integrating @eq-youngs-elem over $\Omega$ with respect to $\mu$:
+$$
+\int_{\Omega} |fg| \, d\mu \le \frac{1}{2} \int_{\Omega} f^2 \, d\mu + \frac{1}{2} \int_{\Omega} g^2 \, d\mu < \infty.
+$$
+
+Thus, $fg \in L^1(\Omega, \mathcal{F}, \mu)$.
+:::
+
+This result implies the following corollary, which shows that $L^2$ functions are also $L^1$ functions when the measure is finite.
+
+::: {#cor-finite-measure-inclusion}
+If $\mu$ is a finite measure ($\mu(\Omega) < \infty$), then $L^2(\mu) \subseteq L^1(\mu)$.
+:::
+
+::: {.proof}
+## Proof of @cor-finite-measure-inclusion
+Let $f \in L^2(\mu)$. Taking $g = \mathbf{1}_{\Omega} \in L^2(\mu)$, we have $\int_{\Omega} \mathbf{1}_{\Omega}^2 \, d\mu = \mu(\Omega) < \infty$. By @prp-l2-product-integrable, $f \cdot \mathbf{1}_{\Omega} = f \in L^1(\mu)$.
+:::
+
+---
+
+## Cauchy-Schwarz Inequality
+
+For $f, g \in L^2(\Omega, \mathcal{F}, \mu)$, define the inner product and norm:
+$$
+\langle f, g \rangle_{L^2} \triangleq \int_{\Omega} fg \, d\mu, \quad \|f\|_{L^2} \triangleq \left( \int_{\Omega} f^2 \, d\mu \right)^{1/2}.
+$$ {#eq-l2-inner-norm}
+
+::: {#thm-cauchy-schwarz}
+## Cauchy-Schwarz Inequality
+
+If $f, g \in L^2(\Omega, \mathcal{F}, \mu)$, then:
+$$
+\left| \int_{\Omega} fg \, d\mu \right| \le \int_{\Omega} |fg| \, d\mu \le \|f\|_{L^2} \|g\|_{L^2}.
+$$ {#eq-cauchy-schwarz}
+:::
+
+::: {.proof}
+## Proof of @eq-cauchy-schwarz
+
+The inequality $\left|\int_{\Omega} fg \, d\mu\right| \le \int_{\Omega} |fg| \, d\mu$ is standard. To establish the second inequality, define the quadratic polynomial for $t \in \mathbb{R}$:
+$$
+p(t) \triangleq \int_{\Omega} (|f| - t|g|)^2 \, d\mu \ge 0.
+$$
+
+Expanding the integrand:
+$$
+\begin{aligned}
+p(t) &= \int_{\Omega} f^2 \, d\mu - 2t \int_{\Omega} |fg| \, d\mu + t^2 \int_{\Omega} g^2 \, d\mu \\
+&= \|f\|_{L^2}^2 - 2t \int_{\Omega} |fg| \, d\mu + t^2 \|g\|_{L^2}^2.
+\end{aligned}
+$$
+
+Since $p(t) \ge 0$ for all $t \in \mathbb{R}$, its discriminant $\Delta$ must be non-positive:
+$$
+\Delta = \left( -2 \int_{\Omega} |fg| \, d\mu \right)^2 - 4 \|f\|_{L^2}^2 \|g\|_{L^2}^2 \le 0.
+$$
+
+$$
+4 \left( \int_{\Omega} |fg| \, d\mu \right)^2 \le 4 \|f\|_{L^2}^2 \|g\|_{L^2}^2 \implies \int_{\Omega} |fg| \, d\mu \le \|f\|_{L^2} \|g\|_{L^2}.
+$$
+:::
+
+---
+
+## Vector Space Structure of $L^2$
+
+::: {#cor-l2-normed-space}
+$L^2(\Omega, \mathcal{F}, \mu)$ is a vector space, and $\|\cdot\|_{L^2}$ defines a norm on it (up to $\mu$-almost sure equivalence classes).
+:::
+
+::: {.proof}
+## Proof of @cor-l2-normed-space
+We verify the norm axioms:
+
+1. **Homogeneity:** For $\alpha \in \mathbb{R}$ and $f \in L^2$, $\|\alpha f\|_{L^2}^2 = \int_{\Omega} (\alpha f)^2 \, d\mu = \alpha^2 \int_{\Omega} f^2 \, d\mu = \alpha^2 \|f\|_{L^2}^2$, so $\|\alpha f\|_{L^2} = |\alpha| \|f\|_{L^2}$.
+2. **Positive Definiteness:** $\|f\|_{L^2} = 0 \implies \int_{\Omega} f^2 \, d\mu = 0 \implies f^2 = 0 \quad \mu\text{-a.s.} \implies f = 0 \quad \mu\text{-a.s.}$
+3. **Triangle Inequality (Minkowski's Inequality):** For $f, g \in L^2$:
+$$
+\begin{aligned}
+\|f + g\|_{L^2}^2 &= \int_{\Omega} (f + g)^2 \, d\mu = \int_{\Omega} f^2 \, d\mu + 2 \int_{\Omega} fg \, d\mu + \int_{\Omega} g^2 \, d\mu \\
+&\le \|f\|_{L^2}^2 + 2 \|f\|_{L^2} \|g\|_{L^2} + \|g\|_{L^2}^2 = \left( \|f\|_{L^2} + \|g\|_{L^2} \right)^2.
+\end{aligned}
+$$
+
+Taking square roots yields $\|f + g\|_{L^2} \le \|f\|_{L^2} + \|g\|_{L^2} < \infty$.
+:::
+
+::: {#rem-hilbert-space}
+$L^2(\Omega, \mathcal{F}, \mu)$ is a Hilbert space under the inner product 
+$$
+\langle f, g \rangle_{L^2} = \int fg \, d\mu.
+$$
+It is Cauchy complete. That is, if $(f_n)_{n=1}^\infty \subset L^2$ is Cauchy ($\|f_n - f_m\|_{L^2} \to 0$ as $n, m \to \infty$), there exists $f \in L^2$ such that $\|f_n - f\|_{L^2} \to 0$. Completeness holds in general $L^p$ spaces for $1 \le p \le \infty$ and plays a crucial role in constructing conditional expectations.
+:::
+
+---
+
+## Covariance, Variance, and Correlation
+
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space. Because $\mathbb{P}(\Omega) = 1 < \infty$, $L^2(\mathbb{P}) \subseteq L^1(\mathbb{P})$. In particular:
+$$
+\begin{aligned}
+\|X\|_{L^1} &= \int_{\Omega} |X| \, d\mathbb{P} = \int_{\Omega} |X \cdot 1| \, d\mathbb{P} \\
+&\le \|X\|_{L^2} \|1\|_{L^2} = \|X\|_{L^2} = \sqrt{\mathbb{E}[X^2]}.
+\end{aligned}
+$$ {#eq-l1-l2-bound}
+
+Thus, $|\mathbb{E}[X]| \le \mathbb{E}[|X|] \le \sqrt{\mathbb{E}[X^2]}$.
+
+For $X, Y \in L^2(\Omega, \mathcal{F}, \mathbb{P})$, define the centered random variables:
+$$
+\dot{X} \triangleq X - \mathbb{E}[X], \quad \dot{Y} \triangleq Y - \mathbb{E}[Y]
+$$ {#eq-centered-rv}
+
+::: {#def-covariance-variance}
+1. **Covariance:**
+   $$
+   \begin{aligned}
+   \text{Cov}(X, Y) &\triangleq \mathbb{E}[\dot{X} \dot{Y}] \\
+   &= \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])] \\
+   &= \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y].
+   \end{aligned}
+   $$ 
+
+2. **Variance:**
+   $$
+   \begin{aligned}
+   \text{Var}(X) &\triangleq \text{Cov}(X, X) = \mathbb{E}[\dot{X}^2] \\
+   &= \mathbb{E}[X^2] - (\mathbb{E}[X])^2 \ge 0.
+   \end{aligned}
+   $$
+:::
+
+::: {#lem-zero-variance}
+If $X \in L^2(\Omega, \mathcal{F}, \mathbb{P})$ and $\text{Var}(X) = 0$, then $X = \mathbb{E}[X]$ $\mathbb{P}$-almost surely (i.e., $X$ is constant a.s.).
+:::
+
+::: {.proof}
+## Proof of @lem-zero-variance
+$0 = \text{Var}(X) = \mathbb{E}[\dot{X}^2] = \int_{\Omega} \dot{X}^2 \, d\mathbb{P}$. Since $\dot{X}^2 \ge 0$, $\dot{X}^2 = 0$ $\mathbb{P}$-a.s., which implies $\dot{X} = 0 \implies X = \mathbb{E}[X]$ $\mathbb{P}$-a.s.
+:::
+
+---
+
+## Variance Examples
+
+1. **Normal Distribution $X \sim \mathcal{N}(\alpha, t)$:** Since $X \overset{d}{=} \sqrt{t} Z + \alpha$ with $Z \sim \mathcal{N}(0,1)$, we have $\mathbb{E}[X] = \alpha$ (computed in Lecture 11.2), so $X - \mathbb{E}[X] = \sqrt{t}\,Z$. Therefore:
+   $$
+   \text{Var}(X) = \mathbb{E}\bigl[(X - \alpha)^2\bigr] = \mathbb{E}\bigl[(\sqrt{t}\,Z)^2\bigr] = t\,\mathbb{E}[Z^2] = t \cdot 1 = t.
+   $$
+
+2. **Exponential Distribution $T \sim \text{Exp}(\alpha)$:** We use $\text{Var}(T) = \mathbb{E}[T^2] - (\mathbb{E}[T])^2$ and compute $\mathbb{E}[T^2]$ by differentiating the Laplace integral twice. Since $\frac{d^2}{d\alpha^2}e^{-\alpha t} = t^2 e^{-\alpha t}$, the interchange with integration is justified by DCT (the dominator $t^2 e^{-\alpha_0 t}$ is integrable for any fixed $\alpha_0 > 0$):
+   $$
+   \int_{0}^{\infty} t^2 e^{-\alpha t} \, dt = \frac{d^2}{d\alpha^2} \int_{0}^{\infty} e^{-\alpha t} \, dt = \frac{d^2}{d\alpha^2}\!\left(\frac{1}{\alpha}\right) = \frac{2}{\alpha^3}.
+   $$
+   Therefore $\mathbb{E}[T^2] = \alpha \cdot \dfrac{2}{\alpha^3} = \dfrac{2}{\alpha^2}$, and:
+   $$
+   \text{Var}(T) = \mathbb{E}[T^2] - \bigl(\mathbb{E}[T]\bigr)^2 = \frac{2}{\alpha^2} - \frac{1}{\alpha^2} = \frac{1}{\alpha^2}.
+   $$
+
+3. **Poisson Distribution $N \sim \text{Pois}(\alpha)$:** We use $\text{Var}(N) = \mathbb{E}[N(N-1)] + \mathbb{E}[N] - (\mathbb{E}[N])^2$. The $k=0$ and $k=1$ terms vanish, so:
+   $$
+   \mathbb{E}[N(N-1)] = \sum_{k=2}^{\infty} k(k-1)\, e^{-\alpha} \frac{\alpha^k}{k!} = \sum_{k=2}^{\infty} e^{-\alpha} \frac{\alpha^k}{(k-2)!}.
+   $$
+   Substituting $j = k - 2$:
+   $$
+   \mathbb{E}[N(N-1)] = \alpha^2 e^{-\alpha} \sum_{j=0}^{\infty} \frac{\alpha^j}{j!} = \alpha^2 e^{-\alpha} e^{\alpha} = \alpha^2.
+   $$
+   Therefore:
+   $$
+   \text{Var}(N) = \mathbb{E}[N(N-1)] + \mathbb{E}[N] - \bigl(\mathbb{E}[N]\bigr)^2 = \alpha^2 + \alpha - \alpha^2 = \alpha.
+   $$
+
+---
+
+## Correlation and Uncorrelated Variables
+
+::: {#def-uncorrelated-correlation}
+Two random variables $X, Y \in L^2(\Omega, \mathcal{F}, \mathbb{P})$ are **uncorrelated** if $\text{Cov}(X, Y) = 0$.
+
+Their **correlation** is defined as:
+$$
+\text{Corr}(X, Y) \triangleq \frac{\text{Cov}(X, Y)}{\sqrt{\text{Var}(X)\text{Var}(Y)}} = \frac{\langle \dot{X}, \dot{Y} \rangle_{L^2}}{\|\dot{X}\|_{L^2} \|\dot{Y}\|_{L^2}}.
+$$ {#eq-corr-def}
+
+By the Cauchy-Schwarz inequality, $|\text{Corr}(X, Y)| \le 1$.
+:::
+
+::: {#prp-variance-sum}
+
+1. For any $\alpha \in \mathbb{R}$, $\text{Cov}(X + \alpha, Y) = \text{Cov}(X, Y)$.
+
+2. If $X_1, X_2, \dots, X_n \in L^2$ are pairwise uncorrelated, then:
+$$
+\text{Var}(X_1 + X_2 + \dots + X_n) = \sum_{j=1}^{n} \text{Var}(X_j).
+$$ {#eq-bienayme-formula}
+:::
+
+::: {.proof}
+## Proof of @prp-variance-sum
+Observe that $\dot{(X + \alpha)} = (X + \alpha) - \mathbb{E}[X + \alpha] = X - \mathbb{E}[X] = \dot{X}$.
+
+For the sum of random variables:
+$$
+\begin{aligned}
+\text{Var}\left( \sum_{j=1}^{n} X_j \right) &= \mathbb{E}\left[ \left( \sum_{j=1}^{n} \dot{X}_j \right)^2 \right] = \mathbb{E}\left[ \sum_{j=1}^{n} \sum_{k=1}^{n} \dot{X}_j \dot{X}_k \right] = \sum_{j=1}^{n} \sum_{k=1}^{n} \mathbb{E}[\dot{X}_j \dot{X}_k] \\
+&= \sum_{j=1}^{n} \sum_{k=1}^{n} \text{Cov}(X_j, X_k).
+\end{aligned}
+$$
+
+Since $\text{Cov}(X_j, X_k) = 0$ for $j \neq k$, only terms with $j = k$ remain:
+$$
+\text{Var}\left( \sum_{j=1}^{n} X_j \right) = \sum_{j=1}^{n} \text{Cov}(X_j, X_j) = \sum_{j=1}^{n} \text{Var}(X_j).
+$$
+:::
+
+---
+
+## Indicator Functions and Independence
+
+Let $A, B \in \mathcal{F}$, and consider $X = \mathbf{1}_A$ and $Y = \mathbf{1}_B$. $X$ and $Y$ are Bernoulli random variables with $\mathbb{E}[\mathbf{1}_A] = \mathbb{P}(A)$ and $\mathbb{E}[\mathbf{1}_B] = \mathbb{P}(B)$.
+
+Since $\mathbf{1}_A \mathbf{1}_B = \mathbf{1}_{A \cap B}$:
+$$
+\text{Cov}(\mathbf{1}_A, \mathbf{1}_B) = \mathbb{E}[\mathbf{1}_{A \cap B}] - \mathbb{E}[\mathbf{1}_A]\mathbb{E}[\mathbf{1}_B] = \mathbb{P}(A \cap B) - \mathbb{P}(A)\mathbb{P}(B).
+$$ 
+
+Therefore, $\text{Cov}(\mathbf{1}_A, \mathbf{1}_B) = 0$ if and only if $A$ and $B$ are independent events.
+
+---
+
+## Example: Coin Tossing Sequence
+
+Consider tossing a fair coin $n$ times.
+
+* **Sample Space:** $\Omega = \{ (\omega_1, \dots, \omega_n) \mid \omega_j \in \{0, 1\} \}$, so $|\Omega| = 2^n$, where $1 = \text{Heads}$ and $0 = \text{Tails}$.
+* **$\sigma$-algebra:** $\mathcal{F} = 2^{\Omega}$.
+* **Probability Measure:** Uniform measure $\mathbb{P}(A) = \frac{|A|}{2^n}$ for $A \subseteq \Omega$.
+* **Coordinate Random Variables:** $X_j(\omega) = \omega_j \in \{0,1\}$ for $j = 1, \dots, n$. Since each $X_j$ is bounded, $X_j \in L^2(\mathbb{P})$.
+
+::: {#exr-coin-flips}
+Show that $\text{Cov}(X_j, X_k) = \frac{1}{4} \delta_{jk}$, where $\delta_{jk}$ is the Kronecker delta.
+:::
+
+::: {.solution}
+**Step 1: Mean.** For each $j$, exactly half of the $2^n$ outcomes have $\omega_j = 1$:
+$$
+\mathbb{E}[X_j] = \mathbb{P}(X_j = 1) = \frac{2^{n-1}}{2^n} = \frac{1}{2}.
+$$
+
+**Step 2: Second moment.** Since $X_j \in \{0,1\}$, we have $X_j^2 = X_j$, so $\mathbb{E}[X_j^2] = \mathbb{E}[X_j] = \frac{1}{2}$.
+
+**Step 3: Diagonal case $j = k$.** By the shortcut formula:
+$$
+\text{Cov}(X_j, X_j) = \text{Var}(X_j) = \mathbb{E}[X_j^2] - \bigl(\mathbb{E}[X_j]\bigr)^2 = \frac{1}{2} - \frac{1}{4} = \frac{1}{4}.
+$$
+
+**Step 4: Off-diagonal case $j \neq k$.** The product $X_j X_k = 1$ if and only if $\omega_j = 1$ and $\omega_k = 1$. For $j \neq k$, the remaining $n-2$ coordinates are free, giving $2^{n-2}$ such outcomes:
+$$
+\mathbb{E}[X_j X_k] = \mathbb{P}(X_j = 1,\, X_k = 1) = \frac{2^{n-2}}{2^n} = \frac{1}{4}.
+$$
+Therefore:
+$$
+\text{Cov}(X_j, X_k) = \mathbb{E}[X_j X_k] - \mathbb{E}[X_j]\mathbb{E}[X_k] = \frac{1}{4} - \frac{1}{2} \cdot \frac{1}{2} = 0.
+$$
+
+**Conclusion.** Combining both cases:
+$$
+\text{Cov}(X_j, X_k) = \frac{1}{4}\,\delta_{jk}. \qquad \square
+$$
+:::
+
+

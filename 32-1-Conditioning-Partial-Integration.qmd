@@ -1,0 +1,172 @@
+# Lecture 32.1: Conditioning as Partial Integration
+
+In this lecture, we explore the concept of conditional expectation as a form of partial integration in the context of product probability spaces. We will see how conditioning on a sub-$\sigma$-field can be interpreted as integrating out certain variables while retaining measurability with respect to others.
+
+## The Averaging Property as the Primary Workhorse
+
+In measure-theoretic probability, the **Averaging Property** serves as the central operational characterization of conditional expectation.
+
+::: {#def-cond-exp}
+## Conditional Expectation via Averaging
+Let $(\Omega, \mathcal{F}, P)$ be a probability space, $\mathcal{G} \subseteq \mathcal{F}$ a sub-$\sigma$-field, and $X \in L^1(\Omega, \mathcal{F}, P)$. The conditional expectation $\mathbb{E}_{\mathcal{G}}[X]$ (or $\mathbb{E}[X \mid \mathcal{G}]$) is the unique element in $L^1(\Omega, \mathcal{G}, P)$ satisfying:
+$$
+\mathbb{E}[\mathbb{E}_{\mathcal{G}}[X] Y] = \mathbb{E}[XY] \quad \forall Y \in \mathcal{B}_b(\Omega, \mathcal{G}).
+$$
+where $\mathcal{B}_b(\Omega, \mathcal{G})$ denotes the space of bounded, $\mathcal{G}$-measurable random variables.
+:::
+
+## Example 1.0 (Averaging Property in Action)
+Let $X \in L^1(\Omega, \mathcal{F}, P)$. Consider $\mathbb{E}_{\mathcal{F}}[X]$. By definition, $\mathbb{E}_{\mathcal{F}}[X]$ is the unique $\mathcal{F}$-measurable random variable satisfying:
+$$
+\mathbb{E}[\mathbb{E}_{\mathcal{F}}[X] Y] = \mathbb{E}[XY] \quad \forall Y \in \mathcal{B}_b(\Omega, \mathcal{F}).
+$$
+Since $\mathcal{B}_b(\Omega, \mathcal{F})$ contains all bounded $\mathcal{F}$-measurable random variables, we can take $Y = \mathbb{1}_A$ for any $A \in \mathcal{F}$, yielding:
+$$
+\mathbb{E}[\mathbb{E}_{\mathcal{F}}[X] \mathbb{1}_A] = \mathbb{E}[X \mathbb{1}_A] \quad \forall A \in \mathcal{F}.
+$$
+This is precisely the defining property of $X$ itself, so we conclude:
+$$
+\mathbb{E}_{\mathcal{F}}[X] = X \quad \text{a.s.}
+$$
+
+For uniqueness, if $Z \in L^1(\Omega, \mathcal{F}, P)$ also satisfies the averaging property, then $\mathbb{E}[(Z - X) Y] = 0$ , where $Y\in \mathcal{B}_b(\Omega, \mathcal{F})$. Taking $Y = \text{sign}(Z - X) \cdot \mathbb{1}_{\{|Z - X| \leq n\}}$ gives 
+$$
+0=\mathbb{E}[(Z - X) Y] = \mathbb{E}[|Z - X| \cdot \mathbb{1}_{\{|Z - X| \leq n\}}] \to \mathbb{E}[|Z - X|],
+$$
+by the Dominated Convergence Theorem (DCT). Thus, $Z = X$ a.s., proving uniqueness.
+
+## Example 1.1 (Trivial/Constant Case)
+If $X$ is already $\mathcal{F}$-measurable and we condition on the trivial $\sigma$-field $\mathcal{G} = \{\emptyset, \Omega\}$, then any $\mathcal{G}$-measurable function must be constant almost surely:
+$$
+L^1(\Omega, \mathcal{G}, P) = \{ c \cdot \mathbb{1}_{\Omega} \mid c \in \mathbb{R} \}.
+$$
+Thus any $\mathcal G$-measurable random variable must be constant almost surely. Then, for some constant $c\in\mathbb R$, $\mathbb E_{\mathcal G}[X]=c$ $a.s.$ Now take $Y=1_{\Omega}$. The averaging property gives
+$$
+\mathbb E[\mathbb E_{\mathcal G}[X]] = \mathbb E[X]. 
+$$
+Since $\mathbb E_{\mathcal G}[X]=c$ a.s., we have $\mathbb E[\mathbb E_{\mathcal G}[X]] = \mathbb E[c] = c$. Therefore, $c=\mathbb E[X]$, and hence
+$$
+\mathbb E_{\mathcal G}[X]=\mathbb E[X] \qquad\text{a.s.}
+$$
+
+So the intuition is:
+
+* conditioning on $\mathcal F$: you retain all information, so $\mathbb E[X\mid\mathcal F]=X$;
+* conditioning on the trivial $\sigma$-field: you retain no information, so the conditional expectation must be a constant, and that constant is chosen to preserve the unconditional mean: $\mathbb{E}[X\mid\{\emptyset,\Omega\}]=\mathbb{E}[X]$.
+
+
+## Example 1.2 (Total Expectation Law)
+Setting $Y = \mathbb{1}_{\Omega} \in \mathcal{B}_b(\Omega, \mathcal{G})$ in the averaging property for any arbitrary sub-$\sigma$-field $\mathcal{G}$ recovers the Law of Total Expectation:
+$$
+\mathbb{E}[\mathbb{E}_{\mathcal{G}}[X]] = \mathbb{E}[X].
+$$
+This reflects the inner product identity $\langle P_K(X), \mathbb{1} \rangle = \langle X, \mathbb{1} \rangle$ when $\mathbb{1} \in K$ by self-adjointness of the orthogonal projection $P_K$.
+
+---
+
+## Testing via Indicator Functions and Dynkin's Systems
+
+While the definition requires testing against all bounded $\mathcal{G}$-measurable functions $Y \in \mathcal{B}_b(\Omega, \mathcal{G})$, it is often sufficient to test against indicator functions of sets in a generating family.
+
+::: {#lem-indicator}
+## Indicator Characterization of Conditional Expectation
+Let $Z \in L^1(\Omega, \mathcal{G}, P)$. Then $Z = \mathbb{E}_{\mathcal{G}}[X]$ if and only if:
+$$
+\mathbb{E}[Z \mathbb{1}_B] = \mathbb{E}[X \mathbb{1}_B] \quad \forall B \in \mathcal{G}.
+$$
+:::
+
+::: {.proof}
+## Proof of @lem-indicator
+$(\implies)$ If $Z = \mathbb{E}_{\mathcal{G}}[X]$, taking $Y = \mathbb{1}_B \in \mathcal{B}_b(\Omega, \mathcal{G})$ for any $B \in \mathcal{G}$ yields $\mathbb{E}[Z \mathbb{1}_B] = \mathbb{E}[X \mathbb{1}_B]$ directly.
+
+$(\impliedby)$ Assume $\mathbb{E}[Z \mathbb{1}_B] = \mathbb{E}[X \mathbb{1}_B]$ for all $B \in \mathcal{G}$.  
+By linearity, $\mathbb{E}[ZY] = \mathbb{E}[XY]$ holds for all $\mathcal{G}$-simple functions $Y = \sum_{i=1}^k c_i \mathbb{1}_{B_i}$ ($B_i \in \mathcal{G}$).  
+
+For any bounded $\mathcal{G}$-measurable function $Y \in \mathcal{B}_b(\Omega, \mathcal{G})$, there exists a sequence of simple functions $Y_n$ such that $|Y_n| \le |Y|$ and $Y_n \to Y$ pointwise. By **Dynkin's Multiplication Systems Theorem** (or standard approximation by simple functions and the Dominated Convergence Theorem):
+$$
+\mathbb{E}[ZY] = \lim_{n \to \infty} \mathbb{E}[ZY_n] = \lim_{n \to \infty} \mathbb{E}[XY_n] = \mathbb{E}[XY]
+$$
+Thus, $Z$ satisfies the averaging property for all $Y \in \mathcal{B}_b(\Omega, \mathcal{G})$, so $Z = \mathbb{E}_{\mathcal{G}}[X]$ a.s. 
+:::
+
+---
+
+## Product Probability Spaces and Partial Integration
+
+Conditional expectation can be understood geometrically as **partial integration**—integrating out a subset of variables while retaining measurability with respect to the remaining ones.
+
+## Product Space Setup
+Let $(\Omega_1, \mathcal{F}_1, P_1)$ and $(\Omega_2, \mathcal{F}_2, P_2)$ be two probability spaces.  
+Define the product probability space:
+$$
+\Omega = \Omega_1 \times \Omega_2, \quad \mathcal{F} = \mathcal{F}_1 \otimes \mathcal{F}_2, \quad P = P_1 \otimes P_2.
+$$
+Consider the sub-$\sigma$-field generated by events in the first coordinate:
+$$
+\mathcal{G} = \{ A_1 \times \Omega_2 \mid A_1 \in \mathcal{F}_1 \}.
+$$
+Notice that $\mathcal{G}$ contains information only about $\omega_1 \in \Omega_1$, leaving $\omega_2 \in \Omega_2$ unobserved.
+
+---
+
+## Derivation of $\mathbb{E}_{\mathcal{G}}[X]$ as Partial Integration
+
+Let $X \in L^1(\Omega, \mathcal{F}, P)$, where $X = X(\omega_1, \omega_2)$. We seek a $\mathcal{G}$-measurable random variable $Z(\omega_1, \omega_2) = \mathbb{E}_{\mathcal{G}}[X](\omega_1, \omega_2)$.
+
+Since $Z$ is $\mathcal{G}$-measurable, $Z$ must depend only on the first component $\omega_1$; that is, $Z(\omega_1, \omega_2) = Z(\omega_1)$.
+
+Using @lem-indicator, $Z(\omega_1)$ is uniquely determined by testing against set indicators $B = A_1 \times \Omega_2 \in \mathcal{G}$ for arbitrary $A_1 \in \mathcal{F}_1$:
+$$
+\mathbb{E}[Z \mathbb{1}_{A_1 \times \Omega_2}] = \mathbb{E}[X \mathbb{1}_{A_1 \times \Omega_2}].
+$$
+
+Evaluating the left-hand side using Fubini's Theorem:
+$$
+\begin{align*}
+\mathbb{E}[Z \mathbb{1}_{A_1 \times \Omega_2}] &= \int_{\Omega_1} \int_{\Omega_2} Z(\omega_1) \mathbb{1}_{A_1}(\omega_1) \, dP_2(\omega_2) dP_1(\omega_1) \\
+&= \int_{A_1} Z(\omega_1) \, dP_1(\omega_1).
+\end{align*}
+$$
+
+Evaluating the right-hand side using Fubini's Theorem:
+$$
+\begin{align*}
+\mathbb{E}[X \mathbb{1}_{A_1 \times \Omega_2}] &= \int_{\Omega_1} \int_{\Omega_2} X(\omega_1, \omega_2) \mathbb{1}_{A_1}(\omega_1) \, dP_2(\omega_2) dP_1(\omega_1) \\
+&= \int_{A_1} \left( \int_{\Omega_2} X(\omega_1, \omega_2) \, dP_2(\omega_2) \right) dP_1(\omega_1)
+\end{align*}
+$$
+
+Equating the two integral representations for all $A_1 \in \mathcal{F}_1$:
+$$
+\int_{A_1} Z(\omega_1) \, dP_1(\omega_1) = \int_{A_1} \left( \int_{\Omega_2} X(\omega_1, \omega_2) \, dP_2(\omega_2) \right) dP_1(\omega_1) \quad \forall A_1 \in \mathcal{F}_1.
+$$
+
+Since this equality holds for all $A_1 \in \mathcal{F}_1$, the integrands must agree $P_1$-almost surely:
+$$\mathbb{E}_{\mathcal{G}}[X](\omega_1, \omega_2) = Z(\omega_1) = \int_{\Omega_2} X(\omega_1, \omega_2) \, dP_2(\omega_2) \quad \text{a.s.}$$
+
+> **Key takeaway:** $\mathbb{E}_{\mathcal{G}}[X]$ integrates out the unobserved degrees of freedom ($\omega_2$) while holding the observed structure ($\omega_1$) fixed.
+
+---
+
+## Intuitive Conceptualization: *Projected On* vs *Conditioned On*
+
+::: {.callout-note}
+### Terminology Remark
+The term **"conditional expectation"** can sometimes obscure its underlying geometric nature. Conditioning on a $\sigma$-field $\mathcal{G}$ does not mean restricting or imposing constraints on $X$; rather, it means **projecting** $X$ onto the subspace of random variables resolvable using $\mathcal{G}$.
+:::
+
+1. **Sub-$\sigma$-field size:**
+   * Larger sub-$\sigma$-field $\mathcal{G} \implies$ Larger target subspace $L^1(\Omega, \mathcal{G}, P) \implies$ Less information discarded, projection is closer to $X$.
+   * Smaller sub-$\sigma$-field $\mathcal{G} \implies$ Smaller target subspace $L^1(\Omega, \mathcal{G}, P) \implies$ More information coarse-grained or averaged out.
+2. **Mental Substitution Rule:** Whenever you read “conditioned on $\mathcal{G}$”, read it as “projected onto $\mathcal{G}$”.
+
+3. **Partial Expectation:**
+   Because $\mathbb{E}_{\mathcal{G}}[X]$ averages out only unobserved components, a descriptive name for conditional expectation is **partial expectation given $\mathcal{G}$**.
+
+4. **Extension to Classic Theorems:**
+   Because conditional expectation acts as a partial integral, standard integration theorems and integral inequalities possess direct conditional counterparts:
+   * Conditional Monotone Convergence Theorem (MCT)
+   * Conditional Dominated Convergence Theorem (DCT)
+   * Conditional Fatou's Lemma
+   * Conditional Jensen's Inequality

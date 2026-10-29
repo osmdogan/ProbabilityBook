@@ -1,0 +1,153 @@
+
+# Lecture 0: Banach Tarski
+
+## Introduction to Measurement
+
+To motivate the mathematical necessity of measure theory, consider the fundamental problem of measuring the length (or proportion) of subsets of the unit circle in the complex plane $\mathbb{C}$:
+$$
+S^1 := \{ z \in \mathbb{C} : |z| = 1 \}.
+$${#eq-unit-circle}
+
+For any given subset $E \subseteq S^1$, we would like to assign a real number $\mu(E) \ge 0$ representing the "proportion of the circle" covered by $E$ (so that $0 \le \mu(E) \le 1$).
+
+---
+
+## Axiomatic Properties of a Measurement Function
+
+An ideal measurement function $\mu: 2^{S^1} \to [0, 1]$ on the power set of $S^1$ should satisfy the following natural axioms:
+
+::: {#def-measurement-axioms}
+## Properties of Measurements
+Let $S^1$ be the unit circle. A set function $\mu: 2^{S^1} \to [0, 1]$ is a valid measurement if:
+
+1. **Normalization:**
+   $$
+   \mu(S^1) = 1.
+   $${#eq-normalization}
+
+2. **Finite Additivity ($2'$):**
+   If $E_1, E_2 \subseteq S^1$ are disjoint ($E_1 \cap E_2 = \emptyset$), then:
+   $$
+   \mu(E_1 \cup E_2) = \mu(E_1) + \mu(E_2).
+   $${#eq-finite-additivity}
+
+3. **Countable Additivity ($2$):**
+   If $\{E_j\}_{j=1}^\infty$ is a countable sequence of pairwise disjoint subsets of $S^1$ ($E_i \cap E_j = \emptyset$ for all $i \neq j$), then:
+   $$
+   \mu\left( \bigcup_{j=1}^\infty E_j \right) = \sum_{j=1}^\infty \mu(E_j).
+   $${#eq-countable-additivity}
+
+4. **Rotational Invariance ($3$):**
+   If two subsets $E_1, E_2 \subseteq S^1$ are congruent (i.e., $E_2$ is obtained from $E_1$ by a rigid rotation $u \in S^1$), then:
+   $$
+   \mu(E_1) = \mu(E_2).
+   $${#eq-rotational-invariance}
+   Explicitly, for any $u \in S^1$ and $E \subseteq S^1$, defining $u E := \{ u z : z \in E \}$, rotational invariance requires $\mu(u E) = \mu(E)$.
+:::
+
+---
+
+## Non-Existence Theorem (Vitali-Type Construction)
+
+::: {#thm-nonexistence}
+## Non-Existence of a Universally Defined Measure
+There is no set function $\mu: 2^{S^1} \to [0, 1]$ that simultaneously satisfies **Normalization** (@eq-normalization), **Countable Additivity** (@eq-countable-additivity), and **Rotational Invariance** (@eq-rotational-invariance).
+:::
+
+::: {.proof}
+Consider the countable dense subgroup of rotations $T \subset S^1$ corresponding to rational angles in $[0, 2\pi)$:
+$$
+T := \{ e^{2\pi i t} : t \in \mathbb{Q} \cap [0, 1) \}.
+$${#eq-rational-subgroup}
+Notice that $T$ is a countable subgroup of $S^1$ under complex multiplication.
+
+Define an equivalence relation $\sim$ on $S^1$ by setting:
+$$
+z \sim w \iff z = u w \text{ for some } u \in T.
+$${#eq-equiv-relation}
+
+By the **Axiom of Choice**, select exactly one representative element $q$ from each equivalence class in $S^1 / \sim$, and collect these representatives into a set $E_0 \subset S^1$:
+$$
+E_0 = \{ q \in S^1 : q \text{ is the chosen representative of its class} \}.
+$${#eq-vitali-set}
+
+We establish two claims regarding $E_0$:
+
+1. **Disjointness:** If $u_1, u_2 \in T$ with $u_1 \neq u_2$, then $(u_1 E_0) \cap (u_2 E_0) = \emptyset$.
+   * *Proof:* If $z \in (u_1 E_0) \cap (u_2 E_0)$, then $z = u_1 q_1 = u_2 q_2$ for some $q_1, q_2 \in E_0$. This implies $q_1 = (u_1^{-1} u_2) q_2$, so $q_1 \sim q_2$. By construction of $E_0$, $q_1$ and $q_2$ must be the same representative element, so $q_1 = q_2$. Thus $u_1 = u_2$, establishing disjointness.
+
+2. **Partitioning $S^1$:** The rotated copies of $E_0$ cover the entire circle:
+   $$
+   S^1 = \bigcup_{u \in T} u E_0.
+   $${#eq-circle-partition}
+   * *Proof:* For any $z \in S^1$, $z$ belongs to some equivalence class with representative $q \in E_0$. Thus $z \sim q$, which means $z = u q \in u E_0$ for some $u \in T$.
+
+Now, apply the measurement function $\mu$ to @eq-circle-partition. By normalization (@eq-normalization) and countable additivity (@eq-countable-additivity):
+$$
+1 = \mu(S^1) = \mu\left( \bigcup_{u \in T} u E_0 \right) = \sum_{u \in T} \mu(u E_0).
+$${#eq-measure-sum}
+
+By rotational invariance (@eq-rotational-invariance), $\mu(u E_0) = \mu(E_0)$ for all $u \in T$. Substituting this into @eq-measure-sum yields:
+$$
+1 = \sum_{u \in T} \mu(E_0).
+$${#eq-contradiction-sum}
+
+Since $T$ is countably infinite, the constant sum $\sum_{u \in T} \mu(E_0)$ presents a contradiction:
+
+* If $\mu(E_0) = 0$, then $\sum_{u \in T} 0 = 0 \neq 1$.
+* If $\mu(E_0) > 0$, then $\sum_{u \in T} \mu(E_0) = \infty \neq 1$.
+
+Thus, no such measurement function $\mu$ can exist on all subsets of $S^1$.
+:::
+
+---
+
+## Resolution: $\sigma$-Algebras and Non-Measurable Sets
+
+The measurement function $\mu(E) = \frac{1}{2\pi} \int_E \mathrm{d}\theta$ is used daily in ordinary calculus. How can it fail to exist?
+
+The answer lies in an important subtlety: **the definition of the Riemann integral only works over "nice" sets**. The Vitali-type set $E_0$ is logically well-defined — its construction requires only the Axiom of Choice — but it is measure-theoretically pathological: it is non-measurable and cannot be assigned a consistent length.
+
+Much of measure theory is spent extending the Riemann integral to the Lebesgue integral over a restricted, rich family of sets called a **$\sigma$-algebra** ($\mathcal{F}$). BUT there is a fundamental limit: **there's only so far it can be extended**.
+
+---
+
+## The Moral of the Story and Kolmogorov's Probability Theory
+
+This non-existence result might seem like a bad sign... but it is actually a foundational truth for Kolmogorov's modern probability theory.
+
+> **Key Takeaway:**
+> In probability theory, we do not always have complete information about the world, which means there may be some events (subsets of $\Omega$) to which we simply cannot assign probabilities. 
+> Consequently, probability measures $\mathbb{P}$ must be defined on a designated $\sigma$-algebra $\mathcal{F} \subset 2^\Omega$ of **measurable events**, rather than the full power set $2^\Omega$.
+
+---
+
+## The Banach–Tarski Paradox
+
+The existence of non-measurable sets leads to paradoxical decompositions in higher dimensions.
+
+::: {#thm-banach-tarski}
+## Banach–Tarski Paradox (Banach & Tarski, 1924)
+Given any two bounded subsets $E, F \subset \mathbb{R}^d$ ($d \ge 3$) with non-empty interior, there exist finite partitions:
+$$
+E = \bigcup_{j=1}^n E_j \quad \text{and} \quad F = \bigcup_{j=1}^n F_j
+$${#eq-bt-partition}
+with $E_i \cap E_j = \emptyset$ and $F_i \cap F_j = \emptyset$ for $i \neq j$, such that $E_j$ is congruent to $F_j$ via rigid rotations and translations for each $1 \le j \le n$.
+:::
+
+> **Remark (Robinson's Refinement, 1947):**
+> If $E$ is a solid ball in $\mathbb{R}^3$ and $F$ consists of two disjoint solid balls of the same radius, the Banach–Tarski theorem holds explicitly with as few as $n = 5$ non-measurable pieces!
+
+---
+
+## Takeaways
+
+1. **No universal measure exists on $S^1$.** No set function $\mu: 2^{S^1} \to [0,1]$ can simultaneously satisfy normalization, countable additivity, and rotational invariance. The proof constructs a Vitali set $E_0$ using the Axiom of Choice by selecting one representative from each orbit of $T = \{e^{2\pi i t} : t \in \mathbb{Q} \cap [0,1)\}$. The rotated copies $\{uE_0 : u \in T\}$ are disjoint (since $q_1 \sim q_2$ and both in $E_0$ forces $q_1 = q_2$) and cover $S^1$, so countable additivity and rotational invariance force $1 = \sum_{u \in T} \mu(E_0)$, which is impossible for any constant $\mu(E_0) \ge 0$.
+
+2. **Resolution via $\sigma$-algebras.** The Lebesgue measure $\mu(E) = \frac{1}{2\pi}\int_E d\theta$ is well-defined on the $\sigma$-algebra of Lebesgue-measurable sets, which excludes non-measurable sets like $E_0$. Measure theory resolves the paradox by restricting $\mu$ to a $\sigma$-algebra $\mathcal{F} \subsetneq 2^{S^1}$ rather than attempting to measure every subset.
+
+3. **Banach–Tarski paradox.** In $\mathbb{R}^d$ for $d \ge 3$, any two bounded sets with non-empty interior are equidecomposable into finitely many pieces related by rigid motions. In particular, a solid ball can be reassembled into two balls of the same size. This is not physically realizable because the pieces are non-measurable — the usual principle that rigid motions preserve volume does not apply to them.
+
+4. **Kolmogorov's framework.** The non-existence result is a foundational feature of modern probability: not all subsets of the sample space $\Omega$ can be assigned probabilities. The probability triple $(\Omega, \mathcal{F}, \mathbb{P})$ restricts $\mathbb{P}$ to a $\sigma$-algebra $\mathcal{F} \subset 2^\Omega$ of measurable events. This is not a limitation but a necessity imposed by the structure of the real line.
+
+

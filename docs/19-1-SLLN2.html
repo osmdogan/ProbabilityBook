@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>40&nbsp; Lecture 19.1: Strong Law of Large Numbers (II) – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./19-2-Renewal-Theory.html" rel="next">
+<link href="./18-2-Kolmogorov-Convergence-Criterion.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-I.html">Probability Theory I</a></li><li class="breadcrumb-item"><a href="./19-1-SLLN2.html"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#kroneckers-lemma" id="toc-kroneckers-lemma" class="nav-link active" data-scroll-target="#kroneckers-lemma"><span class="header-section-number">40.1</span> Kronecker’s Lemma</a></li>
+  <li><a href="#complete-proof-of-kolmogorovs-strong-law-of-large-numbers" id="toc-complete-proof-of-kolmogorovs-strong-law-of-large-numbers" class="nav-link" data-scroll-target="#complete-proof-of-kolmogorovs-strong-law-of-large-numbers"><span class="header-section-number">40.2</span> Complete Proof of Kolmogorov’s Strong Law of Large Numbers</a></li>
+  <li><a href="#marcinkiewicz-zygmund-extensions-and-rates-of-convergence" id="toc-marcinkiewicz-zygmund-extensions-and-rates-of-convergence" class="nav-link" data-scroll-target="#marcinkiewicz-zygmund-extensions-and-rates-of-convergence"><span class="header-section-number">40.3</span> Marcinkiewicz-Zygmund Extensions and Rates of Convergence</a></li>
+  <li><a href="#comparison-of-normalization-rates" id="toc-comparison-of-normalization-rates" class="nav-link" data-scroll-target="#comparison-of-normalization-rates"><span class="header-section-number">40.4</span> Comparison of Normalization Rates</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">40.5</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/19-1-SLLN2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-I.html">Probability Theory I</a></li><li class="breadcrumb-item"><a href="./19-1-SLLN2.html"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="kroneckers-lemma" class="level2" data-number="40.1">
+<h2 data-number="40.1" class="anchored" data-anchor-id="kroneckers-lemma"><span class="header-section-number">40.1</span> Kronecker’s Lemma</h2>
+<p>Kronecker’s Lemma serves as the primary analytical bridge translating the convergence of infinite weighted series (obtained via Kolmogorov’s Convergence Criterion) into almost sure Cesàro-type limits for partial sums. The central message of Kronecker’s Lemma is:</p>
+<ul>
+<li>If the weighted terms <span class="math inline">\(x_k/b_k\)</span> are summable, then the corresponding cumulative sum <span class="math inline">\(\sum_{k=1}^n x_k\)</span> grows more slowly than <span class="math inline">\(b_n\)</span>.</li>
+</ul>
+<div id="lem-kronecker" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 40.1 (Kronecker’s Lemma)</strong></span> Let <span class="math inline">\(\{x_n\}_{n=1}^\infty\)</span> be a sequence in <span class="math inline">\(\mathbb{R}\)</span> (or any normed vector space), and let <span class="math inline">\(\{b_n\}_{n=1}^\infty\)</span> be a sequence of positive real numbers such that <span class="math inline">\(b_n \uparrow \infty\)</span>. If the infinite series <span class="math inline">\(\sum_{k=1}^\infty \frac{x_k}{b_k}\)</span> converges in <span class="math inline">\(\mathbb{R}\)</span>, then: <span id="eq-kronecker-statement"><span class="math display">\[
+\lim_{n \to \infty} \frac{1}{b_n} \sum_{k=1}^n x_k = 0
+\tag{40.1}\]</span></span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-kronecker" class="quarto-xref">Lemma&nbsp;<span>40.1</span></a>). </span>Define <span class="math inline">\(y_k \triangleq \frac{x_k}{b_k}\)</span> and <span class="math inline">\(S_n \triangleq \sum_{k=1}^n y_k\)</span> for <span class="math inline">\(n \ge 1\)</span> (with <span class="math inline">\(S_0 \triangleq 0\)</span>). By hypothesis, <span class="math inline">\(S_n \to S \in \mathbb{R}\)</span> as <span class="math inline">\(n \to \infty\)</span>. Express <span class="math inline">\(x_k = b_k (S_k - S_{k-1})\)</span> and perform summation by parts: <span id="eq-summation-by-parts-kronecker"><span class="math display">\[
+\begin{aligned}
+\sum_{k=1}^n x_k &amp;= \sum_{k=1}^n b_k (S_k - S_{k-1}) \\
+&amp;= \sum_{k=1}^n b_kS_k - \sum_{k=0}^{n-1} b_{k+1} S_k\\
+&amp;= b_n S_n + \sum_{k=1}^{n-1} (b_k - b_{k+1}) S_k
+\end{aligned}
+\tag{40.2}\]</span></span></p>
+<p>Divide both sides by <span class="math inline">\(b_n\)</span> and add/subtract <span class="math inline">\(\frac{S}{b_n} \sum_{k=1}^{n-1} (b_{k+1} - b_k) = S \left(1 - \frac{b_1}{b_n}\right)\)</span>: <span class="math display">\[
+\begin{aligned}
+\frac{1}{b_n} \sum_{k=1}^n x_k &amp;= S_n - \frac{1}{b_n} \sum_{k=1}^{n-1} (b_{k+1} - b_k) S_k \\
+&amp;= S_n - \left(1 - \frac{b_1}{b_n}\right) S + R_n,
+\end{aligned}
+\]</span> where the remainder term <span class="math inline">\(R_n\)</span> is defined as: <span id="eq-kronecker-rn-def"><span class="math display">\[
+R_n \triangleq \frac{1}{b_n} \sum_{k=1}^{n-1} (b_{k+1} - b_k) (S - S_k)
+\tag{40.3}\]</span></span></p>
+<p>Since <span class="math inline">\(S_n \to S\)</span> and <span class="math inline">\(b_n \to \infty\)</span>, <span class="math inline">\(S_n - \left(1 - \frac{b_1}{b_n}\right) S \to S - S = 0\)</span>. For <span class="math inline">\(R_n\)</span>, fix <span class="math inline">\(N \in \mathbb{N}\)</span>. For <span class="math inline">\(n &gt; N\)</span>, split the sum at <span class="math inline">\(N\)</span>: <span id="eq-rn-split-bound"><span class="math display">\[
+\begin{aligned}
+|R_n| &amp;\le \frac{1}{b_n} \sum_{k=1}^{N-1} (b_{k+1} - b_k) |S - S_k| \\
+&amp;+ \left( \sup_{k \ge N} |S - S_k| \right) \frac{1}{b_n} \sum_{k=N}^{n-1} (b_{k+1} - b_k)
+\end{aligned}
+\tag{40.4}\]</span></span> As <span class="math inline">\(n \to \infty\)</span>, the first term vanishes because the numerator sum is constant while <span class="math inline">\(b_n \to \infty\)</span>. The second term is bounded by <span class="math inline">\(\sup_{k \ge N} |S - S_k| \cdot \left(1 - \frac{b_N}{b_n}\right) \le \sup_{k \ge N} |S - S_k|\)</span>. Taking <span class="math inline">\(N \to \infty\)</span> forces <span class="math inline">\(R_n \to 0\)</span>. Thus <span class="math inline">\(\frac{1}{b_n} \sum_{k=1}^n x_k \to 0\)</span>.</p>
+</div>
+<div id="exm-kronecker-harmonic" class="theorem example">
+<p><span class="theorem-title"><strong>Example 40.1 (Harmonic Sequence)</strong></span> Consider the sequences <span class="math inline">\(x_n=\frac{1}{n}\)</span> and <span class="math inline">\(b_n=n\)</span>. Then, <span class="math inline">\(b_n\uparrow\infty\)</span>, and <span class="math inline">\(\frac{x_k}{b_k}=\frac{1/k}{k}=\frac{1}{k^2}\)</span>. Therefore, <span class="math display">\[
+\sum_{k=1}^\infty \frac{x_k}{b_k}=\sum_{k=1}^\infty \frac{1}{k^2}&lt;\infty.
+\]</span> Hence, by Kronecker’s Lemma, <span class="math inline">\(\frac{1}{n}\sum_{k=1}^n x_k\longrightarrow 0\)</span>. Indeed, in this case, <span class="math display">\[
+\frac{1}{n}\sum_{k=1}^n x_k=\frac{1}{n}\sum_{k=1}^n\frac{1}{k}
+=\frac{H_n}{n},
+\]</span> where <span class="math inline">\(H_n\)</span> denotes the <span class="math inline">\(n\)</span>-th harmonic number. Since <span class="math inline">\(H_n\sim\log n\)</span>, we have <span class="math inline">\(\frac{H_n}{n} \sim \frac{\log n}{n} \longrightarrow 0\)</span>. Thus, Kronecker’s Lemma gives <span class="math display">\[
+\frac{1}{n}\sum_{k=1}^n\frac{1}{k}\longrightarrow0.
+\]</span></p>
+</div>
+<div id="exm-kronecker-alternating" class="theorem example">
+<p><span class="theorem-title"><strong>Example 40.2 (An Alternating Sequence)</strong></span> Consider <span class="math inline">\(x_n=\frac{(-1)^n}{\sqrt{n}}\)</span> and <span class="math inline">\(b_n=n\)</span>. Then <span class="math inline">\(\frac{x_n}{b_n} = \frac{(-1)^n}{n^{3/2}}\)</span>. The corresponding series converges absolutely because <span class="math display">\[
+\sum_{n=1}^\infty
+\left|
+\frac{x_n}{b_n}
+\right|
+=
+\sum_{n=1}^\infty\frac{1}{n^{3/2}}
+&lt;\infty.
+\]</span> Therefore, Kronecker’s Lemma implies <span class="math inline">\(\frac{1}{n}\sum_{k=1}^n\frac{(-1)^k}{\sqrt{k}}\longrightarrow0\)</span>. Equivalently, <span class="math inline">\(\sum_{k=1}^n\frac{(-1)^k}{\sqrt{k}}=o(n)\)</span>. This example illustrates an important feature of Kronecker’s Lemma. The lemma does not say that the partial sums <span class="math inline">\(\sum_{k=1}^n x_k\)</span> must converge. Rather, it says that their growth is negligible relative to <span class="math inline">\(b_n\)</span>: <span class="math inline">\(\sum_{k=1}^n x_k=o(b_n)\)</span>. Here, <span class="math inline">\(b_n=n\)</span>, so the conclusion is that the partial sums grow more slowly than linearly.</p>
+</div>
+<hr>
+</section>
+<section id="complete-proof-of-kolmogorovs-strong-law-of-large-numbers" class="level2" data-number="40.2">
+<h2 data-number="40.2" class="anchored" data-anchor-id="complete-proof-of-kolmogorovs-strong-law-of-large-numbers"><span class="header-section-number">40.2</span> Complete Proof of Kolmogorov’s Strong Law of Large Numbers</h2>
+<div id="thm-kolmogorov-slln-full" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 40.1 (Kolmogorov’s Strong Law of Large Numbers (SLLN))</strong></span> Let <span class="math inline">\(\{X_n\}_{n=1}^\infty\)</span> be an i.i.d. sequence of <span class="math inline">\(L^1\)</span> random variables with <span class="math inline">\(E[X_1] = \alpha\)</span>. Let <span class="math inline">\(S_n \triangleq \sum_{k=1}^n X_k\)</span>. Then: <span id="eq-slln-main-target"><span class="math display">\[
+\frac{S_n}{n} \xrightarrow{\text{a.s.}} \alpha \quad \text{as } n \to \infty
+\tag{40.5}\]</span></span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>By <a href="18-1-SLLN1.html#cor-iid-tail-truncation" class="quarto-xref">Corollary&nbsp;<span>38.1</span></a>, <span class="math inline">\(\{X_n\}\)</span> is tail equivalent to the truncated sequence <span class="math inline">\(X_n' \triangleq X_n \mathbf{1}_{\{|X_n| \le n\}}\)</span>. Hence by <a href="18-1-SLLN1.html#prp-tail-equivalence-slln" class="quarto-xref">Proposition&nbsp;<span>38.1</span></a> (applied with <span class="math inline">\(b_n = n\)</span> and target limit <span class="math inline">\(\alpha\)</span>), it suffices to prove <span class="math inline">\(\frac{S_n'}{n} \xrightarrow{\text{a.s.}} \alpha\)</span>, where <span class="math inline">\(S_n' \triangleq \sum_{k=1}^n X_k'\)</span>.</p>
+<ol type="1">
+<li><p><strong>Variance Sum Bound:</strong> Set <span class="math inline">\(Y_n \triangleq \frac{X_n'}{n}\)</span>. Calculate the sum of variances: <span id="eq-slln-var-sum-start"><span class="math display">\[
+\begin{aligned}
+\sum_{n=1}^\infty \operatorname{Var}\left( \frac{X_n'}{n} \right) &amp;= \sum_{n=1}^\infty \frac{1}{n^2} \operatorname{Var}(X_n') \\
+&amp;\le \sum_{n=1}^\infty \frac{1}{n^2} \mathbb{E}\left[ |X_n'|^2 \right] \\
+&amp;= \sum_{n=1}^\infty \frac{1}{n^2} \mathbb{E}\left[ |X_1|^2 \mathbf{1}_{\{|X_1| \le n\}} \right].
+\end{aligned}
+\tag{40.6}\]</span></span></p>
+<p>Interchange expectation and summation via Fubini-Tonelli: <span id="eq-fubini-tonelli-slln"><span class="math display">\[
+\sum_{n=1}^\infty \frac{1}{n^2} \mathbb{E}\left[ |X_1|^2 \mathbf{1}_{\{|X_1| \le n\}} \right] = \mathbb{E}\left[ |X_1|^2 \sum_{n \ge |X_1|}^\infty \frac{1}{n^2} \right]
+\tag{40.7}\]</span></span></p>
+<p>For <span class="math inline">\(x &gt; 1\)</span>, estimate the tail sum <span class="math inline">\(\sum_{n \ge x}^\infty \frac{1}{n^2}\)</span> using the integral test (with the shift <span class="math inline">\(t \mapsto t-1\)</span> so the integral is finite): <span id="eq-tail-sum-integral-estimate"><span class="math display">\[
+\sum_{n \ge x}^\infty \frac{1}{n^2} \le \min\left( \frac{\pi^2}{6}, \int_{x-1}^\infty \frac{1}{t^2} \, dt \right) = \min\left( \frac{\pi^2}{6}, \frac{1}{x-1} \right).
+\tag{40.8}\]</span></span> We claim this is <span class="math inline">\(\le \min\left(4, \frac{4}{x}\right)\)</span> for every <span class="math inline">\(x &gt; 1\)</span>: if <span class="math inline">\(1 &lt; x \le 2\)</span> then <span class="math inline">\(\frac{4}{x} \ge 2 &gt; \frac{\pi^2}{6}\)</span>, so <span class="math inline">\(\min\left(\frac{\pi^2}{6}, \frac{1}{x-1}\right) \le \frac{\pi^2}{6} &lt; \frac{4}{x}\)</span>; if <span class="math inline">\(x &gt; 2\)</span> then <span class="math inline">\(\frac{1}{x-1} \le \frac{4}{x}\)</span> (equivalent to <span class="math inline">\(x \ge \frac{4}{3}\)</span>, which holds), so <span class="math inline">\(\min\left(\frac{\pi^2}{6}, \frac{1}{x-1}\right) \le \frac{1}{x-1} \le \frac{4}{x}\)</span>. (The naive constant <span class="math inline">\(2\)</span> in place of <span class="math inline">\(4\)</span> fails here: at <span class="math inline">\(x=1.5\)</span>, <span class="math inline">\(\pi^2/6 \approx 1.645 &gt; 2/x \approx 1.333\)</span>.) For <span class="math inline">\(0 \le x \le 1\)</span>, the sum is bounded by <span class="math inline">\(\pi^2/6 \le 4 \le \min(4,4/x)\)</span> trivially. Hence <span class="math inline">\(\sum_{n \ge x}^\infty \frac{1}{n^2} \le \min\left(4, \frac{4}{x}\right)\)</span> for all <span class="math inline">\(x \ge 0\)</span>.</p>
+<p>Substituting this back with <span class="math inline">\(x = |X_1|\)</span> yields: <span id="eq-slln-var-finite-bound"><span class="math display">\[
+\begin{aligned}
+\sum_{n=1}^\infty \operatorname{Var}\left( \frac{X_n'}{n} \right) &amp;\le \mathbb{E}\left[ |X_1|^2 \cdot \min\left( 4, \frac{4}{|X_1|} \right) \right] \\
+&amp;= 4\, \mathbb{E}\left[ \min(|X_1|^2, |X_1|) \right] \le 4\, \mathbb{E}[|X_1|] &lt; \infty,
+\end{aligned}
+\tag{40.9}\]</span></span> using <span class="math inline">\(\min(|X_1|^2,|X_1|) \le |X_1|\)</span> pointwise (true since <span class="math inline">\(\min(a^2,a) \le a\)</span> for every <span class="math inline">\(a \ge 0\)</span>).</p></li>
+<li><p><strong>Application of Kolmogorov’s Convergence Criterion:</strong> Since <span class="math inline">\(\sum_{n=1}^\infty \operatorname{Var}\left( \frac{X_n'}{n} \right) &lt; \infty\)</span>, Kolmogorov’s Convergence Criterion (<a href="18-2-Kolmogorov-Convergence-Criterion.html#thm-kolmogorov-convergence-criterion" class="quarto-xref">Theorem&nbsp;<span>39.2</span></a>) implies that: <span id="eq-slln-series-conv-as"><span class="math display">\[
+\sum_{n=1}^\infty \frac{X_n' - E[X_n']}{n} \quad \text{converges almost surely.}
+\tag{40.10}\]</span></span></p></li>
+<li><p><strong>Application of Kronecker’s Lemma:</strong> By Step 2, for almost every fixed <span class="math inline">\(\omega \in \Omega\)</span> the real-number series <span class="math inline">\(\sum_{k=1}^\infty \frac{X_k'(\omega) - E[X_k']}{k}\)</span> converges. Since Kronecker’s Lemma (<a href="#lem-kronecker" class="quarto-xref">Lemma&nbsp;<span>40.1</span></a>) is a purely deterministic statement about real sequences, it applies pathwise to each such <span class="math inline">\(\omega\)</span> with <span class="math inline">\(x_k = X_k'(\omega) - E[X_k']\)</span> and <span class="math inline">\(b_k = k\)</span>, giving: <span id="eq-kronecker-applied-slln"><span class="math display">\[
+\frac{1}{n} \sum_{k=1}^n (X_k' - E[X_k']) = \frac{S_n'}{n} - \frac{1}{n} \sum_{k=1}^n E[X_k'] \xrightarrow{\text{a.s.}} 0
+\tag{40.11}\]</span></span></p></li>
+<li><p><strong>Cesàro Means of Expectations:</strong> By the Dominated Convergence Theorem (dominating function <span class="math inline">\(|X_1| \in L^1\)</span>, since <span class="math inline">\(|X_1 \mathbf{1}_{\{|X_1|\le k\}}| \le |X_1|\)</span>), <span class="math inline">\(\mathbb{E}[X_k'] = \mathbb{E}[X_1 \mathbf{1}_{\{|X_1| \le k\}}] \xrightarrow{k \to \infty} \mathbb{E}[X_1] = \alpha\)</span>. The Cesàro mean of any convergent real sequence <span class="math inline">\(a_k \to \alpha\)</span> converges to the same limit: given <span class="math inline">\(\epsilon&gt;0\)</span>, choose <span class="math inline">\(N\)</span> with <span class="math inline">\(|a_k - \alpha| &lt; \epsilon\)</span> for all <span class="math inline">\(k \ge N\)</span>; then <span class="math display">\[
+\left| \frac{1}{n}\sum_{k=1}^n a_k - \alpha \right| \le \frac{1}{n}\sum_{k=1}^{N-1} |a_k - \alpha| + \frac{n-N+1}{n}\epsilon \xrightarrow{n \to \infty} \epsilon,
+\]</span> and since <span class="math inline">\(\epsilon&gt;0\)</span> was arbitrary, the limit is <span class="math inline">\(\alpha\)</span>. Applying this with <span class="math inline">\(a_k = \mathbb{E}[X_k']\)</span>: <span id="eq-cesaro-limit-expectation"><span class="math display">\[
+\lim_{n \to \infty} \frac{1}{n} \sum_{k=1}^n \mathbb{E}[X_k'] = \alpha
+\tag{40.12}\]</span></span> Combining Steps 3 and 4 establishes <span class="math inline">\(\frac{S_n'}{n} \xrightarrow{\text{a.s.}} \alpha\)</span>, which completes the proof.</p></li>
+</ol>
+</div>
+<hr>
+</section>
+<section id="marcinkiewicz-zygmund-extensions-and-rates-of-convergence" class="level2" data-number="40.3">
+<h2 data-number="40.3" class="anchored" data-anchor-id="marcinkiewicz-zygmund-extensions-and-rates-of-convergence"><span class="header-section-number">40.3</span> Marcinkiewicz-Zygmund Extensions and Rates of Convergence</h2>
+<div id="thm-marcinkiewicz-zygmund" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 40.2 (Marcinkiewicz-Zygmund Strong Law)</strong></span> Let <span class="math inline">\(\{X_n\}_{n=1}^\infty\)</span> be i.i.d. random variables in <span class="math inline">\(L^p\)</span> for <span class="math inline">\(p \in (1, 2)\)</span> with <span class="math inline">\(E[X_1] = \alpha\)</span>. Then: <span id="eq-mz-rate-statement"><span class="math display">\[
+\frac{S_n - n\alpha}{n^{1/p}} \xrightarrow{\text{a.s.}} 0,
+\tag{40.13}\]</span></span> or equivalently, dividing both sides by <span class="math inline">\(n^{1-1/p}\)</span>: <span id="eq-mz-rate-equivalent"><span class="math display">\[
+\left| \frac{S_n}{n} - \alpha \right| = o\left( \frac{1}{n^{1 - 1/p}} \right) \quad \text{a.s.}
+\tag{40.14}\]</span></span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-marcinkiewicz-zygmund" class="quarto-xref">Theorem&nbsp;<span>40.2</span></a>). </span>The proof follows the <span class="math inline">\(L^1\)</span> SLLN outline using cut-offs <span class="math inline">\(X_n' \triangleq X_n \mathbf{1}_{\{|X_n| \le n^{1/p}\}}\)</span> and normalization <span class="math inline">\(b_n = n^{1/p}\)</span>. The tail integral bound evaluates as <span class="math inline">\(\sum_{n \ge x} n^{-2/p} \le \frac{p}{2-p} (x-1)^{\frac{p-2}{p}}\)</span>.</p>
+</div>
+<div id="thm-l2-slln-general" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 40.3 (<span class="math inline">\(L^2\)</span>-SLLN under Independent Heterogeneous Variables)</strong></span> Let <span class="math inline">\(\{X_n\}_{n=1}^\infty\)</span> be independent random variables with common mean <span class="math inline">\(E[X_n] = \alpha\)</span> and uniformly bounded variance <span class="math inline">\(\operatorname{Var}(X_n) \le s^2 &lt; \infty\)</span>. Let <span class="math inline">\(b_n &gt; 0\)</span> with <span class="math inline">\(b_n \uparrow \infty\)</span> satisfying <span class="math inline">\(\sum_{n=1}^\infty \frac{1}{b_n^2} &lt; \infty\)</span>. Then: <span id="eq-l2-slln-general-statement"><span class="math display">\[
+\frac{S_n - n\alpha}{b_n} \xrightarrow{\text{a.s. and } L^2} 0
+\tag{40.15}\]</span></span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-l2-slln-general" class="quarto-xref">Theorem&nbsp;<span>40.3</span></a>). </span></p>
+<ul>
+<li><strong>Almost Sure Convergence:</strong> Since <span class="math inline">\(\operatorname{Var}(X_n/b_n) = \operatorname{Var}(X_n)/b_n^2 \le s^2/b_n^2\)</span>, we have <span class="math inline">\(\sum_{n=1}^\infty \operatorname{Var}\left( \frac{X_n}{b_n} \right) \le s^2 \sum_{n=1}^\infty \frac{1}{b_n^2} &lt; \infty\)</span>. By Kolmogorov’s Convergence Criterion (<a href="18-2-Kolmogorov-Convergence-Criterion.html#thm-kolmogorov-convergence-criterion" class="quarto-xref">Theorem&nbsp;<span>39.2</span></a>), <span class="math inline">\(\sum_{n=1}^\infty \frac{X_n - \alpha}{b_n}\)</span> converges almost surely. Applying Kronecker’s Lemma (<a href="#lem-kronecker" class="quarto-xref">Lemma&nbsp;<span>40.1</span></a>) pathwise with <span class="math inline">\(x_k = X_k - \alpha\)</span> and weights <span class="math inline">\(b_k\)</span> gives <span class="math inline">\(\frac{1}{b_n}\sum_{k=1}^n (X_k - \alpha) = \frac{S_n - n\alpha}{b_n} \xrightarrow{\text{a.s.}} 0\)</span>.</li>
+<li><strong><span class="math inline">\(L^2\)</span> Convergence:</strong> <span class="math inline">\(\left\|\frac{S_n - n\alpha}{b_n}\right\|_{L^2}^2 = \frac{1}{b_n^2} \operatorname{Var}(S_n) = \frac{1}{b_n^2} \sum_{k=1}^n \operatorname{Var}(X_k) \le s^2 \frac{n}{b_n^2}\)</span>. To see <span class="math inline">\(\frac{n}{b_n^2} \to 0\)</span>, apply Kronecker’s Lemma (<a href="#lem-kronecker" class="quarto-xref">Lemma&nbsp;<span>40.1</span></a>) to the constant sequence <span class="math inline">\(x_k = 1\)</span> with <strong>weights <span class="math inline">\(b_k^2\)</span></strong> (not <span class="math inline">\(b_k\)</span>): since <span class="math inline">\(b_k^2 \uparrow \infty\)</span> and <span class="math inline">\(\sum_{k=1}^\infty \frac{x_k}{b_k^2} = \sum_{k=1}^\infty \frac{1}{b_k^2} &lt; \infty\)</span> by hypothesis, the lemma gives <span class="math inline">\(\frac{1}{b_n^2}\sum_{k=1}^n 1 = \frac{n}{b_n^2} \to 0\)</span>, hence <span class="math inline">\(\left\|\frac{S_n-n\alpha}{b_n}\right\|_{L^2}^2 \to 0\)</span>.</li>
+</ul>
+</div>
+<hr>
+</section>
+<section id="comparison-of-normalization-rates" class="level2" data-number="40.4">
+<h2 data-number="40.4" class="anchored" data-anchor-id="comparison-of-normalization-rates"><span class="header-section-number">40.4</span> Comparison of Normalization Rates</h2>
+<p>The following table compares different normalization rates and the corresponding convergence guarantees for sums of independent random variables.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Rate Choice / Theorem</th>
+<th style="text-align: left;">Normalization <span class="math inline">\(b_n\)</span></th>
+<th style="text-align: left;">Convergence Guarantee</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Marcinkiewicz-Zygmund (<span class="math inline">\(p \in (1, 2)\)</span>)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(b_n = n^{1/p}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\frac{S_n - n\alpha}{n^{1/p}} \xrightarrow{\text{a.s.}} 0\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Polynomial <span class="math inline">\(L^2\)</span>-SLLN (<span class="math inline">\(p &gt; 0\)</span>)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(b_n = n^{1/2 + p}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\frac{S_n - n\alpha}{n^{1/2+p}} \xrightarrow{\text{a.s. and } L^2} 0\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Log-power <span class="math inline">\(L^2\)</span>-SLLN (<span class="math inline">\(\epsilon &gt; 0\)</span>)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(b_n = \sqrt{n} (\log n)^{1/2 + \epsilon}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\frac{S_n - n\alpha}{\sqrt{n}(\log n)^{1/2+\epsilon}} \xrightarrow{\text{a.s. and } L^2} 0\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Law of the Iterated Logarithm (Khinchin)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(b_n = \sqrt{2 s^2 n \log \log n}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\limsup_{n \to \infty} \frac{S_n - n\alpha}{b_n} = 1\)</span> a.s.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="takeaways" class="level2" data-number="40.5">
+<h2 data-number="40.5" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">40.5</span> Takeaways</h2>
+<ul>
+<li><strong>Kronecker’s Lemma is the analytic engine, not a probability result.</strong> It is a purely deterministic statement about real sequences: if a weighted series <span class="math inline">\(\sum x_k/b_k\)</span> converges, the Cesàro-type average <span class="math inline">\(\frac{1}{b_n}\sum_{k=1}^n x_k\)</span> vanishes. Its power in probability comes from applying it <em>pathwise</em>, i.e., separately to almost every <span class="math inline">\(\omega\)</span> after a.s. convergence of a random series has been established some other way (typically via Kolmogorov’s Convergence Criterion).</li>
+<li><strong>The two-step recipe: variance-summability <span class="math inline">\(\to\)</span> Kronecker.</strong> Every SLLN-type result in this lecture (<a href="./19-1-SLLN2.html">thm-kolmogorov-slln-full</a>, <a href="./19-1-SLLN2.html">thm-l2-slln-general</a>) follows the same pattern: (1) truncate/normalize so that <span class="math inline">\(\sum \operatorname{Var}(X_n/b_n) &lt; \infty\)</span>, invoke Kolmogorov’s Convergence Criterion to get a.s. convergence of the centered weighted series, then (2) apply Kronecker’s Lemma to convert that series convergence into convergence of the Cesàro-type average <span class="math inline">\(S_n/b_n\)</span>.</li>
+<li><strong>Truncation tail bounds are delicate.</strong> Converting a second-moment tail sum like <span class="math inline">\(\sum_{n\ge x} n^{-2}\)</span> into a bound linear in <span class="math inline">\(x\)</span> requires care with the constants — a naive integral shift can produce a bound that fails on part of the range (as seen with the constant <span class="math inline">\(2\)</span> vs.&nbsp;<span class="math inline">\(4\)</span> in <a href="./19-1-SLLN2.html">thm-kolmogorov-slln-full</a>’s proof). Always verify such min-type bounds hold on the <em>entire</em> range, not just asymptotically.</li>
+<li><strong>Normalization rate trades off against moment assumptions.</strong> The comparison table makes explicit the tradeoff: the classical SLLN needs only <span class="math inline">\(L^1\)</span> with <span class="math inline">\(b_n=n\)</span>; weaker moments (<span class="math inline">\(L^p\)</span>, <span class="math inline">\(p\in(1,2)\)</span>) force a slower-growing normalization <span class="math inline">\(b_n = n^{1/p}\)</span> (Marcinkiewicz-Zygmund); while retaining <span class="math inline">\(L^2\)</span> but allowing heterogeneity lets <span class="math inline">\(b_n\)</span> grow anywhere from just above <span class="math inline">\(\sqrt n\)</span> (with a log-power correction) to <span class="math inline">\(n^{1/2+p}\)</span>, so long as <span class="math inline">\(\sum 1/b_n^2 &lt; \infty\)</span>.</li>
+<li><strong>The Law of the Iterated Logarithm is the sharp boundary.</strong> Where the SLLN only tells us <span class="math inline">\(S_n/b_n \to 0\)</span>, the LIL identifies the <em>exact</em> almost-sure growth envelope <span class="math inline">\(b_n = \sqrt{2s^2 n \log\log n}\)</span> at which <span class="math inline">\(\limsup (S_n-n\alpha)/b_n = 1\)</span> — showing that no normalization growing strictly slower than <span class="math inline">\(\sqrt{n\log\log n}\)</span> can force a.s. convergence to <span class="math inline">\(0\)</span> for general finite-variance i.i.d. sequences.</li>
+<li><strong>Net effect:</strong> together with the truncation and tail-equivalence tools from <a href="./18-1-SLLN1.html">18-1-SLLN1.qmd</a> and the Maximal Inequality from <a href="./18-2-Kolmogorov-Convergence-Criterion.html">18-2-Kolmogorov-Convergence-Criterion.qmd</a>, this lecture completes the full proof of Kolmogorov’s Strong Law of Large Numbers and situates it within a broader family of normalization-rate results.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="pagination-link" aria-label="Lecture 18.2: Kolmogorov Convergence Criterion">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./19-2-Renewal-Theory.html" class="pagination-link" aria-label="Lecture 19.2: Renewal Theory">
+        <span class="nav-page-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/19-1-SLLN2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

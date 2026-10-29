@@ -1,0 +1,306 @@
+# Lecture 9.2: $L^1$ and the Dominated Convergence Theorem
+
+## Definition of the Lebesgue Integral for Real-Valued Functions
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space. For a measurable function $f: \Omega \to \overline{\mathbb{R}} = [-\infty, \infty]$, we define its positive and negative parts by:
+$$
+f_{+}(\omega) := \max\{f(\omega), 0\} = f(\omega) \mathbf{1}_{\{f \ge 0\}}(\omega),
+$$ {#eq-f-plus-def}
+$$
+f_{-}(\omega) := \max\{-f(\omega), 0\} = -f(\omega) \mathbf{1}_{\{f \le 0\}}(\omega).
+$$ {#eq-f-minus-def}
+
+Notice that 
+
+- $f = f_{+} - f_{-}$,
+- $|f| = f_{+} + f_{-}$, and
+- $f_{+}, f_{-} \in L^+(\Omega, \mathcal{F})$.
+
+::: {#def-l1-integrability}
+## Integrability and Space $\mathcal{L}^1$
+A measurable function $f: \Omega \to \overline{\mathbb{R}}$ is called **$\mu$-integrable** if:
+$$
+\int_{\Omega} f_{+} \, d\mu < \infty \quad \text{and} \quad \int_{\Omega} f_{-} \, d\mu < \infty.
+$$ {#eq-l1-condition}
+
+The space of all integrable functions is denoted by $\mathcal{L}^1(\Omega, \mathcal{F}, \mu)$. For any $f \in \mathcal{L}^1(\Omega, \mathcal{F}, \mu)$, its **Lebesgue integral** is defined as:
+$$
+\int_{\Omega} f \, d\mu := \int_{\Omega} f_{+} \, d\mu - \int_{\Omega} f_{-} \, d\mu.
+$$ {#eq-l1-integral-def}
+:::
+
+- Since $|f| = f_{+} + f_{-}$, we can equivalently define $\mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ as 
+$$
+\mathcal{L}^1(\Omega, \mathcal{F}, \mu) := \{f: \Omega \to \overline{\mathbb{R}} \text{ measurable s.t. } \int_{\Omega} |f| \, d\mu < \infty\}.
+$$
+
+:::{#rem-l1-finiteness}
+Note that 
+$$
+f \in \mathcal{L}^1 \implies \int_{\Omega} |f| \, d\mu = \int_{\Omega} f_{+} \, d\mu + \int_{\Omega} f_{-} \, d\mu < \infty.
+$$
+Thus, it follows that $|f| < \infty$ almost everywhere. Thus, by modifying $f$ on a null set, we can assume without loss of generality that $f$ is strictly real-valued ($f: \Omega \to \mathbb{R}$).
+
+:::
+
+---
+
+## Properties of $\mathcal{L}^1(\Omega, \mathcal{F}, \mu)$
+In the following proposition, we summarize some important properties of the space $\mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ and the Lebesgue integral.
+
+::: {#prp-l1-properties}
+## Linearity and Monotonicity of $\mathcal{L}^1$ 
+1. $\mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ is a real vector space.
+2. The integral operator $\int \cdot \, d\mu : \mathcal{L}^1(\Omega, \mathcal{F}, \mu) \to \mathbb{R}$ is a linear functional:
+   $$
+   \int (a f + b g) \, d\mu = a \int f \, d\mu + b \int g \, d\mu \quad \forall a, b \in \mathbb{R}, \, f, g \in \mathcal{L}^1.
+   $$ {#eq-l1-linearity}
+3. **Monotonicity:** If $f, g \in \mathcal{L}^1$ and $f \le g$ a.e., then:
+   $$
+   \int f \, d\mu \le \int g \, d\mu
+   $$ {#eq-l1-monotonicity}
+4. **Triangle Inequality:** For any $f \in \mathcal{L}^1$:
+   $$
+   \left| \int f \, d\mu \right| \le \int |f| \, d\mu.
+   $$ {#eq-l1-triangle}
+:::
+
+::: {.proof}
+## Proof of @prp-l1-properties
+We prove each property systematically.
+
+### Proof of Step 1 & Vector Space Structure
+Let $f, g \in \mathcal{L}^1$ and $a, b \in \mathbb{R}$. By the point-wise triangle inequality:
+$$
+|a f + b g| \le |a| |f| + |b| |g|.
+$$
+Integrating both sides and using $L^+$ linearity (@cor-additivity-lplus and @prp-basic-properties-lplus):
+$$
+\int |a f + b g| \, d\mu \le |a| \int |f| \, d\mu + |b| \int |g| \, d\mu < \infty.
+$$
+Hence, $a f + b g \in \mathcal{L}^1$, proving $\mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ is a vector space.
+
+### Proof of Step 2 (Linearity)
+*Scalar Multiplication:* If $a \ge 0$, $(af)_{+} = a f_{+}$ and $(af)_{-} = a f_{-}$. By $L^+$ homogeneity:
+$$
+\int a f \, d\mu = \int a f_{+} \, d\mu - \int a f_{-} \, d\mu = a \int f_{+} \, d\mu - a \int f_{-} \, d\mu = a \int f \, d\mu.
+$$
+If $a < 0$, $(af)_{+} = -a f_{-}$ and $(af)_{-} = -a f_{+}$. Thus:
+$$
+\begin{align*}
+\int a f \, d\mu &= \int (-a) f_{-} \, d\mu - \int (-a) f_{+} \, d\mu \\
+&= -a \int f_{-} \, d\mu - (-a) \int f_{+} \, d\mu\\
+& = a \left( \int f_{+} \, d\mu - \int f_{-} \, d\mu \right) \\
+&= a \int f \, d\mu.
+\end{align*}
+$$
+
+*Addition:* For $f, g \in \mathcal{L}^1$, $f + g = (f_{+} + g_{+}) - (f_{-} + g_{-})$, which implies:
+$$
+\begin{align*}
+&(f + g)_{+} - (f + g)_{-} = (f_{+} + g_{+}) - (f_{-} + g_{-})\\
+& \implies (f + g)_{+} + f_{-} + g_{-} = (f + g)_{-} + f_{+} + g_{+}
+\end{align*}
+$$
+
+Since all terms belong to $L^+$ with finite integrals, we integrate both sides using $L^+$ additivity:
+$$
+\int (f + g)_{+} \, d\mu + \int f_{-} \, d\mu + \int g_{-} \, d\mu = \int (f + g)_{-} \, d\mu + \int f_{+} \, d\mu + \int g_{+} \, d\mu
+$$
+
+Rearranging the finite real terms gives:
+$$
+\begin{align*}
+\int (f + g)_{+} \, d\mu - \int (f + g)_{-} \, d\mu &= \left( \int f_{+} \, d\mu - \int f_{-} \, d\mu \right) \\
+&+ \left( \int g_{+} \, d\mu - \int g_{-} \, d\mu \right)
+\end{align*}
+$$
+Thus, $\int (f + g) \, d\mu = \int f \, d\mu + \int g \, d\mu$.
+
+### Proof of Step 3 (Monotonicity)
+Assume $f \le g$ a.e. Then $f_{+} - f_{-} \le g_{+} - g_{-}$ a.e., which rearranges to $f_{+} + g_{-} \le g_{+} + f_{-}$ a.e.
+
+By monotonicity of $L^+$ integrals (@prp-ae-integral-properties Part 1) applied to $f_+ + g_- \le g_+ + f_-$, and additivity of $L^+$ integrals (@cor-additivity-lplus):
+$$
+\begin{align*}
+&\int f_{+} \, d\mu + \int g_{-} \, d\mu \le \int g_{+} \, d\mu + \int f_{-} \, d\mu \\
+&\implies \int f_{+} \, d\mu - \int f_{-} \, d\mu \le \int g_{+} \, d\mu - \int g_{-} \, d\mu.
+\end{align*}
+$$
+Therefore, $\int f \, d\mu \le \int g \, d\mu$.
+
+### Proof of Step 4 (Triangle Inequality)
+Using definition @eq-l1-integral-def and standard triangle inequality on $\mathbb{R}$:
+$$
+\begin{align*}
+\left| \int f \, d\mu \right| &= \left| \int f_{+} \, d\mu - \int f_{-} \, d\mu \right| \\
+&\le \int f_{+} \, d\mu + \int f_{-} \, d\mu \\
+&= \int (f_{+} + f_{-}) \, d\mu \\
+&= \int |f| \, d\mu
+\end{align*}
+$$
+:::
+
+---
+
+## Semi-Norms, Equivalence Classes, and $L^p$ Spaces
+
+::: {#def-l1-seminorm}
+## $\mathcal{L}^1$ Semi-Norm
+The functional $\|\cdot\|_{\mathcal{L}^1} : \mathcal{L}^1(\Omega, \mathcal{F}, \mu) \to [0, \infty)$ defined by:
+$$
+\|f\|_{\mathcal{L}^1} := \int_{\Omega} |f| \, d\mu.
+$$ {#eq-l1-seminorm}
+is a **semi-norm** on $\mathcal{L}^1(\Omega, \mathcal{F}, \mu)$. It satisfies:
+
+1. **Absolute Homogeneity:** $\|\alpha f\|_{\mathcal{L}^1} = |\alpha| \|f\|_{\mathcal{L}^1}$ for all $\alpha \in \mathbb{R}$.
+2. **Subadditivity (Triangle Inequality):** $\|f + g\|_{\mathcal{L}^1} \le \|f\|_{\mathcal{L}^1} + \|g\|_{\mathcal{L}^1}$.
+:::
+
+:::{#rem-l1-seminorm}
+*Failure of Definiteness:* By @prp-ae-integral-properties Part 3, $\|f\|_{\mathcal{L}^1} = 0 \iff f = 0$ a.e. Thus, $\|f\|_{\mathcal{L}^1} = 0$ does not imply $f(\omega) = 0$ everywhere on $\Omega$.
+:::
+
+::: {#def-lp-quotient-space}
+## $L^1$ Quotient Space
+We define an equivalence relation $\sim_\mu$ on $\mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ by:
+$$
+f \sim_\mu g \iff f = g \text{ a.e. } [\mu].
+$$ {#eq-equivalence-relation}
+
+The Banach space **$L^1(\Omega, \mathcal{F}, \mu)$** is defined as the set of equivalence classes:
+$$
+L^1(\Omega, \mathcal{F}, \mu) := \mathcal{L}^1(\Omega, \mathcal{F}, \mu) / \sim_\mu.
+$$ {#eq-l1-quotient}
+:::
+
+**Some remarks on $L^1$ spaces:**
+
+- For any equivalence class $[f] \in L^1$, any function $f_1 \in [f]$ is called a **version** of $[f]$. The integral $\int [f] \, d\mu := \int f_1 \, d\mu$ is well-defined independent of the choice of version. 
+- On $L^1(\Omega, \mathcal{F}, \mu)$, $\|[f]\|_{L^1} := \int |f| \, d\mu$ is a genuine norm, and $d_\mu([f], [g]) := \|[f] - [g]\|_{L^1}$ is a genuine metric.
+- Going forward, we will often abuse notation and write $f \in L^1$ to mean $[f] \in L^1$.
+
+The next definition generalizes the $L^1$ space to $L^p$ spaces for $1 \le p < \infty$.
+
+::: {#def-lp-space}
+## General $L^p$ Spaces ($1 \le p < \infty$)
+For $1 \le p < \infty$, $L^p(\Omega, \mathcal{F}, \mu)$ is defined as the set of equivalence classes of measurable functions $f: \Omega \to \mathbb{R}$ such that $\int |f|^p \, d\mu < \infty$. The norm is defined by:
+$$
+\|f\|_{L^p} := \left( \int_{\Omega} |f|^p \, d\mu \right)^{1/p}.
+$$ {#eq-lp-norm}
+:::
+
+The next result shows that $L^p$ spaces are complete normed vector spaces and that the $L^p$ norm satisfies Minkowski's inequality.
+
+::: {#thm-lp-completeness}
+## Completeness of $L^p$ (Driver [17.27])
+For $1 \le p < \infty$, the space $(L^p(\Omega, \mathcal{F}, \mu), \|\cdot\|_{L^p})$ is a complete normed vector space (a **Banach space**). The norm satisfies Minkowski's inequality:
+$$
+\|f + g\|_{L^p} \le \|f\|_{L^p} + \|g\|_{L^p} \quad \forall f, g \in L^p.
+$$ {#eq-minkowski}
+:::
+
+---
+
+## The Dominated Convergence Theorem (DCT)
+For $L^{+}$, we have two integral convergence theorems: Fatou's Lemma (@thm-fatou) and the Monotone Convergence Theorem (@thm-mct). For $L^1$, we have a single integral convergence theorem, the Dominated Convergence Theorem (DCT).
+
+::: {#thm-dct}
+## Dominated Convergence Theorem 
+Let $(f_n)_{n=1}^\infty$ be a sequence of measurable functions, and let $g_n, g \in \mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ be integrable dominating functions such that:
+
+1. $f_n \to f$ a.e. as $n \to \infty$.
+2. $g_n \to g$ a.e. as $n \to \infty$ and $g_n \ge 0$ a.e.
+3. $|f_n| \le g_n$ a.e. for all $n \in \mathbb{N}$.
+4. $\int_{\Omega} g_n \, d\mu \to \int_{\Omega} g \, d\mu < \infty$ as $n \to \infty$.
+
+Then $f \in \mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ and:
+$$
+\lim_{n \to \infty} \int_{\Omega} f_n \, d\mu = \int_{\Omega} f \, d\mu.
+$$ {#eq-dct-conclusion}
+In fact, $\lim_{n \to \infty} \int_{\Omega} |f_n - f| \, d\mu = 0$.
+:::
+
+::: {.proof}
+## Proof of @thm-dct
+First, since $|f_n| \le g_n$ a.e. and $f_n \to f$, $g_n \to g$ a.e., taking $n \to \infty$ yields $|f| \le g$ a.e. Since $g \in \mathcal{L}^1$, $\int |f| \, d\mu \le \int g \, d\mu < \infty$, so $f \in \mathcal{L}^1$.
+
+Since $|f_n| \le g_n$ a.e. and $g_n \ge 0$ a.e., we have $g_n + f_n \ge g_n - |f_n| \ge 0$ a.e. and $g_n - f_n \ge g_n - |f_n| \ge 0$ a.e. Thus $(g_n + f_n)_{n=1}^\infty \subset L^+$ and $(g_n - f_n)_{n=1}^\infty \subset L^+$.
+
+### Step 1: Lower Bound via Fatou's Lemma
+Since $g_n \to g$ and $f_n \to f$ a.e. (hypotheses 1 and 2), $g_n + f_n \to g + f$ a.e., so $\liminf_{n \to \infty}(g_n + f_n) = g + f$ a.e. Applying Fatou's Lemma (@thm-fatou) to $g_n + f_n \ge 0$:
+$$
+\int (g + f) \, d\mu = \int \liminf_{n \to \infty} (g_n + f_n) \, d\mu \le \liminf_{n \to \infty} \int (g_n + f_n) \, d\mu.
+$$
+
+Using linearity of the integral and $\lim_{n \to \infty} \int g_n \, d\mu = \int g \, d\mu$:
+$$
+\int g \, d\mu + \int f \, d\mu \le \int g \, d\mu + \liminf_{n \to \infty} \int f_n \, d\mu.
+$$
+
+Subtracting the finite quantity $\int g \, d\mu$ yields:
+$$
+\int f \, d\mu \le \liminf_{n \to \infty} \int f_n \, d\mu.
+$$ {#eq-dct-step1}
+
+### Step 2: Upper Bound via Fatou's Lemma
+Since $g_n \to g$ and $f_n \to f$ a.e., $g_n - f_n \to g - f$ a.e., so $\liminf_{n \to \infty}(g_n - f_n) = g - f$ a.e. Applying Fatou's Lemma to $g_n - f_n \ge 0$:
+$$
+\int (g - f) \, d\mu = \int \liminf_{n \to \infty} (g_n - f_n) \, d\mu \le \liminf_{n \to \infty} \int (g_n - f_n) \, d\mu.
+$$
+
+Since $\lim_{n \to \infty} \int g_n \, d\mu = \int g \, d\mu$ exists (hypothesis 4), $\liminf_n(a_n + b_n) = \lim_n a_n + \liminf_n b_n$ gives:
+$$
+\liminf_{n \to \infty} \int (g_n - f_n) \, d\mu = \int g \, d\mu + \liminf_{n \to \infty} \left( -\int f_n \, d\mu \right).
+$$
+
+Recall that $\liminf_{n \to \infty} (-a_n) = -\limsup_{n \to \infty} a_n$. Thus:
+$$
+\int g \, d\mu - \int f \, d\mu \le \int g \, d\mu - \limsup_{n \to \infty} \int f_n \, d\mu.
+$$
+
+Subtracting $\int g \, d\mu$ and multiplying by $-1$ reverses the inequality:
+$$
+\limsup_{n \to \infty} \int f_n \, d\mu \le \int f \, d\mu.
+$$ {#eq-dct-step2}
+
+Combining @eq-dct-step1 and @eq-dct-step2:
+$$
+\limsup_{n \to \infty} \int f_n \, d\mu \le \int f \, d\mu \le \liminf_{n \to \infty} \int f_n \, d\mu.
+$$
+
+Since $\liminf \int f_n \le \limsup \int f_n$ always holds, all terms are equal, proving $\lim_{n \to \infty} \int f_n \, d\mu = \int f \, d\mu$.
+
+### Step 3: Convergence in $L^1$ norm
+It remains to prove $\lim_{n \to \infty} \int |f_n - f| \, d\mu = 0$. Since $|f_n - f| \le |f_n| + |f| \le g_n + g$ a.e., the sequence $h_n := g_n + g - |f_n - f| \ge 0$ a.e.
+
+Since $g_n \to g$ a.e. and $|f_n - f| \to 0$ a.e. (as $f_n \to f$ a.e.), we have $h_n \to 2g$ a.e., so $\liminf_{n \to \infty} h_n = 2g$ a.e. Applying Fatou's Lemma to $(h_n)$:
+$$
+\int 2g \, d\mu = \int \liminf_{n \to \infty} h_n \, d\mu \le \liminf_{n \to \infty} \int h_n \, d\mu.
+$$
+
+Since $\lim_{n \to \infty} \int g_n \, d\mu = \int g \, d\mu$ (hypothesis 4), the same $\liminf$ splitting gives:
+$$
+\begin{align*}
+\liminf_{n \to \infty} \int h_n \, d\mu &= \lim_{n \to \infty} \int g_n \, d\mu + \int g \, d\mu + \liminf_{n \to \infty}\left(-\int |f_n - f| \, d\mu\right)\\
+& = 2\int g \, d\mu - \limsup_{n \to \infty} \int |f_n - f| \, d\mu.
+\end{align*}
+$$
+
+Therefore $2\int g \, d\mu \le 2\int g \, d\mu - \limsup_{n \to \infty} \int |f_n - f| \, d\mu$, which gives $\limsup_{n \to \infty} \int |f_n - f| \, d\mu \le 0$. Since $\int |f_n - f| \, d\mu \ge 0$, we conclude $\lim_{n \to \infty} \int |f_n - f| \, d\mu = 0$.
+:::
+
+::: {#cor-bounded-convergence-theorem}
+## Bounded Convergence Theorem
+Let $(\Omega, \mathcal{F}, \mu)$ be a finite measure space ($\mu(\Omega) < \infty$). Suppose $(f_n)_{n=1}^\infty$ is a sequence of measurable functions such that $f_n \to f$ a.e., and there exists a constant $M < \infty$ with $|f_n(\omega)| \le M$ a.e. for all $n$. 
+
+Then $f \in \mathcal{L}^1$ and $\int f_n \, d\mu \to \int f \, d\mu$.
+:::
+
+::: {.proof}
+## Proof of @cor-bounded-convergence-theorem
+Set $g_n = g = M \mathbf{1}_{\Omega}$. Since $\int g \, d\mu = M \mu(\Omega) < \infty$, $g$ is an integrable dominating function. The result follows directly from the Dominated Convergence Theorem (@thm-dct).
+:::
+
+---
+

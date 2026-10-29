@@ -1,0 +1,200 @@
+# Lecture 38.2: Time-Homogeneous Markov Processes
+
+
+## Introduction and Motivation
+
+In time-homogeneous processes, transition kernels depend on time $s$ and $t$ only through the time elapsed $t - s$. We illustrate this via two standard motivating examples before formalizing operator semigroups and transition dynamics.
+
+::: {#exm-poisson-process}
+## Poisson Process Transition Kernel
+Consider a Poisson process $(N_t)_{t \ge 0}$ with intensity parameter $\lambda > 0$. The transition kernel $q_{s,t}(n, B)$ for $s \le t$, $n \in \mathbb{N}_0$, and $B \in \mathcal{B}(\mathbb{N}_0)$ is given by
+$$
+q_{s,t}(n, B) = \mathbb{E}\left[ \mathbf{1}_B(n + N_t - N_s) \right] = \sum_{m \in B} \mathrm{Poisson}(\lambda(t - s))(\{m - n\}).
+$$
+Since the distribution of $N_t - N_s$ is $\mathrm{Poisson}(\lambda(t - s))$, $q_{s,t}$ depends on $s$ and $t$ solely through the difference $t - s$, so $q_{s,t} = q_{0, t-s}$.
+:::
+
+::: {#exm-brownian-motion}
+## (Pre-) Brownian Motion Transition Kernel
+Consider a (pre-) Brownian motion $(B_t)_{t \ge 0}$. Its transition kernel $q_{s,t}(x, A)$ for $x \in \mathbb{R}$ and $A \in \mathcal{B}(\mathbb{R})$ is
+$$
+q_{s,t}(x, A) = \mathbb{E}\left[ \mathbf{1}_A(x + B_t - B_s) \right].
+$$
+Because $B_t - B_s \sim \mathcal{N}(0, t - s)$, the transition kernel $q_{s,t}$ depends on $s, t$ only through $t - s$.
+:::
+
+---
+
+## Time Homogeneity and One-Parameter Semigroups
+
+Throughout, $T$ denotes the totally ordered index set with least element $0$ fixed in Lecture 38.1 (e.g. $T = [0,\infty)$ or $T = \mathbb{N}_0$), so that for $s \le t \in T$ the difference $t - s$ and, for $s,t\ge0$, the sum $s+t$ again lie in $T$. We also recall from Lectures 37.1–38.1 that any family of Markov transition operators $\{Q_{s,t}\}_{s \le t \in T}$ on $(S,\mathcal{B}(S))$ is assumed to satisfy the (general, not-yet-homogeneous) **Chapman-Kolmogorov equations**
+$$
+Q_{r,s} Q_{s,t} = Q_{r,t}, \quad \forall r \le s \le t \in T.
+$$ {#eq-general-ck}
+
+::: {#def-time-homogeneous}
+## Time-Homogeneous Markov Transition Operators
+Let $\{Q_{s,t}\}_{s \le t \in T}$ be a collection of Markov transition operators on $(S, \mathcal{B}(S))$ satisfying @eq-general-ck. The collection is called **time-homogeneous** if
+$$
+Q_{s,t} = Q_{0, t-s} =: Q_{t-s}, \quad \forall s \le t \in T.
+$$ {#eq-time-homog-def}
+:::
+
+Under time homogeneity, the general Chapman-Kolmogorov equation @eq-general-ck forces the single-index family $(Q_r)_{r\ge0}$ to satisfy the semigroup law: substituting $Q_{r,s}=Q_{s-r}$, $Q_{s,t}=Q_{t-s}$, and $Q_{r,t}=Q_{t-r}$ into @eq-general-ck gives
+$$
+Q_{s-r} Q_{t-s} = Q_{r,s} Q_{s,t} \overset{\text{(CK)}}{=} Q_{r,t} = Q_{t-r} = Q_{(s-r) + (t-s)},
+$$
+where (CK) marks the use of the general Chapman-Kolmogorov equation @eq-general-ck — the only non-notational step in the chain, since the remaining equalities are either the time-homogeneity substitution or the trivial arithmetic identity $(s-r)+(t-s)=t-r$. Writing $a := s-r \ge 0$ and $b := t - s \ge 0$ (which range over all of $T\cap[0,\infty)$ as $r,s,t$ vary), we obtain $Q_a Q_b = Q_{a+b}$. In other words, time homogeneity together with the general Chapman-Kolmogorov equations *implies* (rather than merely relabels) the one-parameter semigroup property defined next.
+
+::: {#def-one-parameter-semigroup}
+## One-Parameter Transition Semigroup
+A collection $(Q_t)_{t \in T, t \ge 0}$ of Markov transition operators on $\mathcal{B}_b(S, \mathcal{B}(S))$ (i.e. bounded linear operators with $Q_t f \ge 0$ whenever $f \ge 0$, and $Q_t \mathbf{1} = \mathbf{1}$) satisfying
+$$
+Q_s Q_t = Q_{s+t} \quad \text{and} \quad Q_0 = \mathrm{Id}
+$$ {#eq-semigroup-prop}
+is called a **1-parameter (transition) semigroup**.
+:::
+
+::: {#def-time-homogeneous-process}
+## Time-Homogeneous Markov Process
+A Markov process $(X_t)_{t \in T}$ with transition operators $\{Q_{s,t}\}_{s \le t \in T}$ is called a **time-homogeneous Markov process** if $\{Q_{s,t}\}$ is time-homogeneous in the sense of @def-time-homogeneous. By the computation above, the induced single-index family $(Q_t)_{t \ge 0} := (Q_{0,t})_{t \ge 0}$ then automatically forms a 1-parameter semigroup in the sense of @def-one-parameter-semigroup, which we call the **transition semigroup** of the process.
+:::
+
+::: {#rem-heuristic}
+## Intuitive Interpretation
+By definition of the transition operators (Lecture 38.1) together with time homogeneity, for every $f \in \mathcal{B}_b(S)$ and $s \le t \in T$ we have the *exact* identity
+$$
+\mathbb{E}[f(X_t) \mid \mathcal{F}_s] = (Q_{t-s} f)(X_s),
+$$
+or equivalently, shifting by $s$:
+$$
+\mathbb{E}[f(X_{s+t}) \mid \mathcal{F}_s] = (Q_t f)(X_s).
+$$
+(@thm-shift-property below gives the rigorous generalization of this identity to arbitrary bounded measurable functionals of the whole future path, not just single-time functionals $f(X_t)$.) Informally, $Q_t$ determines the state distribution at time $t$ given $X_0$. For $X_{t+s}$ given $X_0$, the evolution decomposes via $Q_tQ_s=Q_sQ_t$ (the two operators commute since $Q_aQ_b=Q_{a+b}=Q_bQ_a$), corresponding to evaluating a new process $\tilde{X}_t$ given $X_s$.
+:::
+
+---
+
+## Canonical Process Notation and Measures on Path Space
+
+For any time-homogeneous Markov process, all finite-dimensional distributions are uniquely determined by:
+
+1. The initial distribution $\nu = \mathrm{Law}(X_0) \in \mathcal{P}(S, \mathcal{B})$;
+2. The transition semigroup $(Q_t)_{t \in T}$.
+
+Thinking of the process as a measure on the path space $S^T$, we fix the transition semigroup $(Q_t)_{t \in T}$ and consider the family of probability measures $\{\mathbb{P}^\nu\}_{\nu \in \mathcal{P}(S,\mathcal{B})}$ corresponding to different starting distributions $\nu$.
+
+**Notation:**
+
+* Let $X_\cdot = (X_t)_{t \in T}$ denote the canonical process ensemble.
+* For a bounded, measurable functional $F \in \mathcal{B}_b(S^T, \mathcal{B}^{\otimes T})$, $\mathbb{E}^\nu[F(X_\cdot)]$ denotes the expected value of $F(X_\cdot)$ under the law where $X_0 \sim \nu$.
+* In the Dirac case where $\nu = \delta_x$ for $x \in S$, we write $\mathbb{E}^x$ and $\mathbb{P}^x$. $\mathbb{P}^x$ is the law of the process started at $x$. The superscript $x$ in $\mathbb{E}^x$ specifies the initial condition: under $\mathbb{P}^x = \mathbb{P}^{\delta_x}$, the process begins at $x$ with certainty ($X_0 = x$ almost surely).
+* $g(x) = \mathbb{E}^x[F(X_\cdot)]$ is simply: start the process at $x$, run it forward in time, apply $F$ to the resulting path, and take the expected value. Doing this for every $x \in S$ produces a function $g : S \to \mathbb{R}$. It tells you, for each possible starting state, how large $F$ is expected to be along the path.
+* Before you can write “$g(X_t)$” in the following theorem, we need $g$ to be a measurable function $S \to \mathbb{R}$. Otherwise, composing $g$ with the random variable $X_t$ doesn’t produce a well-defined random variable. Statement 1 in @thm-shift-property guarantees exactly this.
+* Statement 2 of the following theorem is: $\mathbb{E}^{\nu_0}[F(X_{t+\cdot}) \mid X_t] = g(X_t), \quad \mathbb{P}^{\nu_0}\text{-a.s.}$ This should be read as: to compute the conditional expectation of any path functional of the future trajectory, you don’t need to know the full past — you just evaluate $g$ at the current state. The entire job of the conditional expectation is done by the single function $g$ evaluated at one point.
+
+---
+
+## Main Shift-Invariance and Conditional Expectation Theorem
+
+::: {#thm-shift-property}
+## Shift Property and Measurability of Markov Expectations
+Let $X_\cdot$ be a time-homogeneous Markov process taking values in a measurable state space $(S, \mathcal{B}(S))$ with transition semigroup $(Q_t)_{t \ge 0}$. Let $F \in \mathcal{B}_b(S^T, \mathcal{B}^{\otimes T})$. Then:
+
+1. The mapping $S \ni x \mapsto \mathbb{E}^x[F(X_\cdot)]$ is $\mathcal{B}(S) / \mathcal{B}(\mathbb{R})$-measurable.
+2. For all $t \ge 0$ and any initial distribution $\nu_0 \in \mathcal{P}(S, \mathcal{B}(S))$,
+$$
+\mathbb{E}^{\nu_0}\left[ F(X_{t+\cdot}) \mid \mathcal{F}_t \right] = \mathbb{E}^{\nu_0}\left[ F(X_{t+\cdot}) \mid X_t \right] = \mathbb{E}^{X_t}[F(X_\cdot)], \quad \mathbb{P}^{\nu_0}\text{-a.s.}
+$$ {#eq-shift-thm-property}
+where $g(x) := \mathbb{E}^x[F(X_\cdot)]$ and $g(X_t) = \mathbb{E}^{X_t}[F(X_\cdot)]$.
+:::
+
+::: {#rem-measurability-note}
+## What the theorem actually says
+1. At the level of a single observable $f(X_{s+t})$, time homogeneity already gives you the familiar identity $\mathbb{E}[f(X_{s+t}) \mid \mathcal{F}_s] = (Q_t f)(X_s)$. The shift property theorem **lifts this to the entire future path at once**: instead of just $f(X_{s+t})$, you can take any bounded measurable functional $F$ of the whole future trajectory $(X_{t+s})_{s \geq 0}$ — say, the supremum of the path, a stopping-time functional, a running integral — and the identity still holds. The conclusion is:
+$$
+\mathbb{E}^{\nu_0}\!\left[F(X_{t+\cdot}) \mid \mathcal{F}_t\right] = \mathbb{E}^{X_t}[F(X_\cdot)], \quad \mathbb{P}^{\nu_0}\text{-a.s.}
+$$
+
+2. Statement 1 (measurability) is a prerequisite, not just a bonus. Before you can write $\mathbb{E}^{X_t}[F(X_\cdot)]$ — i.e., evaluate the map $x \mapsto \mathbb{E}^x[F(X_\cdot)]$ at the random variable $X_t$ — you need to know that this map is measurable, otherwise the composition isn’t a well-defined random variable. The theorem guarantees this first, making the right-hand side of the equation meaningful. Notice also that measurability holds for any measurable transition kernel family and does not itself require time homogeneity.
+
+3. Statement 2 is where time homogeneity plays its role. The first equality (conditioning on $\mathcal{F}_t$ is the same as conditioning on $X_t$) is just the Markov property. The second equality — that the conditional expectation equals $\mathbb{E}^{X_t}[F(X_\cdot)]$ — is genuinely using time homogeneity. Because the transition kernels from time $t$ onward coincide with those of a fresh process started at $X_t$ from time $0$, the law of the future path $(X_{t+s})_{s \geq 0}$ given $X_t = x$ is *exactly the same* as the law of $(X_s)_{s \geq 0}$ under $\mathbb{P}^x$.
+
+4. The **restart** interpretation: The theorem is the rigorous statement of: a time-homogeneous Markov process restarts from scratch at any fixed time $t$, with the current state $X_t$ as the new initial condition, and this holds not just for observations at a single future time, but for the entire future path at once. $\mathbb{E}^{X_t}[F(X_\cdot)]$ should literally be read as “run a fresh copy of the process starting at $X_t$, and apply $F$ to that copy’s trajectory.” The theorem says this equals the conditional expectation of $F$ applied to the actual time-shifted path.
+
+:::
+
+
+---
+
+## Proof of the Main Theorem
+
+::: {.proof}
+### Step 1: Reduction to Local $\sigma$-Algebras
+Recall $\mathcal{F}_t$ denotes a filtration to which $(X_t)_{t\in T}$ is adapted and Markov, and $\mathcal{F}_{\ge t}^X := \sigma(X_u : u \ge t)$ denotes the future $\sigma$-algebra from time $t$ onward (Lecture 36.1). Observe that $F(X_{t+\cdot}) \in \mathcal{B}(\Omega, \mathcal{F}_{\ge t}^X)$, since $F(X_{t+\cdot})$ is a (pointwise) limit of functions depending only on finitely many coordinates $X_u$, $u \ge t$. As established in @thm-markov-future (Lecture 36.1), if $Y$ is a bounded $\mathcal{F}_{\ge t}^X$-measurable random variable, then by the Markov property:
+$$
+\mathbb{E}[Y \mid \mathcal{F}_t] = \mathbb{E}[Y \mid X_t].
+$$
+Applying this to $Y = F(X_{t+\cdot})$ directly yields the first equality in @eq-shift-thm-property:
+$$
+\mathbb{E}^{\nu_0}\left[ F(X_{t+\cdot}) \mid \mathcal{F}_t \right] = \mathbb{E}^{\nu_0}\left[ F(X_{t+\cdot}) \mid X_t \right].
+$$
+
+### Step 2: Proof for Cylinder Functions
+It remains to prove the second equality in @eq-shift-thm-property, $\mathbb{E}^{\nu_0}[F(X_{t+\cdot}) \mid X_t] = \mathbb{E}^{X_t}[F(X_\cdot)]$, together with statement 1, for general $F \in \mathcal{B}_b(S^T, \mathcal{B}^{\otimes T})$. We reduce to cylinder functions via **Dynkin's Multiplicative Systems Theorem** (@thm-dynkin-multiplicative-system, Lecture 14.1), exactly as in the proof of @thm-markov-future (Lecture 36.1):
+
+* Let $\mathbb{M}$ be the collection of functions
+$$
+F(w) = f_0(w(t_0)) f_1(w(t_1)) \cdots f_n(w(t_n)),
+$$ {#eq-cylinder-f}
+where $0 = t_0 < t_1 < \dots < t_n$ and $f_j \in \mathcal{B}_b(S, \mathcal{B})$ for $j = 0, \dots, n$. As in @lem-multiplicative-system (Lecture 36.1), $\mathbb{M}$ is closed under pointwise products (merge coincident time points and multiply the corresponding factors) and $\sigma(\mathbb{M}) = \mathcal{B}^{\otimes T}$: taking $n=0$ recovers every generator $\{X_0 \in A\}$, and padding with $f_0 \equiv 1$ recovers every generator $\{X_t \in A\}$ for $t > 0$, $A \in \mathcal{B}$. Hence $\mathbb{M}$ is a multiplicative system generating $\mathcal{B}^{\otimes T}$.
+* Let $\mathbb{H} := \{F \in \mathcal{B}_b(S^T, \mathcal{B}^{\otimes T}) : \text{statements 1 and 2 hold for } F\}$. $\mathbb{H}$ is a vector space (both statements are linear in $F$) containing the constant function $1$ (both sides of statement 2 reduce to $1$, and $x \mapsto 1$ is trivially measurable). $\mathbb{H}$ is closed under bounded convergence: if $F_k \in \mathbb{H}$, $|F_k| \le C$, and $F_k \to F$ pointwise, then for each fixed $x$, $g_k(x) := \mathbb{E}^x[F_k(X_\cdot)] \to \mathbb{E}^x[F(X_\cdot)] =: g(x)$ by (ordinary) bounded convergence under $\mathbb{P}^x$, so $g$ is measurable as a pointwise limit of measurable functions (statement 1), and $g_k(X_t) \to g(X_t)$ everywhere on $\Omega$; combined with the Conditional Dominated Convergence Theorem applied to $F_k(X_{t+\cdot}) \to F(X_{t+\cdot})$ (boundedly), the identities $\mathbb{E}^{\nu_0}[F_k(X_{t+\cdot}) \mid X_t] = g_k(X_t)$ pass to the limit to give $\mathbb{E}^{\nu_0}[F(X_{t+\cdot}) \mid X_t] = g(X_t)$ a.s. (statement 2).
+
+By @thm-dynkin-multiplicative-system, if $\mathbb{M} \subseteq \mathbb{H}$ then $\mathbb{H} = \mathcal{B}_b(S^T, \mathcal{B}^{\otimes T})$. It therefore suffices to establish statements 1 and 2 for cylinder functions $F \in \mathbb{M}$ of the form @eq-cylinder-f.
+
+#### Proof of Statement 1 (Measurability)
+For $F$ given by @eq-cylinder-f:
+$$
+\begin{aligned}
+\mathbb{E}^x[F(X_\cdot)] &= \mathbb{E}^x\left[ f_0(X_{t_0}) f_1(X_{t_1}) \cdots f_n(X_{t_n}) \right] \\
+&= \int \delta_x(\mathrm{d}x_0) \int q_{t_0, t_1}(x_0, \mathrm{d}x_1) \cdots \int q_{t_{n-1}, t_n}(x_{n-1}, \mathrm{d}x_n) f_0(x_0) \cdots f_n(x_n) \\
+&= f_0(x) \left( Q_{t_0, t_1} \left( f_1 \cdots Q_{t_{n-1}, t_n} f_n \right) \right)(x).
+\end{aligned}
+$$
+Because transition operators map bounded measurable functions to bounded measurable functions, $x \mapsto \mathbb{E}^x[F(X_\cdot)]$ is a composition of measurable functions, hence $\mathcal{B}(S)/\mathcal{B}(\mathbb{R})$-measurable. $\checkmark$
+
+#### Proof of Statement 2 (Conditional Shift Property)
+We wish to show that $\mathbb{E}^{\nu_0}[F(X_{t+\cdot}) \mid X_t] = g(X_t)$ $\mathbb{P}^{\nu_0}$-a.s., where $g(x) := \mathbb{E}^x[F(X_\cdot)]$.
+
+For $F(X_{t+\cdot}) = f_0(X_t) f_1(X_{t + t_1}) \cdots f_n(X_{t + t_n})$, let $h \in \mathcal{B}_b(S, \mathcal{B})$ be an arbitrary test function. Evaluating the joint expectation yields:
+$$
+\begin{aligned}
+I &:= \mathbb{E}^{\nu_0}\left[ h(X_t) F(X_{t+\cdot}) \right] = \mathbb{E}^{\nu_0}\left[ h(X_t) f_0(X_t) f_1(X_{t+t_1}) \cdots f_n(X_{t+t_n}) \right] \\
+&= \int \nu_0(\mathrm{d}x_{-1}) \int q_{0, t}(x_{-1}, \mathrm{d}x_0) \int q_{t, t+t_1}(x_0, \mathrm{d}x_1) \cdots \\
+& \quad \quad \cdots \int q_{t+t_{n-1}, t+t_n}(x_{n-1}, \mathrm{d}x_n) h(x_0) f_0(x_0) f_1(x_1) \cdots f_n(x_n).
+\end{aligned}
+$$
+
+By time homogeneity (the initial kernel $q_{0,t} = q_t$, and $q_{t+t_{j-1}, t+t_j} = q_{0, t_j - t_{j-1}} = q_{t_j - t_{j-1}}$ for $j = 1, \dots, n$) and using the marginal distribution $\nu_t(\mathrm{d}x_0) := \int \nu_0(\mathrm{d}x_{-1}) q_t(x_{-1}, \mathrm{d}x_0) = \mathrm{Law}(X_t)$, we rewrite $I$ as:
+$$
+\begin{aligned}
+I &= \int \nu_t(\mathrm{d}x_0) h(x_0) f_0(x_0) \int q_{t_1}(x_0, \mathrm{d}x_1) \cdots \int q_{t_n - t_{n-1}}(x_{n-1}, \mathrm{d}x_n) f_1(x_1) \cdots f_n(x_n) \\
+&= \int \nu_t(\mathrm{d}x_0) h(x_0) \underbrace{\mathbb{E}^{x_0}\left[ f_0(X_0) f_1(X_{t_1}) \cdots f_n(X_{t_n}) \right]}_{= \mathbb{E}^{x_0}[F(X_\cdot)] = g(x_0)} \\
+&= \int \nu_t(\mathrm{d}x_0) h(x_0) g(x_0) \\
+&= \mathbb{E}^{\nu_0}\left[ h(X_t) \mathbb{E}^{X_t}[F(X_\cdot)] \right].
+\end{aligned}
+$$
+Since $\mathbb{E}^{\nu_0}[h(X_t) F(X_{t+\cdot})] = \mathbb{E}^{\nu_0}[h(X_t) g(X_t)]$ holds for all bounded measurable test functions $h$, and $g(X_t)$ is $\sigma(X_t)$-measurable, by definition of conditional expectation we conclude:
+$$
+\mathbb{E}^{\nu_0}\left[ F(X_{t+\cdot}) \mid X_t \right] = g(X_t) = \mathbb{E}^{X_t}[F(X_\cdot)], \quad \mathbb{P}^{\nu_0}\text{-a.s.} \quad \blacksquare
+$$
+:::
+
+---
+
+## Takeaways
+
+- **Time homogeneity collapses $\{Q_{s,t}\}$ to a semigroup.** The reduction $Q_{s,t} = Q_{0,t-s}$ (@def-time-homogeneous), combined with the general Chapman-Kolmogorov equations @eq-general-ck that any transition family already satisfies, *implies* — rather than merely renames — the one-parameter semigroup law $Q_sQ_t=Q_{s+t}$, $Q_0=\mathrm{Id}$ (@def-one-parameter-semigroup). A time-homogeneous Markov process is exactly a Markov process whose transition operators reduce this way.
+- **The canonical family $\{\mathbb{P}^\nu\}_{\nu}$.** Fixing the semigroup $(Q_t)_{t\ge0}$, all finite-dimensional distributions — and hence, via the Kolmogorov Extension Theorem, a canonical probability measure $\mathbb{P}^\nu$ on path space — are determined by the initial law $\nu$ alone; $\mathbb{P}^x := \mathbb{P}^{\delta_x}$ is the Dirac/single-starting-point case.
+- **The shift property (@thm-shift-property) is the rigorous form of "restarting the process at $X_t$."** Statement 1 (measurability of $x \mapsto \mathbb{E}^x[F(X_\cdot)]$) holds for *any* measurable transition kernel family and does not use time homogeneity. Statement 2 — that conditioning the shifted path functional $F(X_{t+\cdot})$ on the whole past $\mathcal{F}_t$ is the same as conditioning on $X_t$ alone, and equals $\mathbb{E}^{X_t}[F(X_\cdot)]$ — genuinely uses time homogeneity (to identify the post-$t$ kernels with the original ones) and is the basis for the strong Markov property developed in later lectures.
+- **Proof technique: reduce to cylinder functions via the Multiplicative Systems Theorem.** As in @thm-markov-future (Lecture 36.1), the argument is carried out first for finite products $f_0(w(t_0))\cdots f_n(w(t_n))$ of bounded measurable functions — a multiplicative system generating $\mathcal{B}^{\otimes T}$ — and then extended to all of $\mathcal{B}_b(S^T,\mathcal{B}^{\otimes T})$ by checking that the class of functionals satisfying statements 1–2 is a vector space, containing $1$, closed under bounded convergence.

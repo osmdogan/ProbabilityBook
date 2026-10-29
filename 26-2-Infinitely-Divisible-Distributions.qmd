@@ -1,0 +1,186 @@
+# Lecture 26.2: Infinite Divisibility
+
+## Infinite Divisibility
+
+What is so special about Gaussian distributions? One answer lies in the concept of **infinite divisibility**. An infinitely divisible distribution is a distribution that can be viewed as the distribution of a sum of any number of independent and identically distributed smaller random contributions.
+
+:::{#def-infinitely-divisible-measure}
+## Infinitely Divisible Measure
+A probability measure $\mu \in \text{Prob}(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ is **infinitely divisible** if for each $n \in \mathbb{N}$, there exists a probability measure $\mu_n \in \text{Prob}(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ such that:
+$$ \mu = \mu_n^{*n} = \underbrace{\mu_n * \mu_n * \dots * \mu_n}_{n \text{ times}} $$
+
+In terms of random variables and characteristic functions, this definition admits two equivalent formulations:
+
+1. **Random Variable Formulation:** For each $n \in \mathbb{N}$, there exist i.i.d. real-valued random variables $\{X_{n,k}\}_{k=1}^n$ such that:
+   $$ S_n = X_{n,1} + X_{n,2} + \dots + X_{n,n} \sim \mu $$
+2. **Characteristic Function Formulation:** $\mu$ has a characteristic function $\hat{\mu}(\xi)$ satisfying:
+   $$ \hat{\mu}(\xi) = (\varphi_n(\xi))^n \quad \forall \xi \in \mathbb{R} $$
+   where $\varphi_n(\xi)$ is the characteristic function of $\mu_n$.
+
+The equivalence follows from $\widehat{\mu_n^{*n}}=(\hat\mu_n)^n$ and the uniqueness theorem for characteristic functions.
+:::
+
+:::{#rem-infinitely-divisible}
+Intuitively, infinite divisibility means that a random quantity can be split into any number of independent, identically distributed pieces without changing its overall distribution. Suppose $X\sim\mu$. If $\mu$ is infinitely divisible, then for every $n=2,3,4,\ldots$, we can find i.i.d. random variables
+$$ X_{n,1},\ldots,X_{n,n} $$
+such that
+$$ X_{n,1}+\cdots+X_{n,n}\overset{d}=X. $$
+
+So you can think of $X$ as a whole that can be decomposed into $n$ independent, statistically identical components, for any finite $n$.
+
+There are really two ideas in the definition:
+
+   - Divisible: the distribution can be represented as a convolution of smaller distributions.
+   - Infinitely: this can be done for every $n$, no matter how large.
+
+Graphically, you can think of it as
+$$ \boxed{\text{whole}} \quad\longrightarrow\quad \boxed{\text{piece}}+\boxed{\text{piece}}+\cdots+\boxed{\text{piece}} $$
+with $n$ identical independent pieces, for any $n$. The pieces become smaller as $n$ increases, but their aggregate distribution remains exactly the same.
+:::
+
+---
+
+## Gaussian Distribution
+Let $\sigma\ge 0$ and let $Z\sim\mathcal{N}(0,1)$. For each $n\in\mathbb{N}$, let
+$$ X_{n,k}\stackrel{\mathrm{i.i.d.}}{\sim}\mathcal{N}(0,\sigma^2/n),\qquad k=1,\dots,n. $$
+$$ S_n = X_{n,1} + \dots + X_{n,n} \stackrel{d}{=} \mathcal{N}(0, \sigma^2) $$
+
+*Proof via characteristic functions:*
+Note that $X_{n,k} \stackrel{d}{=} \frac{\sigma}{\sqrt{n}} Z$. The characteristic function of $X_{n,k}$ is:
+$$ \varphi_{X_{n,k}}(\xi) = \varphi_Z\left( \frac{\sigma}{\sqrt{n}} \xi \right) = e^{-\frac{\sigma^2}{n} \frac{\xi^2}{2}} $$
+Taking the $n$-fold product yields:
+$$ \varphi_{S_n}(\xi) = (\varphi_{X_{n,k}}(\xi))^n = \left( e^{-\frac{\sigma^2}{n} \frac{\xi^2}{2}} \right)^n = e^{-\frac{\sigma^2 \xi^2}{2}} = \varphi_{\mathcal{N}(0, \sigma^2)}(\xi) $$
+Thus, $S_n \stackrel{d}{=} \sigma Z \sim \mathcal{N}(0, \sigma^2)$. 
+
+
+
+## Poisson Distribution
+For $\lambda\ge0$, if $X_{n,k} \stackrel{\text{i.i.d.}}{\sim} \operatorname{Poisson}(\lambda / n)$, then:
+$$ S_n = X_{n,1} + \dots + X_{n,n} \stackrel{d}{=} \text{Poisson}(\lambda) $$
+
+## Convolution Closure
+Recall that that convolution is associative and commutative. If $\mu$ and $\nu$ are infinitely divisible, choose, for each $n$, probability measures $\mu_n$ and $\nu_n$ such that $\mu=\mu_n^{*n}$ and $\nu=\nu_n^{*n}$. Then $\mu * \nu$ is also infinitely divisible:
+$$ 
+\mu * \nu = (\mu_n^{*n}) * (\nu_n^{*n}) = (\mu_n * \nu_n)^{*n} 
+$$
+
+Suppose $X\sim\mu$ and $Y\sim\nu$ with $X$ and $Y$ independent. Infinite divisibility says that, for any $n$, $X\overset d=X_{n,1}+\cdots+X_{n,n}$ and
+$Y\overset d=Y_{n,1}+\cdots+Y_{n,n}$, where each sequence consists of i.i.d. variables. Then
+$$ 
+X+Y \overset d= (X_{n,1}+Y_{n,1})+\cdots+(X_{n,n}+Y_{n,n}). 
+$$
+Because the two sequences can be taken independently, the variables $X_{n,k}+Y_{n,k}$ for $k=1,\ldots,n$ are again i.i.d. Hence $X+Y$ is infinitely divisible.
+
+---
+
+## Non-Example: The Bernoulli/Symmetric Two-Point Measure
+
+Not all probability distributions are infinitely divisible. Consider the symmetric two-point measure: $\mu = \frac{1}{2}(\delta_1 + \delta_{-1})$. Using linearity of integration,
+$$ 
+\begin{aligned} \hat\mu(\xi) &= \int_{\mathbb R}e^{i\xi x} \frac12(\delta_1+\delta_{-1})(dx)\\ 
+&= \frac12\int_{\mathbb R}e^{i\xi x}\,\delta_1(dx) + \frac12\int_{\mathbb R}e^{i\xi x}\,\delta_{-1}(dx). 
+\end{aligned} 
+$$
+The defining property of the Dirac measure is $\int_{\mathbb R}f(x)\,\delta_a(dx)=f(a)$. Therefore,
+$$ 
+\begin{aligned} \hat\mu(\xi) &= \frac12e^{i\xi} + \frac12e^{-i\xi}\\ &= \frac12\left(e^{i\xi}+e^{-i\xi}\right). 
+\end{aligned} 
+$$
+Using Euler's identity, $e^{i\xi}=\cos\xi+i\sin\xi$ and $e^{-i\xi}=\cos\xi-i\sin\xi$, we have $e^{i\xi}+e^{-i\xi}=2\cos\xi$.  Therefore, the characteristic function is $\hat{\mu}(\xi) = \cos(\xi)$.
+
+Suppose $\mu$ were infinitely divisible. Then for $n=2$, there exist i.i.d. random variables $X_1, X_2\sim\nu$, where $\nu=\mu_2$, such that $X_1+X_2\sim\mu$. Hence
+$$ X_1 + X_2 \in \{-1, 1\} \quad\text{a.s.} $$
+
+1. **Support Bound:** Note that $P(X_1 + X_2 < -1) = 0$ and $P(X_1 + X_2 > 1) = 0$ (since $X_1+X_2\in\{-1,1\}$ a.s.). Also $\{X_1>1/2\}\cap\{X_2>1/2\} \subseteq \{X_1+X_2>1\}$ and $\{X_1<-1/2\}\cap\{X_2<-1/2\} \subseteq \{X_1+X_2<-1\}$. Then, independence implies:
+   $$ P\left(X_1 < -\frac{1}{2}\right)^2 \le P(X_1 + X_2 < -1) = 0 $$
+   $$ P\left(X_1 > \frac{1}{2}\right)^2 \le P(X_1 + X_2 > 1) = 0 $$
+   This **proves** that $|X_1| \le \frac{1}{2}$ a.s. and $|X_2| \le \frac{1}{2}$ a.s. Since $X_1$ and $X_2$ are bounded, their characteristic functions are infinitely differentiable.
+
+2. **Differentiability Contradiction:** Since $X_1$ is bounded almost surely, its law $\mathcal{L}(X_1)$ has finite moments of all orders, so its characteristic function $f(\xi):=\widehat{\mathcal{L}(X_1)}(\xi)$ belongs to $C^\infty(\mathbb{R})$. The convolution-root identity gives:
+   $$ \cos(\xi) = \hat{\mu}(\xi) = (f(\xi))^2 $$
+
+   Evaluating at $\xi = \frac{\pi}{2}$:
+   $$ \cos\left(\frac{\pi}{2}\right) = 0 = f\left(\frac{\pi}{2}\right)^2 \implies f\left(\frac{\pi}{2}\right) = 0 $$
+
+   Differentiating both sides of $\cos(\xi) = f(\xi)^2$ with respect to $\xi$:
+   $$ -\sin(\xi) = 2 f(\xi) f'(\xi) $$
+
+   Evaluating at $\xi = \frac{\pi}{2}$ yields:
+   $$ -1 = -\sin\left(\frac{\pi}{2}\right) = 2 \cdot f\left(\frac{\pi}{2}\right) \cdot f'\left(\frac{\pi}{2}\right) = 2 \cdot 0 \cdot f'\left(\frac{\pi}{2}\right) = 0. 
+   $$
+
+Contradiction ($-1 = 0$). Hence, $\mu = \frac{1}{2}(\delta_1 + \delta_{-1})$ is not infinitely divisible. 
+
+---
+
+## Characterization via Triangular Arrays
+
+A useful characterization shows that infinite divisibility is equivalent to being the limit in distribution of equal-length i.i.d. rows.
+
+:::{#thm-triangular-array-characterization}
+## Triangular Array Characterization
+A probability measure $\mu \in \text{Prob}(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ is infinitely divisible **if and only if** there exists a triangular array of real-valued random variables $\{X_{n,k}\}_{1\le k\le n}$ such that, for each row $n$, the variables are i.i.d. and:
+$$ S_n = \sum_{k=1}^{n} X_{n,k} \xrightarrow{w} X \sim \mu \quad \text{as } n \to \infty. $$
+:::
+
+*(Note: Exact equality in distribution is not required; weak convergence suffices.)*
+
+---
+
+:::{.proof}
+
+## Proof for rows of length $n$
+
+*$(\Longrightarrow)$* If $\mu$ is infinitely divisible, then for each $n$ there exists $\mu_n$ with $\mu_n^{*n} = \mu$. Let $X_{n,1}, \ldots, X_{n,n} \overset{\text{i.i.d.}}{\sim} \mu_n$. Then $S_n:=\sum_{k=1}^nX_{n,k}\sim\mu$ for every $n$, so $S_n \xrightarrow{w} X$ for any random variable $X\sim\mu$.
+
+*$(\Longleftarrow)$* Now assume the given array has rows of length $n$. This is the hypothesis in the corrected theorem; no reduction from arbitrary row lengths is being made.
+
+1. **Setup:**
+   For each $n \in \mathbb{N}$, let $\{X_{n,k}\}_{k=1}^n$ be i.i.d. such that $S_n = \sum_{k=1}^n X_{n,k} \xrightarrow{w} X \sim \mu$.
+
+2. **Decomposition for fixed $l \in \mathbb{N}$:**
+   Fix $l \in \mathbb{N}$. Write the sum from row $m$ as
+   $$ S^{(m)} := \sum_{k=1}^{m} X_{m,k}. $$
+   In row $nl$, partition $S^{(nl)}$ into $l$ independent, identically distributed blocks:
+   $$ S^{(nl)} = \sum_{k=1}^{nl} X_{nl,k} = \sum_{i=1}^l B_{n,i}, $$
+   where the $i$-th block sum is
+   $$ B_{n,i} := \sum_{j=n(i-1)+1}^{ni} X_{nl,j}. $$
+
+3. **Tightness via Prokhorov's Theorem:**
+   Since $S^{(nl)} \xrightarrow{w} X$ as $n \to \infty$, the sequence $\{S^{(nl)}\}_{n=1}^\infty$ is tight. Define:
+   $$ \varepsilon(r) := \sup_{n \ge 1}\, P(|S^{(nl)}| > r). $$
+   By tightness, $\varepsilon(r) \to 0$ as $r \to \infty$.
+
+   Since $\bigcap_{i=1}^l\{B_{n,i} > r\} \subseteq \{S^{(nl)} > lr\}$ (if each block exceeds $r$ then their sum exceeds $lr$), and the blocks $B_{n,1}, \ldots, B_{n,l}$ are independent:
+   $$
+   \begin{align*}
+   P(B_{n,1} > r)^l &= P\!\left(\bigcap_{i=1}^l \{B_{n,i} > r\}\right) \le P(S^{(nl)} > lr) \le P(|S^{(nl)}| > lr) \le \varepsilon(lr)
+   \end{align*}
+   $$
+   Taking $l$-th roots gives $P(B_{n,1} > r) \le \varepsilon(lr)^{1/l}$.
+
+   Symmetrically, $\bigcap_{i=1}^l\{B_{n,i} < -r\} \subseteq \{S^{(nl)} < -lr\} \subseteq \{|S^{(nl)}| > lr\}$, so:
+   $$ P(B_{n,1} < -r) \le \varepsilon(lr)^{1/l}. $$
+   
+   Therefore $P(|B_{n,1}| > r) \le 2\,\varepsilon(lr)^{1/l} \to 0$ as $r \to \infty$, uniformly in $n$. This establishes that $\{B_{n,1}\}_{n=1}^\infty$ is **tight**.
+
+4. **Extracting Convergent Subsequences:**
+   By Prokhorov's Theorem (tightness implies relative compactness), there exists a subsequence $\{n_j\}_{j=1}^\infty$ and a probability measure $\mu_l$ such that:
+   $$ B_{n_j,1} \xrightarrow{w} Y_l \sim \mu_l. $$
+   Since all $l$ blocks $B_{n_j,1}, \dots, B_{n_j,l}$ are identically distributed, the same subsequential limit applies to every block:
+   $$ B_{n_j,i} \xrightarrow{w} Y_l \quad \text{for each } i = 1, \dots, l. $$
+
+5. **Conclusion:**
+   Since $B_{n_j,1}, \dots, B_{n_j,l}$ are **independent** (they are disjoint blocks of i.i.d. entries within row $n_jl$), the characteristic function of their sum factors as:
+   $$ \varphi_{S^{(n_jl)}}(\xi) = \prod_{i=1}^l \varphi_{B_{n_j,i}}(\xi). $$
+   By Step 4, each $B_{n_j,i} \xrightarrow{w} Y_l$, so $\varphi_{B_{n_j,i}}(\xi) \to \varphi_{Y_l}(\xi)$ for every $\xi$. Hence:
+   $$ \varphi_{S^{(n_jl)}}(\xi) \longrightarrow (\varphi_{Y_l}(\xi))^l. $$
+   On the other hand, $n_jl \to \infty$ and $S^{(m)} \xrightarrow{w} X$ as $m\to\infty$, so $S^{(n_jl)} \xrightarrow{w} X$, giving $\varphi_{S^{(n_jl)}}(\xi) \to \hat{\mu}(\xi)$. By uniqueness of limits:
+   $$ \hat{\mu}(\xi) = (\varphi_{Y_l}(\xi))^l \quad \forall \xi \in \mathbb{R}. $$
+
+Since $l \in \mathbb{N}$ was arbitrary, for each $l$ the measure $\mu_l$ satisfies $\hat{\mu} = (\hat{\mu}_l)^l$, i.e., $\mu = \mu_l^{*l}$. Thus $\mu$ is infinitely divisible.
+
+:::
+---
+
+**Note:** More general limits of triangular arrays with independent, non-identically distributed entries require additional hypotheses. In particular, an infinitesimality condition is central in general infinite-divisibility limit theorems, while Lindeberg--Feller conditions are specifically used to characterize Gaussian limits. The present theorem avoids those additional issues by assuming i.i.d. rows of length $n$.

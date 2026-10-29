@@ -1,0 +1,318 @@
+# Lecture 21.1: Total Variation 
+
+## Convergence Revisited
+
+In earlier sections, we considered several modes of convergence for random variables $\{X_n\}_{n=1}^\infty$ to $X$ defined on a common probability space $(\Omega, \mathcal{F}, \mathbb{P})$:
+
+1. **Almost Sure Convergence ($X_n \xrightarrow{\text{a.s.}} X$):**
+   $$
+   \mathbb{P}\left(\lim_{n \to \infty} X_n = X\right) = 1 \iff \lim_{n \to \infty} \mathbb{P}\left(\bigcup_{k \ge n} \{|X_k - X| > \epsilon\}\right) = 0, 
+   $$
+   for all $\epsilon>0$.
+
+2. **Convergence in $L^p$ ($X_n \xrightarrow{L^p} X$):**
+   $$
+   \begin{align*}
+   \lim_{n \to \infty} \|X_n - X\|_{L^p}^p& = \lim_{n \to \infty} \mathbb{E}\left[|X_n - X|^p\right] \\
+   &= \lim_{n \to \infty}\int_{\mathbb{R}^2} |y - x|^p \, \mu_{(X_n, X)}(dy, dx)=0,
+   \end{align*}
+   $$
+   where the joint distribution is $\mu_{(X_n,X)}=\mathbb{P}\circ(X_n,X)^{-1}$. Equivalently
+   $$
+  \lim_{n \to \infty}\mathbb{E}\left[|X_n - X|^p\right] = \lim_{n \to \infty}\int_{\Omega} |X_n(\omega) - X(\omega)|^p\,\mathbb{P}(d\omega)=0,
+   $$   
+
+3. **Convergence in Probability ($X_n \xrightarrow{\mathbb{P}} X$):**
+   $$
+   \lim_{n \to \infty} \mathbb{P}\left(|X_n - X| > \epsilon\right) = \lim_{n \to \infty}\int_{\mathbb{R}^2} \mathbb{I}_{\{|y - x| > \epsilon\}} \, \mu_{(X_n, X)}(dy, dx)=0.
+   $$
+Equivalently,
+$$
+\lim_{n \to \infty} \mathbb{P}\left(|X_n - X| > \epsilon\right) = \lim_{n \to \infty}\int_{\Omega} \mathbb{I}_{\{|X_n(\omega) - X(\omega)| > \epsilon\}}\mathbb{P}(d\omega)= 0.
+$$
+
+:::{.callout-note}
+## Key Observation
+All of these modes of convergence require information about the **joint distribution** $\mu_{(X_n, X)}$ of $(X_n, X)$. We now turn to notions of convergence that depend **only on individual distributions**.
+:::
+
+---
+
+## Total Variation Distance
+
+Let $\mu, \nu$ be probability measures on a measurable space $(S, \mathcal{B})$. Because probability measures are real-valued functions on the $\sigma$-algebra $\mathcal{B}$, we can equip them with natural function-space metrics.
+
+:::{#def-tv-distance}
+## Total Variation Distance
+Let $\mu, \nu$ be probability measures on $(S, \mathcal{B})$. The **Total Variation Distance** between them is defined by:
+$$
+d_{\text{TV}}(\mu, \nu) := \sup_{B \in \mathcal{B}} |\mu(B) - \nu(B)|.
+$$
+If $X$ and $Y$ are $(S, \mathcal{B})$-valued random variables, we set:
+$$
+d_{\text{TV}}(X, Y) := d_{\text{TV}}(\mu_X, \mu_Y) = \sup_{B \in \mathcal{B}} |\mathbb{P}(X \in B) - \mathbb{P}(Y \in B)|.
+$$
+:::
+
+**Some Observations**:
+
+1. If $d_{\mathrm{TV}}(\mu,\nu)=0$, then $\mu$ and $\nu$ assign exactly the same probability to every event, so $\mu=\nu$.
+2. If $d_{\mathrm{TV}}(\mu,\nu)$ is small, then no event can have substantially different probabilities under the two measures.
+3. If $d_{\mathrm{TV}}(\mu,\nu)$ is close to $1$, there is an event that strongly distinguishes the two distributions.
+4. The maximum possible value is $1$.
+
+
+---
+
+## Scheffé's Lemma
+The following lemma, known as Scheffé's Lemma, provides an important characterization of the total variation distance in terms of densities with respect to a dominating measure.
+
+:::{#lem-scheffe}
+## Scheffé's Lemma
+Let $\mu, \nu \in \text{Prob}(S, \mathcal{B})$ and let $\alpha$ be a $\sigma$-finite measure on $(S, \mathcal{B})$ such that $\mu \ll \alpha$ and $\nu \ll \alpha$. By the Radon-Nikodym theorem there exist non-negative densities $u, v \in L^1(\alpha)$ with $d\mu = u \, d\alpha$, $d\nu = v \, d\alpha$ and $\int_S u \, d\alpha = \int_S v \, d\alpha = 1$. Then:
+$$
+d_{\text{TV}}(\mu, \nu) = \frac{1}{2} \|u - v\|_{L^1(\alpha)} = \frac{1}{2} \int_S |u - v| \, d\alpha.
+$$
+:::
+
+:::{.proof}
+## Proof of Scheffé's Lemma
+For any event $B \in \mathcal{B}$:
+$$
+|\mu(B) - \nu(B)| = \left| \int_B u \, d\alpha - \int_B v \, d\alpha \right| \le \int_B |u - v| \, d\alpha 
+$${#eq-tv-ineq-1}
+
+Similarly, applying (1) to the complement $B^c \in \mathcal{B}$ and using $\mu(B^c) = 1 - \mu(B)$, $\nu(B^c) = 1 - \nu(B)$ (here we use that $\mu$ and $\nu$ are *probability* measures):
+$$
+\begin{aligned}
+|\mu(B) - \nu(B)| &= |(1 - \mu(B)) - (1 - \nu(B))| \\
+&= |\mu(B^c) - \nu(B^c)| \le \int_{B^c} |u - v| \, d\alpha 
+\end{aligned}
+$${#eq-tv-ineq-2}
+
+Adding inequalities @eq-tv-ineq-1 and @eq-tv-ineq-2:
+$$
+\begin{aligned}
+2 |\mu(B) - \nu(B)| &\le \int_B |u - v| \, d\alpha + \int_{B^c} |u - v| \, d\alpha\\
+& = \int_S |u - v| \, d\alpha = \|u - v\|_{L^1(\alpha)}
+\end{aligned}
+$$
+Taking the supremum over all $B \in \mathcal{B}$ yields:
+$$
+d_{\text{TV}}(\mu, \nu) \le \frac{1}{2} \|u - v\|_{L^1(\alpha)}
+$$
+
+To achieve equality, define $A := \{x \in S : u(x) > v(x)\}$. Since $\int_S u \, d\alpha = \int_S v \, d\alpha = 1$, we have $\int_S (u - v) \, d\alpha = 0$. Thus:
+$$
+\int_A (u - v) \, d\alpha + \int_{A^c} (u - v) \, d\alpha = 0 \implies \int_A |u - v| \, d\alpha = \int_{A^c} |u - v| \, d\alpha
+$$
+Evaluating $|\mu(A) - \nu(A)|$:
+$$
+\begin{aligned}
+|\mu(A) - \nu(A)| &= \int_A (u - v) \, d\alpha \\
+&= \frac{1}{2} \left( \int_A |u - v| \, d\alpha + \int_{A^c} |u - v| \, d\alpha \right)\\
+&= \frac{1}{2} \int_S |u - v| \, d\alpha
+\end{aligned}
+$$
+Since $A \in \mathcal{B}$, the upper bound is attained, establishing $d_{\text{TV}}(\mu, \nu) = \frac{1}{2} \|u - v\|_{L^1(\alpha)}$. $\blacksquare$
+:::
+
+:::{.callout-note}
+## Construction of a Dominating Measure $\alpha$
+A common dominating measure always exists for a countable family. For any sequence $\{\mu_n\}_{n=1}^\infty \subset \text{Prob}(S, \mathcal{B})$, set:
+$$
+\alpha = \sum_{n=1}^\infty 2^{-n} \mu_n .
+$$
+This is a well-defined measure with $\alpha(S) = \sum_{n \ge 1} 2^{-n} = 1$, so $\alpha$ is finite (indeed a probability measure). If $\alpha(B) = 0$ then $2^{-k}\mu_k(B) \le \alpha(B) = 0$, hence $\mu_k \ll \alpha$ for every $k$, and by the Radon-Nikodym theorem $d\mu_k = u_k \, d\alpha$ with $u_k \ge 0$ and $\int_S u_k \, d\alpha = \mu_k(S) = 1$.
+
+(For a sequence of general finite measures one normalizes first, e.g. $\alpha = \sum_{n \ge 1} 2^{-n} \mu_n / (1 + \mu_n(S))$.)
+:::
+
+---
+
+## Properties of the Total Variation Metric
+Next, we discuss some important properties of the total variation metric. The following corollary summarizes these properties.
+
+:::{#cor-tv-properties}
+## Completeness
+$d_{\text{TV}}$ is a **complete metric** on $\text{Prob}(S, \mathcal{B})$, the space of probability measures on $(S, \mathcal{B})$.
+:::
+
+:::{.proof}
+## Proof of @cor-tv-properties
+Given any countable family of measures in $\text{Prob}(S, \mathcal{B})$, construct the dominating probability measure $\alpha$ as above and let $u_n$ denote the density $d\mu_n = u_n \, d\alpha$. All quantities below are then computed via @lem-scheffe with respect to this common $\alpha$.
+
+1. **Metric Axioms:** Let $\mu_1, \mu_2, \mu_3 \in \text{Prob}(S, \mathcal{B})$ and take $\alpha$ dominating these three measures.
+   * *Finiteness and non-negativity:* $0 \le d_{\text{TV}}(\mu_1, \mu_2) = \frac{1}{2}\|u_1 - u_2\|_{L^1(\alpha)} \le \frac{1}{2}(\|u_1\|_{L^1(\alpha)} + \|u_2\|_{L^1(\alpha)}) = 1$.
+   * *Symmetry:* $|\mu_1(B) - \mu_2(B)| = |\mu_2(B) - \mu_1(B)|$ for every $B \in \mathcal{B}$, hence $d_{\text{TV}}(\mu_1, \mu_2) = d_{\text{TV}}(\mu_2, \mu_1)$.
+   * *Identity of indiscernibles:* $d_{\text{TV}}(\mu_1, \mu_2) = 0 \iff \frac{1}{2}\int_S |u_1 - u_2| d\alpha = 0 \iff u_1 = u_2$ $\alpha$-a.s. $\iff \mu_1 = \mu_2$.
+   * *Triangle inequality* holds by $L^1(\alpha)$ norm bounds:
+     $$
+     \begin{align*}
+     d_{\text{TV}}(\mu_1, \mu_3) &= \frac{1}{2} \|u_1 - u_3\|_{L^1(\alpha)} \le \frac{1}{2}\left(\|u_1 - u_2\|_{L^1(\alpha)} + \|u_2 - u_3\|_{L^1(\alpha)}\right)\\
+     & = d_{\text{TV}}(\mu_1, \mu_2) + d_{\text{TV}}(\mu_2, \mu_3)
+     \end{align*}
+     $$
+2. **Completeness:**
+   Let $\{\mu_n\}_{n=1}^\infty \subset \text{Prob}(S, \mathcal{B})$ be $d_{\text{TV}}$-Cauchy and let $\alpha = \sum_{n \ge 1} 2^{-n}\mu_n$ with $d\mu_n = u_n \, d\alpha$. Since $\|u_n - u_m\|_{L^1(\alpha)} = 2 d_{\text{TV}}(\mu_n, \mu_m)$, the sequence $\{u_n\}_{n=1}^\infty$ is Cauchy in $L^1(\alpha)$. By completeness of $L^1(\alpha)$, there exists $u \in L^1(\alpha)$ such that $u_n \to u$ in $L^1(\alpha)$. Passing to a subsequence converging $\alpha$-a.s. gives $u \ge 0$ $\alpha$-a.s., and $\left|\int_S u \, d\alpha - 1\right| = \left|\int_S (u - u_n) \, d\alpha\right| \le \|u - u_n\|_{L^1(\alpha)} \to 0$ gives $\int_S u \, d\alpha = 1$. Define $d\mu := u \, d\alpha$, so $\mu \in \text{Prob}(S, \mathcal{B})$. Then:
+   $$
+   d_{\text{TV}}(\mu_n, \mu) = \frac{1}{2} \|u_n - u\|_{L^1(\alpha)} \xrightarrow{n \to \infty} 0
+   $$
+   Hence $\mu_n \to \mu$ in $d_{\text{TV}}$, establishing completeness. $\blacksquare$
+:::
+
+---
+
+## Integral Bounds & Variational Representation
+The following corollary provides bounds on integrals of bounded measurable functions with respect to probability measures in terms of the total variation distance.
+
+
+:::{#cor-bounded-functions}
+## Bounded Functions Characterization
+If $h : S \to \mathbb{R}$ is a bounded measurable function on $(S, \mathcal{B})$, then for any $\mu, \nu \in \text{Prob}(S, \mathcal{B})$:
+$$
+\left| \int_S h \, d\mu - \int_S h \, d\nu \right| \le 2 d_{\text{TV}}(\mu, \nu) \cdot \sup_{x \in S} |h(x)|
+$$
+Furthermore, $d_{\text{TV}}$ has the dual variational formulation:
+$$
+\begin{aligned}
+d_{\text{TV}}(\mu, \nu) &= \frac{1}{2} \sup \biggl\{ \left| \int_S h \, d\mu - \int_S h \, d\nu \right| : h : S \to \mathbb{R} \text{ measurable},\\
+&\quad\quad\quad\quad\quad \sup_{x \in S} |h(x)| \le 1 \biggr\}
+\end{aligned}
+$$
+:::
+
+:::{.proof}
+### Proof of @cor-bounded-functions
+Fix a dominating measure $\alpha$ for the pair $\{\mu, \nu\}$ (e.g. $\alpha = \frac{1}{2}(\mu + \nu)$) with $d\mu = u \, d\alpha$ and $d\nu = v \, d\alpha$. Since $h$ is bounded and measurable, $h \in L^1(\mu) \cap L^1(\nu)$ and all integrals below are finite:
+$$
+\begin{align*}
+\left| \int_S h \, d\mu - \int_S h \, d\nu \right| &= \left| \int_S h(u - v) \, d\alpha \right| \le \int_S |h| |u - v| \, d\alpha \\
+&\le \left(\sup_{x \in S} |h(x)|\right) \int_S |u - v| \, d\alpha
+\end{align*}
+$$
+By @lem-scheffe, $\int_S |u - v| d\alpha = 2 d_{\text{TV}}(\mu, \nu)$, giving the first bound.
+
+If $\sup_S |h| \le 1$, this implies $\left|\int_S h \, d\mu - \int_S h \, d\nu\right| \le 2 d_{\text{TV}}(\mu, \nu)$, so the supremum is at most $2 d_{\text{TV}}(\mu, \nu)$.
+To achieve equality, choose $h(x) = \mathbb{I}_{\{u > v\}}(x) - \mathbb{I}_{\{u \le v\}}(x)$, which is measurable because $u$ and $v$ are, and satisfies $\sup_S |h| = 1 \le 1$. Substituting $h$:
+$$
+\begin{align*}
+\int_S h \, d\mu - \int_S h \, d\nu &= \int_S (\mathbb{I}_{\{u > v\}} - \mathbb{I}_{\{u \le v\}})(u - v) \, d\alpha \\
+&= \int_{\{u > v\}} |u - v| \, d\alpha + \int_{\{u \le v\}} |u - v| \, d\alpha \\
+&= \int_S |u - v| \, d\alpha = 2 d_{\text{TV}}(\mu, \nu)
+\end{align*}
+$$
+Taking the supremum establishes the variational representation. $\blacksquare$
+:::
+
+---
+
+## Total Variation on Countable Spaces
+
+Total variation distance simplifies substantially when the underlying space $S$ is countable.
+
+:::{#lem-countable}
+## Countable State Space
+Let $S$ be a countable set equipped with $\mathcal{B} = 2^S$ (so that every singleton $\{k\}$ is measurable) and let $\mu, \nu \in \text{Prob}(S, \mathcal{B})$. Then:
+$$
+d_{\text{TV}}(\mu, \nu) = \frac{1}{2} \sum_{k \in S} |\mu(\{k\}) - \nu(\{k\})|
+$$
+Consequently, for $\mu_n, \mu \in \text{Prob}(S, \mathcal{B})$: $\mu_n \xrightarrow{d_{\text{TV}}} \mu \iff \mu_n(\{k\}) \to \mu(\{k\})$ pointwise for every $k \in S$.
+:::
+
+:::{.proof}
+## Proof of @lem-countable
+Enumerate $S = \{k_1, k_2, \dots\}$ and take the finite dominating measure $\alpha = \sum_{k \in S} \alpha_k \delta_k$ with weights $\alpha_{k_j} := 2^{-j} > 0$, so that $\alpha(S) = \sum_{k \in S}\alpha_k \le 1 < \infty$. Since $\alpha(B) = 0$ forces $B = \emptyset$, every measure on $(S, 2^S)$ is absolutely continuous with respect to $\alpha$, and the Radon-Nikodym densities are $u(k) = \frac{\mu(\{k\})}{\alpha_k}$ and $v(k) = \frac{\nu(\{k\})}{\alpha_k}$.
+Applying @lem-scheffe:
+$$
+\begin{align*}
+d_{\text{TV}}(\mu, \nu) &= \frac{1}{2} \int_S |u - v| \, d\alpha = \frac{1}{2} \sum_{k \in S} \alpha_k |u(k) - v(k)| \\
+&= \frac{1}{2} \sum_{k \in S} \left| u(k)\alpha_k - v(k)\alpha_k \right| = \frac{1}{2} \sum_{k \in S} |\mu(\{k\}) - \nu(\{k\})|
+\end{align*}
+$$
+
+For the convergence equivalence:
+
+* ($\Rightarrow$) Taking $B = \{k\}$ in the definition gives $|\mu_n(\{k\}) - \mu(\{k\})| \le d_{\text{TV}}(\mu_n, \mu) \to 0$ for each fixed $k$.
+* ($\Leftarrow$) Suppose $\mu_n(\{k\}) \to \mu(\{k\})$ for every $k$. Set
+  $$
+  g_n(k) := \mu_n(\{k\}) + \mu(\{k\}) - |\mu_n(\{k\}) - \mu(\{k\})| \ge 0 ,
+  $$
+  where non-negativity follows from $|a - b| \le a + b$ for $a, b \ge 0$. By Fatou's lemma for series (i.e. with respect to counting measure on $S$) and $g_n(k) \to 2\mu(\{k\})$,
+  $$
+  \begin{aligned}
+  &2 = \sum_{k \in S} \liminf_{n \to \infty} g_n(k) \le \liminf_{n \to \infty} \sum_{k \in S} g_n(k) \\
+  &= 2 - \limsup_{n \to \infty} \sum_{k \in S} |\mu_n(\{k\}) - \mu(\{k\})|,
+  \end{aligned}
+  $$
+  using $\sum_{k} \mu_n(\{k\}) = \sum_{k} \mu(\{k\}) = 1$. Hence $\limsup_n \sum_{k} |\mu_n(\{k\}) - \mu(\{k\})| \le 0$, i.e. $d_{\text{TV}}(\mu_n, \mu) \to 0$. 
+:::
+
+---
+
+## Example 1: Bernoulli Distributions
+Let $\mu_p \triangleq \text{Bernoulli}(p)$ and $\mu_q \triangleq \text{Bernoulli}(q)$ for $p, q \in [0, 1]$. Using @lem-countable on $S = \{0, 1\}$:
+$$
+\begin{align*}
+d_{\text{TV}}(\mu_p, \mu_q) &= \frac{1}{2} \sum_{x=0}^1 |\mu_p(\{x\}) - \mu_q(\{x\})|\\
+&= \frac{1}{2} \left( |(1 - p) - (1 - q)| + |p - q| \right) = |p - q|
+\end{align*}
+$$
+
+---
+
+## Example 2: Poisson Distribution
+Let $\nu_\lambda \triangleq \text{Poisson}(\lambda)$ where $\nu_\lambda(\{k\}) = \frac{e^{-\lambda} \lambda^k}{k!}$ for $k \in \mathbb{N}_0$. Consider $\nu_\lambda$ and $\nu_\eta$ for $\lambda, \eta > 0$. Using @lem-countable on $S = \mathbb{N}_0$:
+$$
+\begin{align*}
+d_{\text{TV}}(\nu_\lambda, \nu_\eta) &= \frac{1}{2} \sum_{k=0}^\infty |\nu_\lambda(\{k\}) - \nu_\eta(\{k\})| = \frac{1}{2} \sum_{k=0}^\infty \left| \frac{e^{-\lambda} \lambda^k}{k!} - \frac{e^{-\eta} \eta^k}{k!} \right| \\
+&= \frac{1}{2} \sum_{k=0}^\infty \frac{1}{k!} \left| e^{-\lambda} \lambda^k - e^{-\eta} \eta^k \right| \leq 1 - e^{-|\lambda - \eta|} \le |\lambda - \eta|.
+\end{align*}
+$$
+
+The last two bounds are justified as follows. Assume without loss of generality that $\lambda \le \eta$ and let $X \sim \text{Poisson}(\lambda)$ and $Z \sim \text{Poisson}(\eta - \lambda)$ be independent, so that $Y := X + Z \sim \text{Poisson}(\eta)$ by the convolution property of Poisson laws. For any $B \subseteq \mathbb{N}_0$,
+$$
+\begin{aligned}
+|\nu_\lambda(B) - \nu_\eta(B)| &= |\mathbb{P}(X \in B) - \mathbb{P}(Y \in B)| \\
+&\le \mathbb{P}(X \ne Y) = \mathbb{P}(Z \ne 0)\\
+& = 1 - e^{-(\eta - \lambda)},
+\end{aligned}
+$$
+and taking the supremum over $B$ gives $d_{\text{TV}}(\nu_\lambda, \nu_\eta) \le 1 - e^{-|\lambda - \eta|}$. The final inequality is the elementary bound $1 - e^{-t} \le t$ for $t \ge 0$.
+
+---
+
+## Example 3: Bernoulli vs. Poisson Comparison
+Fix $p \in [0, 1]$ and regard both laws as elements of $\text{Prob}(\mathbb{N}_0, 2^{\mathbb{N}_0})$. Consider $d_{\text{TV}}(\mu_p, \nu_p)$ where $\mu_p = \text{Bernoulli}(p)$ and $\nu_p = \text{Poisson}(p)$. Since $\mu_p(\{k\}) = 0$ for all $k \ge 2$, @lem-countable gives:
+
+$$
+\begin{align*}
+d_{\text{TV}}(\mu_p, \nu_p) &= \frac{1}{2} \sum_{x=0}^\infty |\mu_p(\{x\}) - \nu_p(\{x\})| \\
+&= \frac{1}{2} |\mu_p(\{0\}) - \nu_p(\{0\})| \\
+&\quad + \frac{1}{2} |\mu_p(\{1\}) - \nu_p(\{1\})| + \frac{1}{2} \sum_{k \ge 2} \nu_p(\{k\}).
+\end{align*}
+$$
+
+Evaluating individual terms:
+
+* $\mu_p(\{0\}) - \nu_p(\{0\}) = 1 - p - e^{-p}$
+* $\mu_p(\{1\}) - \nu_p(\{1\}) = p - p e^{-p} = p(1 - e^{-p}) \ge 0$
+* $\sum_{k \ge 2} \nu_p(\{k\}) = 1 - \nu_p(\{0\}) - \nu_p(\{1\}) = 1 - e^{-p} - p e^{-p} \ge 0$
+
+Using the standard inequality $1 - p \le e^{-p}$, we have $1 - p - e^{-p} \le 0$, so $|1 - p - e^{-p}| = e^{-p} + p - 1$.
+
+Combining all components:
+$$
+\begin{aligned}
+d_{\text{TV}}(\mu_p, \nu_p) &= \frac{1}{2} (e^{-p} + p - 1) + \frac{1}{2} p(1 - e^{-p}) + \frac{1}{2} (1 - e^{-p} - p e^{-p}) \\
+&= \frac{1}{2} e^{-p} + \frac{1}{2} p - \frac{1}{2} + \frac{1}{2} p - \frac{1}{2} p e^{-p} + \frac{1}{2} - \frac{1}{2} e^{-p} - \frac{1}{2} p e^{-p} \\
+&= p (1 - e^{-p}).
+\end{aligned}
+$$
+
+Thus, the exact total variation distance is:
+$$
+d_{\text{TV}}(\text{Bernoulli}(p), \text{Poisson}(p)) = p (1 - e^{-p}).
+$$
+
+

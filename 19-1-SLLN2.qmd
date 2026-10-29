@@ -1,0 +1,211 @@
+# Lecture 19.1: Strong Law of Large Numbers (II)
+
+## Kronecker's Lemma
+
+Kronecker's Lemma serves as the primary analytical bridge translating the convergence of infinite weighted series (obtained via Kolmogorov's Convergence Criterion) into almost sure Cesàro-type limits for partial sums. The central message of Kronecker's Lemma is:
+
+- If the weighted terms $x_k/b_k$ are summable, then the corresponding cumulative sum $\sum_{k=1}^n x_k$ grows more slowly than $b_n$.
+
+::: {#lem-kronecker}
+## Kronecker's Lemma
+
+Let $\{x_n\}_{n=1}^\infty$ be a sequence in $\mathbb{R}$ (or any normed vector space), and let $\{b_n\}_{n=1}^\infty$ be a sequence of positive real numbers such that $b_n \uparrow \infty$. If the infinite series $\sum_{k=1}^\infty \frac{x_k}{b_k}$ converges in $\mathbb{R}$, then:
+$$
+\lim_{n \to \infty} \frac{1}{b_n} \sum_{k=1}^n x_k = 0
+$$ {#eq-kronecker-statement}
+:::
+
+::: {.proof}
+## Proof of @lem-kronecker
+Define $y_k \triangleq \frac{x_k}{b_k}$ and $S_n \triangleq \sum_{k=1}^n y_k$ for $n \ge 1$ (with $S_0 \triangleq 0$). By hypothesis, $S_n \to S \in \mathbb{R}$ as $n \to \infty$. Express $x_k = b_k (S_k - S_{k-1})$ and perform summation by parts:
+$$
+\begin{aligned}
+\sum_{k=1}^n x_k &= \sum_{k=1}^n b_k (S_k - S_{k-1}) \\
+&= \sum_{k=1}^n b_kS_k - \sum_{k=0}^{n-1} b_{k+1} S_k\\ 
+&= b_n S_n + \sum_{k=1}^{n-1} (b_k - b_{k+1}) S_k
+\end{aligned}
+$$ {#eq-summation-by-parts-kronecker}
+
+Divide both sides by $b_n$ and add/subtract $\frac{S}{b_n} \sum_{k=1}^{n-1} (b_{k+1} - b_k) = S \left(1 - \frac{b_1}{b_n}\right)$:
+$$
+\begin{aligned}
+\frac{1}{b_n} \sum_{k=1}^n x_k &= S_n - \frac{1}{b_n} \sum_{k=1}^{n-1} (b_{k+1} - b_k) S_k \\
+&= S_n - \left(1 - \frac{b_1}{b_n}\right) S + R_n,
+\end{aligned}
+$$
+where the remainder term $R_n$ is defined as:
+$$
+R_n \triangleq \frac{1}{b_n} \sum_{k=1}^{n-1} (b_{k+1} - b_k) (S - S_k)
+$$ {#eq-kronecker-rn-def}
+
+Since $S_n \to S$ and $b_n \to \infty$, $S_n - \left(1 - \frac{b_1}{b_n}\right) S \to S - S = 0$. For $R_n$, fix $N \in \mathbb{N}$. For $n > N$, split the sum at $N$:
+$$
+\begin{aligned}
+|R_n| &\le \frac{1}{b_n} \sum_{k=1}^{N-1} (b_{k+1} - b_k) |S - S_k| \\
+&+ \left( \sup_{k \ge N} |S - S_k| \right) \frac{1}{b_n} \sum_{k=N}^{n-1} (b_{k+1} - b_k)
+\end{aligned}
+$$ {#eq-rn-split-bound}
+As $n \to \infty$, the first term vanishes because the numerator sum is constant while $b_n \to \infty$. The second term is bounded by $\sup_{k \ge N} |S - S_k| \cdot \left(1 - \frac{b_N}{b_n}\right) \le \sup_{k \ge N} |S - S_k|$. Taking $N \to \infty$ forces $R_n \to 0$. Thus $\frac{1}{b_n} \sum_{k=1}^n x_k \to 0$.
+:::
+
+::: {#exm-kronecker-harmonic}
+## Harmonic Sequence
+Consider the sequences $x_n=\frac{1}{n}$ and $b_n=n$. Then, $b_n\uparrow\infty$, and
+$\frac{x_k}{b_k}=\frac{1/k}{k}=\frac{1}{k^2}$. Therefore,
+$$
+\sum_{k=1}^\infty \frac{x_k}{b_k}=\sum_{k=1}^\infty \frac{1}{k^2}<\infty.
+$$
+Hence, by Kronecker's Lemma, $\frac{1}{n}\sum_{k=1}^n x_k\longrightarrow 0$. Indeed, in this case,
+$$
+\frac{1}{n}\sum_{k=1}^n x_k=\frac{1}{n}\sum_{k=1}^n\frac{1}{k}
+=\frac{H_n}{n},
+$$
+where $H_n$ denotes the $n$-th harmonic number. Since $H_n\sim\log n$,
+we have $\frac{H_n}{n} \sim \frac{\log n}{n} \longrightarrow 0$. Thus, Kronecker's Lemma gives
+$$
+\frac{1}{n}\sum_{k=1}^n\frac{1}{k}\longrightarrow0.
+$$
+:::
+
+::: {#exm-kronecker-alternating}
+## An Alternating Sequence
+Consider $x_n=\frac{(-1)^n}{\sqrt{n}}$ and $b_n=n$. Then $\frac{x_n}{b_n} = \frac{(-1)^n}{n^{3/2}}$. The corresponding series converges absolutely because
+$$
+\sum_{n=1}^\infty
+\left|
+\frac{x_n}{b_n}
+\right|
+=
+\sum_{n=1}^\infty\frac{1}{n^{3/2}}
+<\infty.
+$$
+Therefore, Kronecker's Lemma implies $\frac{1}{n}\sum_{k=1}^n\frac{(-1)^k}{\sqrt{k}}\longrightarrow0$. Equivalently, $\sum_{k=1}^n\frac{(-1)^k}{\sqrt{k}}=o(n)$. This example illustrates an important feature of Kronecker's Lemma. The lemma does not say that the partial sums $\sum_{k=1}^n x_k$ must converge. Rather, it says that their growth is negligible relative to $b_n$: $\sum_{k=1}^n x_k=o(b_n)$. Here, $b_n=n$, so the conclusion is that the partial sums grow more slowly than linearly.
+:::
+
+---
+
+## Complete Proof of Kolmogorov's Strong Law of Large Numbers
+
+::: {#thm-kolmogorov-slln-full}
+## Kolmogorov's Strong Law of Large Numbers (SLLN)
+
+Let $\{X_n\}_{n=1}^\infty$ be an i.i.d. sequence of $L^1$ random variables with $E[X_1] = \alpha$. Let $S_n \triangleq \sum_{k=1}^n X_k$. Then:
+$$
+\frac{S_n}{n} \xrightarrow{\text{a.s.}} \alpha \quad \text{as } n \to \infty
+$$ {#eq-slln-main-target}
+:::
+
+::: {.proof}
+By @cor-iid-tail-truncation, $\{X_n\}$ is tail equivalent to the truncated sequence $X_n' \triangleq X_n \mathbf{1}_{\{|X_n| \le n\}}$. Hence by @prp-tail-equivalence-slln (applied with $b_n = n$ and target limit $\alpha$), it suffices to prove $\frac{S_n'}{n} \xrightarrow{\text{a.s.}} \alpha$, where $S_n' \triangleq \sum_{k=1}^n X_k'$.
+
+1. **Variance Sum Bound:** Set $Y_n \triangleq \frac{X_n'}{n}$. Calculate the sum of variances:
+   $$
+   \begin{aligned}
+   \sum_{n=1}^\infty \operatorname{Var}\left( \frac{X_n'}{n} \right) &= \sum_{n=1}^\infty \frac{1}{n^2} \operatorname{Var}(X_n') \\
+   &\le \sum_{n=1}^\infty \frac{1}{n^2} \mathbb{E}\left[ |X_n'|^2 \right] \\
+   &= \sum_{n=1}^\infty \frac{1}{n^2} \mathbb{E}\left[ |X_1|^2 \mathbf{1}_{\{|X_1| \le n\}} \right].
+   \end{aligned}
+   $$ {#eq-slln-var-sum-start}
+
+   Interchange expectation and summation via Fubini-Tonelli:
+   $$
+   \sum_{n=1}^\infty \frac{1}{n^2} \mathbb{E}\left[ |X_1|^2 \mathbf{1}_{\{|X_1| \le n\}} \right] = \mathbb{E}\left[ |X_1|^2 \sum_{n \ge |X_1|}^\infty \frac{1}{n^2} \right]
+   $$ {#eq-fubini-tonelli-slln}
+
+   For $x > 1$, estimate the tail sum $\sum_{n \ge x}^\infty \frac{1}{n^2}$ using the integral test (with the shift $t \mapsto t-1$ so the integral is finite):
+   $$
+   \sum_{n \ge x}^\infty \frac{1}{n^2} \le \min\left( \frac{\pi^2}{6}, \int_{x-1}^\infty \frac{1}{t^2} \, dt \right) = \min\left( \frac{\pi^2}{6}, \frac{1}{x-1} \right).
+   $$ {#eq-tail-sum-integral-estimate}
+   We claim this is $\le \min\left(4, \frac{4}{x}\right)$ for every $x > 1$: if $1 < x \le 2$ then $\frac{4}{x} \ge 2 > \frac{\pi^2}{6}$, so $\min\left(\frac{\pi^2}{6}, \frac{1}{x-1}\right) \le \frac{\pi^2}{6} < \frac{4}{x}$; if $x > 2$ then $\frac{1}{x-1} \le \frac{4}{x}$ (equivalent to $x \ge \frac{4}{3}$, which holds), so $\min\left(\frac{\pi^2}{6}, \frac{1}{x-1}\right) \le \frac{1}{x-1} \le \frac{4}{x}$. (The naive constant $2$ in place of $4$ fails here: at $x=1.5$, $\pi^2/6 \approx 1.645 > 2/x \approx 1.333$.) For $0 \le x \le 1$, the sum is bounded by $\pi^2/6 \le 4 \le \min(4,4/x)$ trivially. Hence $\sum_{n \ge x}^\infty \frac{1}{n^2} \le \min\left(4, \frac{4}{x}\right)$ for all $x \ge 0$.
+
+   Substituting this back with $x = |X_1|$ yields:
+   $$
+   \begin{aligned}
+   \sum_{n=1}^\infty \operatorname{Var}\left( \frac{X_n'}{n} \right) &\le \mathbb{E}\left[ |X_1|^2 \cdot \min\left( 4, \frac{4}{|X_1|} \right) \right] \\
+   &= 4\, \mathbb{E}\left[ \min(|X_1|^2, |X_1|) \right] \le 4\, \mathbb{E}[|X_1|] < \infty,
+   \end{aligned}
+   $$ {#eq-slln-var-finite-bound}
+   using $\min(|X_1|^2,|X_1|) \le |X_1|$ pointwise (true since $\min(a^2,a) \le a$ for every $a \ge 0$).
+
+2. **Application of Kolmogorov's Convergence Criterion:** Since $\sum_{n=1}^\infty \operatorname{Var}\left( \frac{X_n'}{n} \right) < \infty$, Kolmogorov's Convergence Criterion (@thm-kolmogorov-convergence-criterion) implies that:
+   $$
+   \sum_{n=1}^\infty \frac{X_n' - E[X_n']}{n} \quad \text{converges almost surely.}
+   $$ {#eq-slln-series-conv-as}
+
+3. **Application of Kronecker's Lemma:** By Step 2, for almost every fixed $\omega \in \Omega$ the real-number series $\sum_{k=1}^\infty \frac{X_k'(\omega) - E[X_k']}{k}$ converges. Since Kronecker's Lemma (@lem-kronecker) is a purely deterministic statement about real sequences, it applies pathwise to each such $\omega$ with $x_k = X_k'(\omega) - E[X_k']$ and $b_k = k$, giving:
+   $$
+   \frac{1}{n} \sum_{k=1}^n (X_k' - E[X_k']) = \frac{S_n'}{n} - \frac{1}{n} \sum_{k=1}^n E[X_k'] \xrightarrow{\text{a.s.}} 0
+   $$ {#eq-kronecker-applied-slln}
+
+4. **Cesàro Means of Expectations:** By the Dominated Convergence Theorem (dominating function $|X_1| \in L^1$, since $|X_1 \mathbf{1}_{\{|X_1|\le k\}}| \le |X_1|$), $\mathbb{E}[X_k'] = \mathbb{E}[X_1 \mathbf{1}_{\{|X_1| \le k\}}] \xrightarrow{k \to \infty} \mathbb{E}[X_1] = \alpha$. The Cesàro mean of any convergent real sequence $a_k \to \alpha$ converges to the same limit: given $\epsilon>0$, choose $N$ with $|a_k - \alpha| < \epsilon$ for all $k \ge N$; then
+   $$
+   \left| \frac{1}{n}\sum_{k=1}^n a_k - \alpha \right| \le \frac{1}{n}\sum_{k=1}^{N-1} |a_k - \alpha| + \frac{n-N+1}{n}\epsilon \xrightarrow{n \to \infty} \epsilon,
+   $$
+   and since $\epsilon>0$ was arbitrary, the limit is $\alpha$. Applying this with $a_k = \mathbb{E}[X_k']$:
+   $$
+   \lim_{n \to \infty} \frac{1}{n} \sum_{k=1}^n \mathbb{E}[X_k'] = \alpha
+   $$ {#eq-cesaro-limit-expectation}
+   Combining Steps 3 and 4 establishes $\frac{S_n'}{n} \xrightarrow{\text{a.s.}} \alpha$, which completes the proof.
+:::
+
+---
+
+## Marcinkiewicz-Zygmund Extensions and Rates of Convergence
+
+::: {#thm-marcinkiewicz-zygmund}
+## Marcinkiewicz-Zygmund Strong Law
+
+Let $\{X_n\}_{n=1}^\infty$ be i.i.d. random variables in $L^p$ for $p \in (1, 2)$ with $E[X_1] = \alpha$. Then:
+$$
+\frac{S_n - n\alpha}{n^{1/p}} \xrightarrow{\text{a.s.}} 0,
+$$ {#eq-mz-rate-statement}
+or equivalently, dividing both sides by $n^{1-1/p}$:
+$$
+\left| \frac{S_n}{n} - \alpha \right| = o\left( \frac{1}{n^{1 - 1/p}} \right) \quad \text{a.s.}
+$$ {#eq-mz-rate-equivalent}
+:::
+
+::: {.proof}
+## Proof of @thm-marcinkiewicz-zygmund
+The proof follows the $L^1$ SLLN outline using cut-offs $X_n' \triangleq X_n \mathbf{1}_{\{|X_n| \le n^{1/p}\}}$ and normalization $b_n = n^{1/p}$. The tail integral bound evaluates as $\sum_{n \ge x} n^{-2/p} \le \frac{p}{2-p} (x-1)^{\frac{p-2}{p}}$.
+:::
+
+::: {#thm-l2-slln-general}
+## $L^2$-SLLN under Independent Heterogeneous Variables
+
+Let $\{X_n\}_{n=1}^\infty$ be independent random variables with common mean $E[X_n] = \alpha$ and uniformly bounded variance $\operatorname{Var}(X_n) \le s^2 < \infty$. Let $b_n > 0$ with $b_n \uparrow \infty$ satisfying $\sum_{n=1}^\infty \frac{1}{b_n^2} < \infty$. Then:
+$$
+\frac{S_n - n\alpha}{b_n} \xrightarrow{\text{a.s. and } L^2} 0
+$$ {#eq-l2-slln-general-statement}
+:::
+
+::: {.proof}
+## Proof of @thm-l2-slln-general
+
+* **Almost Sure Convergence:** Since $\operatorname{Var}(X_n/b_n) = \operatorname{Var}(X_n)/b_n^2 \le s^2/b_n^2$, we have $\sum_{n=1}^\infty \operatorname{Var}\left( \frac{X_n}{b_n} \right) \le s^2 \sum_{n=1}^\infty \frac{1}{b_n^2} < \infty$. By Kolmogorov's Convergence Criterion (@thm-kolmogorov-convergence-criterion), $\sum_{n=1}^\infty \frac{X_n - \alpha}{b_n}$ converges almost surely. Applying Kronecker's Lemma (@lem-kronecker) pathwise with $x_k = X_k - \alpha$ and weights $b_k$ gives $\frac{1}{b_n}\sum_{k=1}^n (X_k - \alpha) = \frac{S_n - n\alpha}{b_n} \xrightarrow{\text{a.s.}} 0$.
+* **$L^2$ Convergence:** $\left\|\frac{S_n - n\alpha}{b_n}\right\|_{L^2}^2 = \frac{1}{b_n^2} \operatorname{Var}(S_n) = \frac{1}{b_n^2} \sum_{k=1}^n \operatorname{Var}(X_k) \le s^2 \frac{n}{b_n^2}$. To see $\frac{n}{b_n^2} \to 0$, apply Kronecker's Lemma (@lem-kronecker) to the constant sequence $x_k = 1$ with **weights $b_k^2$** (not $b_k$): since $b_k^2 \uparrow \infty$ and $\sum_{k=1}^\infty \frac{x_k}{b_k^2} = \sum_{k=1}^\infty \frac{1}{b_k^2} < \infty$ by hypothesis, the lemma gives $\frac{1}{b_n^2}\sum_{k=1}^n 1 = \frac{n}{b_n^2} \to 0$, hence $\left\|\frac{S_n-n\alpha}{b_n}\right\|_{L^2}^2 \to 0$.
+:::
+
+---
+
+## Comparison of Normalization Rates
+
+The following table compares different normalization rates and the corresponding convergence guarantees for sums of independent random variables.
+
+| Rate Choice / Theorem | Normalization $b_n$ | Convergence Guarantee |
+| :--- | :--- | :--- |
+| **Marcinkiewicz-Zygmund ($p \in (1, 2)$)** | $b_n = n^{1/p}$ | $\frac{S_n - n\alpha}{n^{1/p}} \xrightarrow{\text{a.s.}} 0$ |
+| **Polynomial $L^2$-SLLN ($p > 0$)** | $b_n = n^{1/2 + p}$ | $\frac{S_n - n\alpha}{n^{1/2+p}} \xrightarrow{\text{a.s. and } L^2} 0$ |
+| **Log-power $L^2$-SLLN ($\epsilon > 0$)** | $b_n = \sqrt{n} (\log n)^{1/2 + \epsilon}$ | $\frac{S_n - n\alpha}{\sqrt{n}(\log n)^{1/2+\epsilon}} \xrightarrow{\text{a.s. and } L^2} 0$ |
+| **Law of the Iterated Logarithm (Khinchin)** | $b_n = \sqrt{2 s^2 n \log \log n}$ | $\limsup_{n \to \infty} \frac{S_n - n\alpha}{b_n} = 1$ a.s. |
+
+---
+
+## Takeaways
+
+- **Kronecker's Lemma is the analytic engine, not a probability result.** It is a purely deterministic statement about real sequences: if a weighted series $\sum x_k/b_k$ converges, the Cesàro-type average $\frac{1}{b_n}\sum_{k=1}^n x_k$ vanishes. Its power in probability comes from applying it *pathwise*, i.e., separately to almost every $\omega$ after a.s. convergence of a random series has been established some other way (typically via Kolmogorov's Convergence Criterion).
+- **The two-step recipe: variance-summability $\to$ Kronecker.** Every SLLN-type result in this lecture ([thm-kolmogorov-slln-full](19-1-SLLN2.qmd), [thm-l2-slln-general](19-1-SLLN2.qmd)) follows the same pattern: (1) truncate/normalize so that $\sum \operatorname{Var}(X_n/b_n) < \infty$, invoke Kolmogorov's Convergence Criterion to get a.s. convergence of the centered weighted series, then (2) apply Kronecker's Lemma to convert that series convergence into convergence of the Cesàro-type average $S_n/b_n$.
+- **Truncation tail bounds are delicate.** Converting a second-moment tail sum like $\sum_{n\ge x} n^{-2}$ into a bound linear in $x$ requires care with the constants — a naive integral shift can produce a bound that fails on part of the range (as seen with the constant $2$ vs. $4$ in [thm-kolmogorov-slln-full](19-1-SLLN2.qmd)'s proof). Always verify such min-type bounds hold on the *entire* range, not just asymptotically.
+- **Normalization rate trades off against moment assumptions.** The comparison table makes explicit the tradeoff: the classical SLLN needs only $L^1$ with $b_n=n$; weaker moments ($L^p$, $p\in(1,2)$) force a slower-growing normalization $b_n = n^{1/p}$ (Marcinkiewicz-Zygmund); while retaining $L^2$ but allowing heterogeneity lets $b_n$ grow anywhere from just above $\sqrt n$ (with a log-power correction) to $n^{1/2+p}$, so long as $\sum 1/b_n^2 < \infty$.
+- **The Law of the Iterated Logarithm is the sharp boundary.** Where the SLLN only tells us $S_n/b_n \to 0$, the LIL identifies the *exact* almost-sure growth envelope $b_n = \sqrt{2s^2 n \log\log n}$ at which $\limsup (S_n-n\alpha)/b_n = 1$ — showing that no normalization growing strictly slower than $\sqrt{n\log\log n}$ can force a.s. convergence to $0$ for general finite-variance i.i.d. sequences.
+- **Net effect:** together with the truncation and tail-equivalence tools from [18-1-SLLN1.qmd](18-1-SLLN1.qmd) and the Maximal Inequality from [18-2-Kolmogorov-Convergence-Criterion.qmd](18-2-Kolmogorov-Convergence-Criterion.qmd), this lecture completes the full proof of Kolmogorov's Strong Law of Large Numbers and situates it within a broader family of normalization-rate results.

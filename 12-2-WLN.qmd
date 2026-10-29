@@ -1,0 +1,196 @@
+# Lecture 12.2: The Weak Law of Large Numbers
+
+## Markov's and Chebyshev's Inequalities
+
+## Markov's Inequality
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space. Recall Markov's inequality: if $f \ge 0$ is a non-negative measurable function and $\epsilon > 0, p > 0$, then:
+$$
+\mu(\{f \ge \epsilon\}) \le \frac{1}{\epsilon^p} \int_{\Omega} f^p \, d\mu
+$$ {#eq-markov-ineq}
+
+---
+
+## Chebyshev's Inequality
+
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space and let $X \in L^2(\Omega, \mathcal{F}, \mathbb{P})$.
+
+Setting $p = 2$ and applying Markov's inequality to the non-negative random variable $f = |\dot{X}| = |X - \mathbb{E}[X]|$, we obtain Chebyshev's inequality:
+
+::: {#thm-chebyshev-inequality}
+## Chebyshev's Inequality
+
+Let $X \in L^2(\Omega, \mathcal{F}, \mathbb{P})$. For any $\epsilon > 0$:
+$$
+\begin{aligned}
+\mathbb{P}\left(|X - \mathbb{E}[X]| \ge \epsilon\right) &= \mathbb{P}\left(|\dot{X}|\ge \epsilon\right) \\
+&\le \frac{1}{\epsilon^2} \mathbb{E}\left[|\dot{X}|^2\right] = \frac{\text{Var}(X)}{\epsilon^2}.
+\end{aligned}
+$$ {#eq-chebyshev-ineq}
+:::
+
+::: {.proof}
+By definition of expectation and non-negativity of $|\dot{X}|^2$:
+$$
+\begin{aligned}
+\text{Var}(X) &= \mathbb{E}\left[|\dot{X}|^2\right] = \int_{\Omega} |\dot{X}|^2 \, d\mathbb{P}\\
+& \ge \int_{\{|\dot{X}| \ge \epsilon\}} |\dot{X}|^2 \, d\mathbb{P} \ge \epsilon^2 \int_{\{|\dot{X}| \ge \epsilon\}} \, d\mathbb{P} = \epsilon^2 \mathbb{P}(|\dot{X}| \ge \epsilon).
+\end{aligned}
+$$
+
+Dividing both sides by $\epsilon^2 > 0$ completes the proof.
+:::
+
+**Alternative Form (Standard Deviation Units)**:
+
+Let $\sigma(X) \triangleq \sqrt{\text{Var}(X)}$ denote the standard deviation of $X$. Setting $\epsilon = k \sigma(X)$ for $k > 0$ in @eq-chebyshev-ineq yields:
+$$
+\mathbb{P}\left(|X - \mathbb{E}[X]| \ge k \sigma(X)\right) \le \frac{\text{Var}(X)}{(k \sigma(X))^2} = \frac{1}{k^2}
+$$ {#eq-chebyshev-k-sigma}
+
+---
+
+## Interpretation of Expectation and the Empirical Mean
+
+Consider tossing a fair coin $n$ times:
+
+* **Sample Space:** $\Omega = \{ \omega = (\omega_1, \dots, \omega_n) \mid \omega_j \in \{0, 1\} \}$.
+* **$\sigma$-algebra:** $\mathcal{F} = 2^{\Omega}$.
+* **Probability Measure:** $\mathbb{P}(\{\omega\}) = 2^{-n}$ for each elementary outcome $\omega \in \Omega$.
+* **Indicator Random Variables:** $X_j(\omega) = \omega_j \in \{0, 1\}$ for $j = 1, \dots, n$.
+
+Each coordinate $X_j$ takes value 1 for $2^{n-1}$ outcomes and 0 for $2^{n-1}$ outcomes, giving:
+$$
+\mathbb{E}[X_j] = \sum_{\omega \in \Omega} X_j(\omega) \mathbb{P}(\omega) = \sum_{\omega \in \Omega} \omega_j 2^{-n} = \frac{1}{2}
+$$
+
+## Total Number of Heads
+
+Define the total number of heads $S_n \triangleq \sum_{j=1}^n X_j$. By linearity of expectation:
+$$
+\mathbb{E}[S_n] = \sum_{j=1}^n \mathbb{E}[X_j] = \frac{n}{2}
+$$
+
+The range of $S_n(\omega)$ is $\{0, 1, 2, \dots, n\}$. The probability mass function is:
+$$
+\begin{align*}
+\mathbb{P}(S_n = k) &= \frac{1}{2^n} \# \{ \omega \in \Omega \mid \omega_1 + \dots + \omega_n = k \} \\
+&= \frac{1}{2^n} \binom{n}{k}, \quad k \in \{0, 1, \dots, n\}
+\end{align*}
+$$
+
+Thus, $S_n \sim \text{Bin}\left(n, \frac{1}{2}\right)$.
+
+---
+
+## Proportion of Heads
+
+Consider the sample mean $\frac{S_n}{n}$. Its expectation is $\mathbb{E}\left[\frac{S_n}{n}\right] = \frac{1}{2}$.
+
+Since the $X_j$ are pairwise uncorrelated (shown in Lecture 12.1, with $\text{Var}(X_j) = \frac{1}{4}$), Bienaymé's identity gives:
+$$
+\text{Var}(S_n) = \sum_{j=1}^n \text{Var}(X_j) = n \cdot \frac{1}{4} = \frac{n}{4}.
+$$
+
+Using $\text{Var}(cX) = c^2 \text{Var}(X)$ with $c = 1/n$:
+$$
+\text{Var}\!\left(\frac{S_n}{n}\right) = \frac{1}{n^2} \text{Var}(S_n) = \frac{n/4}{n^2} = \frac{1}{4n}.
+$$
+
+Applying Chebyshev's inequality to $\frac{S_n}{n}$:
+$$
+\mathbb{P}\left(\left| \frac{S_n}{n} - \frac{1}{2} \right| \ge \epsilon\right) \le \frac{\text{Var}(S_n/n)}{\epsilon^2} = \frac{1}{4n\epsilon^2} = \mathcal{O}\left(\frac{1}{n}\right).
+$$ 
+
+This concentration property is not restricted to binomial distributions; it holds because $S_n = \sum_{j=1}^n X_j$ is a sum of uncorrelated random variables normalized by $n$.
+
+---
+
+## The Weak Law of Large Numbers (WLLN)
+
+::: {#thm-wlln-uncorrelated}
+## Weak Law of Large Numbers (Uncorrelated $L^2$ Case)
+
+Let $\{X_n\}_{n=1}^{\infty}$ be a sequence of $L^2(\Omega, \mathcal{F}, \mathbb{P})$ random variables on a common probability space. Suppose $\{X_n\}$ are pairwise uncorrelated:
+$$
+\text{Cov}(X_n, X_m) = 0 \quad \text{for } n \neq m,
+$$
+
+and share a common mean $\alpha \in \mathbb{R}$ and common variance $t > 0$:
+$$
+\mathbb{E}[X_n] = \alpha, \quad \text{Var}(X_n) = t \quad \forall n \in \mathbb{N}.
+$$
+
+Let $S_n \triangleq \sum_{j=1}^n X_j$. Then for any $\epsilon > 0$:
+$$
+\mathbb{P}\left(\left| \frac{S_n}{n} - \alpha \right| \ge \epsilon\right) \le \frac{t}{n \epsilon^2} = \mathcal{O}\left(\frac{1}{n}\right) \xrightarrow{n \to \infty} 0.
+$$ {#eq-wlln-bound}
+:::
+
+::: {.proof}
+## Proof of @eq-wlln-bound
+By linearity of expectation:
+$$
+\mathbb{E}[S_n] = \mathbb{E}\left[ \sum_{j=1}^n X_j \right] = \sum_{j=1}^n \mathbb{E}[X_j] = n \alpha \implies \mathbb{E}\left[ \frac{S_n}{n} \right] = \alpha
+$$
+
+Because the $\{X_j\}$ are pairwise uncorrelated, Bienaymé's identity applies:
+$$
+\text{Var}(S_n) = \text{Var}\left( \sum_{j=1}^n X_j \right) = \sum_{j=1}^n \text{Var}(X_j) = n t
+$$
+
+Therefore, the variance of the sample average is:
+$$
+\text{Var}\left( \frac{S_n}{n} \right) = \frac{1}{n^2} \text{Var}(S_n) = \frac{n t}{n^2} = \frac{t}{n}
+$$
+
+Applying Chebyshev's inequality to $\frac{S_n}{n}$ yields:
+$$
+\mathbb{P}\left(\left| \frac{S_n}{n} - \alpha \right| \ge \epsilon\right) \le \frac{\text{Var}(S_n/n)}{\epsilon^2} = \frac{t}{n \epsilon^2}
+$$
+
+Taking $n \to \infty$ proves the assertion.
+:::
+
+---
+
+## Convergence Modes: Convergence in Probability vs. Almost Sure Convergence
+
+The convergence established by the Weak Law of Large Numbers:
+$$
+\lim_{n \to \infty} \mathbb{P}\left(\left| \frac{S_n}{n} - \alpha \right| \ge \epsilon\right) = 0 \quad \forall \epsilon > 0
+$$
+
+is called **convergence in probability**, written $\frac{S_n}{n} \xrightarrow{\mathbb{P}} \alpha$.
+
+## Question: Does Convergence in Probability Imply Almost Sure Convergence?
+
+Does $\frac{S_n}{n} \xrightarrow{\mathbb{P}} \alpha$ imply that $\frac{S_n}{n} \xrightarrow{\text{a.s.}} \alpha$, i.e., $\mathbb{P}\left(\left\{ \omega \in \Omega \mid \lim_{n \to \infty} \frac{S_n(\omega)}{n} = \alpha \right\}\right) = 1$?
+
+::: {#exm-prob-vs-as}
+Consider an independent sequence of indicator random variables $\{X_n\}_{n=1}^{\infty}$ such that:
+$$
+\mathbb{P}(X_n = 1) = \frac{1}{n}, \quad \mathbb{P}(X_n = 0) = 1 - \frac{1}{n}
+$$
+
+1. **Convergence in Probability:** Since $X_n \in \{0, 1\}$, for any $\epsilon > 0$:
+   - If $\epsilon > 1$: $\{|X_n| \ge \epsilon\} = \emptyset$, so $\mathbb{P}(|X_n| \ge \epsilon) = 0$.
+   - If $0 < \epsilon \le 1$: $\{|X_n| \ge \epsilon\} = \{X_n = 1\}$, so $\mathbb{P}(|X_n| \ge \epsilon) = \frac{1}{n}$.
+   
+   In both cases $\mathbb{P}(|X_n - 0| \ge \epsilon) \le \dfrac{1}{n} \xrightarrow{n \to \infty} 0$, so $X_n \xrightarrow{\mathbb{P}} 0$.
+
+2. **Almost Sure Behavior:**
+   Summing the probabilities:
+   $$
+   \sum_{n=1}^{\infty} \mathbb{P}(X_n = 1) = \sum_{n=1}^{\infty} \frac{1}{n} = \infty
+   $$
+
+   Since $\{X_n\}$ are independent, the **second Borel-Cantelli Lemma** (which requires independence) implies:
+   $$
+   \mathbb{P}\bigl(X_n = 1 \text{ infinitely often (i.o.)}\bigr) = 1.
+   $$
+
+   Consequently, $X_n(\omega)$ does not converge to $0$ almost surely, because $X_n(\omega) = 1$ infinitely many times for almost every $\omega \in \Omega$.
+:::
+
+---

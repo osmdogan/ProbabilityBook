@@ -1,0 +1,281 @@
+# Lecture 10.1: Integrals and Derivatives
+
+## 1-Parameter Families and Leibniz's Integral Rule
+
+In probability theory and measure-theoretic analysis, we frequently encounter 1-parameter families of random variables or integrands $\{X_t : t \in (a, b)\}$ defined on a measure space $(\Omega, \mathcal{F}, \mu)$. A central problem is establishing conditions under which differentiation and integration can be interchanged.
+
+::: {#thm-differentiation-under-integral}
+## Differentiation Under the Integral Sign (Driver [10.31])
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space, $(a, b) \subset \mathbb{R}$ an open interval, and $f: (a, b) \times \Omega \to \mathbb{R}$ a function satisfying:
+
+1. **Measurability:** $\omega \mapsto f(t, \omega)$ is $\mathcal{F}$-measurable for each fixed $t \in (a, b)$.
+2. **Integrability:** $f(t_0, \cdot) \in \mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ for at least one point $t_0 \in (a, b)$.
+3. **Differentiability:** The partial derivative $\frac{\partial f}{\partial t}(t, \omega)$ exists for $\mu$-a.e. $\omega \in \Omega$ and for every $t \in (a, b)$.
+4. **Domination:** There exists a non-negative function $g \in \mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ such that:
+   $$
+   \left| \frac{\partial f}{\partial t}(t, \omega) \right| \le g(\omega) \quad \text{for } \mu\text{-a.e. } \omega \in \Omega \text{ and all } t \in (a, b)
+   $$ {#eq-leibniz-domination}
+
+Then $f(t, \cdot) \in \mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ for all $t \in (a, b)$, the map $G(t) := \int_{\Omega} f(t, \omega) \, d\mu(\omega)$ is differentiable on $(a, b)$, and:
+$$
+\frac{d}{dt} \int_{\Omega} f(t, \omega) \, d\mu(\omega) = \int_{\Omega} \frac{\partial f}{\partial t}(t, \omega) \, d\mu(\omega)
+$$ {#eq-leibniz-rule}
+:::
+
+::: {.proof}
+## Proof of @thm-differentiation-under-integral
+Fix $t \in (a, b)$ and select any sequence $(h_n)_{n=1}^\infty \subset \mathbb{R} \setminus \{0\}$ such that $t + h_n \in (a, b)$ for all $n$ and $h_n \to 0$ as $n \to \infty$.
+
+### Step 1: Integrability of $f(t, \cdot)$
+By the Mean Value Theorem applied to $u \mapsto f(u, \omega)$ on the interval between $t_0$ and $t$, there exists a point $t^*(\omega)$ strictly between $t_0$ and $t$ such that:
+$$
+|f(t, \omega) - f(t_0, \omega)| = \left| \frac{\partial f}{\partial t}(t^*(\omega), \omega) \right| |t - t_0| \le |t - t_0| g(\omega) \quad \text{a.e.}
+$$
+
+Thus, $|f(t, \omega)| \le |f(t_0, \omega)| + |t - t_0| g(\omega)$ a.e. Integrating both sides yields $\int |f(t, \omega)| \, d\mu \le \int |f(t_0, \omega)| \, d\mu + |t - t_0| \int g \, d\mu < \infty$, so $f(t, \cdot) \in \mathcal{L}^1(\Omega, \mathcal{F}, \mu)$ for all $t \in (a, b)$.
+
+### Step 2: Interchanging the Limit and Integral
+Define the sequence of difference quotients:
+$$
+D_n(\omega) := \frac{f(t + h_n, \omega) - f(t, \omega)}{h_n}
+$$
+
+1. **Pointwise Convergence:** By assumption (3), $D_n(\omega) \to \frac{\partial f}{\partial t}(t, \omega)$ a.e. as $n \to \infty$.
+2. **Uniform Domination:** By the Mean Value Theorem, for each $n$ and a.e. $\omega$, there exists $t_n^*(\omega)$ between $t$ and $t + h_n$ such that $|D_n(\omega)| = \left| \frac{\partial f}{\partial t}(t_n^*(\omega), \omega) \right| \le g(\omega)$.
+
+Since $f(t+h_n, \cdot)$ and $f(t, \cdot)$ are measurable (condition 1), $D_n$ is measurable. Since $|D_n| \le g \in \mathcal{L}^1$, we have $D_n \in \mathcal{L}^1$. The limit $\frac{\partial f}{\partial t}(t, \cdot)$ is measurable as the a.e. pointwise limit of the measurable functions $(D_n)$.
+
+By linearity of the $\mathcal{L}^1$ integral:
+$$
+\begin{align*}
+\frac{G(t + h_n) - G(t)}{h_n} &= \frac{1}{h_n}\left(\int_{\Omega} f(t+h_n, \omega)\,d\mu - \int_{\Omega} f(t, \omega)\,d\mu\right) \\
+&= \int_{\Omega} D_n(\omega)\,d\mu(\omega).
+\end{align*}
+$$
+
+Applying the Dominated Convergence Theorem (@thm-dct) with $|D_n| \le g$ and $D_n \to \frac{\partial f}{\partial t}(t, \cdot)$ a.e.:
+$$
+\begin{align*}
+\frac{d}{dt} G(t) &= \lim_{n \to \infty} \frac{G(t + h_n) - G(t)}{h_n} \\
+&= \lim_{n \to \infty} \int_{\Omega} D_n(\omega) \, d\mu(\omega) \\
+&= \int_{\Omega} \lim_{n \to \infty} D_n(\omega) \, d\mu(\omega)\\
+&= \int_{\Omega} \frac{\partial f}{\partial t}(t, \omega) \, d\mu(\omega)
+\end{align*}
+$$
+:::
+
+---
+
+## Moment-Generating Functions and Analyticity
+
+::: {#def-mgf}
+## Moment-Generating Function (MGF)
+Let $X$ be a real-valued random variable on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$. The **moment-generating function** $M_X(t)$ is defined by:
+$$
+M_X(t) := \mathbb{E}[e^{tX}] = \int_{\Omega} e^{tX(\omega)} \, d\mathbb{P}(\omega) \in (0, \infty]
+$$ {#eq-mgf-def}
+:::
+
+::: {#prp-mgf-differentiation}
+## Differentiation and Moments of MGF
+Suppose there exists $\epsilon > 0$ such that $\mathbb{E}[e^{\epsilon |X|}] < \infty$. Then $M_X(t) < \infty$ for all $t \in (-\epsilon, \epsilon)$, $M_X$ is infinitely differentiable on $(-\epsilon, \epsilon)$, and:
+$$
+M_X^{(n)}(t) = \mathbb{E}[X^n e^{tX}] \quad \forall t \in (-\epsilon, \epsilon), \, n \in \mathbb{N}
+$$ {#eq-mgf-derivative-n}
+In particular, evaluating at $t = 0$ yields the raw moments:
+$$
+M_X^{(n)}(0) = \mathbb{E}[X^n]
+$$ {#eq-mgf-moments}
+:::
+
+::: {.proof}
+## Proof of @prp-mgf-differentiation
+
+We prove by induction on $n \in \mathbb{N}_0$ that $M_X^{(n)}(t) = \mathbb{E}[X^n e^{tX}]$ for all $t \in (-\epsilon, \epsilon)$.
+
+### Step 0: $M_X(t) < \infty$ on $(-\epsilon, \epsilon)$
+
+**Key polynomial bound.** For any $\alpha \in (0,1)$ and $n \in \mathbb{N}_0$, the function $u \mapsto u^n e^{-\alpha\epsilon u}$ attains its maximum on $[0,\infty)$ at $u = n/(\alpha\epsilon)$, so:
+$$
+\sup_{u \ge 0}\, u^n e^{-\alpha\epsilon u} = \left(\frac{n}{\alpha\epsilon e}\right)^n < \infty.
+$$
+Consequently, there exists a finite constant $C_{n,\alpha}$ such that:
+$$
+|x|^n \le C_{n,\alpha}\, e^{\alpha\epsilon|x|} \quad \text{for all } x \in \mathbb{R}.
+$$ {#eq-poly-exp-bound}
+
+In particular, for $n = 0$ and any $t \in (-\epsilon, \epsilon)$, write $t = (1-\alpha)\epsilon \cdot \operatorname{sgn}(t) \cdot r$ for some $r < 1$ (choosing $\alpha$ small enough so $|t| < (1-\alpha)\epsilon$). Then:
+$$
+e^{tX} \le e^{|t||X|} \le e^{(1-\alpha)\epsilon|X|} \le e^{\epsilon|X|},
+$$
+so $M_X(t) = \mathbb{E}[e^{tX}] \le \mathbb{E}[e^{\epsilon|X|}] < \infty$.
+
+### Step 1: Base case $n = 0 \to 1$ (differentiability and $M_X' = \mathbb{E}[X e^{tX}]$)
+
+Fix $t \in (-\epsilon, \epsilon)$ and choose $\alpha \in (0,1)$ such that $|t| < (1-\alpha)\epsilon$; this is possible since $(1-\alpha)\epsilon \nearrow \epsilon$ as $\alpha \searrow 0$. We verify the four conditions of @thm-differentiation-under-integral for $f(t, \omega) = e^{tX(\omega)}$ on the interval $I_\alpha := (-(1-\alpha)\epsilon,\, (1-\alpha)\epsilon) \ni t$:
+
+1. **Measurability:** $\omega \mapsto e^{tX(\omega)}$ is measurable for each $t$, since $X$ is measurable and the exponential is continuous.
+2. **Integrability at $t_0 = 0$:** $\mathbb{E}[e^{0 \cdot X}] = 1 < \infty$.
+3. **Differentiability:** $\frac{\partial}{\partial t} e^{tX(\omega)} = X(\omega)\,e^{tX(\omega)}$ exists for every $\omega \in \Omega$ and every $t \in I_\alpha$.
+4. **Domination:** Using the polynomial bound @eq-poly-exp-bound with $n=1$, $C_\alpha := C_{1,\alpha} = \frac{1}{e\alpha\epsilon}$:
+$$
+\left|\frac{\partial}{\partial t} e^{tX}\right| = |X|\,e^{tX} \le |X|\,e^{|t||X|} \le |X|\,e^{(1-\alpha)\epsilon|X|} \le C_\alpha\,e^{\alpha\epsilon|X|}\cdot e^{(1-\alpha)\epsilon|X|} = C_\alpha\,e^{\epsilon|X|}.
+$$
+Since $\mathbb{E}[e^{\epsilon|X|}] < \infty$ by hypothesis, $g(\omega) := C_\alpha\,e^{\epsilon|X(\omega)|}$ is an integrable dominating function.
+
+All conditions of @thm-differentiation-under-integral are satisfied on $I_\alpha$, hence:
+$$
+M_X'(t) = \frac{d}{dt}\,\mathbb{E}[e^{tX}] = \mathbb{E}\!\left[\frac{\partial}{\partial t} e^{tX}\right] = \mathbb{E}[X e^{tX}].
+$$
+
+### Step 2: Inductive step ($n \to n+1$)
+
+Suppose that $M_X^{(n)}(t) = \mathbb{E}[X^n e^{tX}]$ for all $t \in (-\epsilon,\epsilon)$. We differentiate the integral $t \mapsto \mathbb{E}[X^n e^{tX}]$ by applying @thm-differentiation-under-integral to $f(t,\omega) = X(\omega)^n e^{tX(\omega)}$ on the same $I_\alpha$:
+
+1. **Measurability:** $\omega \mapsto X(\omega)^n e^{tX(\omega)}$ is measurable for each $t$.
+2. **Integrability at $t_0 = 0$:** By the polynomial bound @eq-poly-exp-bound, $\mathbb{E}[|X|^n] \le C_{n,\alpha}\,\mathbb{E}[e^{\alpha\epsilon|X|}] \le C_{n,\alpha}\,\mathbb{E}[e^{\epsilon|X|}] < \infty$.
+3. **Differentiability:** $\frac{\partial}{\partial t}\bigl(X^n e^{tX}\bigr) = X^{n+1} e^{tX}$ exists pointwise for every $\omega$ and $t \in I_\alpha$.
+4. **Domination:** Again by @eq-poly-exp-bound 
+
+$$
+\left|\frac{\partial}{\partial t}\bigl(X^n e^{tX}\bigr)\right| = |X|^{n+1} e^{|t||X|} \le |X|^{n+1} e^{(1-\alpha)\epsilon|X|} \le C_{n+1,\alpha}\,e^{\epsilon|X|} \in \mathcal{L}^1.
+$$
+
+Therefore:
+$$
+M_X^{(n+1)}(t) = \frac{d}{dt}\,\mathbb{E}[X^n e^{tX}] = \mathbb{E}\!\left[\frac{\partial}{\partial t}\bigl(X^n e^{tX}\bigr)\right] = \mathbb{E}[X^{n+1} e^{tX}].
+$$
+
+By induction, $M_X^{(n)}(t) = \mathbb{E}[X^n e^{tX}]$ for all $n \in \mathbb{N}_0$ and all $t \in (-\epsilon, \epsilon)$.
+
+### Step 3: Moment formula
+
+Setting $t = 0$ in the identity just established:
+$$
+M_X^{(n)}(0) = \mathbb{E}[X^n e^{0 \cdot X}] = \mathbb{E}[X^n].
+$$
+:::
+
+::: {#prp-mgf-analyticity}
+## Analyticity of the MGF
+If $\mathbb{E}[e^{\epsilon |X|}] < \infty$ for some $\epsilon > 0$, then $M_X(t)$ is analytic on $(-\epsilon, \epsilon)$ and expands as a power series:
+$$
+M_X(t) = \sum_{n=0}^{\infty} \frac{t^n}{n!} \mathbb{E}[X^n] \quad \forall t \in (-\epsilon, \epsilon)
+$$ {#eq-mgf-power-series}
+:::
+
+::: {.proof}
+## Proof of @prp-mgf-analyticity
+
+We establish the power series representation in three steps.
+
+### Step 1: All moments are finite
+
+By the polynomial bound @eq-poly-exp-bound from the proof of @prp-mgf-differentiation, for any fixed $\alpha \in (0,1)$ there exists $C_{n,\alpha} < \infty$ with $|x|^n \le C_{n,\alpha}\,e^{\alpha\epsilon|x|}$ for all $x \in \mathbb{R}$. Taking expectations:
+$$
+\mathbb{E}[|X|^n] \le C_{n,\alpha}\,\mathbb{E}[e^{\alpha\epsilon|X|}] \le C_{n,\alpha}\,\mathbb{E}[e^{\epsilon|X|}] < \infty.
+$$
+Hence all moments of $X$ are finite.
+
+### Step 2: The power series converges absolutely for $|t| < \epsilon$
+
+Fix $t \in (-\epsilon, \epsilon)$. Since $\frac{|t|^n}{n!}|X(\omega)|^n \ge 0$ for all $n$ and $\omega$, Tonelli's theorem (or the Monotone Convergence Theorem) allows us to exchange the sum and expectation:
+$$
+\sum_{n=0}^{\infty} \frac{|t|^n}{n!}\,\mathbb{E}[|X|^n]
+= \mathbb{E}\!\left[\sum_{n=0}^{\infty} \frac{|t|^n}{n!}\,|X|^n\right]
+= \mathbb{E}[e^{|t||X|}]
+\le \mathbb{E}[e^{\epsilon|X|}] < \infty,
+$$
+where the last inequality uses $|t| < \epsilon$. This confirms that the power series $\sum_{n=0}^{\infty} \frac{t^n}{n!}\mathbb{E}[X^n]$ converges absolutely for every $t \in (-\epsilon, \epsilon)$, so its radius of convergence is at least $\epsilon$.
+
+### Step 3: $M_X(t)$ equals the power series via DCT
+
+Define the partial-sum sequence $S_N(t, \omega) := \sum_{n=0}^{N} \frac{t^n}{n!}\,X(\omega)^n$. We verify the conditions for the Dominated Convergence Theorem (@thm-dct):
+
+- **Pointwise convergence:** For every fixed $\omega \in \Omega$, the Taylor series of the exponential converges:
+$$
+S_N(t, \omega) \;\xrightarrow{N\to\infty}\; e^{tX(\omega)}.
+$$
+
+- **Integrable domination:** For $|t| < \epsilon$:
+$$
+|S_N(t, \omega)| \le \sum_{n=0}^{N} \frac{|t|^n}{n!}\,|X(\omega)|^n \le \sum_{n=0}^{\infty} \frac{|t|^n}{n!}\,|X(\omega)|^n = e^{|t||X(\omega)|} \le e^{\epsilon|X(\omega)|} \in \mathcal{L}^1.
+$$
+
+Since all moments are finite (Step 1), linearity of expectation gives $\mathbb{E}[S_N] = \sum_{n=0}^N \frac{t^n}{n!}\mathbb{E}[X^n]$. Applying the Dominated Convergence Theorem:
+$$
+M_X(t) = \mathbb{E}[e^{tX}] = \lim_{N\to\infty} \mathbb{E}[S_N(t,\cdot)] = \lim_{N\to\infty}\sum_{n=0}^N \frac{t^n}{n!}\,\mathbb{E}[X^n] = \sum_{n=0}^{\infty} \frac{t^n}{n!}\,\mathbb{E}[X^n].
+$$
+
+### Step 4: Analyticity
+
+A function that is represented by a convergent power series on an open interval is real-analytic on that interval. Since the series $\sum_{n=0}^{\infty} \frac{t^n}{n!}\mathbb{E}[X^n]$ converges for all $t \in (-\epsilon, \epsilon)$ (Step 2) and equals $M_X(t)$ there (Step 3), we conclude that $M_X$ is analytic on $(-\epsilon, \epsilon)$.
+:::
+
+---
+
+## Counterexample: Failure of Uniform Domination
+
+::: {#exm-dct-counterexample}
+## Failure of Interchange: Indicator Family on $[0,1]$
+
+**Setup.** Let $(\Omega, \mathcal{F}, \lambda) = ([0, 1], \mathcal{B}([0, 1]), \lambda)$ be the Lebesgue measure space and $(a,b) = (0,1)$. Define:
+$$
+f(t, \omega) := \mathbf{1}_{[0, t]}(\omega) \quad \text{for } (t, \omega) \in (0, 1) \times [0, 1].
+$$
+This is the indicator of the "sub-diagonal" region: $f(t,\omega) = 1$ if $\omega \le t$ and $f(t,\omega) = 0$ if $\omega > t$.
+
+---
+
+**Part 1: The two computations disagree.**
+
+*Direct differentiation.* The integral equals the length of $[0,t]$:
+$$
+G(t) := \int_{[0,1]} f(t, \omega)\,d\lambda(\omega) = \lambda([0,t]) = t,
+$$
+so $G'(t) = 1$ for all $t \in (0,1)$.
+
+*Formal interchange.* For $\lambda$-a.e. fixed $\omega$ (specifically, all $\omega \ne t$), $f(t,\omega)$ is locally constant in $t$, giving $\frac{\partial f}{\partial t}(t,\omega) = 0$. The formal interchange therefore yields:
+$$
+\int_{[0,1]} \frac{\partial f}{\partial t}(t,\omega)\,d\lambda(\omega) = \int_{[0,1]} 0\,d\lambda(\omega) = 0.
+$$
+
+Since $G'(t) = 1 \ne 0$, the interchange $\frac{d}{dt}\int = \int\frac{\partial}{\partial t}$ is **false** here.
+
+---
+
+**Part 2: Checking which conditions of @thm-differentiation-under-integral hold.**
+
+**Condition 1 (Measurability): $\checkmark$** For each fixed $t$, $\omega \mapsto \mathbf{1}_{[0,t]}(\omega)$ is a Borel-measurable indicator function.
+
+**Condition 2 (Integrability): $\checkmark$** At $t_0 = 1/2$, for example, $\int_{[0,1]} f(1/2,\omega)\,d\lambda = 1/2 < \infty$.
+
+**Condition 3 (Differentiability): $\boldsymbol{\times}$ — fails jointly.**
+
+For any fixed $t \in (0,1)$, compute the difference quotient explicitly:
+
+- If $\omega < t$: then $f(t+h,\omega) = 1$ and $f(t,\omega) = 1$ for all $|h|$ small enough (so that $\omega < t + h$ and $\omega < t$), giving quotient $0 \to 0$.
+- If $\omega > t$: then $f(t+h,\omega) = 0$ and $f(t,\omega) = 0$ for all $|h|$ small enough, giving quotient $0 \to 0$.
+- If $\omega = t$: $f(t,t) = 1$ (since $t \in [0,t]$). For $h > 0$: $f(t+h,t) = 1$, so the right quotient is $0$. For $h < 0$: $f(t+h,t) = \mathbf{1}_{[0,t+h]}(t) = 0$ (since $t > t+h$), so the left quotient is $\frac{0-1}{h} = \frac{-1}{h} \to +\infty$ as $h \to 0^-$.
+
+Hence for each fixed $t$, the partial derivative $\frac{\partial f}{\partial t}(t,\omega)$ **fails to exist** at the single point $\omega = t$, which is a $\lambda$-null set. So condition 3 holds *for each fixed $t$ separately*. However, condition 3 requires a single null set $N$ independent of $t$ outside which the derivative exists **for every** $t \in (0,1)$ simultaneously. But for every $\omega \in (0,1)$, the derivative fails at $t = \omega$. Thus any such $N$ would need to contain all of $(0,1)$, which has positive measure. **The joint condition fails.**
+
+**Condition 4 (Domination): $\boldsymbol{\times}$ — fails as well.**
+
+For $h > 0$, the difference quotient is:
+$$
+D_h(t, \omega) := \frac{f(t+h,\omega) - f(t,\omega)}{h} = \frac{\mathbf{1}_{(t,\,t+h]}(\omega)}{h}.
+$$
+This equals $1/h$ on the interval $(t, t+h]$ (of length $h$) and $0$ elsewhere. For any candidate dominating function $g \in \mathcal{L}^1([0,1])$, one needs $g(\omega) \ge 1/h$ for all $\omega \in (t, t+h]$. Taking $h = \omega - t$ (i.e., for each $\omega > t$ just above $t$), this forces $g(\omega) \ge \frac{1}{\omega - t}$ for $\omega$ near $t$. But:
+$$
+\int_t^{t+\delta} \frac{1}{\omega - t}\,d\omega = \Big[\log(\omega - t)\Big]_t^{t+\delta} = +\infty,
+$$
+so no integrable $g$ can dominate $\{D_h\}$ uniformly over all $h > 0$.
+
+---
+
+**Lesson.** The example shows that both conditions 3 and 4 are genuinely necessary. The a.e.-pointwise derivative exists for each fixed $t$, giving a sensible-looking "answer" of $0$ — but the integral of that answer disagrees with the true derivative $G'(t) = 1$. The failure is not visible slice-by-slice; it only manifests in the joint structure required by the theorem.
+:::
+
+---
+

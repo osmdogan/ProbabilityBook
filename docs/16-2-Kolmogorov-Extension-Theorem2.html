@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>35&nbsp; Lecture 16.2: Kolmogorov’s Extension Theorem (II) – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./17-1-Kolmogorov- 0-1-Law.html" rel="next">
+<link href="./16-1-Kolmogorov-Extension-Theorem1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-I.html">Probability Theory I</a></li><li class="breadcrumb-item"><a href="./16-2-Kolmogorov-Extension-Theorem2.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#radon-measures-on-mathbbrd" id="toc-radon-measures-on-mathbbrd" class="nav-link active" data-scroll-target="#radon-measures-on-mathbbrd"><span class="header-section-number">35.1</span> Radon Measures on <span class="math inline">\(\mathbb{R}^d\)</span></a></li>
+  <li><a href="#proof-of-the-kolmogorov-extension-theorem" id="toc-proof-of-the-kolmogorov-extension-theorem" class="nav-link" data-scroll-target="#proof-of-the-kolmogorov-extension-theorem"><span class="header-section-number">35.2</span> Proof of the Kolmogorov Extension Theorem</a></li>
+  <li><a href="#extensions-to-mathbbrmathbbn-and-infinite-independent-sequences" id="toc-extensions-to-mathbbrmathbbn-and-infinite-independent-sequences" class="nav-link" data-scroll-target="#extensions-to-mathbbrmathbbn-and-infinite-independent-sequences"><span class="header-section-number">35.3</span> Extensions to <span class="math inline">\(\mathbb{R}^\mathbb{N}\)</span> and Infinite Independent Sequences</a></li>
+  <li><a href="#existence-of-infinite-independent-sequences" id="toc-existence-of-infinite-independent-sequences" class="nav-link" data-scroll-target="#existence-of-infinite-independent-sequences"><span class="header-section-number">35.4</span> Existence of Infinite Independent Sequences</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/16-2-Kolmogorov-Extension-Theorem2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-I.html">Probability Theory I</a></li><li class="breadcrumb-item"><a href="./16-2-Kolmogorov-Extension-Theorem2.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="radon-measures-on-mathbbrd" class="level2" data-number="35.1">
+<h2 data-number="35.1" class="anchored" data-anchor-id="radon-measures-on-mathbbrd"><span class="header-section-number">35.1</span> Radon Measures on <span class="math inline">\(\mathbb{R}^d\)</span></h2>
+<p>Let <span class="math inline">\((X, \tau)\)</span> be a topological space equipped with its Borel <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{B}(X)\)</span>; recall from <a href="5-1-Radon-Measure.html#def-borel-radon-measure" class="quarto-xref">Definition&nbsp;<span>11.1</span></a> that a <strong>Borel measure</strong> on <span class="math inline">\(X\)</span> is a measure defined on <span class="math inline">\(\mathcal{B}(X)\)</span>. The notions below are best behaved when <span class="math inline">\(X\)</span> is locally compact and Hausdorff, which is the case for the only space we use, <span class="math inline">\(X = \mathbb{R}^d\)</span>.</p>
+<div id="def-regular-measures" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 35.1</strong></span> A Borel measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\((X, \mathcal{B}(X))\)</span> is called:</p>
+<ul>
+<li><strong>Outer-regular:</strong> <span class="math inline">\(\mu(B) = \inf \{ \mu(V) \mid B \subseteq V, \, V \text{ open} \}\)</span> for all <span class="math inline">\(B \in \mathcal{B}(X)\)</span>.</li>
+<li><strong>Inner-regular:</strong> <span class="math inline">\(\mu(B) = \sup \{ \mu(K) \mid K \subseteq B, \, K \text{ compact} \}\)</span> for all <span class="math inline">\(B \in \mathcal{B}(X)\)</span>.</li>
+<li><strong>Radon measure:</strong> <span class="math inline">\(\mu\)</span> is <strong>finite on compact sets</strong> (<span class="math inline">\(\mu(K) &lt; \infty\)</span> for all compact <span class="math inline">\(K \subseteq X\)</span>; on a locally compact Hausdorff space this is equivalent to being locally finite) and both inner- and outer-regular.</li>
+</ul>
+</div>
+<div id="rem-radon-terminology" class="proof remark">
+<p><span class="proof-title"><em>Remark 35.1</em> (Two Conventions for “Radon”). </span>Two cautionary remarks about the word <em>Radon</em>.</p>
+<ol type="1">
+<li><strong>Relation to <a href="5-1-Radon-Measure.html#def-borel-radon-measure" class="quarto-xref">Definition&nbsp;<span>11.1</span></a>.</strong> In Lecture 5.1 a Radon measure on <span class="math inline">\(\mathbb{R}\)</span> was defined by the purely local condition <span class="math inline">\(\mu((a,b]) &lt; \infty\)</span> for all bounded intervals, with <strong>no</strong> regularity requirement. On <span class="math inline">\(\mathbb{R}^d\)</span> the two notions in fact coincide, but we do not prove this in general: <a href="#thm-finite-borel-radon" class="quarto-xref">Theorem&nbsp;<span>35.1</span></a> below establishes it for <strong>finite</strong> Borel measures, which is the only case used in this lecture. Whenever regularity is invoked below, it is <a href="#thm-finite-borel-radon" class="quarto-xref">Theorem&nbsp;<span>35.1</span></a> (or its <a href="#cor-radon-on-borel-subset" class="quarto-xref">Corollary&nbsp;<span>35.1</span></a>) that is being used, never <a href="5-1-Radon-Measure.html#def-borel-radon-measure" class="quarto-xref">Definition&nbsp;<span>11.1</span></a>.</li>
+<li><strong>Strong versus weak inner regularity.</strong> Many texts require inner regularity only on <strong>open</strong> sets (together with outer regularity on all Borel sets). The definition above, demanding inner regularity on <em>all</em> Borel sets, is the stronger “tight” form. The two are not equivalent on a general locally compact Hausdorff space, but they agree for finite Borel measures on <span class="math inline">\(\mathbb{R}^d\)</span> by <a href="#thm-finite-borel-radon" class="quarto-xref">Theorem&nbsp;<span>35.1</span></a>, so no ambiguity arises here.</li>
+</ol>
+</div>
+<div id="thm-finite-borel-radon" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 35.1</strong></span> Every finite Borel measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\((\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))\)</span> (in particular, any probability measure) is a Radon measure.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-finite-borel-radon" class="quarto-xref">Theorem&nbsp;<span>35.1</span></a>). </span><strong>Finiteness on compact sets</strong> is immediate: <span class="math inline">\(\mu(K) \le \mu(\mathbb{R}^d) &lt; \infty\)</span> for every compact <span class="math inline">\(K \subseteq \mathbb{R}^d\)</span>. It remains to prove inner- and outer-regularity.</p>
+<p>Write <span class="math inline">\(d(x,C) \triangleq \inf_{y \in C} |x - y|\)</span> for the Euclidean distance from a point to a set (with <span class="math inline">\(d(x,\emptyset) \triangleq +\infty\)</span>), and define the family of sets: <span class="math display">\[
+\begin{aligned}
+\mathcal{F} \triangleq \bigl\{ B \in \mathcal{B}(\mathbb{R}^d) \;\big|\;&amp;
+\forall \epsilon &gt; 0,\ \exists\text{ open }V\text{ and closed }C\text{ such that}\\
+&amp; C \subseteq B \subseteq V
+\text{ and }
+\mu(V\setminus C)&lt;\epsilon
+\bigr\}.
+\end{aligned}
+\]</span></p>
+<ol type="1">
+<li><p><strong>Closed Sets are in <span class="math inline">\(\mathcal{F}\)</span>:</strong> Let <span class="math inline">\(C\)</span> be closed. For <span class="math inline">\(k \in \mathbb{N}\)</span>, set <span class="math inline">\(V_k \triangleq \{ x \in \mathbb{R}^d \mid d(x, C) &lt; 1/k \}\)</span> (so <span class="math inline">\(V_k = \emptyset\)</span> if <span class="math inline">\(C = \emptyset\)</span>). Then each <span class="math inline">\(V_k\)</span> is open, <span class="math inline">\(C \subseteq V_k\)</span>, the sequence <span class="math inline">\((V_k)\)</span> is decreasing, and <span class="math inline">\(\bigcap_{k} V_k = \overline{C} = C\)</span> because <span class="math inline">\(C\)</span> is closed. Since <span class="math inline">\(\mu(V_1) \le \mu(\mathbb{R}^d) &lt; \infty\)</span>, continuity from above gives <span class="math inline">\(\mu(V_k \setminus C) = \mu(V_k) - \mu(C) \to 0\)</span>. Given <span class="math inline">\(\epsilon &gt; 0\)</span>, choose <span class="math inline">\(k\)</span> with <span class="math inline">\(\mu(V_k \setminus C) &lt; \epsilon\)</span>; the pair consisting of the closed set <span class="math inline">\(C\)</span> itself and the open set <span class="math inline">\(V_k\)</span> then witnesses <span class="math inline">\(C \in \mathcal{F}\)</span>.</p></li>
+<li><p><strong>Algebra Properties:</strong></p>
+<ul>
+<li><span class="math inline">\(\emptyset \in \mathcal{F}\)</span> and <span class="math inline">\(\mathbb{R}^d \in \mathcal{F}\)</span>, both being closed (item 1).</li>
+<li>Let <span class="math inline">\(A \in \mathcal{F}\)</span> and <span class="math inline">\(\epsilon &gt; 0\)</span>. Choose <span class="math inline">\(C\)</span> closed and <span class="math inline">\(V\)</span> open with <span class="math inline">\(C \subseteq A \subseteq V\)</span> and <span class="math inline">\(\mu(V \setminus C) &lt; \epsilon\)</span>. Then <span class="math inline">\(V^c \subseteq A^c \subseteq C^c\)</span> with <span class="math inline">\(V^c\)</span> closed and <span class="math inline">\(C^c\)</span> open. Since <span class="math inline">\(C^c \setminus V^c = C^c \cap V = V \setminus C\)</span>, we get <span class="math inline">\(\mu(C^c \setminus V^c) &lt; \epsilon\)</span>. As <span class="math inline">\(\epsilon &gt; 0\)</span> was arbitrary, <span class="math inline">\(A^c \in \mathcal{F}\)</span>.</li>
+<li>Let <span class="math inline">\(A_1, A_2 \in \mathcal{F}\)</span> and <span class="math inline">\(\epsilon &gt; 0\)</span>. Choose <span class="math inline">\(C_i \subseteq A_i \subseteq V_i\)</span> with <span class="math inline">\(C_i\)</span> closed, <span class="math inline">\(V_i\)</span> open and <span class="math inline">\(\mu(V_i \setminus C_i) &lt; \epsilon/2\)</span>. Then <span class="math inline">\(C_1 \cup C_2\)</span> is closed, <span class="math inline">\(V_1 \cup V_2\)</span> is open, <span class="math inline">\(C_1 \cup C_2 \subseteq A_1 \cup A_2 \subseteq V_1 \cup V_2\)</span>, and <span class="math inline">\((V_1 \cup V_2) \setminus (C_1 \cup C_2) \subseteq (V_1 \setminus C_1) \cup (V_2 \setminus C_2)\)</span>, so <span class="math inline">\(\mu((V_1 \cup V_2) \setminus (C_1 \cup C_2)) \le \mu(V_1 \setminus C_1) + \mu(V_2 \setminus C_2) &lt; \epsilon\)</span>. As <span class="math inline">\(\epsilon &gt; 0\)</span> was arbitrary, <span class="math inline">\(A_1 \cup A_2 \in \mathcal{F}\)</span>.</li>
+</ul>
+<p>Hence <span class="math inline">\(\mathcal{F}\)</span> is an algebra (closure under finite intersections follows from complements and unions).</p></li>
+<li><p><strong>Closure under countable disjoint unions:</strong> Let <span class="math inline">\(A_n \in \mathcal{F}\)</span> be pairwise disjoint and fix <span class="math inline">\(\epsilon &gt; 0\)</span>. Choose <span class="math inline">\(C_n \subseteq A_n \subseteq V_n\)</span> with <span class="math inline">\(\mu(V_n \setminus C_n) &lt; \epsilon/2^{n+1}\)</span>. Set <span class="math inline">\(V = \bigcup_{n=1}^\infty V_n\)</span> (open) and <span class="math inline">\(D_N = \bigcup_{n=1}^N C_n\)</span> (closed), so that <span class="math inline">\(D_N \subseteq A \triangleq \bigcup_n A_n \subseteq V\)</span>. Observe that: <span class="math display">\[
+V \setminus D_N \subseteq \bigcup_{n=1}^N (V_n \setminus C_n) \cup \bigcup_{n=N+1}^\infty V_n.
+\]</span> For <span class="math inline">\(n &gt; N\)</span>, since <span class="math inline">\(C_n \subseteq A_n\)</span> we have <span class="math inline">\(\mu(V_n) \le \mu(A_n) + \mu(V_n \setminus C_n)\)</span>. By subadditivity: <span class="math display">\[
+\mu(V \setminus D_N) \le \sum_{n=1}^\infty \mu(V_n \setminus C_n) + \sum_{n=N+1}^\infty \mu(A_n) &lt; \frac{\epsilon}{2} + \sum_{n=N+1}^\infty \mu(A_n).
+\]</span> Since <span class="math inline">\(\mu\)</span> is finite and the <span class="math inline">\(A_n\)</span> are disjoint, <span class="math inline">\(\sum_{n=1}^\infty \mu(A_n) = \mu(A) \le \mu(\mathbb{R}^d) &lt; \infty\)</span>, so <span class="math inline">\(\sum_{n=N+1}^\infty \mu(A_n) &lt; \epsilon/2\)</span> for <span class="math inline">\(N\)</span> sufficiently large. Hence <span class="math inline">\(\mu(V \setminus D_N) &lt; \epsilon\)</span> for such <span class="math inline">\(N\)</span>, and since <span class="math inline">\(\epsilon &gt; 0\)</span> was arbitrary, <span class="math inline">\(A = \bigcup_n A_n \in \mathcal{F}\)</span>.</p>
+<p><strong><span class="math inline">\(\mathcal{F}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra:</strong> Given any (not necessarily disjoint) <span class="math inline">\(A_n \in \mathcal{F}\)</span>, apply disjointification: set <span class="math inline">\(B_1 = A_1\)</span> and <span class="math inline">\(B_n = A_n \setminus \bigcup_{k=1}^{n-1} A_k\)</span> for <span class="math inline">\(n \ge 2\)</span>. Since <span class="math inline">\(\mathcal{F}\)</span> is an algebra (Step 2), each <span class="math inline">\(B_n \in \mathcal{F}\)</span>. The <span class="math inline">\(B_n\)</span> are pairwise disjoint and <span class="math inline">\(\bigcup_n A_n = \bigsqcup_n B_n\)</span>, so <span class="math inline">\(\bigcup_n A_n \in \mathcal{F}\)</span> by the disjoint case above. Together with <span class="math inline">\(\mathbb{R}^d \in \mathcal{F}\)</span> and closure under complements, <span class="math inline">\(\mathcal{F}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra.</p>
+<p>Since <span class="math inline">\(\mathcal{F}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra containing all closed sets, <span class="math inline">\(\mathcal{F} \supseteq \sigma(\text{closed sets}) = \mathcal{B}(\mathbb{R}^d)\)</span>. Combined with <span class="math inline">\(\mathcal{F} \subseteq \mathcal{B}(\mathbb{R}^d)\)</span> by definition, <span class="math inline">\(\mathcal{F} = \mathcal{B}(\mathbb{R}^d)\)</span>.</p></li>
+</ol>
+<p>For any <span class="math inline">\(B \in \mathcal{B}(\mathbb{R}^d) = \mathcal{F}\)</span>, the definition of <span class="math inline">\(\mathcal{F}\)</span> provides, for each <span class="math inline">\(n\)</span>, a closed set <span class="math inline">\(C_n \subseteq B\)</span> with <span class="math inline">\(\mu(B \setminus C_n) &lt; 1/n\)</span>, establishing inner-regularity with closed sets. Setting <span class="math inline">\(K_n = C_n \cap \bar{B}^d(0, n)\)</span> gives compact <span class="math inline">\(K_n \subseteq B\)</span> with <span class="math display">\[
+\mu(B \setminus K_n) \le \mu(B \setminus C_n) + \mu(C_n \setminus \bar{B}^d(0,n)) &lt; \frac{1}{n} + \mu(B \setminus \bar{B}^d(0,n)) \to 0
+\]</span> as <span class="math inline">\(n \to \infty\)</span> (using <span class="math inline">\(B \setminus \bar{B}^d(0,n) \downarrow \emptyset\)</span> and continuity from above for the finite measure <span class="math inline">\(\mu\)</span>). Hence <span class="math inline">\(\mu(K_n) \to \mu(B)\)</span>, establishing full inner-regularity. For outer-regularity, given <span class="math inline">\(\epsilon &gt; 0\)</span> take <span class="math inline">\(C \subseteq B \subseteq V\)</span> with <span class="math inline">\(\mu(V \setminus C) &lt; \epsilon\)</span> as in the definition of <span class="math inline">\(\mathcal{F}\)</span>; then <span class="math inline">\(V \setminus B \subseteq V \setminus C\)</span>, so <span class="math inline">\(\mu(V) = \mu(B) + \mu(V \setminus B) \le \mu(B) + \epsilon\)</span>, and since <span class="math inline">\(\epsilon &gt; 0\)</span> was arbitrary the infimum over open <span class="math inline">\(V \supseteq B\)</span> equals <span class="math inline">\(\mu(B)\)</span>.</p>
+<p>Note where the two hypotheses enter. Everything up to the previous paragraph uses only that <span class="math inline">\(\mathbb{R}^d\)</span> is a <strong>metric</strong> space and that <span class="math inline">\(\mu\)</span> is <strong>finite</strong>, and yields inner regularity by <em>closed</em> sets; this part is valid in any metric space. The upgrade from closed to <strong>compact</strong> sets uses the Heine–Borel theorem (a closed bounded subset of <span class="math inline">\(\mathbb{R}^d\)</span> is compact) together with <span class="math inline">\(\sigma\)</span>-compactness of <span class="math inline">\(\mathbb{R}^d\)</span>, and does fail in general metric spaces.</p>
+</div>
+<p>The Kolmogorov Extension Theorem is applied below to probability measures on the cube <span class="math inline">\([0,1]^n\)</span>, not on <span class="math inline">\(\mathbb{R}^n\)</span>. The following corollary transfers <a href="#thm-finite-borel-radon" class="quarto-xref">Theorem&nbsp;<span>35.1</span></a> to that setting.</p>
+<div id="cor-radon-on-borel-subset" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 35.1 (Regularity on Borel Subsets of <span class="math inline">\(\mathbb{R}^d\)</span>)</strong></span> Let <span class="math inline">\(E \in \mathcal{B}(\mathbb{R}^d)\)</span>, give <span class="math inline">\(E\)</span> the subspace topology, and let <span class="math inline">\(\mathcal{B}(E)\)</span> be its Borel <span class="math inline">\(\sigma\)</span>-algebra. Let <span class="math inline">\(\nu\)</span> be a finite Borel measure on <span class="math inline">\((E, \mathcal{B}(E))\)</span>. Then <span class="math inline">\(\nu\)</span> is inner-regular by compact sets: <span class="math display">\[
+\nu(B) = \sup\{ \nu(K) \mid K \subseteq B, \ K \text{ compact} \} \qquad \forall B \in \mathcal{B}(E),
+\]</span> where “compact” may equivalently be read in <span class="math inline">\(E\)</span> or in <span class="math inline">\(\mathbb{R}^d\)</span>, compactness being intrinsic to a subset. In particular every probability measure <span class="math inline">\(\nu_n\)</span> on <span class="math inline">\(([0,1]^n, \mathcal{B}([0,1]^n))\)</span> is inner-regular by compact sets.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#cor-radon-on-borel-subset" class="quarto-xref">Corollary&nbsp;<span>35.1</span></a>). </span><strong>Step 0: identification of <span class="math inline">\(\mathcal{B}(E)\)</span>.</strong> The collection <span class="math inline">\(\mathcal{D} \triangleq \{ A \subseteq \mathbb{R}^d \mid A \cap E \in \mathcal{B}(E) \}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra (preimages under the inclusion <span class="math inline">\(E \hookrightarrow \mathbb{R}^d\)</span> commute with complements and countable unions) and contains every open <span class="math inline">\(A \subseteq \mathbb{R}^d\)</span>, since <span class="math inline">\(A \cap E\)</span> is open in <span class="math inline">\(E\)</span>. Hence <span class="math inline">\(\mathcal{B}(\mathbb{R}^d) \subseteq \mathcal{D}\)</span>, i.e.&nbsp;<span class="math inline">\(\{A \cap E \mid A \in \mathcal{B}(\mathbb{R}^d)\} \subseteq \mathcal{B}(E)\)</span>. Conversely <span class="math inline">\(\{A \cap E \mid A \in \mathcal{B}(\mathbb{R}^d)\}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(E\)</span> containing all sets open in <span class="math inline">\(E\)</span>, so it contains <span class="math inline">\(\mathcal{B}(E)\)</span>. Therefore <span class="math display">\[
+\mathcal{B}(E) = \{ A \cap E \mid A \in \mathcal{B}(\mathbb{R}^d) \},
+\]</span> and because <span class="math inline">\(E \in \mathcal{B}(\mathbb{R}^d)\)</span> every such <span class="math inline">\(A \cap E\)</span> is itself Borel in <span class="math inline">\(\mathbb{R}^d\)</span>, giving <span class="math display">\[
+\mathcal{B}(E) = \{ A \in \mathcal{B}(\mathbb{R}^d) \mid A \subseteq E \} \subseteq \mathcal{B}(\mathbb{R}^d).
+\]</span></p>
+<p><strong>Step 1: transfer.</strong> Define <span class="math inline">\(\hat{\nu}(A) \triangleq \nu(A \cap E)\)</span> for <span class="math inline">\(A \in \mathcal{B}(\mathbb{R}^d)\)</span>; this is well defined by Step 0, is countably additive because <span class="math inline">\(\nu\)</span> is and <span class="math inline">\(A \mapsto A \cap E\)</span> preserves disjointness and countable unions, and is finite with <span class="math inline">\(\hat\nu(\mathbb{R}^d) = \nu(E) &lt; \infty\)</span>. Hence <span class="math inline">\(\hat\nu\)</span> is Radon by <a href="#thm-finite-borel-radon" class="quarto-xref">Theorem&nbsp;<span>35.1</span></a>. For <span class="math inline">\(B \in \mathcal{B}(E)\)</span> we have <span class="math inline">\(B \subseteq E\)</span>, so <span class="math inline">\(\hat\nu(B) = \nu(B)\)</span> and <span class="math display">\[
+\nu(B) = \hat{\nu}(B) = \sup\{ \hat{\nu}(K) \mid K \subseteq B, \ K \subseteq \mathbb{R}^d \text{ compact} \}.
+\]</span> Every such <span class="math inline">\(K\)</span> satisfies <span class="math inline">\(K \subseteq B \subseteq E\)</span>, so <span class="math inline">\(K\)</span> is compact in the subspace topology of <span class="math inline">\(E\)</span> as well (compactness of a set depends only on its own subspace topology), and <span class="math inline">\(\hat{\nu}(K) = \nu(K)\)</span>. The final claim follows with <span class="math inline">\(E = [0,1]^n\)</span>, which is closed, hence Borel, in <span class="math inline">\(\mathbb{R}^n\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="proof-of-the-kolmogorov-extension-theorem" class="level2" data-number="35.2">
+<h2 data-number="35.2" class="anchored" data-anchor-id="proof-of-the-kolmogorov-extension-theorem"><span class="header-section-number">35.2</span> Proof of the Kolmogorov Extension Theorem</h2>
+<p>Let <span class="math inline">\(Q = [0, 1]^\mathbb{N}\)</span> equipped with the product topology and its Borel <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{B}(Q)\)</span>. We prove <a href="16-1-Kolmogorov-Extension-Theorem1.html#thm-kolmogorov-extension-unit-interval" class="quarto-xref">Theorem&nbsp;<span>34.2</span></a>, whose hypotheses (a projectively consistent family <span class="math inline">\(\{\nu_n\}_{n=1}^\infty\)</span> of probability measures on <span class="math inline">\(([0,1]^n, \mathcal{B}([0,1]^n))\)</span>) and conclusion (existence and uniqueness of <span class="math inline">\(P\)</span> on <span class="math inline">\((Q, \mathcal{B}(Q))\)</span> with <span class="math inline">\(P \circ \pi_n^{-1} = \nu_n\)</span>) are stated there.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="16-1-Kolmogorov-Extension-Theorem1.html#thm-kolmogorov-extension-unit-interval" class="quarto-xref">Theorem&nbsp;<span>34.2</span></a>). </span></p>
+<ol type="1">
+<li><p><strong>Cylinder Algebra:</strong> For <span class="math inline">\(j \in \mathbb{N}\)</span>, let <span class="math inline">\(p_j:Q\to[0,1]\)</span> be the <span class="math inline">\(j\)</span>-th coordinate projection, <span class="math inline">\(p_j((x_k)_{k=1}^\infty)=x_j\)</span>. Let <span class="math inline">\(\pi_n:Q\to[0,1]^n\)</span> be the projection onto the first <span class="math inline">\(n\)</span> coordinates: <span class="math display">\[
+\pi_n(x)=(p_1(x),\ldots,p_n(x))=(x_1,\ldots,x_n),
+\]</span> and write <span class="math inline">\(Q_{&gt;n} \triangleq [0,1]^{\{n+1,n+2,\ldots\}}\)</span> for the remaining coordinates. Under the canonical bijection <span class="math inline">\(Q \cong [0,1]^n \times Q_{&gt;n}\)</span> we have <span class="math inline">\(\pi_n^{-1}(B) = B \times Q_{&gt;n}\)</span>; we use the unambiguous form <span class="math inline">\(\pi_n^{-1}(B)\)</span> from now on. Define the <span class="math inline">\(\sigma\)</span>-algebra of cylinder sets determined by the first <span class="math inline">\(n\)</span> coordinates by <span id="eq-cylinder-algebra-order-n"><span class="math display">\[
+\mathcal{C}_n
+\triangleq \{\pi_n^{-1}(B)\mid B\in\mathcal{B}([0,1]^n)\}
+=\sigma(\pi_n)=\sigma(p_1,\ldots,p_n).
+\tag{35.1}\]</span></span> The inverse images of Borel sets form the <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\sigma(\pi_n)\)</span>. Moreover, each <span class="math inline">\(p_j\)</span> with <span class="math inline">\(j\le n\)</span> is <span class="math inline">\(\sigma(\pi_n)\)</span>-measurable because <span class="math inline">\(p_j=\operatorname{pr}_j\circ\pi_n\)</span> with <span class="math inline">\(\operatorname{pr}_j\)</span> continuous, while <span class="math inline">\(\pi_n=(p_1,\ldots,p_n)\)</span> is <span class="math inline">\(\sigma(p_1,\ldots,p_n)/\bigotimes_{k\le n}\mathcal{B}([0,1])\)</span>-measurable by <a href="14-2-Product-Measure.html#lem-product-measurability" class="quarto-xref">Lemma&nbsp;<span>30.3</span></a>, and <span class="math inline">\(\bigotimes_{k \le n}\mathcal{B}([0,1]) = \mathcal{B}([0,1]^n)\)</span> by <a href="16-1-Kolmogorov-Extension-Theorem1.html#lem-borel-cylinder-identity" class="quarto-xref">Lemma&nbsp;<span>34.3</span></a>. These two inclusions prove <span class="math inline">\(\sigma(\pi_n)=\sigma(p_1,\ldots,p_n)\)</span>.</p>
+<p>The collection <span class="math inline">\(\mathcal{A} \triangleq \bigcup_{n=1}^\infty \mathcal{C}_n\)</span> is exactly the algebra <span class="math inline">\(\mathcal{A}\)</span> of <a href="16-1-Kolmogorov-Extension-Theorem1.html#lem-borel-cylinder-identity" class="quarto-xref">Lemma&nbsp;<span>34.3</span></a>, and by that lemma <span class="math display">\[
+\sigma(\mathcal{A})=\sigma(p_j:j\in\mathbb{N})=\mathcal{B}(Q).
+\]</span> (This last identity is where countability of the index set and second countability of <span class="math inline">\([0,1]\)</span> are used; for an uncountable product the inclusion <span class="math inline">\(\sigma(\mathcal{A}) \subseteq \mathcal{B}(Q)\)</span> can be strict.) Note also that <span class="math inline">\(\mathcal{C}_m \subseteq \mathcal{C}_n\)</span> for <span class="math inline">\(m \le n\)</span>, since <span class="math inline">\(\pi_m^{-1}(B) = \pi_n^{-1}(B \times [0,1]^{n-m})\)</span> and <span class="math inline">\(B \times [0,1]^{n-m} \in \mathcal{B}([0,1]^n)\)</span> by <a href="16-1-Kolmogorov-Extension-Theorem1.html#lem-borel-cylinder-identity" class="quarto-xref">Lemma&nbsp;<span>34.3</span></a>; hence any finite collection of elements of <span class="math inline">\(\mathcal{A}\)</span> lies in a common <span class="math inline">\(\mathcal{C}_n\)</span>, which is used repeatedly below.</p></li>
+<li><p><strong>Finitely Additive Set Function:</strong> Define <span class="math inline">\(P_0: \mathcal{A} \to [0, 1]\)</span> by <span class="math inline">\(P_0(\pi_n^{-1}(B)) \triangleq \nu_n(B)\)</span>. This is <strong>well-defined</strong>: if <span class="math inline">\(\pi_m^{-1}(B) = \pi_n^{-1}(B')\)</span> with <span class="math inline">\(m \le n\)</span>, then applying the surjection <span class="math inline">\(\pi_n\)</span> gives <span class="math inline">\(B' = B \times [0,1]^{n-m}\)</span>, so iterating the consistency condition <span class="math inline">\(n-m\)</span> times gives <span class="math inline">\(\nu_n(B') = \nu_m(B)\)</span>. <strong>Finite additivity</strong> holds because two disjoint elements of <span class="math inline">\(\mathcal{A}\)</span> may be written at a common order <span class="math inline">\(n\)</span> as <span class="math inline">\(\pi_n^{-1}(B_1)\)</span>, <span class="math inline">\(\pi_n^{-1}(B_2)\)</span>; disjointness and surjectivity of <span class="math inline">\(\pi_n\)</span> force <span class="math inline">\(B_1 \cap B_2 = \emptyset\)</span>, whence <span class="math display">\[
+P_0\bigl(\pi_n^{-1}(B_1) \cup \pi_n^{-1}(B_2)\bigr) = \nu_n(B_1 \cup B_2) = \nu_n(B_1) + \nu_n(B_2).
+\]</span> In particular, <span class="math inline">\(P_0(Q) = \nu_1([0,1]) = 1\)</span>, so <span class="math inline">\(P_0\)</span> is a finitely additive probability set function on the algebra <span class="math inline">\(\mathcal{A}\)</span>. Being non-negative and finitely additive on an algebra, <span class="math inline">\(P_0\)</span> is also <strong>monotone</strong> and <strong>finitely subadditive</strong> there; both facts are used below.</p></li>
+<li><p><strong>Countable Additivity via Compactness:</strong> We show that <span class="math inline">\(P_0\)</span> is a premeasure on <span class="math inline">\(\mathcal{A}\)</span>. Since <span class="math inline">\(P_0\)</span> is finitely additive with <span class="math inline">\(P_0(Q) = 1 &lt; \infty\)</span>, <a href="5-1-Radon-Measure.html#prp-premeasure-continuity-equivalences" class="quarto-xref">Proposition&nbsp;<span>11.1</span></a> (equivalence of items 1 and 4) reduces this to: <span class="math display">\[
+B_n \in \mathcal{A},\ B_n \downarrow \emptyset \ \Longrightarrow \ P_0(B_n) \to 0 .
+\]</span> Since <span class="math inline">\((B_n)\)</span> is decreasing and <span class="math inline">\(P_0\)</span> is monotone, <span class="math inline">\(P_0(B_n)\)</span> is non-increasing and bounded, so the limit exists; suppose towards a contradiction that <span class="math display">\[
+\lim_{n\to\infty} P_0(B_n) = \inf_{n} P_0(B_n) = \epsilon &gt; 0 .
+\]</span></p>
+<ul>
+<li><strong>Cylinder representation.</strong> Write <span class="math inline">\(B_n = \pi_{m_n}^{-1}(C_n)\)</span> with <span class="math inline">\(m_n \in \mathbb{N}\)</span> and <span class="math inline">\(C_n \in \mathcal{B}([0,1]^{m_n})\)</span>, so that <span class="math inline">\(P_0(B_n) = \nu_{m_n}(C_n)\)</span> by Step 2. (No re-indexing to a common or monotone order is needed: the argument below applies <a href="16-1-Kolmogorov-Extension-Theorem1.html#cor-finite-intersection-property" class="quarto-xref">Corollary&nbsp;<span>34.1</span></a> directly to closed sets, rather than building a point of <span class="math inline">\(\bigcap_n B_n\)</span> coordinate by coordinate.)</li>
+<li><strong>Compact inner approximation.</strong> Each <span class="math inline">\(\nu_{m_n}\)</span> is a probability measure on <span class="math inline">\([0,1]^{m_n}\)</span>, hence inner-regular by compact sets by <a href="#cor-radon-on-borel-subset" class="quarto-xref">Corollary&nbsp;<span>35.1</span></a>. Since <span class="math inline">\(\nu_{m_n}(C_n) &lt; \infty\)</span>, we may choose a compact <span class="math inline">\(K_n' \subseteq C_n\)</span> with <span class="math display">\[
+\nu_{m_n}(C_n \setminus K_n') &lt; \frac{\epsilon}{2^{n+1}} .
+\]</span></li>
+<li><strong>Cylinders over the compacta.</strong> Put <span class="math inline">\(K_n \triangleq \pi_{m_n}^{-1}(K_n') \subseteq B_n\)</span>. Since <span class="math inline">\(\pi_{m_n} : Q \to [0,1]^{m_n}\)</span> is continuous (its components <span class="math inline">\(p_1, \dots, p_{m_n}\)</span> are) and <span class="math inline">\(K_n'\)</span> is compact, hence closed in <span class="math inline">\([0,1]^{m_n}\)</span>, the set <span class="math inline">\(K_n\)</span> is <strong>closed</strong> in <span class="math inline">\(Q\)</span>. Also <span class="math inline">\(K_n \in \mathcal{A}\)</span>, and <span class="math inline">\(B_n \setminus K_n = \pi_{m_n}^{-1}(C_n \setminus K_n')\)</span>, so <span class="math display">\[
+P_0(B_n \setminus K_n) = \nu_{m_n}(C_n \setminus K_n') &lt; \frac{\epsilon}{2^{n+1}} .
+\]</span></li>
+<li>Set <span class="math inline">\(H_n \triangleq \bigcap_{i=1}^n K_i\)</span>. Then <span class="math inline">\(H_n \in \mathcal{A}\)</span> (a finite intersection of cylinders), <span class="math inline">\(H_n\)</span> is closed in <span class="math inline">\(Q\)</span>, and <span class="math inline">\(H_n \subseteq K_n \subseteq B_n\)</span>.</li>
+<li><strong>Estimate the difference.</strong> Since <span class="math inline">\(H_n \subseteq B_n\)</span> we have <span class="math inline">\(B_n \setminus H_n = \bigcup_{i=1}^n (B_n \setminus K_i)\)</span>, and <span class="math inline">\(B_n \subseteq B_i\)</span> for <span class="math inline">\(i \le n\)</span> (because <span class="math inline">\((B_n)\)</span> is decreasing), so <span class="math inline">\(B_n \setminus K_i \subseteq B_i \setminus K_i\)</span>. Using finite subadditivity and monotonicity of <span class="math inline">\(P_0\)</span> from Step 2: <span id="eq-compact-diff-bound"><span class="math display">\[
+\begin{aligned}
+P_0(B_n \setminus H_n) &amp;= P_0\left( \bigcup_{i=1}^n (B_n \setminus K_i) \right) \\
+&amp;\le \sum_{i=1}^n P_0(B_n \setminus K_i) \\
+&amp;\le \sum_{i=1}^n P_0(B_i \setminus K_i) \\
+&amp;&lt; \sum_{i=1}^n \frac{\epsilon}{2^{i+1}} &lt; \frac{\epsilon}{2}
+\end{aligned}
+\tag{35.2}\]</span></span></li>
+<li>Since <span class="math inline">\(H_n \subseteq B_n\)</span> and <span class="math inline">\(P_0\)</span> is finitely additive, <span class="math inline">\(P_0(B_n) = P_0(H_n) + P_0(B_n \setminus H_n)\)</span>, whence, using <span class="math inline">\(P_0(B_n) \ge \epsilon\)</span>, <span class="math display">\[
+P_0(H_n) = P_0(B_n) - P_0(B_n \setminus H_n) &gt; \epsilon - \frac{\epsilon}{2} = \frac{\epsilon}{2} &gt; 0 .
+\]</span></li>
+<li>In particular <span class="math inline">\(H_n = \bigcap_{i=1}^n K_i \neq \emptyset\)</span> for every <span class="math inline">\(n \in \mathbb{N}\)</span>. The sets <span class="math inline">\(K_i\)</span> are closed in <span class="math inline">\(Q\)</span> and all their initial finite intersections are non-empty, so <a href="16-1-Kolmogorov-Extension-Theorem1.html#cor-finite-intersection-property" class="quarto-xref">Corollary&nbsp;<span>34.1</span></a> applies and gives, using <span class="math inline">\(H_n \subseteq B_n\)</span>, <span id="eq-non-empty-intersection"><span class="math display">\[
+\bigcap_{n=1}^\infty B_n \supseteq \bigcap_{n=1}^\infty H_n = \bigcap_{i=1}^\infty K_i \neq \emptyset
+\tag{35.3}\]</span></span></li>
+<li>This contradicts <span class="math inline">\(B_n \downarrow \emptyset\)</span>. Hence <span class="math inline">\(P_0(B_n) \to 0\)</span> whenever <span class="math inline">\(B_n \downarrow \emptyset\)</span>, so <span class="math inline">\(P_0\)</span> is a premeasure on the algebra <span class="math inline">\(\mathcal{A}\)</span>.</li>
+</ul></li>
+<li><p><strong>Extension and uniqueness.</strong> <span class="math inline">\((Q, \mathcal{A}, P_0)\)</span> is a finite premeasure space, so by the measure extension theorem <a href="4-2-Extension-Theorem.html#thm-main-extension-measure" class="quarto-xref">Theorem&nbsp;<span>9.2</span></a>, <span class="math inline">\(P_0\)</span> extends to a measure <span class="math inline">\(P\)</span> on a <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(\sigma(\mathcal{A}) = \mathcal{B}(Q)\)</span>; restricting to <span class="math inline">\(\mathcal{B}(Q)\)</span> gives a measure with <span class="math inline">\(P(Q) = P_0(Q) = 1\)</span> and <span class="math display">\[
+P(\pi_n^{-1}(B)) = P_0(\pi_n^{-1}(B)) = \nu_n(B) \qquad \forall n \in \mathbb{N},\ \forall B \in \mathcal{B}([0,1]^n),
+\]</span> which is <a href="16-1-Kolmogorov-Extension-Theorem1.html#eq-kolmogorov-target-measure" class="quarto-xref">Equation&nbsp;<span>34.11</span></a>. Uniqueness holds because <span class="math inline">\(\mathcal{A}\)</span> is an algebra, hence a <span class="math inline">\(\pi\)</span>-system, generating <span class="math inline">\(\mathcal{B}(Q)\)</span>, and <a href="16-1-Kolmogorov-Extension-Theorem1.html#eq-kolmogorov-target-measure" class="quarto-xref">Equation&nbsp;<span>34.11</span></a> determines <span class="math inline">\(P\)</span> on <span class="math inline">\(\mathcal{A}\)</span>; apply <a href="15-1-Independence.html#lem-pi-system-uniqueness" class="quarto-xref">Lemma&nbsp;<span>32.1</span></a>. (This is the same argument already recorded after the statement of <a href="16-1-Kolmogorov-Extension-Theorem1.html#thm-kolmogorov-extension-unit-interval" class="quarto-xref">Theorem&nbsp;<span>34.2</span></a> in Lecture 16.1.)</p></li>
+</ol>
+</div>
+<hr>
+</section>
+<section id="extensions-to-mathbbrmathbbn-and-infinite-independent-sequences" class="level2" data-number="35.3">
+<h2 data-number="35.3" class="anchored" data-anchor-id="extensions-to-mathbbrmathbbn-and-infinite-independent-sequences"><span class="header-section-number">35.3</span> Extensions to <span class="math inline">\(\mathbb{R}^\mathbb{N}\)</span> and Infinite Independent Sequences</h2>
+<p>Throughout this section <span class="math inline">\(\mathbb{R}^\mathbb{N}\)</span> carries the product topology, <span class="math inline">\(p_n : \mathbb{R}^\mathbb{N} \to \mathbb{R}\)</span> is the <span class="math inline">\(n\)</span>-th coordinate map and <span class="math inline">\(\pi_n : \mathbb{R}^\mathbb{N} \to \mathbb{R}^n\)</span>, <span class="math inline">\(\pi_n(x) = (x_1,\dots,x_n)\)</span>, is the projection onto the first <span class="math inline">\(n\)</span> coordinates. The function <span class="math inline">\((a,b) \mapsto |a-b| \wedge 1\)</span> is a metric on <span class="math inline">\(\mathbb{R}\)</span> inducing its usual topology, so <span class="math display">\[
+\rho_\mathbb{R}(x,y) \triangleq \sum_{n=1}^\infty 2^{-n}\bigl( |x_n - y_n| \wedge 1 \bigr)
+\]</span> is a well-defined metric on <span class="math inline">\(\mathbb{R}^\mathbb{N}\)</span> (the truncation <span class="math inline">\(\wedge\,1\)</span> is what makes the series converge), and the argument of <a href="16-1-Kolmogorov-Extension-Theorem1.html#lem-product-topology-metric" class="quarto-xref">Lemma&nbsp;<span>34.2</span></a> shows verbatim that <span class="math inline">\(\rho_\mathbb{R}\)</span> induces the product topology, that <span class="math inline">\(\rho_\mathbb{R}\)</span>-convergence is coordinatewise convergence, and that the countable family of finite cylinders <span class="math inline">\(\bigcap_{k \le N} p_k^{-1}(I_k)\)</span> with <span class="math inline">\(I_k \subseteq \mathbb{R}\)</span> an open interval with rational endpoints is a base. In particular <span class="math inline">\(\mathbb{R}^\mathbb{N}\)</span> is a separable metrizable space; it is in fact <strong>Polish</strong>, since <span class="math inline">\(\rho_\mathbb{R}\)</span> is complete. Repeating the argument of <a href="16-1-Kolmogorov-Extension-Theorem1.html#lem-borel-cylinder-identity" class="quarto-xref">Lemma&nbsp;<span>34.3</span></a> <em>mutatis mutandis</em> — it used only countability of the index set and second countability of the factor, not compactness — gives <span id="eq-borel-cylinder-identity-real"><span class="math display">\[
+\mathcal{B}(\mathbb{R}^\mathbb{N}) = \sigma(p_n : n \in \mathbb{N}) = \bigotimes_{n=1}^\infty \mathcal{B}(\mathbb{R}) = \sigma\Bigl( \bigcup_{n=1}^\infty \pi_n^{-1}\bigl( \mathcal{B}(\mathbb{R}^n) \bigr) \Bigr),
+\tag{35.4}\]</span></span> where the second equality is <a href="14-2-Product-Measure.html#def-product-sigma-algebra-general" class="quarto-xref">Definition&nbsp;<span>30.3</span></a> (the product <span class="math inline">\(\sigma\)</span>-algebra is by definition generated by the coordinate maps) and the third uses the Borel identity <span class="math inline">\(\mathcal{B}(\mathbb{R}^n) = \bigotimes_{k=1}^n \mathcal{B}(\mathbb{R})\)</span> of Lecture 14.2. Moreover <span class="math inline">\(\bigcup_{n} \pi_n^{-1}(\mathcal{B}(\mathbb{R}^n))\)</span> is an algebra, hence a <span class="math inline">\(\pi\)</span>-system, generating <span class="math inline">\(\mathcal{B}(\mathbb{R}^\mathbb{N})\)</span>.</p>
+<div id="cor-kolmogorov-extension-real" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 35.2 (Kolmogorov Extension Theorem on <span class="math inline">\(\mathbb{R}^\mathbb{N}\)</span>)</strong></span> Let <span class="math inline">\(\nu_n\)</span> be probability measures on <span class="math inline">\((\mathbb{R}^n, \mathcal{B}(\mathbb{R}^n))\)</span>, <span class="math inline">\(n \in \mathbb{N}\)</span>, satisfying projective consistency <span id="eq-kolmogorov-real-consistency"><span class="math display">\[
+\nu_{n+1}(B \times \mathbb{R}) = \nu_n(B) \qquad \forall B \in \mathcal{B}(\mathbb{R}^n),\ \forall n \in \mathbb{N} .
+\tag{35.5}\]</span></span> Then there exists a unique probability measure <span class="math inline">\(P\)</span> on <span class="math inline">\((\mathbb{R}^\mathbb{N}, \mathcal{B}(\mathbb{R}^\mathbb{N}))\)</span> such that <span id="eq-kolmogorov-real-target"><span class="math display">\[
+P\bigl( \pi_n^{-1}(B) \bigr) = \nu_n(B) \qquad \forall B \in \mathcal{B}(\mathbb{R}^n),\ \forall n \in \mathbb{N},
+\tag{35.6}\]</span></span> equivalently <span class="math inline">\(P \circ \pi_n^{-1} = \nu_n\)</span> for every <span class="math inline">\(n\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#cor-kolmogorov-extension-real" class="quarto-xref">Corollary&nbsp;<span>35.2</span></a>). </span><strong>Uniqueness.</strong> By <a href="#eq-borel-cylinder-identity-real" class="quarto-xref">Equation&nbsp;<span>35.4</span></a> the sets <span class="math inline">\(\pi_n^{-1}(B)\)</span> form a <span class="math inline">\(\pi\)</span>-system generating <span class="math inline">\(\mathcal{B}(\mathbb{R}^\mathbb{N})\)</span> on which <a href="#eq-kolmogorov-real-target" class="quarto-xref">Equation&nbsp;<span>35.6</span></a> prescribes <span class="math inline">\(P\)</span>; since <span class="math inline">\(P\)</span> is a probability measure, <a href="15-1-Independence.html#lem-pi-system-uniqueness" class="quarto-xref">Lemma&nbsp;<span>32.1</span></a> gives uniqueness. It remains to prove existence.</p>
+<p><strong>Transport to the cube.</strong> Fix a homeomorphism <span class="math inline">\(\alpha: \mathbb{R} \to (0, 1)\)</span> (e.g.&nbsp;<span class="math inline">\(\alpha(x) = \int_{-\infty}^x \frac{1}{\pi(1+t^2)} \, dt\)</span>, the Cauchy CDF), and let <span class="math inline">\(\beta \triangleq \alpha^{-1} : (0,1) \to \mathbb{R}\)</span>. Extend <span class="math inline">\(\beta\)</span> to a Borel map <span class="math inline">\(\bar\beta : [0,1] \to \mathbb{R}\)</span> by setting <span class="math inline">\(\bar\beta(0) = \bar\beta(1) \triangleq 0\)</span>. Both <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\bar\beta\)</span> are Borel measurable, so the coordinatewise maps <span class="math display">\[
+\alpha^n : \mathbb{R}^n \to (0,1)^n, \qquad \bar\beta^{\,n} : [0,1]^n \to \mathbb{R}^n, \qquad \bar\beta^{\,\infty} : Q \to \mathbb{R}^\mathbb{N}
+\]</span> are Borel measurable — for <span class="math inline">\(\bar\beta^{\,\infty}\)</span> this is <a href="14-2-Product-Measure.html#lem-product-measurability" class="quarto-xref">Lemma&nbsp;<span>30.3</span></a> applied to the components <span class="math inline">\(\bar\beta \circ p_k\)</span>, together with <a href="#eq-borel-cylinder-identity-real" class="quarto-xref">Equation&nbsp;<span>35.4</span></a>. Note <span class="math inline">\(\bar\beta^{\,n} \circ \alpha^n = \mathrm{id}_{\mathbb{R}^n}\)</span> and <span class="math inline">\(\alpha^n \circ \bar\beta^{\,n} = \mathrm{id}\)</span> on <span class="math inline">\((0,1)^n\)</span>.</p>
+<p>Define <span class="math inline">\(\tilde\nu_n\)</span> on <span class="math inline">\(([0,1]^n, \mathcal{B}([0,1]^n))\)</span> as the pushforward of <span class="math inline">\(\nu_n\)</span> under <span class="math inline">\(\alpha^n\)</span>: <span class="math display">\[
+\tilde{\nu}_n(A) \triangleq \nu_n\bigl((\alpha^n)^{-1}(A \cap (0, 1)^n)\bigr), \qquad A \in \mathcal{B}([0,1]^n) .
+\]</span> Each <span class="math inline">\(\tilde\nu_n\)</span> is a probability measure with <span class="math inline">\(\tilde\nu_n\bigl((0,1)^n\bigr) = \nu_n(\mathbb{R}^n) = 1\)</span>.</p>
+<p><strong>Consistency of <span class="math inline">\(\{\tilde{\nu}_n\}\)</span>.</strong> Let <span class="math inline">\(A \in \mathcal{B}([0,1]^n)\)</span> and abbreviate <span class="math inline">\(S \triangleq A \cap (0,1)^n\)</span>. Two set identities are used. First, <span class="math display">\[
+(A \times [0,1]) \cap (0,1)^{n+1} = S \times (0,1),
+\]</span> and second, since <span class="math inline">\(\alpha^{n+1}\)</span> acts coordinatewise and <span class="math inline">\(\alpha^{-1}\bigl((0,1)\bigr) = \mathbb{R}\)</span>, <span class="math display">\[
+(\alpha^{n+1})^{-1}\bigl( S \times (0,1) \bigr) = (\alpha^{n})^{-1}(S) \times \alpha^{-1}\bigl((0,1)\bigr) = (\alpha^{n})^{-1}(S) \times \mathbb{R} .
+\]</span> Therefore <span class="math display">\[
+\begin{aligned}
+\tilde{\nu}_{n+1}(A \times [0,1]) &amp;= \nu_{n+1}\Bigl( (\alpha^{n+1})^{-1}\bigl( (A \times [0,1]) \cap (0,1)^{n+1} \bigr) \Bigr) \\
+&amp;= \nu_{n+1}\bigl( (\alpha^n)^{-1}(S) \times \mathbb{R} \bigr) \\
+&amp;= \nu_n\bigl( (\alpha^n)^{-1}(S) \bigr) = \tilde{\nu}_n(A),
+\end{aligned}
+\]</span> the third equality being <a href="#eq-kolmogorov-real-consistency" class="quarto-xref">Equation&nbsp;<span>35.5</span></a>. Hence <span class="math inline">\(\{\tilde{\nu}_n\}\)</span> is projectively consistent in the sense of <a href="16-1-Kolmogorov-Extension-Theorem1.html#eq-kolmogorov-consistency-cond" class="quarto-xref">Equation&nbsp;<span>34.10</span></a>.</p>
+<p><strong>Existence.</strong> By <a href="16-1-Kolmogorov-Extension-Theorem1.html#thm-kolmogorov-extension-unit-interval" class="quarto-xref">Theorem&nbsp;<span>34.2</span></a> there is a probability measure <span class="math inline">\(\tilde{P}\)</span> on <span class="math inline">\((Q, \mathcal{B}(Q))\)</span> with <span class="math inline">\(\tilde{P} \circ \pi_n^{-1} = \tilde\nu_n\)</span> for every <span class="math inline">\(n\)</span>. Define <span class="math display">\[
+P \triangleq \tilde{P} \circ \bigl( \bar\beta^{\,\infty} \bigr)^{-1},
+\]</span> a probability measure on <span class="math inline">\((\mathbb{R}^\mathbb{N}, \mathcal{B}(\mathbb{R}^\mathbb{N}))\)</span> since <span class="math inline">\(\bar\beta^{\,\infty}\)</span> is measurable. (The values assigned to <span class="math inline">\(\bar\beta\)</span> at the endpoints <span class="math inline">\(0,1\)</span> are irrelevant: <span class="math inline">\((0,1)^\mathbb{N} = \bigcap_n \pi_n^{-1}\bigl((0,1)^n\bigr) \in \mathcal{B}(Q)\)</span> and <span class="math inline">\(\tilde{P}\bigl(\pi_n^{-1}((0,1)^n)\bigr) = \tilde\nu_n((0,1)^n) = 1\)</span> for every <span class="math inline">\(n\)</span>, so <span class="math inline">\(\tilde{P}\bigl((0,1)^\mathbb{N}\bigr) = 1\)</span> and <span class="math inline">\(\bar\beta^{\,\infty}\)</span> agrees <span class="math inline">\(\tilde P\)</span>-a.s. with the inverse of the coordinatewise map induced by <span class="math inline">\(\alpha\)</span>.)</p>
+<p><strong>Verification of <a href="#eq-kolmogorov-real-target" class="quarto-xref">Equation&nbsp;<span>35.6</span></a>.</strong> Fix <span class="math inline">\(n\)</span> and <span class="math inline">\(B \in \mathcal{B}(\mathbb{R}^n)\)</span>. Since <span class="math inline">\(\pi_n \circ \bar\beta^{\,\infty} = \bar\beta^{\,n} \circ \pi_n\)</span>, <span class="math display">\[
+P\bigl(\pi_n^{-1}(B)\bigr) = \tilde{P}\Bigl( \bigl(\bar\beta^{\,\infty}\bigr)^{-1}\bigl(\pi_n^{-1}(B)\bigr) \Bigr) = \tilde{P}\Bigl( \pi_n^{-1}\bigl( (\bar\beta^{\,n})^{-1}(B) \bigr) \Bigr) = \tilde{\nu}_n\bigl( (\bar\beta^{\,n})^{-1}(B) \bigr).
+\]</span> Writing <span class="math inline">\(A \triangleq (\bar\beta^{\,n})^{-1}(B)\)</span> we have <span class="math inline">\(A \cap (0,1)^n = \{ y \in (0,1)^n \mid \beta^n(y) \in B \} = \alpha^n(B)\)</span>, hence <span class="math inline">\((\alpha^n)^{-1}\bigl(A \cap (0,1)^n\bigr) = B\)</span> and therefore <span class="math inline">\(\tilde\nu_n(A) = \nu_n(B)\)</span>. Thus <span class="math inline">\(P(\pi_n^{-1}(B)) = \nu_n(B)\)</span>.</p>
+</div>
+<div id="rem-transport-mechanism" class="proof remark">
+<p><span class="proof-title"><em>Remark 35.2</em> (What the Transport Argument Actually Uses). </span>The specific choice of the Cauchy CDF is irrelevant. The only properties of <span class="math inline">\(\mathbb{R}\)</span> used above are:</p>
+<ol type="1">
+<li><span class="math inline">\(\mathbb{R}\)</span> is homeomorphic to a <strong>Borel</strong> subset <span class="math inline">\((0,1)\)</span> of the compact metrizable space <span class="math inline">\([0,1]\)</span>, so that the finite-dimensional laws transport to <span class="math inline">\([0,1]^n\)</span> and the transported laws charge <span class="math inline">\((0,1)^n\)</span> fully;</li>
+<li>the inverse homeomorphism extends to a <strong>Borel</strong> map <span class="math inline">\([0,1] \to \mathbb{R}\)</span> (any extension will do, since the added set is <span class="math inline">\(\tilde P\)</span>-null).</li>
+</ol>
+<p>By the Borel isomorphism theorem every uncountable Polish space is Borel isomorphic to <span class="math inline">\([0,1]\)</span>, so the same argument yields the Kolmogorov extension theorem with an arbitrary Polish state space in place of <span class="math inline">\(\mathbb{R}\)</span>. Some such hypothesis is genuinely needed: the theorem is false for arbitrary measurable state spaces.</p>
+</div>
+<hr>
+</section>
+<section id="existence-of-infinite-independent-sequences" class="level2" data-number="35.4">
+<h2 data-number="35.4" class="anchored" data-anchor-id="existence-of-infinite-independent-sequences"><span class="header-section-number">35.4</span> Existence of Infinite Independent Sequences</h2>
+<div id="thm-existence-iid-sequences" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 35.2 (Existence of Infinite Independent Sequences)</strong></span> Let <span class="math inline">\(\{\mu_n\}_{n=1}^\infty\)</span> be an arbitrary sequence of Borel probability measures on <span class="math inline">\((\mathbb{R}, \mathcal{B}(\mathbb{R}))\)</span>. There exists a probability space <span class="math inline">\((\Omega, \mathcal{F}, P)\)</span> and a sequence of independent random variables <span class="math inline">\(X_n: (\Omega, \mathcal{F}, P) \to (\mathbb{R}, \mathcal{B}(\mathbb{R}))\)</span> such that <span class="math inline">\(\mu_{X_n} = \mu_n\)</span> for all <span class="math inline">\(n \in \mathbb{N}\)</span>. In particular, taking <span class="math inline">\(\mu_n = \mu\)</span> for every <span class="math inline">\(n\)</span> produces an i.i.d. sequence with common law <span class="math inline">\(\mu\)</span>, so i.i.d. sequences with an arbitrary prescribed marginal law exist.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-existence-iid-sequences" class="quarto-xref">Theorem&nbsp;<span>35.2</span></a>). </span>Set <span class="math inline">\(\Omega \triangleq \mathbb{R}^\mathbb{N}\)</span> and <span class="math inline">\(\mathcal{F} \triangleq \mathcal{B}(\mathbb{R}^\mathbb{N}) = \sigma(p_n : n \in \mathbb{N})\)</span> by <a href="#eq-borel-cylinder-identity-real" class="quarto-xref">Equation&nbsp;<span>35.4</span></a>. All the random variables constructed below are defined on this single space <span class="math inline">\((\Omega, \mathcal{F}, P)\)</span>, as <a href="15-2-Independent-Random-Variables.html#def-indep-rvs" class="quarto-xref">Definition&nbsp;<span>33.1</span></a> requires.</p>
+<ol type="1">
+<li>Define the finite product measures <span class="math inline">\(\nu_n \triangleq \bigotimes_{k=1}^n \mu_k\)</span> on <span class="math inline">\(\bigl(\mathbb{R}^n, \bigotimes_{k=1}^n \mathcal{B}(\mathbb{R})\bigr) = (\mathbb{R}^n, \mathcal{B}(\mathbb{R}^n))\)</span>, the identification of the two <span class="math inline">\(\sigma\)</span>-algebras being the Borel identity of Lecture 14.2; these exist and are unique probability measures by <a href="16-1-Kolmogorov-Extension-Theorem1.html#prp-finite-product-measure" class="quarto-xref">Proposition&nbsp;<span>34.1</span></a> (for <span class="math inline">\(n = 1\)</span> read <span class="math inline">\(\nu_1 = \mu_1\)</span>).</li>
+<li><strong>Projective consistency.</strong> The map <span class="math inline">\(B \mapsto \nu_{n+1}(B \times \mathbb{R})\)</span> is the pushforward of <span class="math inline">\(\nu_{n+1}\)</span> under the projection <span class="math inline">\(\operatorname{pr}_{1:n} : \mathbb{R}^{n+1} \to \mathbb{R}^n\)</span> (measurable by <a href="14-2-Product-Measure.html#lem-product-measurability" class="quarto-xref">Lemma&nbsp;<span>30.3</span></a>), hence a probability measure on <span class="math inline">\(\mathcal{B}(\mathbb{R}^n)\)</span>; so is <span class="math inline">\(B \mapsto \nu_n(B)\)</span>. On a rectangle <span class="math inline">\(B = B_1 \times \dots \times B_n\)</span> they agree, since by <a href="16-1-Kolmogorov-Extension-Theorem1.html#eq-n-fold-rectangle-formula" class="quarto-xref">Equation&nbsp;<span>34.2</span></a> <span class="math display">\[
+\begin{aligned}
+\nu_{n+1}(B_1 \times \dots \times B_n \times \mathbb{R}) &amp;= \Bigl( \prod_{k=1}^n \mu_k(B_k) \Bigr) \mu_{n+1}(\mathbb{R})\\
+&amp; = \prod_{k=1}^n \mu_k(B_k) = \nu_n(B).
+\end{aligned}
+\]</span> Rectangles form a <span class="math inline">\(\pi\)</span>-system generating <span class="math inline">\(\mathcal{B}(\mathbb{R}^n)\)</span> by <a href="14-2-Product-Measure.html#def-product-sigma-algebra" class="quarto-xref">Definition&nbsp;<span>30.1</span></a> together with <span class="math inline">\(\mathcal{B}(\mathbb{R}^n) = \bigotimes_{k=1}^n \mathcal{B}(\mathbb{R})\)</span>, so <a href="15-1-Independence.html#lem-pi-system-uniqueness" class="quarto-xref">Lemma&nbsp;<span>32.1</span></a> gives <span class="math inline">\(\nu_{n+1}(B \times \mathbb{R}) = \nu_n(B)\)</span> for <strong>all</strong> <span class="math inline">\(B \in \mathcal{B}(\mathbb{R}^n)\)</span>, i.e. <a href="#eq-kolmogorov-real-consistency" class="quarto-xref">Equation&nbsp;<span>35.5</span></a> holds.</li>
+<li>By <a href="#cor-kolmogorov-extension-real" class="quarto-xref">Corollary&nbsp;<span>35.2</span></a> there is a unique probability measure <span class="math inline">\(P\)</span> on <span class="math inline">\((\mathbb{R}^\mathbb{N}, \mathcal{B}(\mathbb{R}^\mathbb{N}))\)</span> with <span class="math inline">\(P(\pi_n^{-1}(B)) = \nu_n(B)\)</span> for all <span class="math inline">\(n\)</span> and all <span class="math inline">\(B \in \mathcal{B}(\mathbb{R}^n)\)</span>.</li>
+<li>Set <span class="math inline">\(X_n \triangleq p_n\)</span>, the <strong><span class="math inline">\(n\)</span>-th coordinate</strong> map, which is <span class="math inline">\(\mathcal{F}/\mathcal{B}(\mathbb{R})\)</span>-measurable by <a href="14-2-Product-Measure.html#lem-canonical-projections-measurable" class="quarto-xref">Lemma&nbsp;<span>30.1</span></a>. For any <span class="math inline">\(n\)</span> and any <span class="math inline">\(B_1, \dots, B_n \in \mathcal{B}(\mathbb{R})\)</span> we have <span class="math inline">\(\bigcap_{k=1}^n \{X_k \in B_k\} = \pi_n^{-1}(B_1 \times \dots \times B_n)\)</span>, so <span id="eq-iid-sequence-proof-finish"><span class="math display">\[
+\begin{aligned}
+P(X_1 \in B_1, \dots, X_n \in B_n) &amp;= P\bigl( \pi_n^{-1}(B_1 \times \dots \times B_n) \bigr) \\
+&amp;= \nu_n(B_1 \times \dots \times B_n) \\
+&amp;= \prod_{k=1}^n \mu_k(B_k) .
+\end{aligned}
+\tag{35.7}\]</span></span></li>
+<li><strong>Marginals.</strong> Fixing <span class="math inline">\(k \le n\)</span> and setting <span class="math inline">\(B_j = \mathbb{R}\)</span> for <span class="math inline">\(j \ne k\)</span> in <a href="#eq-iid-sequence-proof-finish" class="quarto-xref">Equation&nbsp;<span>35.7</span></a> gives <span class="math inline">\(P(X_k \in B_k) = \mu_k(B_k)\)</span>, i.e.&nbsp;<span class="math inline">\(\mu_{X_k} = \mu_k\)</span>.</li>
+<li><strong>Independence.</strong> Let <span class="math inline">\(J \subseteq \mathbb{N}\)</span> be finite and non-empty, <span class="math inline">\(n \triangleq \max J\)</span>, and <span class="math inline">\(B_j \in \mathcal{B}(\mathbb{R})\)</span> for <span class="math inline">\(j \in J\)</span>. Setting <span class="math inline">\(B_j = \mathbb{R}\)</span> for <span class="math inline">\(j \in \{1,\dots,n\} \setminus J\)</span> in <a href="#eq-iid-sequence-proof-finish" class="quarto-xref">Equation&nbsp;<span>35.7</span></a> and using step 5, <span class="math display">\[
+P\Bigl( \bigcap_{j \in J} \{X_j \in B_j\} \Bigr) = \prod_{j \in J} \mu_j(B_j) = \prod_{j \in J} P(X_j \in B_j) .
+\]</span> Since this holds for every finite <span class="math inline">\(J\)</span>, the family <span class="math inline">\(\{X_n\}_{n=1}^\infty\)</span> is independent in the sense of <a href="15-2-Independent-Random-Variables.html#def-indep-rvs" class="quarto-xref">Definition&nbsp;<span>33.1</span></a>.</li>
+</ol>
+</div>
+<div id="exm-iid-bernoulli-sequence" class="theorem example">
+<p><span class="theorem-title"><strong>Example 35.1</strong></span> Suppose we want random variables <span class="math inline">\(X_1,X_2,X_3,\ldots\)</span> such that <span class="math display">\[
+X_n=
+\begin{cases} 1,&amp;\text{with probability }p_n,\\
+0,&amp;\text{with probability }1-p_n,
+\end{cases}
+\]</span> where the probabilities can be different for every <span class="math inline">\(n\)</span>. For example, let <span class="math inline">\(p_n=\frac{1}{n+1}\)</span>. Thus, <span class="math display">\[
+X_1\sim\operatorname{Bernoulli}\left(\frac12\right), \, X_2\sim\operatorname{Bernoulli}\left(\frac13\right), \, X_3\sim\operatorname{Bernoulli}\left(\frac14\right), \,\ldots
+\]</span> and we want all these random variables to be independent. The theorem says that such an infinite sequence exists. Let’s construct it explicitly. For each <span class="math inline">\(n\)</span>, define <span class="math display">\[
+\mu_n = \frac{n}{n+1}\delta_0 + \frac{1}{n+1}\delta_1,
+\]</span> where <span class="math inline">\(\delta_x\)</span> denotes the point mass at <span class="math inline">\(x\)</span>. So <span class="math inline">\(\mu_n(\{1\})=\frac{1}{n+1}\)</span> and <span class="math inline">\(\mu_n(\{0\})=\frac{n}{n+1}\)</span>. Our goal is therefore to construct independent <span class="math inline">\(X_n\)</span> satisfying <span class="math inline">\(X_n \sim \mu_n\)</span> for <span class="math inline">\(n=1,2,3,\ldots\)</span>.</p>
+<p>Let <span class="math inline">\(\Omega=\{0,1\}^{\mathbb N}\)</span>. An element of <span class="math inline">\(\Omega\)</span> is an entire infinite sequence: <span class="math display">\[
+\omega=(\omega_1,\omega_2,\omega_3,\ldots), \, \omega_n\in\{0,1\}.
+\]</span> For example, <span class="math inline">\(\omega=(0,1,0,0,1,0,1,\ldots)\)</span> is one possible outcome. Think of <span class="math inline">\(\omega\)</span> as describing the outcomes of all infinitely many coin tosses. We equip <span class="math inline">\(\Omega\)</span> with the product <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal F = \bigotimes_{n=1}^\infty 2^{\{0,1\}}\)</span>, where <span class="math inline">\(2^{\{0,1\}}\)</span> is the power set of <span class="math inline">\(\{0,1\}\)</span>. For each coordinate, define the probability measure <span class="math display">\[
+\mu_n = \frac{n}{n+1}\delta_0+\frac{1}{n+1}\delta_1.
+\]</span> The infinite product probability measure is <span class="math display">\[
+P=\bigotimes_{n=1}^\infty\mu_n.
+\]</span> This is the probability measure that makes the coordinates behave according to their specified distributions and makes them independent. Schematically, <span class="math display">\[
+(\Omega,\mathcal F,P) = \left( \{0,1\}^{\mathbb N}, \bigotimes_{n=1}^{\infty}2^{\{0,1\}}, \bigotimes_{n=1}^{\infty}\mu_n \right).
+\]</span> Now define the <span class="math inline">\(n\)</span>th coordinate map: <span class="math inline">\(X_n(\omega)=\omega_n\)</span>. For example, if <span class="math inline">\(\omega=(0,1,0,0,1,0,\ldots)\)</span>, then <span class="math display">\[
+X_1(\omega)=0,\, X_2(\omega)=1,\, X_3(\omega)=0,\, X_4(\omega)=0,\,\ldots.
+\]</span> So each <span class="math inline">\(X_n\)</span> simply looks at the <span class="math inline">\(n\)</span>th coordinate. The event <span class="math inline">\(\{X_n=1\}\)</span> consists of all sequences whose <span class="math inline">\(n\)</span>th coordinate equals <span class="math inline">\(1\)</span>: <span class="math inline">\(\{X_n=1\} = \{\omega\in\Omega:\omega_n=1\}\)</span>. Therefore, <span class="math inline">\(P(X_n=1) = \mu_n(\{1\}) = \frac{1}{n+1}\)</span>. Similarly, <span class="math inline">\(P(X_n=0) = \mu_n(\{0\}) = \frac{n}{n+1}\)</span>. Hence, <span class="math inline">\(X_n\)</span> has the desired Bernoulli distribution: <span class="math inline">\(X_n \sim \operatorname{Bernoulli}\left(\frac{1}{n+1}\right)\)</span>. Thus, <span class="math inline">\(\mu_{X_n} = \mu_n\)</span>.</p>
+<p>The entire sample space can be visualized as</p>
+<p><span class="math display">\[
+\begin{array}{cccccc}
+\omega &amp;=&amp; (\omega_1,&amp;\omega_2,&amp;\omega_3,&amp;\omega_4,\ldots)\\
+&amp;&amp;\downarrow&amp;\downarrow&amp;\downarrow&amp;\downarrow\\
+&amp;&amp;X_1(\omega)&amp;X_2(\omega)&amp;X_3(\omega)&amp;X_4(\omega)
+\end{array}
+\]</span> For example, <span class="math inline">\(\omega=(0,1,0,0,1,0,0,\ldots)\)</span> produces <span class="math display">\[
+(X_1(\omega),X_2(\omega),X_3(\omega),X_4(\omega),X_5(\omega),\ldots) = (0,1,0,0,1,\ldots).
+\]</span> So an element <span class="math inline">\(\omega\)</span> is itself an infinite realization, while <span class="math inline">\(X_n\)</span> extracts its <span class="math inline">\(n\)</span>th component. This is the central idea behind the product-space construction.</p>
+</div>
+<div id="exm-uniform-random-sequence" class="theorem example">
+<p><span class="theorem-title"><strong>Example 35.2 (Infinitely many independent Uniform<span class="math inline">\((0,1)\)</span> random variables)</strong></span> Suppose we want <span class="math inline">\(X_1,X_2,X_3,\ldots\)</span> to satisfy <span class="math inline">\(X_n\sim \operatorname{Uniform}(0,1)\)</span> for every <span class="math inline">\(n\)</span>. The theorem tells us that such a sequence exists. Let’s construct it.</p>
+<p>Let <span class="math inline">\(\lambda\)</span> denote Lebesgue measure on <span class="math inline">\([0,1]\)</span>. The Uniform<span class="math inline">\((0,1)\)</span> probability measure is <span class="math inline">\(\mu(A)=\lambda(A)\)</span> for all <span class="math inline">\(A\in\mathcal B([0,1])\)</span>, because <span class="math inline">\(\lambda([0,1])=1\)</span>. Thus, <span class="math inline">\(([0,1],\mathcal B([0,1]),\lambda)\)</span> is the desired probability space for a single Uniform<span class="math inline">\((0,1)\)</span> random variable.</p>
+<p>Take <span class="math inline">\(\Omega=[0,1]^{\mathbb N}\)</span>. An element of <span class="math inline">\(\Omega\)</span> is an infinite sequence <span class="math display">\[
+\omega=(\omega_1,\omega_2,\omega_3,\ldots), \qquad \omega_n\in[0,1].
+\]</span> For example, <span class="math inline">\(\omega=(0.374,0.821,0.156,\ldots)\)</span> is one possible outcome. The sample space therefore contains every possible infinite sequence of numbers in <span class="math inline">\([0,1]\)</span>. Equip it with the product <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal F = \bigotimes_{n=1}^{\infty} \mathcal B([0,1])=\mathcal B([0,1])^{\otimes\mathbb N}\)</span>. For every coordinate, we want the Uniform<span class="math inline">\((0,1)\)</span> distribution. Therefore define <span class="math inline">\(P=\bigotimes_{n=1}^{\infty}\lambda=\lambda^{\otimes\mathbb N}\)</span>. Thus, the probability space can be written as <span class="math display">\[
+(\Omega, \mathcal F, P)=([0,1]^{\mathbb N}, \bigotimes_{n=1}^{\infty} \mathcal B([0,1]), \bigotimes_{n=1}^{\infty}\lambda).
+\]</span></p>
+<p>Define the coordinate maps <span class="math display">\[
+X_n: \underbrace{([0,1]^{\mathbb N},\mathcal B([0,1])^{\otimes\mathbb N},\lambda^{\otimes\mathbb N})}_{\text{probability space}} \longrightarrow \underbrace{([0,1],\mathcal B([0,1]))}_{\text{measurable codomain space}},
+\]</span> with <span class="math inline">\(X_n(\omega)=\omega_n\)</span>. Why is <span class="math inline">\(X_n\)</span> Uniform<span class="math inline">\((0,1)\)</span>? Consider any Borel set <span class="math inline">\(A\subseteq[0,1]\)</span>. We have <span class="math display">\[
+\{X_n\in A\} = \{\omega:\omega_n\in A\}.
+\]</span> This is the cylinder set <span class="math display">\[
+[0,1]\times\cdots\times[0,1] \times A \times[0,1]\times\cdots,
+\]</span> where <span class="math inline">\(A\)</span> occurs in the <span class="math inline">\(n\)</span>th position. By the definition of the product measure, <span class="math display">\[
+\begin{aligned}
+P(X_n\in A) &amp;= P([0,1]\times\cdots\times A\times\cdots)\\
+&amp;= \prod_{j\neq n}\lambda([0,1])\cdot\lambda(A)\\
+&amp;=\lambda(A).
+\end{aligned}
+\]</span> Since <span class="math inline">\(\lambda(A)\)</span> is precisely the Uniform<span class="math inline">\((0,1)\)</span> probability of <span class="math inline">\(A\)</span>, we conclude that <span class="math inline">\(X_n \sim \operatorname{Uniform}(0,1)\)</span>.</p>
+</div>
+<hr>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="pagination-link" aria-label="Lecture 16.1: Kolmogorov's Extension Theorem (I)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./17-1-Kolmogorov- 0-1-Law.html" class="pagination-link" aria-label="Lecture 17.1: Kolmogorov's 0-1 Law">
+        <span class="nav-page-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/16-2-Kolmogorov-Extension-Theorem2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

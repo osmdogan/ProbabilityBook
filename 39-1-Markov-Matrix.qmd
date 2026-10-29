@@ -1,0 +1,150 @@
+# Lecture 39.1: Markov Matrix
+
+## Discrete-Time Homogeneous Markov Processes
+
+We consider discrete time parameter spaces $T = \mathbb{N}_0 = \{0, 1, 2, \dots\}$.
+
+In discrete time, the Chapman-Kolmogorov equations simplify to operator iteration:
+$$
+Q_{n+m} = Q_n Q_m, \quad \forall n, m \in \mathbb{N}_0.
+$$ {#eq-ck-discrete}
+
+By induction (with base case $Q_0 = \mathrm{Id} = Q_1^0$, recall Lecture 38.2), for any $n \in \mathbb{N}_0$, the $n$-step transition operator $Q_n$ is the $n$-fold composition of the single 1-step transition operator $Q_1$:
+$$
+Q_n = Q_1 Q_{n-1} = Q_1 Q_1 Q_{n-2} = \dots = Q_1^n.
+$$ {#eq-operator-power}
+
+Thus, the entire discrete-time homogeneous dynamics is governed by iterating a single transition operator:
+$$
+Q_1 : \mathcal{B}_b(S, \mathcal{B}) \to \mathcal{B}_b(S, \mathcal{B}).
+$$ {#eq-transition-op}
+
+::: {#exm-random-walk}
+## Discrete Random Walk
+Let $(\xi_k)_{k=1}^\infty$ be a sequence of independent and identically distributed (i.i.d.) random vectors in $\mathbb{R}^d$ with common distribution $\mu_{\xi_1} = \mathrm{Law}(\xi_1)$. Define the random walk $X_0 = 0$ and
+$$
+X_n = \sum_{k=1}^n \xi_k, \quad n \ge 1.
+$$ {#eq-rw-def}
+
+For any bounded measurable function $f \in \mathcal{B}_b(\mathbb{R}^d)$, the 1-step operator $Q_1$ acts as (using that the increment $\xi_1$ is independent of the starting point, i.e. translation invariance of the walk):
+$$
+\begin{aligned}
+(Q_1 f)(x) &= \mathbb{E}[f(x + X_1 - X_0)] \\
+&= \mathbb{E}[f(x + \xi_1)] \\
+&= \int_{\mathbb{R}^d} f(x + y) \, \mu_{\xi_1}(\mathrm{d}y).
+\end{aligned}
+$$ {#eq-rw-operator}
+
+**Special Case (Simple Random Walk on $\mathbb{Z}$):**
+If $S = \mathbb{Z}$ and $\mu_{\xi_1} = p \delta_1 + (1-p) \delta_{-1}$ with $p \in (0, 1)$, then:
+$$
+(Q_1 f)(x) = p f(x + 1) + (1 - p) f(x - 1).
+$$ {#eq-ssrw-op}
+This walk is **symmetric** precisely when $p = 1/2$ (cf. Lecture 18.2); for $p \ne 1/2$ it has nonzero drift $\mathbb{E}[\xi_1] = 2p - 1 \ne 0$ and is transient.
+:::
+
+---
+
+## Discrete State Space: Markov Chains
+
+When the state space $S$ is countable (or finite), equipped with the discrete $\sigma$-algebra $\mathcal{B} = 2^S$, the transition kernel simplifies to transition probabilities:
+$$
+q_{n,m}(x, B) = \sum_{y \in B} q_{n,m}(x, y), \quad x \in S, \, B \subseteq S.
+$$ {#eq-discrete-kernel}
+
+For $n < m$, the multi-step transition probability $q_{n,m}(x, y) = \mathbb{P}(X_m = y \mid X_n = x)$ expands across intermediate paths $y_{n+1}, \dots, y_{m-1} \in S$ as:
+$$
+q_{n,m}(x, y) = \sum_{y_{n+1}, \dots, y_{m-1} \in S} q_{n, n+1}(x, y_{n+1}) q_{n+1, n+2}(y_{n+1}, y_{n+2}) \dots q_{m-1, m}(y_{m-1}, y),
+$$ {#eq-multi-step-path-expansion}
+with the convention that the (empty) sum is omitted when $m = n+1$, so that @eq-multi-step-path-expansion reduces to $q_{n,n+1}(x,y)$ in that case.
+
+::: {#exm-ehrenfest-urn}
+## Ehrenfest Urn Model
+Consider an urn containing $N$ total particles separated by a semipermeable membrane. Let $X_n \in S = \{0, 1, \dots, N\}$ represent the number of particles on the left side of the urn at time $n$.
+
+At each step $n \to n+1$, a particle is selected uniformly at random from the entire urn and moved to the opposite side of the membrane.
+
+We model $(X_n)_{n \in \mathbb{N}_0}$ as a time-homogeneous Markov process. The 1-step transition kernel $q_1(i, j) = q_{n, n+1}(i, j) = \mathbb{P}(X_{n+1} = j \mid X_n = i)$ is:
+$$
+q_1(i, j) = 
+\begin{cases}
+\dfrac{i}{N}, & \text{if } j = i - 1, \\[1ex]
+1 - \dfrac{i}{N}, & \text{if } j = i + 1, \\[1ex]
+0, & \text{if } |i - j| \ne 1.
+\end{cases}
+$$ {#eq-ehrenfest-transitions}
+:::
+
+::: {#rem-terminology}
+## Terminological Conventions
+If $(X_t)_{t \in T}$ is a Markov process taking values in a discrete state space $S$, it is typically called a **Markov Chain**.
+
+* Some authors define a discrete-time process $(X_n)_{n \in \mathbb{N}_0}$ as a Markov Chain regardless of whether the state space is discrete or continuous.
+* By standard convention, a continuous-time process $(X_t)_{t \ge 0}$ with continuous state space is usually called a continuous Markov process rather than a Markov chain.
+:::
+
+---
+
+## Transition Matrices and Finite-Dimensional Distributions
+
+For discrete state spaces $S$, let $\nu_k$ denote the probability mass function (PMF) of $X_k$, represented as a row vector $\boldsymbol{\nu}_k$:
+$$
+\nu_k(i) = \mathbb{P}(X_k = i), \quad i \in S.
+$$ {#eq-state-distribution}
+
+The 1-step transition probabilities define an $S \times S$ matrix $P = (P_{ij})_{i, j \in S}$ where:
+$$
+P_{ij} = q_1(i, j) = \mathbb{P}(X_{n+1} = j \mid X_n = i).
+$$ {#eq-transition-matrix-def}
+
+The $n$-step transition probability $q_n(i, j) = \mathbb{P}(X_n = j \mid X_0 = i)$ corresponds to matrix multiplication:
+$$
+q_n(i, j) = \sum_{k_1, k_2, \dots, k_{n-1} \in S} P_{i, k_1} P_{k_1, k_2} \dots P_{k_{n-1}, j} = [P^n]_{ij}.
+$$ {#eq-matrix-power-step}
+
+Consequently, the marginal distribution at step $n$ is obtained via row-vector matrix multiplication:
+$$
+\nu_n(j) = \sum_{i \in S} \nu_0(i) \mathbb{P}(X_n = j \mid X_0 = i) = [\boldsymbol{\nu}_0 P^n]_j.
+$$ {#eq-marginal-distribution-formula}
+
+::: {#rem-fdds-markov-chain}
+## Beyond Marginal Distributions
+Marginal distributions $\boldsymbol{\nu}_n = \boldsymbol{\nu}_0 P^n$ capture only part of the Markov chain structure. Multi-time joint distributions (finite-dimensional distributions) utilize the Markov property explicitly. For example, for $n < m$:
+$$
+\begin{aligned}
+\mathbb{P}(X_n = j, X_m = k) &= \mathbb{P}(X_m = k \mid X_n = j) \mathbb{P}(X_n = j) \\
+&= [\boldsymbol{\nu}_0 P^n]_j [P^{m-n}]_{jk}.
+\end{aligned}
+$$ {#eq-joint-fdd-example}
+:::
+
+---
+
+## Stochastic Matrices and Graph Representation
+
+::: {#def-stochastic-matrix}
+## Stochastic Matrix
+Let $S$ be countable (or finite), as fixed in the preceding section. A matrix $P = (P_{ij})_{i,j \in S}$ is called a **stochastic matrix** (or Markov matrix) if:
+
+1. $P_{ij} \ge 0$ for all $i, j \in S$;
+2. $\sum_{j \in S} P_{ij} = 1$ for all $i \in S$ (rows sum to 1).
+
+Conversely, every stochastic matrix $P$ arises as the transition matrix of some discrete-time Markov chain: given any initial distribution $\nu_0$ on $S$, the formulas @eq-matrix-power-step and @eq-marginal-distribution-formula define a consistent family of finite-dimensional distributions on $S^{\mathbb{N}_0}$, so the Kolmogorov extension theorem (Lecture 16 / 37.2) yields a probability measure on $S^{\mathbb{N}_0}$ under which the coordinate process $(X_n)_{n \in \mathbb{N}_0}$ is a Markov chain with transition matrix $P$ and $\mathrm{Law}(X_0) = \nu_0$.
+:::
+
+In the finite state space setting, the transition dynamics can be visualized as a directed, weighted (looped) graph $G = (V, E)$ where vertices $V = S$ represent states, and directed edges $(i, j) \in E$ bear weights $P_{ij} = \mathbb{P}(X_{n+1} = j \mid X_n = i)$.
+
+::: {#rem-graph-time-homogeneity}
+In the time-homogeneous setting, edge labels $P_{ij}$ remain constant across all time steps $n \to n + 1$. In a time-inhomogeneous setting, arrow labels would depend on $n$.
+:::
+
+---
+
+## Takeaways
+
+- **Time-homogeneity collapses Chapman–Kolmogorov to iterating one operator.** Because $Q_{s,t}$ depends only on $t-s$ (Lecture 38.2), the discrete-time family $(Q_n)_{n\ge0}$ satisfies $Q_{n+m}=Q_nQ_m$ (@eq-ck-discrete), and induction from $Q_0=\mathrm{Id}$ gives $Q_n=Q_1^n$ (@eq-operator-power): the entire dynamics is encoded in the single 1-step operator $Q_1$.
+- **Translation-invariant walks give $Q_1$ as convolution with the step law.** For the random walk $X_n=\sum_{k\le n}\xi_k$ (@exm-random-walk), $(Q_1f)(x)=\int f(x+y)\,\mu_{\xi_1}(\mathrm dy)$ because shifting the start to $x$ only shifts the increment $\xi_1$, not its law. The simple random walk on $\mathbb Z$ (@eq-ssrw-op) is the lattice special case $(Q_1f)(x)=pf(x+1)+(1-p)f(x-1)$, which is symmetric only when $p=1/2$; otherwise the walk has nonzero drift $2p-1$.
+- **Not every chain is translation-invariant.** The Ehrenfest urn (@exm-ehrenfest-urn) shows a genuinely state-dependent kernel: the probability of moving left or right depends on the current occupancy $i$, not just on a fixed increment law, yet it is still a time-homogeneous Markov chain.
+- **On a countable state space, operators become matrices.** With $S$ countable, $Q_1$ is represented by the stochastic matrix $P=(P_{ij})$ (@def-stochastic-matrix, @eq-transition-matrix-def), $Q_n$ by $P^n$ (@eq-matrix-power-step), and the evolution of the marginal law by row-vector times matrix, $\boldsymbol\nu_n=\boldsymbol\nu_0P^n$ (@eq-marginal-distribution-formula). Conversely, any stochastic matrix is the transition matrix of some chain, via the Kolmogorov extension theorem.
+- **Marginals alone do not determine the chain.** $\boldsymbol\nu_n=\boldsymbol\nu_0P^n$ only tracks one-time distributions; joint (multi-time) distributions need the Markov property explicitly, e.g. $\mathbb P(X_n=j,X_m=k)=[\boldsymbol\nu_0P^n]_j[P^{m-n}]_{jk}$ for $n<m$ (@rem-fdds-markov-chain) — the full finite-dimensional distributions are recovered by chaining transition matrices across the gaps between observation times.
+- **Finite chains have a natural graph picture.** A stochastic matrix $P$ on a finite $S$ is equivalent to a weighted directed graph with edge weights $P_{ij}$; time-homogeneity means these weights do not change with $n$, setting up the graph-theoretic tools (communicating classes, periodicity, stationary distributions) developed in later lectures.

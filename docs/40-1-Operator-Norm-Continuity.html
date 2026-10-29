@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>86&nbsp; Lecture 40.1: Operator Norm Continuity – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./AppendixA.html" rel="next">
+<link href="./Probability-Theory-III.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-III.html">Probability Theory III</a></li><li class="breadcrumb-item"><a href="./40-1-Operator-Norm-Continuity.html"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-markov-generators-and-continuity" id="toc-introduction-to-markov-generators-and-continuity" class="nav-link active" data-scroll-target="#introduction-to-markov-generators-and-continuity"><span class="header-section-number">86.1</span> Introduction to Markov Generators and Continuity</a></li>
+  <li><a href="#operator-norms-and-bounded-operators" id="toc-operator-norms-and-bounded-operators" class="nav-link" data-scroll-target="#operator-norms-and-bounded-operators"><span class="header-section-number">86.2</span> Operator Norms and Bounded Operators</a></li>
+  <li><a href="#submultiplicativity-of-the-operator-norm" id="toc-submultiplicativity-of-the-operator-norm" class="nav-link" data-scroll-target="#submultiplicativity-of-the-operator-norm"><span class="header-section-number">86.3</span> Submultiplicativity of the Operator Norm</a></li>
+  <li><a href="#operator-powers-and-matrix-exponentials" id="toc-operator-powers-and-matrix-exponentials" class="nav-link" data-scroll-target="#operator-powers-and-matrix-exponentials"><span class="header-section-number">86.4</span> Operator Powers and Matrix Exponentials</a></li>
+  <li><a href="#discrete-matrix-representations-of-operators" id="toc-discrete-matrix-representations-of-operators" class="nav-link" data-scroll-target="#discrete-matrix-representations-of-operators"><span class="header-section-number">86.5</span> Discrete Matrix Representations of Operators</a></li>
+  <li><a href="#uniformly-continuous-markov-semigroups" id="toc-uniformly-continuous-markov-semigroups" class="nav-link" data-scroll-target="#uniformly-continuous-markov-semigroups"><span class="header-section-number">86.6</span> Uniformly Continuous Markov Semigroups</a></li>
+  <li><a href="#remarks" id="toc-remarks" class="nav-link" data-scroll-target="#remarks"><span class="header-section-number">86.7</span> Remarks</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">86.8</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/40-1-Operator-Norm-Continuity.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-III.html">Probability Theory III</a></li><li class="breadcrumb-item"><a href="./40-1-Operator-Norm-Continuity.html"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-to-markov-generators-and-continuity" class="level2" data-number="86.1">
+<h2 data-number="86.1" class="anchored" data-anchor-id="introduction-to-markov-generators-and-continuity"><span class="header-section-number">86.1</span> Introduction to Markov Generators and Continuity</h2>
+<p>Given a family of Markov transition operators <span class="math inline">\(\{Q_t\}_{t \ge 0}\)</span> on the bounded measurable functions <span class="math inline">\(\mathcal{B}(S, \mathcal{B})\)</span> over a state space <span class="math inline">\(S\)</span>, the <strong>generator</strong> <span class="math inline">\(A\)</span> (should it exist) is defined as the linear operator: <span id="eq-generator-def"><span class="math display">\[
+A f := \left.\frac{\mathrm{d}}{\mathrm{d}t} Q_t f \right\vert{}_{t=0} = \lim_{t \to 0^+} \frac{Q_t f - f}{t}.
+\tag{86.1}\]</span></span></p>
+<p>If <span class="math inline">\(Q_t\)</span> is differentiable at <span class="math inline">\(t = 0\)</span>, it must also be continuous at <span class="math inline">\(t = 0\)</span>. There are multiple notions of operator continuity available (e.g., pointwise/strong continuity, operator norm continuity). The strongest notion—<strong>operator norm continuity</strong>—yields the most concrete analytical properties.</p>
+<hr>
+</section>
+<section id="operator-norms-and-bounded-operators" class="level2" data-number="86.2">
+<h2 data-number="86.2" class="anchored" data-anchor-id="operator-norms-and-bounded-operators"><span class="header-section-number">86.2</span> Operator Norms and Bounded Operators</h2>
+<div id="def-operator-norm" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 86.1 (Bounded Operator and Operator Norm)</strong></span> Let <span class="math inline">\((B, \Vert{}\cdot\Vert{})\)</span> be a normed space (e.g., <span class="math inline">\(B = \mathcal{B}(S, \mathcal{B})\)</span> equipped with the supremum norm <span class="math inline">\(\Vert{}f\Vert{}_\infty := \sup_{x \in S} \vert{}f(x)\vert{}\)</span>). For a linear operator <span class="math inline">\(A: B \to B\)</span>, its <strong>operator norm</strong> <span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}}\)</span> is defined as: <span id="eq-op-norm-def"><span class="math display">\[
+\Vert{}A\Vert{}_{\mathrm{op}} := \sup_{f \neq 0} \frac{\Vert{}A f\Vert{}}{\Vert{}f\Vert{}} = \sup_{\Vert{}f\Vert{} \le 1} \Vert{}A f\Vert{}.
+\tag{86.2}\]</span></span></p>
+<p><span class="math inline">\(A\)</span> is called a <strong>bounded linear operator</strong> if <span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} &lt; \infty\)</span>, which is equivalent to <span class="math inline">\(A\)</span> being Lipschitz continuous: <span id="eq-bounded-lipschitz"><span class="math display">\[
+\Vert{}A f\Vert{} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}f\Vert{} \quad \forall f \in B.
+\tag{86.3}\]</span></span></p>
+</div>
+<hr>
+</section>
+<section id="submultiplicativity-of-the-operator-norm" class="level2" data-number="86.3">
+<h2 data-number="86.3" class="anchored" data-anchor-id="submultiplicativity-of-the-operator-norm"><span class="header-section-number">86.3</span> Submultiplicativity of the Operator Norm</h2>
+<div id="lem-submultiplicative" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 86.1 (Composition of Bounded Linear Operators)</strong></span> If <span class="math inline">\(A, T: B \to B\)</span> are bounded linear operators, then their composition <span class="math inline">\(A T\)</span> is also bounded, and: <span id="eq-submultiplicative"><span class="math display">\[
+\Vert{}A T\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}}.
+\tag{86.4}\]</span></span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-submultiplicative" class="quarto-xref">Lemma&nbsp;<span>86.1</span></a>). </span>Fix <span class="math inline">\(f \in B\)</span>, <span class="math inline">\(f \neq 0\)</span>. If <span class="math inline">\(T f = 0\)</span>, then <span class="math inline">\(\Vert{}A T f\Vert{} = \Vert{}A 0\Vert{} = 0 \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}} \Vert{}f\Vert{}\)</span> trivially. If <span class="math inline">\(T f \neq 0\)</span>, then: <span class="math display">\[
+\frac{\Vert{}A T f\Vert{}}{\Vert{}f\Vert{}} = \frac{\Vert{}A(T f)\Vert{}}{\Vert{}T f\Vert{}} \cdot \frac{\Vert{}T f\Vert{}}{\Vert{}f\Vert{}}.
+\]</span> By definition of the operator norm: <span class="math display">\[
+\frac{\Vert{}A(T f)\Vert{}}{\Vert{}T f\Vert{}} \le \Vert{}A\Vert{}_{\mathrm{op}} \quad \implies \quad \frac{\Vert{}A T f\Vert{}}{\Vert{}f\Vert{}} \le \Vert{}A\Vert{}_{\mathrm{op}} \cdot \frac{\Vert{}T f\Vert{}}{\Vert{}f\Vert{}} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}}.
+\]</span> In either case <span class="math inline">\(\Vert{}A T f\Vert{} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}} \Vert{}f\Vert{}\)</span>. Taking the supremum over all <span class="math inline">\(f \neq 0\)</span> yields <span class="math inline">\(\Vert{}A T\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}}\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="operator-powers-and-matrix-exponentials" class="level2" data-number="86.4">
+<h2 data-number="86.4" class="anchored" data-anchor-id="operator-powers-and-matrix-exponentials"><span class="header-section-number">86.4</span> Operator Powers and Matrix Exponentials</h2>
+<div id="cor-operator-exp" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 86.1 (Powers and Exponentials of Operators)</strong></span> If <span class="math inline">\(A\)</span> is a bounded linear operator, then <span class="math inline">\(A^n\)</span> is bounded for every <span class="math inline">\(n \in \mathbb{N}\)</span>, with: <span id="eq-power-bound"><span class="math display">\[
+\Vert{}A^n\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}}^n.
+\tag{86.5}\]</span></span></p>
+<p>Furthermore, on a Banach space <span class="math inline">\(B\)</span>, the operator exponential defined by the power series: <span id="eq-op-exp-series"><span class="math display">\[
+e^{t A} := \sum_{n=0}^\infty \frac{t^n}{n!} A^n,
+\tag{86.6}\]</span></span> converges in operator norm to a bounded linear operator for all <span class="math inline">\(t \in \mathbb{R}\)</span>, satisfying: <span id="eq-exp-norm-bound"><span class="math display">\[
+\Vert{}e^{t A}\Vert{}_{\mathrm{op}} \le e^{\vert{}t\vert{} \Vert{}A\Vert{}_{\mathrm{op}}} &lt; \infty.
+\tag{86.7}\]</span></span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#cor-operator-exp" class="quarto-xref">Corollary&nbsp;<span>86.1</span></a>). </span></p>
+<ol type="1">
+<li>By induction on <a href="#lem-submultiplicative" class="quarto-xref">Lemma&nbsp;<span>86.1</span></a> (base case <span class="math inline">\(n=0\)</span>: <span class="math inline">\(\Vert{}A^0\Vert{}_{\mathrm{op}} = \Vert{}I\Vert{}_{\mathrm{op}} = 1 = \Vert{}A\Vert{}_{\mathrm{op}}^0\)</span>), <span class="math inline">\(\Vert{}A^n\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}}^n\)</span>.</li>
+<li>Since <span class="math inline">\((\mathcal{B}(S), \Vert{}\cdot\Vert{}_\infty)\)</span> is a complete normed space (Banach space, as uniform limits of bounded functions are bounded and <span class="math inline">\(\mathbb{R}\)</span> is complete), a standard result in functional analysis guarantees that the operator algebra <span class="math inline">\((\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})\)</span> of bounded linear operators on a Banach space is itself a Banach space: if <span class="math inline">\((A_n)\)</span> is <span class="math inline">\(\Vert{}\cdot\Vert{}_{\mathrm{op}}\)</span>-Cauchy, then <span class="math inline">\((A_n f)\)</span> is Cauchy in <span class="math inline">\(B\)</span> for each fixed <span class="math inline">\(f\)</span>, hence converges to some <span class="math inline">\(A f\)</span> by completeness of <span class="math inline">\(B\)</span>; one checks <span class="math inline">\(A\)</span> is linear, bounded, and <span class="math inline">\(A_n \to A\)</span> in operator norm.</li>
+<li>By completeness of <span class="math inline">\((\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})\)</span>, it suffices to show the series of norms converges (absolute convergence implies convergence in a Banach space): <span class="math display">\[
+\sum_{n=0}^\infty \left\Vert{} \frac{t^n}{n!} A^n \right\Vert{}_{\mathrm{op}} \le \sum_{n=0}^\infty \frac{\vert{}t\vert{}^n}{n!} \Vert{}A^n\Vert{}_{\mathrm{op}} \le \sum_{n=0}^\infty \frac{\vert{}t\vert{}^n \Vert{}A\Vert{}_{\mathrm{op}}^n}{n!} = e^{\vert{}t\vert{} \Vert{}A\Vert{}_{\mathrm{op}}} &lt; \infty.
+\]</span> Hence the partial sums of <span class="math inline">\(e^{t A}\)</span> form a Cauchy sequence in <span class="math inline">\((\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})\)</span> and converge to a bounded operator, with <span class="math inline">\(\Vert{}e^{tA}\Vert{}_{\mathrm{op}} \le \sum_{n=0}^\infty \Vert{}t^nA^n/n!\Vert{}_{\mathrm{op}} \le e^{\vert{}t\vert{}\Vert{}A\Vert{}_{\mathrm{op}}}\)</span> by the triangle inequality.</li>
+</ol>
+</div>
+<hr>
+</section>
+<section id="discrete-matrix-representations-of-operators" class="level2" data-number="86.5">
+<h2 data-number="86.5" class="anchored" data-anchor-id="discrete-matrix-representations-of-operators"><span class="header-section-number">86.5</span> Discrete Matrix Representations of Operators</h2>
+<p>When <span class="math inline">\(S\)</span> is countable, we can represent linear operators on <span class="math inline">\(\mathcal{B}(S)\)</span> via matrix kernels <span class="math inline">\(q: S \times S \to \mathbb{R}\)</span>: <span id="eq-matrix-op"><span class="math display">\[
+(A f)(i) = \sum_{j \in S} q(i, j) f(j).
+\tag{86.8}\]</span></span></p>
+<p>To ensure that <span class="math inline">\((A f) \in \mathcal{B}(S)\)</span> and <span class="math inline">\(A\)</span> is bounded, we define the norm: <span id="eq-matrix-row-norm"><span class="math display">\[
+\Vert{}q\Vert{}_\infty := \sup_{i \in S} \sum_{j \in S} \vert{}q(i, j)\vert{}.
+\tag{86.9}\]</span></span></p>
+<div id="prp-matrix-operator-norm" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 86.1 (Equivalence of Row-Sum Norm and Operator Norm)</strong></span> Let <span class="math inline">\(S\)</span> be countable and <span class="math inline">\(q: S \times S \to \mathbb{R}\)</span> satisfy <span class="math inline">\(\Vert{}q\Vert{}_\infty &lt; \infty\)</span>. Then <span class="math inline">\((A f)(i) = \sum_{j \in S} q(i, j) f(j)\)</span> defines a bounded linear operator on <span class="math inline">\(\mathcal{B}(S)\)</span>, and: <span id="eq-norm-equivalence"><span class="math display">\[
+\Vert{}A\Vert{}_{\mathrm{op}} = \Vert{}q\Vert{}_\infty = \sup_{i \in S} \sum_{j \in S} \vert{}q(i, j)\vert{}.
+\tag{86.10}\]</span></span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-matrix-operator-norm" class="quarto-xref">Proposition&nbsp;<span>86.1</span></a>). </span></p>
+<ul>
+<li><p><strong>Upper Bound (<span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} \le \Vert{}q\Vert{}_\infty\)</span>):</strong> For any <span class="math inline">\(f \in \mathcal{B}(S)\)</span> and any <span class="math inline">\(i \in S\)</span>: <span class="math display">\[
+\begin{aligned}
+\vert{}(A f)(i)\vert{} &amp;= \left\vert{} \sum_{j \in S} q(i, j) f(j) \right\vert{}\\
+&amp; \le \sum_{j \in S} \vert{}q(i, j)\vert{} \vert{}f(j)\vert{} \\
+&amp;\le \left( \sum_{j \in S} \vert{}q(i, j)\vert{} \right) \Vert{}f\Vert{}_\infty \\
+&amp;\le \Vert{}q\Vert{}_\infty \Vert{}f\Vert{}_\infty.
+\end{aligned}
+\]</span> Taking the supremum over <span class="math inline">\(i \in S\)</span> gives <span class="math inline">\(\Vert{}A f\Vert{}_\infty \le \Vert{}q\Vert{}_\infty \Vert{}f\Vert{}_\infty\)</span>, so <span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} \le \Vert{}q\Vert{}_\infty\)</span>.</p></li>
+<li><p><strong>Lower Bound (<span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} \ge \Vert{}q\Vert{}_\infty\)</span>):</strong> Fix <span class="math inline">\(\varepsilon &gt; 0\)</span> and choose <span class="math inline">\(i \in S\)</span> such that <span class="math inline">\(\sum_{j \in S} \vert{}q(i, j)\vert{} \ge \Vert{}q\Vert{}_\infty - \varepsilon\)</span>. Define the function <span class="math inline">\(f_i \in \mathcal{B}(S)\)</span> by setting <span class="math inline">\(f_i(j) = \operatorname{sgn}(q(i, j))\)</span>. Notice <span class="math inline">\(\Vert{}f_i\Vert{}_\infty \le 1\)</span>. Evaluating <span class="math inline">\((A f_i)(i)\)</span>: <span class="math display">\[
+(A f_i)(i) = \sum_{j \in S} q(i, j) \operatorname{sgn}(q(i, j)) = \sum_{j \in S} \vert{}q(i, j)\vert{} \ge \Vert{}q\Vert{}_\infty - \varepsilon.
+\]</span> Hence <span class="math inline">\(\Vert{}A f_i\Vert{}_\infty \ge \Vert{}q\Vert{}_\infty - \varepsilon\)</span>. Taking <span class="math inline">\(\varepsilon \to 0\)</span> yields <span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} \ge \Vert{}q\Vert{}_\infty\)</span>.</p></li>
+</ul>
+<p>Combining both inequalities establishes <span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} = \Vert{}q\Vert{}_\infty\)</span>.</p>
+</div>
+<blockquote class="blockquote">
+<p><strong>Caution:</strong> Even when <span class="math inline">\(S\)</span> is countable, not every bounded linear operator on <span class="math inline">\(\mathcal{B}(S) = \ell^\infty(S)\)</span> can be expressed as such a matrix. This is because the dual space <span class="math inline">\((\ell^\infty(S))^*\)</span> is strictly larger than <span class="math inline">\(\ell^1(S)\)</span>: it contains singular (finitely additive but not countably additive) functionals, such as Banach limits, that cannot be represented by any row <span class="math inline">\(q(i, \cdot) \in \ell^1(S)\)</span>. Operators built from such functionals (e.g., rank-one operators <span class="math inline">\(f \mapsto \phi(f) g\)</span> for <span class="math inline">\(g \in \mathcal{B}(S)\)</span> and <span class="math inline">\(\phi\)</span> a singular functional) are bounded but admit no matrix representation <a href="#eq-matrix-op" class="quarto-xref">Equation&nbsp;<span>86.8</span></a>.</p>
+</blockquote>
+<hr>
+</section>
+<section id="uniformly-continuous-markov-semigroups" class="level2" data-number="86.6">
+<h2 data-number="86.6" class="anchored" data-anchor-id="uniformly-continuous-markov-semigroups"><span class="header-section-number">86.6</span> Uniformly Continuous Markov Semigroups</h2>
+<div id="thm-uniformly-continuous-semigroup" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 86.1 (Uniformly Continuous Markov Semigroups)</strong></span> Let <span class="math inline">\(B = \mathcal{B}(S, \mathcal{B})\)</span> and let <span class="math inline">\(\{Q_t\}_{t \ge 0} \subset \mathcal{L}(B)\)</span> be a <strong>semigroup</strong> of bounded linear Markov transition operators, i.e. <span id="eq-chapman-kolmogorov"><span class="math display">\[
+Q_0 = I, \qquad Q_{s+t} = Q_s Q_t \quad \text{for all } s, t \ge 0
+\tag{86.11}\]</span></span> (the Chapman–Kolmogorov equations). Suppose further that <span class="math inline">\(Q_t\)</span> is <strong>operator norm continuous at <span class="math inline">\(t = 0\)</span></strong>: <span id="eq-norm-continuous-zero"><span class="math display">\[
+\lim_{t \to 0^+} \Vert{}Q_t - I\Vert{}_{\mathrm{op}} = 0.
+\tag{86.12}\]</span></span></p>
+<p>Then <span class="math inline">\(Q_t\)</span> is operator norm continuous for every <span class="math inline">\(t \ge 0\)</span>, and operator norm differentiable on all of <span class="math inline">\([0, \infty)\)</span> (one-sided at <span class="math inline">\(t = 0\)</span>). Furthermore, defining the generator <span class="math inline">\(A := \left.\frac{\mathrm{d}}{\mathrm{d}t} Q_t\right\vert{}_{t=0} = \lim_{t \to 0^+} \frac{Q_t - I}{t}\)</span>, we have:</p>
+<ol type="1">
+<li><span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} &lt; \infty\)</span> (the generator is a bounded operator).</li>
+<li><span class="math inline">\(Q_t = e^{t A} = \sum_{n=0}^\infty \frac{t^n}{n!} A^n\)</span> for all <span class="math inline">\(t \ge 0\)</span>.</li>
+<li><span class="math inline">\(Q_t\)</span> satisfies the <strong>Kolmogorov Forward and Backward Differential Equations</strong>: <span id="eq-kolmogorov-odes"><span class="math display">\[
+\frac{\mathrm{d}}{\mathrm{d}t} Q_t = Q_t A = A Q_t, \quad \text{with } Q_0 = I.
+\tag{86.13}\]</span></span></li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-uniformly-continuous-semigroup" class="quarto-xref">Theorem&nbsp;<span>86.1</span></a>). </span><strong>Step 1 (A local uniform bound, and continuity on all of <span class="math inline">\([0,\infty)\)</span>).</strong> By <a href="#eq-norm-continuous-zero" class="quarto-xref">Equation&nbsp;<span>86.12</span></a>, fix <span class="math inline">\(\delta &gt; 0\)</span> such that <span class="math inline">\(\Vert{}Q_s - I\Vert{}_{\mathrm{op}} \le 1/2\)</span> for all <span class="math inline">\(s \in [0, \delta]\)</span>; in particular <span class="math inline">\(M := \sup_{s \in [0,\delta]} \Vert{}Q_s\Vert{}_{\mathrm{op}} \le 3/2\)</span>. For any <span class="math inline">\(t \ge 0\)</span>, write <span class="math inline">\(t = n\delta + r\)</span> with <span class="math inline">\(n \in \mathbb{N}_0\)</span>, <span class="math inline">\(r \in [0, \delta)\)</span>; by <a href="#eq-chapman-kolmogorov" class="quarto-xref">Equation&nbsp;<span>86.11</span></a> and <a href="#lem-submultiplicative" class="quarto-xref">Lemma&nbsp;<span>86.1</span></a>, <span class="math inline">\(\Vert{}Q_t\Vert{}_{\mathrm{op}} = \Vert{}Q_\delta^n Q_r\Vert{}_{\mathrm{op}} \le M^{n+1} &lt; \infty\)</span>. Hence <span class="math inline">\(\sup_{s \in [0,T]} \Vert{}Q_s\Vert{}_{\mathrm{op}} &lt; \infty\)</span> for every <span class="math inline">\(T &lt; \infty\)</span>.</p>
+<p>For <span class="math inline">\(t_0 \ge 0\)</span> and <span class="math inline">\(h \to 0^+\)</span>, <a href="#eq-chapman-kolmogorov" class="quarto-xref">Equation&nbsp;<span>86.11</span></a> gives <span class="math inline">\(Q_{t_0+h} - Q_{t_0} = Q_{t_0}(Q_h - I)\)</span>, so by <a href="#lem-submultiplicative" class="quarto-xref">Lemma&nbsp;<span>86.1</span></a> and <a href="#eq-norm-continuous-zero" class="quarto-xref">Equation&nbsp;<span>86.12</span></a>, <span class="math display">\[
+\Vert{}Q_{t_0+h} - Q_{t_0}\Vert{}_{\mathrm{op}} \le \Vert{}Q_{t_0}\Vert{}_{\mathrm{op}} \Vert{}Q_h - I\Vert{}_{\mathrm{op}} \to 0,
+\]</span> which is right continuity at every <span class="math inline">\(t_0 \ge 0\)</span>. For <span class="math inline">\(0 &lt; h &lt; t_0\)</span>, similarly <span class="math inline">\(Q_{t_0} - Q_{t_0 - h} = Q_{t_0 - h}(Q_h - I)\)</span>; since <span class="math inline">\(\Vert{}Q_{t_0-h}\Vert{}_{\mathrm{op}}\)</span> stays bounded as <span class="math inline">\(h \to 0^+\)</span> by the uniform bound on <span class="math inline">\([0,t_0]\)</span> established above, <span class="math inline">\(\Vert{}Q_{t_0}-Q_{t_0-h}\Vert{}_{\mathrm{op}} \to 0\)</span> as well: left continuity. Hence <span class="math inline">\(t \mapsto Q_t\)</span> is operator norm continuous on all of <span class="math inline">\([0,\infty)\)</span>.</p>
+<p><strong>Step 2 (Construction of a bounded generator).</strong> Since <span class="math inline">\(s \mapsto Q_s\)</span> is continuous on <span class="math inline">\([0,\delta]\)</span> (Step 1), the Riemann integral <span class="math inline">\(S_\delta := \int_0^\delta Q_s \, \mathrm{d}s \in \mathcal{L}(B)\)</span> is well-defined as a limit of Riemann sums in the Banach space <span class="math inline">\((\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})\)</span> (cf. <a href="#cor-operator-exp" class="quarto-xref">Corollary&nbsp;<span>86.1</span></a>), and <span class="math display">\[
+\left\Vert{} \frac{S_\delta}{\delta} - I \right\Vert{}_{\mathrm{op}} = \left\Vert{} \frac{1}{\delta}\int_0^\delta (Q_s - I) \, \mathrm{d}s \right\Vert{}_{\mathrm{op}} \le \frac{1}{\delta}\int_0^\delta \Vert{}Q_s - I\Vert{}_{\mathrm{op}} \, \mathrm{d}s \le \frac{1}{2} &lt; 1.
+\]</span> By the convergent Neumann series in the Banach algebra <span class="math inline">\(\mathcal{L}(B)\)</span> (as in <a href="#cor-operator-exp" class="quarto-xref">Corollary&nbsp;<span>86.1</span></a>), <span class="math inline">\(S_\delta/\delta\)</span>, and hence <span class="math inline">\(S_\delta\)</span>, is invertible in <span class="math inline">\(\mathcal{L}(B)\)</span>. Define the bounded operator <span class="math display">\[
+A := (Q_\delta - I) S_\delta^{-1}.
+\]</span> For <span class="math inline">\(h &gt; 0\)</span>, since the bounded linear operator <span class="math inline">\(Q_h\)</span> commutes with the Riemann integral and <span class="math inline">\(Q_h Q_s = Q_{h+s}\)</span>, a change of variables <span class="math inline">\(u = h+s\)</span> gives <span class="math display">\[
+\frac{Q_h - I}{h} S_\delta = \frac{1}{h}\left( \int_0^\delta Q_{h+s}\,\mathrm{d}s - \int_0^\delta Q_s\,\mathrm{d}s \right) = \frac{1}{h}\left( \int_\delta^{\delta+h} Q_u\,\mathrm{d}u - \int_0^h Q_u\,\mathrm{d}u \right).
+\]</span> By continuity of <span class="math inline">\(u \mapsto Q_u\)</span> at <span class="math inline">\(u = \delta\)</span> and <span class="math inline">\(u = 0\)</span> (Step 1), each averaged integral converges in operator norm as <span class="math inline">\(h \to 0^+\)</span>: <span class="math inline">\(h^{-1}\int_\delta^{\delta+h}Q_u\,\mathrm{d}u \to Q_\delta\)</span> and <span class="math inline">\(h^{-1}\int_0^h Q_u\,\mathrm{d}u \to Q_0 = I\)</span>. Hence <span class="math display">\[
+\frac{Q_h-I}{h}S_\delta \to Q_\delta - I \quad \text{in operator norm as } h \to 0^+.
+\]</span> Right-multiplication by the fixed bounded operator <span class="math inline">\(S_\delta^{-1}\)</span> is continuous on <span class="math inline">\(\mathcal{L}(B)\)</span> (<a href="#lem-submultiplicative" class="quarto-xref">Lemma&nbsp;<span>86.1</span></a>), so <span class="math display">\[
+\frac{Q_h-I}{h} = \left[\frac{Q_h-I}{h}S_\delta\right]S_\delta^{-1} \longrightarrow (Q_\delta-I)S_\delta^{-1} = A
+\]</span> in operator norm as <span class="math inline">\(h \to 0^+\)</span>. This shows the limit defining <span class="math inline">\(A\)</span> exists in operator norm, and <span class="math inline">\(A\)</span> is bounded as a product of bounded operators, proving (1).</p>
+<p><strong>Step 3 (Differentiability for all <span class="math inline">\(t \ge 0\)</span> and the Kolmogorov equations).</strong> Fix <span class="math inline">\(t_0 \ge 0\)</span>. For <span class="math inline">\(h &gt; 0\)</span>, <a href="#eq-chapman-kolmogorov" class="quarto-xref">Equation&nbsp;<span>86.11</span></a> gives <span class="math display">\[
+\frac{Q_{t_0+h}-Q_{t_0}}{h} = Q_{t_0}\cdot\frac{Q_h-I}{h} \longrightarrow Q_{t_0}A, \qquad \frac{Q_{t_0+h}-Q_{t_0}}{h} = \frac{Q_h-I}{h}\cdot Q_{t_0} \longrightarrow A Q_{t_0}
+\]</span> as <span class="math inline">\(h \to 0^+\)</span>, using Step 2 and continuity of left- and right-multiplication by the fixed bounded operator <span class="math inline">\(Q_{t_0}\)</span> (<a href="#lem-submultiplicative" class="quarto-xref">Lemma&nbsp;<span>86.1</span></a>). Hence the right-derivative of <span class="math inline">\(Q_t\)</span> at <span class="math inline">\(t_0\)</span> equals <span class="math inline">\(Q_{t_0}A = AQ_{t_0}\)</span>. For <span class="math inline">\(t_0 &gt; 0\)</span> and <span class="math inline">\(0 &lt; h &lt; t_0\)</span>, <span class="math display">\[
+\frac{Q_{t_0}-Q_{t_0-h}}{h} = Q_{t_0-h}\cdot\frac{Q_h-I}{h}.
+\]</span> Since <span class="math inline">\(Q_{t_0-h}\to Q_{t_0}\)</span> (Step 1) and <span class="math inline">\((Q_h-I)/h \to A\)</span> (Step 2), and <span class="math inline">\(\Vert{}Q_{t_0-h}\Vert{}_{\mathrm{op}}\)</span> is bounded for small <span class="math inline">\(h\)</span> (Step 1), multiplication in <span class="math inline">\(\mathcal{L}(B)\)</span> is jointly continuous there (<a href="#lem-submultiplicative" class="quarto-xref">Lemma&nbsp;<span>86.1</span></a>), so the left-derivative at <span class="math inline">\(t_0\)</span> also equals <span class="math inline">\(Q_{t_0}A\)</span>. Thus <span class="math inline">\(t \mapsto Q_t\)</span> is differentiable in operator norm on <span class="math inline">\([0,\infty)\)</span> (one-sided at <span class="math inline">\(t=0\)</span>), with <span class="math display">\[
+\frac{\mathrm{d}}{\mathrm{d}t}Q_t = Q_t A = A Q_t, \qquad Q_0 = I,
+\]</span> proving (3).</p>
+<p><strong>Step 4 (<span class="math inline">\(Q_t = e^{tA}\)</span>).</strong> By <a href="#cor-operator-exp" class="quarto-xref">Corollary&nbsp;<span>86.1</span></a>, <span class="math inline">\(e^{-tA}\)</span> is a well-defined bounded operator for every <span class="math inline">\(t\)</span>, and <span class="math inline">\(A\)</span> commutes with <span class="math inline">\(e^{-tA}\)</span> since <span class="math inline">\(A\)</span> commutes with every power of itself. Define <span class="math inline">\(F(t) := Q_t e^{-tA} \in \mathcal{L}(B)\)</span>. Differentiating the power series for <span class="math inline">\(e^{-tA}\)</span> term-by-term (justified by the same absolute-convergence argument as in <a href="#cor-operator-exp" class="quarto-xref">Corollary&nbsp;<span>86.1</span></a>) gives <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}e^{-tA} = -Ae^{-tA}\)</span>, so by the Leibniz rule for operator-norm-differentiable <span class="math inline">\(\mathcal{L}(B)\)</span>-valued functions (valid since operator multiplication is bounded bilinear) and Step 3, <span class="math display">\[
+F'(t) = (Q_tA)e^{-tA} + Q_t(-Ae^{-tA}) = Q_tAe^{-tA} - Q_tAe^{-tA} = 0 \quad \text{for all } t \ge 0.
+\]</span> Since <span class="math inline">\(F\)</span> is continuously differentiable with <span class="math inline">\(F' \equiv 0\)</span> on <span class="math inline">\([0,\infty)\)</span>, the fundamental theorem of calculus for Banach-space-valued functions gives <span class="math inline">\(F(t) - F(0) = \int_0^t F'(s)\,\mathrm{d}s = 0\)</span>, i.e., <span class="math inline">\(F(t) = F(0) = Q_0 e^0 = I\)</span> for all <span class="math inline">\(t \ge 0\)</span>. Hence <span class="math inline">\(Q_t = e^{tA}\)</span> for all <span class="math inline">\(t \ge 0\)</span>, proving (2).</p>
+</div>
+<hr>
+</section>
+<section id="remarks" class="level2" data-number="86.7">
+<h2 data-number="86.7" class="anchored" data-anchor-id="remarks"><span class="header-section-number">86.7</span> Remarks</h2>
+<ol type="1">
+<li><strong>Uniqueness:</strong> The argument in Step 4 of the proof above is in fact a general uniqueness argument: for <em>any</em> bounded operator <span class="math inline">\(A\)</span>, the operator-valued ODE <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}X_t = AX_t\)</span>, <span class="math inline">\(X_0 = I\)</span>, has <span class="math inline">\(X_t = e^{tA}\)</span> as its unique solution among operator-norm-differentiable curves <span class="math inline">\(t \mapsto X_t \in \mathcal{L}(B)\)</span> (apply Step 4’s computation to <span class="math inline">\(F(t) := X_t e^{-tA}\)</span> to get <span class="math inline">\(F'\equiv0\)</span>, hence <span class="math inline">\(X_t = X_0 e^{tA} = e^{tA}\)</span>). In particular, <span class="math inline">\(Q_t = e^{tA}\)</span> is the unique such solution to <a href="#eq-kolmogorov-odes" class="quarto-xref">Equation&nbsp;<span>86.13</span></a>.</li>
+<li><strong>Unbounded Generators:</strong> Without operator norm continuity (e.g., under the weaker notion of strong/pointwise continuity <span class="math inline">\(\lim_{t \to 0} \Vert{}Q_t f - f\Vert{}_\infty = 0\)</span>), the generator <span class="math inline">\(A\)</span> may be unbounded and only densely defined on a proper domain <span class="math inline">\(\mathcal{D}(A) \subset \mathcal{B}(S)\)</span>. The key step of the proof above that fails in this setting is Step 2: the Riemann integral <span class="math inline">\(S_\delta\)</span> is still well-defined (its integrand is only strongly, not uniformly, continuous), but <span class="math inline">\(S_\delta/\delta\)</span> need not be close to <span class="math inline">\(I\)</span> in operator norm, so the Neumann-series argument for invertibility of <span class="math inline">\(S_\delta\)</span> breaks down, and the generator can no longer be extracted as a bounded operator via this construction.</li>
+</ol>
+<hr>
+</section>
+<section id="takeaways" class="level2" data-number="86.8">
+<h2 data-number="86.8" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">86.8</span> Takeaways</h2>
+<ul>
+<li>The <strong>operator norm</strong> <span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} = \sup_{\Vert{}f\Vert{}\le1}\Vert{}Af\Vert{}\)</span> turns boundedness of a linear operator into a Lipschitz condition, and it is <strong>submultiplicative</strong>: <span class="math inline">\(\Vert{}AT\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}}\Vert{}T\Vert{}_{\mathrm{op}}\)</span> (<a href="#lem-submultiplicative" class="quarto-xref">Lemma&nbsp;<span>86.1</span></a>). This single inequality is the engine behind everything else in this lecture: it controls powers <span class="math inline">\(A^n\)</span>, the exponential series <span class="math inline">\(e^{tA}\)</span>, and products/limits of operators such as <span class="math inline">\(Q_t(Q_h - I)\)</span>.</li>
+<li>On a Banach space <span class="math inline">\(B\)</span>, the space of bounded linear operators <span class="math inline">\((\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})\)</span> is itself a Banach space (in fact a Banach algebra), so <strong>absolutely convergent operator series converge</strong>. This is what makes the operator exponential <span class="math inline">\(e^{tA} = \sum_{n\ge0} t^nA^n/n!\)</span> well-defined and bounded whenever <span class="math inline">\(A\)</span> is bounded (<a href="#cor-operator-exp" class="quarto-xref">Corollary&nbsp;<span>86.1</span></a>).</li>
+<li>For a countable state space <span class="math inline">\(S\)</span>, bounded operators on <span class="math inline">\(\mathcal{B}(S)\)</span> that arise from a matrix kernel <span class="math inline">\(q(i,j)\)</span> are exactly characterized by <span class="math inline">\(\Vert{}A\Vert{}_{\mathrm{op}} = \Vert{}q\Vert{}_\infty\)</span>, the supremum of absolute row sums (<a href="#prp-matrix-operator-norm" class="quarto-xref">Proposition&nbsp;<span>86.1</span></a>)—but not every bounded operator on <span class="math inline">\(\mathcal{B}(S)\)</span> arises this way, because <span class="math inline">\((\ell^\infty(S))^*\)</span> is strictly larger than <span class="math inline">\(\ell^1(S)\)</span>.</li>
+<li>The central result, <a href="#thm-uniformly-continuous-semigroup" class="quarto-xref">Theorem&nbsp;<span>86.1</span></a>, shows that <strong>operator norm continuity at a single time <span class="math inline">\(t=0\)</span>, together with the semigroup (Chapman–Kolmogorov) property <span class="math inline">\(Q_{s+t}=Q_sQ_t\)</span></strong>, is already enough to force the entire semigroup to collapse to the simplest possible form: <span class="math inline">\(Q_t = e^{tA}\)</span> for a <em>bounded</em> generator <span class="math inline">\(A\)</span>. This is special to the operator-norm topology—the semigroup property alone does <strong>not</strong> buy differentiability; continuity at one point is essential, and it must hold in operator norm, not merely strongly.</li>
+<li>This is also a genuine limitation: most interesting continuous-time Markov chains and diffusions (e.g., Brownian motion, birth-death chains on infinite state spaces) have <strong>unbounded</strong> generators, so <span class="math inline">\(Q_t\)</span> is only <em>strongly</em> (pointwise) continuous at <span class="math inline">\(t=0\)</span>, not operator norm continuous. The uniformly continuous case treated here is the technically simplest instance of the general Hille–Yosida theory of <span class="math inline">\(C_0\)</span>-semigroups, in which the generator is replaced by a closed, densely defined operator <span class="math inline">\(A: \mathcal{D}(A) \subset B \to B\)</span>, and the exponential series is replaced by a more delicate construction (e.g., via the resolvent <span class="math inline">\((\lambda I - A)^{-1}\)</span>).</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Probability-Theory-III.html" class="pagination-link" aria-label="Probability Theory III">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Probability Theory III</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./AppendixA.html" class="pagination-link" aria-label="Limsups, Liminfs and Extended Limits">
+        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/40-1-Operator-Norm-Continuity.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

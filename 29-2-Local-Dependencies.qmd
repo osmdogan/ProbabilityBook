@@ -1,0 +1,167 @@
+# Lecture 29.2: Local Dependencies
+
+## Beyond Independence in Central Limit Theorems
+
+The classical Central Limit Theorem (CLT) guarantees that normalized sums of independent and identically distributed (i.i.d.) random variables with finite variance converge in distribution to a standard normal variable. A natural theoretical question arises: *Can we establish a Central Limit Theorem for dependent random variables?*
+
+When the dependence structure is local—meaning each variable only interacts with a small neighborhood of other variables—we can retain asymptotic normality.
+
+:::{#exm-block-independent-vectors}
+## Block-Independent Vectors
+
+Consider sequence vectors $X_1^n, X_2^n, \dots, X_d^n \in \mathbb{R}$ that are $L^2$ zero-mean random vectors. Suppose we construct a array of variables arranged in "independent neighborhoods":
+
+$$\begin{pmatrix}  X_1^1 & X_2^1 & \dots & X_d^1 \\ X_1^2 & X_2^2 & \dots & X_d^2 \\ \vdots & \vdots & \ddots & \vdots \\ X_1^n & X_2^n & \dots & X_d^n  \end{pmatrix}$$
+
+where across rows $j \neq k$, the vectors are independent, but within the same row (across columns), variables may be dependent.
+
+Define $Y_j = \sum_{i=1}^d X_i^j$ for each row $j \in \{1, \dots, n\}$. Since the rows are i.i.d., the row sums $\{Y_j\}_{j=1}^n$ are i.i.d. random variables with $E[Y_j] = 0$. Setting $S_{nd} = \sum_{j=1}^n Y_j$, the standard CLT implies:
+
+$$\frac{S_{nd}}{\sqrt{n d}} = \frac{1}{\sqrt{d}} \left( \frac{1}{\sqrt{n}} \sum_{j=1}^n Y_j \right) \xrightarrow{d} \mathcal{N}(0, \sigma^2), \quad \text{where } \sigma^2 = \frac{1}{d} E[Y_1^2].$$
+:::
+
+:::{#exm-1-dependent-sequences}
+## 1-Dependent Sequences
+
+Let $\{X_n\}_{n=0}^\infty$ be an i.i.d. sequence of random variables. Define a new sequence by $Y_n = X_n X_{n-1}$ for $n \ge 1$. 
+
+* $Y_n$ and $Y_m$ are independent whenever $\vert{}n - m\vert{} \ge 2$.
+* $Y_n$ and $Y_{n-1}$ are dependent because both share the factor $X_{n-1}$.
+
+This is a classic example of a **$1$-dependent** sequence.
+:::
+
+---
+
+## Formal Framework: Dependency Graphs
+
+To systematically quantify local dependence, we model dependency structures using graph theory.
+
+:::{#def-dependency-graph}
+### Dependency Graph
+Let $\{X_j\}_{j \in V}$ be a collection of random variables indexed by a finite or countable vertex set $V$. A simple, loop-free graph $G = (V, E)$ is called a **dependency graph** for $\{X_j\}_{j \in V}$ if for any two disjoint subsets $A, B \subset V$ with no edge in $E$ connecting $A$ and $B$, the collections $\{X_i\}_{i \in A}$ and $\{X_j\}_{j \in B}$ are mutually independent.
+
+Specifically, an edge $\{i, j\} \in E$ indicates potential dependence between $X_i$ and $X_j$.
+:::
+
+**Degrees in Dependency Graphs**:
+
+* **Vertex Degree:** For $i \in V$, $\operatorname{deg}(i) = \vert{}\{j \in V : \{i, j\} \in E\}\vert{}$ denotes the number of neighbors of $i$.
+* **Graph Degree:** $\operatorname{deg}(G) = \max_{i \in V} \operatorname{deg}(i)$ is the maximum vertex degree of $G$.
+
+:::{#exm-graph-degrees}
+## Examples of Graph Degrees
+
+1. **Independent Variables:** If $\{X_n\}_{n=1}^N$ are mutually independent, $E = \emptyset$, so $\operatorname{deg}(G) = 0$.
+2. **$1$-Dependent Moving Average ($Y_n = X_n X_{n-1}$):** Each $Y_n$ is connected only to $Y_{n-1}$ and $Y_{n+1}$. Thus, $\operatorname{deg}(i) \le 2$, implying $\operatorname{deg}(G) = 2$.
+3. **Block Neighborhoods:** A disjoint union of $d$-vertex cliques yields $\operatorname{deg}(G) \le d - 1$.
+:::
+
+
+---
+
+## Variance Bounding Lemma
+
+The maximum degree of a dependency graph provides a strict upper bound on the variance of sums of locally dependent variables.
+
+:::{#lem-variance-bound}
+## Variance Bound via Dependency Degree
+Let $\{X_j\}_{j \in V}$ be zero-mean, $L^2$ random variables with dependency graph $G = (V, E)$. Let $S = \sum_{j \in V} X_j$. Then:
+
+$$\operatorname{Var}[S] \le \sum_{i \in V} (1 + \operatorname{deg}(i)) \operatorname{Var}[X_i] \le (1 + \operatorname{deg}(G)) \sum_{i \in V} \operatorname{Var}[X_i].$$
+:::
+
+:::{.proof}
+Since $\mathbb{E}[X_j] = 0$, expanding the variance yields:
+
+$$
+\operatorname{Var}[S] = \mathbb{E}\left[ \left( \sum_{j \in V} X_j \right)^2 \right] = \sum_{i \in V} \mathbb{E}[X_i^2] + \sum_{i \in V} \sum_{j \neq i} \mathbb{E}[X_i X_j].
+$$
+
+If $\{i, j\} \notin E$, then $X_i$ and $X_j$ are independent, so $\mathbb{E}[X_i X_j] = \mathbb{E}[X_i] \mathbb{E}[X_j] = 0$. Denoting $j \sim i$ for $\{i, j\} \in E$, the double sum reduces to:
+
+$$\operatorname{Var}[S] = \sum_{i \in V} \operatorname{Var}[X_i] + \sum_{i \in V} \sum_{j \sim i} \mathbb{E}[X_i X_j].$$
+
+Applying the elementary inequality $ab \le \frac{1}{2}(a^2 + b^2)$, we get:
+
+$$\mathbb{E}[X_i X_j] \le \sqrt{\mathbb{E}[X_i^2] \mathbb{E}[X_j^2]} \le \frac{1}{2} \left( \operatorname{Var}[X_i] + \operatorname{Var}[X_j] \right).$$
+
+Summing over all adjacent pairs:
+
+$$\begin{aligned} \sum_{i \in V} \sum_{j \sim i} \mathbb{E}[X_i X_j] &\le \frac{1}{2} \sum_{i \in V} \sum_{j \sim i} \left( \operatorname{Var}[X_i] + \operatorname{Var}[X_j] \right) \\ &= \frac{1}{2} \sum_{i \in V} \operatorname{deg}(i) \operatorname{Var}[X_i] + \frac{1}{2} \sum_{j \in V} \operatorname{deg}(j) \operatorname{Var}[X_j] \\ &= \sum_{i \in V} \operatorname{deg}(i) \operatorname{Var}[X_i]. \end{aligned}$$
+
+Combining terms yields:
+
+$$
+\operatorname{Var}[S] \le \sum_{i \in V} (1 + \operatorname{deg}(i)) \operatorname{Var}[X_i] \le (1 + \operatorname{deg}(G)) \sum_{i \in V} \operatorname{Var}[X_i]. 
+$$
+:::
+
+---
+
+## Normal Approximation via Stein's Method
+
+By combining dependency graphs with **Stein's Method**, we derive explicit Berry–Esseen-type bounds in the Wasserstein metric ($d_{W_1}$).
+
+:::{#thm-steins-clt}
+### Dependency Graph CLT Bound (Ross, §3.2)
+Let $\{X_j\}_{j \in V}$ be zero-mean $L^4$ random variables with dependency graph $G = (V, E)$. Set $S = \sum_{j \in V} X_j$ and $\sigma^2 = \operatorname{Var}[S] > 0$. Let $W = S / \sigma$ and $Z \sim \mathcal{N}(0, 1)$. Then the Wasserstein distance satisfies:
+
+$$
+\begin{align*}
+d_{W_1}(W, Z) &\le \frac{6}{\sqrt{\pi} \sigma^2} \sqrt{(1 + \operatorname{deg}(G))^3 \sum_{j \in V} \mathbb{E}[X_j^4]} \\
+&+ \frac{(1 + \operatorname{deg}(G))^2}{\sigma^3} \sum_{j \in V} \mathbb{E}[\vert{}X_j\vert{}^3].
+\end{align*}
+$$
+:::
+
+:::{#exm-moving-average-process}
+## Moving Average Process Bounds
+
+Let $\{X_j\}_{j=0}^\infty$ be i.i.d. zero-mean $L^4$ random variables with $\mathbb{E}[X_j^2] = 1$. Define $Y_j = X_j X_{j-1}$ for $j \ge 1$.
+
+1. **Moments:** $\mathbb{E}[Y_j] = 0$, $\mathbb{E}[Y_j^2] = \mathbb{E}[X_j^2] \mathbb{E}[X_{j-1}^2] = 1$, and $\mathbb{E}[Y_j^4] = \mathbb{E}[X_1^4]^2$.
+2. **Covariance:** For $i \neq j$, $\mathbb{E}[Y_i Y_j] = 0$, giving $\sigma^2 = \operatorname{Var}\left[\sum_{j=1}^n Y_j\right] = n$.
+3. **Graph Degree:** $\operatorname{deg}(G) = 2$, so $(1 + \operatorname{deg}(G)) = 3$.
+
+Applying @thm-steins-clt for $W = \frac{1}{\sqrt{n}} \sum_{j=1}^n Y_j$:
+
+$$
+\begin{align*}
+d_{W_1}(W, Z) &\le \frac{6}{\sqrt{\pi} n} \sqrt{3^3 \cdot n \mathbb{E}[X_1^4]^2} + \frac{3^2}{n^{3/2}} \cdot n \mathbb{E}[\vert{}X_1\vert{}^3]^2\\
+ &= \frac{1}{\sqrt{n}} \left( \frac{18 \sqrt{3}}{\sqrt{\pi}} \mathbb{E}[X_1^4] + 9 \mathbb{E}[\vert{}X_1\vert{}^3]^2 \right) \\
+ &= \mathcal{O}\left(n^{-1/2}\right).
+\end{align*}
+$$
+
+:::
+
+
+:::{#exm-erdos-renyi-triangles}
+## Triangles in Erdős–Rényi Random Graphs
+
+Let $G(n, p)$ be an Erdős–Rényi random graph on $V = \{1, 2, \dots, n\}$, where each edge $\{i, j\}$ ($1 \le i < j \le n$) exists independently with probability $p \in [0, 1]$. Let $X_{ij} \sim \operatorname{Bern}(p)$ be the indicator of edge $\{i, j\}$.
+
+**Basic Graph Statistics**:
+
+* **Total Edges:** $H = \sum_{i < j} X_{ij} \sim \operatorname{Binom}\left(\binom{n}{2}, p\right)$ with $\mathbb{E}[H] = p \binom{n}{2}$.
+* **Vertex Degree:** $\operatorname{deg}(i) = \sum_{j \neq i} X_{ij} \sim \operatorname{Binom}(n-1, p)$ with $\mathbb{E}[\operatorname{deg}(i)] = p(n-1)$.
+
+```{python}
+#| label: fig-erdos-renyi
+#| fig-cap: "Simulated Erdős–Rényi Graph G(n, p)"
+import networkx as nx
+import matplotlib.pyplot as plt
+
+n = 6
+p = 0.4
+G = nx.erdos_renyi_graph(n, p, seed=42)
+
+plt.figure(figsize=(4, 4))
+nx.draw_networkx(G, node_color='lightblue', edge_color='gray', node_size=500, font_weight='bold')
+plt.title(f"Erdős-Rényi Graph G({n}, {p})")
+plt.axis('off')
+plt.show()
+```
+
+:::

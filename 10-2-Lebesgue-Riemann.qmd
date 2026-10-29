@@ -1,0 +1,159 @@
+# Lecture 10.2: Lebesgue vs. Riemann
+
+## Lebesgue Integration vs. Riemann Integration
+
+The Lebesgue integral extends integration to a much broader class of functions than the classical Riemann integral. A canonical example of a function that is Lebesgue integrable but not Riemann integrable is the Dirichlet function on $[0, 1]$:
+$$
+f(x) = \mathbf{1}_{\mathbb{Q} \cap [0, 1]}(x)
+$$
+
+Since $\mathbb{Q} \cap [0, 1]$ is countable, $\lambda(\mathbb{Q} \cap [0, 1]) = 0$. Thus, $f = 0$ a.e. $[\lambda]$, giving:
+$$
+\int_{[0, 1]} f \, d\lambda = \lambda(\mathbb{Q} \cap [0, 1]) = 0
+$$
+However, $f$ is nowhere continuous on $[0, 1]$, so its upper and lower Riemann integrals disagree ($\overline{\int}_0^1 f(x) dx = 1 \ne 0 = \underline{\int}_0^1 f(x) dx$), making it Riemann non-integrable.
+
+::: {#thm-lebesgue-riemann-equivalence}
+## Lebesgue–Riemann Equivalence Theorem (Driver [11.5])
+Let $\overline{\mathcal{B}}$ denote the completion of the Borel $\sigma$-algebra $\mathcal{B}(\mathbb{R})$ with respect to the Lebesgue measure $\lambda$. 
+
+A bounded function $f: [a, b] \to \mathbb{R}$ is Riemann integrable if and only if $f$ is $\overline{\mathcal{B}}$-measurable and its set of discontinuities has Lebesgue measure zero:
+$$
+\lambda(\{x \in [a, b] \mid f \text{ is discontinuous at } x\}) = 0
+$$ {#eq-riemann-continuity-cond}
+
+In this case, $f \in \mathcal{L}^1([a, b], \overline{\mathcal{B}}, \lambda)$ and the integrals coincide:
+$$
+\int_{[a, b]} f \, d\lambda = \int_a^b f(x) \, dx
+$$ {#eq-lebesgue-riemann-equality}
+:::
+
+::: {.proof}
+*(Partial Proof: Forward Direction)* Assume $f$ is Riemann integrable on $[a, b]$, so $|f| \le M$ for some $M < \infty$.
+
+### Step 1: Constructing measurable upper and lower envelopes
+
+Choose a sequence of refining partitions $\pi_1 \prec \pi_2 \prec \cdots$ with mesh $|\pi_n| \to 0$. Write $\pi_n = \{a = t_0^{(n)} < \cdots < t_{k_n}^{(n)} = b\}$ and $I_j^{(n)} = (t_{j-1}^{(n)}, t_j^{(n)}]$. Define the Darboux step functions:
+$$
+\overline{\varphi}_n := \sum_j \Bigl(\sup_{I_j^{(n)}} f\Bigr)\mathbf{1}_{I_j^{(n)}}, \qquad \underline{\varphi}_n := \sum_j \Bigl(\inf_{I_j^{(n)}} f\Bigr)\mathbf{1}_{I_j^{(n)}}.
+$$
+Each is $\mathcal{B}([a,b])$-measurable, and $\underline{\varphi}_n \le f \le \overline{\varphi}_n$ pointwise. Since $\pi_{n+1}$ refines $\pi_n$, the sups can only decrease and the infs can only increase on sub-intervals, giving $\overline{\varphi}_{n+1} \le \overline{\varphi}_n$ and $\underline{\varphi}_{n+1} \ge \underline{\varphi}_n$ pointwise. Define the pointwise monotone limits:
+$$
+\bar{f} := \lim_{n\to\infty} \overline{\varphi}_n = \inf_n \overline{\varphi}_n, \qquad \underline{f} := \lim_{n\to\infty} \underline{\varphi}_n = \sup_n \underline{\varphi}_n.
+$$
+Both $\bar{f}$ and $\underline{f}$ are $\mathcal{B}([a,b])$-measurable (monotone limits of measurable functions), $|\bar{f}|, |\underline{f}| \le M$, and $\underline{f} \le f \le \bar{f}$ everywhere.
+
+### Step 2: The envelopes agree $\lambda$-a.e.
+
+Since $|\overline{\varphi}_n|, |\underline{\varphi}_n| \le M$ and $\lambda([a,b]) < \infty$, the Bounded Convergence Theorem applies:
+$$
+\int_{[a,b]} \bar{f}\,d\lambda = \lim_{n\to\infty} \int_{[a,b]} \overline{\varphi}_n\,d\lambda = \lim_{n\to\infty} U(f,\pi_n) = \int_a^b f(x)\,dx,
+$$
+$$
+\int_{[a,b]} \underline{f}\,d\lambda = \lim_{n\to\infty} \int_{[a,b]} \underline{\varphi}_n\,d\lambda = \lim_{n\to\infty} L(f,\pi_n) = \int_a^b f(x)\,dx,
+$$
+where both limits equal the Riemann integral because $f$ is Riemann integrable (so $\inf_\pi U(f,\pi) = \sup_\pi L(f,\pi)$) and refining partitions with $|\pi_n|\to 0$ force the Darboux sums to converge to this common value. Therefore:
+$$
+\int_{[a,b]} (\bar{f} - \underline{f})\,d\lambda = 0.
+$$
+Since $\bar{f} - \underline{f} \ge 0$ is non-negative and measurable with zero integral, $\bar{f} = \underline{f}$ $\lambda$-a.e.
+
+### Step 3: Measurability of $f$ and equality of integrals
+
+Since $\underline{f} \le f \le \bar{f}$ everywhere and $\bar{f} = \underline{f}$ $\lambda$-a.e., we have $f = \bar{f}$ $\lambda$-a.e. Since $\bar{f}$ is $\mathcal{B}([a,b])$-measurable and $f$ agrees with it outside a $\lambda$-null set, $f$ is $\overline{\mathcal{B}}$-measurable (measurability is closed under a.e.-modification in the completed $\sigma$-algebra). Since $f$ is bounded and $\lambda([a,b]) < \infty$, $f \in \mathcal{L}^1([a,b], \overline{\mathcal{B}}, \lambda)$. Finally, by monotonicity of the Lebesgue integral and the $\lambda$-a.e. equality $f = \bar{f}$:
+$$
+\int_{[a,b]} f\,d\lambda = \int_{[a,b]} \bar{f}\,d\lambda = \int_a^b f(x)\,dx. \qquad \square
+$$
+:::
+
+---
+
+## Improper Riemann Integrals and Lebesgue Integration
+
+The Lebesgue integral also provides a rigorous foundation for improper Riemann integrals. 
+
+::: {#prp-improper-integrals}
+Suppose $f \in \mathcal{L}^1(\mathbb{R}, \mathcal{B}(\mathbb{R}), \lambda)$. Then:
+$$
+\int_{\mathbb{R}} f \, d\lambda = \lim_{n \to \infty} \int_{[-n, n]} f \, d\lambda.
+$$ {#eq-improper-integral-l1}
+If additionally $f$ is Riemann integrable on $[-n, n]$ for each $n$ (equivalently, $f$ is bounded and a.e. continuous on each $[-n, n]$, by @thm-lebesgue-riemann-equivalence), then also:
+$$
+\int_{\mathbb{R}} f \, d\lambda = \lim_{n \to \infty} \int_{-n}^n f(x) \, dx.
+$$ {#eq-improper-integral-riemann}
+:::
+
+::: {.proof}
+Define $f_n := f \mathbf{1}_{[-n, n]}$. Pointwise, $f_n(x) \to f(x)$ as $n \to \infty$ for all $x \in \mathbb{R}$.
+
+1. **Non-negative case ($f \ge 0$):** $f_n \ge 0$ and $f_n \uparrow f$. Applying the Monotone Convergence Theorem (@cor-mct-ae):
+   $$
+   \int_{\mathbb{R}} f \, d\lambda = \lim_{n \to \infty} \int_{\mathbb{R}} f \mathbf{1}_{[-n, n]} \, d\lambda = \lim_{n \to \infty} \int_{[-n, n]} f \, d\lambda.
+   $$
+2. **General $f \in \mathcal{L}^1$:** $|f_n| \le |f| \in \mathcal{L}^1(\mathbb{R})$ and $f_n \to f$ pointwise. By the Dominated Convergence Theorem (@thm-dct), the first equality in @eq-improper-integral-l1 follows.
+3. **Equality with the Riemann integral:** When $f$ is additionally Riemann integrable on each $[-n,n]$, @thm-lebesgue-riemann-equivalence gives $\int_{[-n,n]} f\,d\lambda = \int_{-n}^n f(x)\,dx$ for each $n$, yielding @eq-improper-integral-riemann.
+:::
+
+---
+
+## Radon Measures and Absolute Continuity
+
+Let $F: \mathbb{R} \to \mathbb{R}$ be a non-decreasing, right-continuous function. $F$ generates a unique Radon measure $\mu_F$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ satisfying $\mu_F((a, b]) = F(b) - F(a)$.
+
+::: {#prp-radon-density}
+## Radon Measures with $C^1$ Distribution Functions
+Suppose $F \in C^1([a, b])$ with $F' \ge 0$. Then $\mu_F$ is absolutely continuous with respect to the Lebesgue measure $\lambda$ on $[a,b]$, with density $\frac{d\mu_F}{d\lambda} = F'$. Specifically, for any Borel set $A \subseteq [a, b]$:
+$$
+\mu_F(A) = \int_A F'(x) \, d\lambda(x)
+$$ {#eq-radon-density}
+
+Furthermore, for any $f \in \mathcal{L}^1([a, b], \mu_F)$, we have $f F' \in \mathcal{L}^1([a, b], \lambda)$ and:
+$$
+\int_{[a, b]} f \, d\mu_F = \int_a^b f(x) F'(x) \, dx
+$$ {#eq-radon-change-of-variables}
+:::
+
+::: {.proof}
+Define $\nu(A) := \int_A F' \, d\lambda$ for $A \in \mathcal{B}(\mathbb{R})$. For any interval $(a, b]$, the Fundamental Theorem of Calculus gives:
+$$
+\nu((a, b]) = \int_a^b F'(x) \, dx = F(b) - F(a) = \mu_F((a, b])
+$$
+
+Since intervals of the form $(a, b]$ generate the Borel $\sigma$-algebra $\mathcal{B}(\mathbb{R})$ and form a $\pi$-system, $\mu_F = \nu$ on $\mathcal{B}(\mathbb{R})$ by the Uniqueness of Measures. The integration identity @eq-radon-change-of-variables follows by standard simple-function approximation.
+:::
+
+---
+
+## Singular Measures and the Cantor Function
+
+Not every continuous distribution function $F$ yields a measure with a density with respect to Lebesgue measure.
+
+::: {#exm-point-mass-failure}
+## Point Mass (Dirac Measure)
+Let $F = \mathbf{1}_{[x_0, \infty)}$, so $\mu_F = \delta_{x_0}$. If $\delta_{x_0}(A) = \int_A \rho \, d\lambda$ for some non-negative density $\rho \ge 0$, then taking $A = \mathbb{R} \setminus \{x_0\}$ gives:
+$$
+0 = \delta_{x_0}(\mathbb{R} \setminus \{x_0\}) = \int_{\mathbb{R} \setminus \{x_0\}} \rho \, d\lambda \implies \rho = 0 \text{ a.e. } [\lambda]
+$$
+
+This forces $\int_{\mathbb{R}} \rho \, d\lambda = 0 \ne \delta_{x_0}(\{x_0\}) = 1$. Thus, point masses cannot possess a Lebesgue density; $\mu_F$ must have no point masses (i.e., $F$ must be continuous) as a prerequisite for absolute continuity.
+:::
+
+::: {#exm-cantor-staircase}
+## The Devil's Staircase (Cantor Function)
+Even continuous, a.e.-differentiable functions may fail the Fundamental Theorem of Calculus.
+
+Let $F: [0, 1] \to [0, 1]$ be the **Cantor Ternary Function** (Devil's Staircase):
+
+* $F$ is continuous and non-decreasing with $F(0) = 0$ and $F(1) = 1$.
+* $F$ is constant on every open interval removed during the construction of $C$ (i.e., on each component of $[0, 1] \setminus C$), so $F'(x) = 0$ for all $x \in [0, 1] \setminus C$. Since $\lambda(C) = 0$, the complement $[0, 1] \setminus C$ has full Lebesgue measure, and therefore $F'(x) = 0$ for $\lambda$-a.e. $x \in [0, 1]$.
+
+Integrating $F'$ yields:
+$$
+\int_{[0, 1]} F' \, d\lambda = \int_{[0, 1]} 0 \, d\lambda = 0 \ne F(1) - F(0) = 1
+$$
+
+Consequently, $\mu_F(A) \ne \int_A F' \, d\lambda$. The measure $\mu_F$ is **singular continuous**: it has no point masses ($\mu_F(\{x\}) = 0$ everywhere) yet is supported entirely on a set of Lebesgue measure zero ($\mu_F(C) = 1$, $\lambda(C) = 0$).
+:::
+
+---
+

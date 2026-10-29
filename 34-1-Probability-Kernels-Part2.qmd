@@ -1,0 +1,413 @@
+
+# Lecture 34.1: Probability Kernels-Part II
+
+## Probability Kernels and Bounded Measurable Functions
+
+Let $(S_1, \mathcal{B}_1)$ and $(S_2, \mathcal{B}_2)$ be measurable spaces, and let $Q: S_1 \times \mathcal{B}_2 \to [0, 1]$ be a probability kernel. Recall that
+
+- For each fixed $x \in S_1$, $Q(x, \cdot)$ is a probability measure on $(S_2, \mathcal{B}_2)$.
+- For each fixed $B \in \mathcal{B}_2$, $Q(\cdot, B)$ is a $\mathcal{B}_1$-measurable function on $S_1$.
+- We can integrate bounded measurable functions against probability kernels:
+$$
+\int f(y) \, Q(x, dy),
+$$
+where $f \in \mathcal{B}_b(S_2, \mathcal{B}_2)$ is a bounded $\mathcal{B}_2$-measurable function. This integral is well-defined for each fixed $x \in S_1$ because $Q(x, \cdot)$ is a probability measure. The resulting function of $x \in S_1$ is $\mathcal{B}_1$-measurable and
+$$
+\left|\int f(y) \, Q(x, dy)\right|\le \int |f(y)| \, Q(x, dy) \le \sup_{y \in S_2} |f(y)| = \|f\|_\infty.
+$$
+
+Given any bounded, $\mathcal{B}_2$-measurable function $f \in \mathcal{B}_b(S_2, \mathcal{B}_2)$, we can integrate $f$ against $Q(x, \cdot)$ for each fixed $x \in S_1$:
+$$
+(L_Q f)(x) := \int_{S_2} f(y) \, Q(x, dy) \quad \forall x \in S_1.
+$$
+The resulting function $L_Q f: S_1 \to \mathbb{R}$ is a new $\mathcal{B}_1$-measurable function of $x \in S_1$. Furthermore, this operation preserves boundedness:
+$$
+\begin{align*}
+|(L_Q f)(x)| &= \left| \int_{S_2} f(y) \, Q(x, dy) \right| \\
+&\le \int_{S_2} |f(y)| \, Q(x, dy) \\
+&\le \sup_{y \in S_2} |f(y)| \\
+&= \|f\|_\infty \quad \forall x \in S_1.
+\end{align*}
+$$
+
+::: {#def-markov-generator}
+## Markov Operator
+Equip the space of bounded measurable functions $\mathcal{B}_b(S, \mathcal{B})$ with the supremum norm:
+$$
+\|f\|_\infty := \sup_{x \in S} |f(x)|.
+$$
+For a probability kernel $Q$ from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$, the linear mapping
+$$
+L_Q: \mathcal{B}_b(S_2, \mathcal{B}_2) \to \mathcal{B}_b(S_1, \mathcal{B}_1), \quad f \mapsto L_Q f
+$$
+defined by $(L_Q f)(x) = \int_{S_2} f(y) \, Q(x, dy)$ is called the **Markov operator** (or transition operator) associated with $Q$. It satisfies $\|L_Q f\|_\infty \le \|f\|_\infty$.
+:::
+
+:::{#exm-markov-operator}
+Let $S_1=S_2=\mathbb R$ and define the probability kernel
+$$ 
+Q(x,dy)=\phi(y-x)\,dy, 
+$$
+where $\phi$ is the standard normal density. Thus, $Q(x,\cdot)=N(x,1)$. In probabilistic language, $Y\mid X=x\sim N(x,1)$. The associated Markov operator is
+$$ 
+(L_Qf)(x) = \int_{\mathbb R}f(y)\phi(y-x)\,dy. 
+$$
+So the Markov operator takes a function $f$ and returns its conditional expectation under the transition distribution $Q(x,\cdot)$.
+
+Now take $f(y)=y^2$. Since $Y\mid X=x\sim N(x,1)$,
+$$ 
+\begin{aligned} 
+(L_Qf)(x) &=\int_{\mathbb R}y^2\phi(y-x)\,dy\\ 
+&=\mathbb E[Y^2\mid X=x]\\ &=x^2+1. 
+\end{aligned} 
+$$
+Thus, $L_Q(y^2)(x)=x^2+1$. This is a nice illustration of why $L_Q$ is closely connected to conditional expectation.
+
+As another example, consider an indicator function: $f(y)=\mathbf 1_{\{y\leq a\}}$. Then
+$$ 
+\begin{aligned} 
+(L_Qf)(x) &= \int_{\mathbb R} \mathbf 1_{\{y\leq a\}} \phi(y-x)\,dy\\ 
+&= \int_{-\infty}^a\phi(y-x)\,dy\\ &= \Phi(a-x). 
+\end{aligned} 
+$$
+Hence $L_Q\mathbf 1_{(-\infty,a]}(x)=\Phi(a-x)$. But this has an immediate probabilistic interpretation: $L_Q\mathbf 1_{\{y\leq a\}}(x) = P(Y\leq a\mid X=x)$. So the Markov operator turns an event indicator into its conditional probability.
+
+:::
+
+
+
+## Axiomatic Properties of Markov Operators
+
+In the following proposition, we summarize the structural properties of the Markov operator $L_Q$ associated with a probability kernel $Q$.
+
+::: {#prp-markov-operator-properties}
+## Properties of the Associated Markov Operator
+Let $Q$ be a probability kernel from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$. The associated Markov operator $L_Q: \mathcal{B}_b(S_2, \mathcal{B}_2) \to \mathcal{B}_b(S_1, \mathcal{B}_1)$ satisfies the following structural properties:
+
+0. **Linearity:** $L_Q(\alpha f + \beta g) = \alpha L_Q(f) + \beta L_Q(g)$ for all $\alpha, \beta \in \mathbb{R}$ and $f, g \in \mathcal{B}_b(S_2, \mathcal{B}_2)$.
+1. **Preservation of Constants (Normalization):** $L_Q(\mathbb{I}_{S_2}) = \mathbb{I}_{S_1}$.
+2. **Positivity (Monotonicity):** If $f \ge 0$, then $L_Q(f) \ge 0$. Consequently, if $f \le g$, then $L_Q(f) \le L_Q(g)$.
+3. **Boundedly Monotone / Pointwise Continuity:** If $f_n \to f$ boundedly (i.e., $f_n(y) \to f(y)$ pointwise and $\sup_n \|f_n\|_\infty < \infty$), then $L_Q f_n \to L_Q f$ boundedly on $S_1$.
+:::
+
+::: {.proof}
+## Proof of @prp-markov-operator-properties
+0. **Linearity:** Follows directly from the linearity of integration with respect to the integrand:
+   $$
+   \begin{aligned}
+   (L_Q(\alpha f + \beta g))(x) &= \int_{S_2} (\alpha f(y) + \beta g(y)) \, Q(x, dy) \\
+   &= \alpha (L_Q f)(x) + \beta (L_Q g)(x).
+   \end{aligned}
+   $$
+1. **Normalization:** Since $Q(x, \cdot)$ is a probability measure for each $x \in S_1$:
+   $$
+   (L_Q \mathbb{I}_{S_2})(x) = \int_{S_2} 1 \, Q(x, dy) = Q(x, S_2) = 1 = \mathbb{I}_{S_1}(x) \quad \forall x \in S_1.
+   $$
+2. **Positivity:** If $f(y) \ge 0$ for all $y \in S_2$, integrating a non-negative function against a non-negative probability measure yields $(L_Q f)(x) = \int_{S_2} f(y) \, Q(x, dy) \ge 0$.
+3. **Boundedly Monotone Continuity:** Suppose $f_n \to f$ pointwise with $\|f_n\|_\infty \le M < \infty$ for all $n \in \mathbb{N}$. For each fixed $x \in S_1$, we have $|f_n(y)| \le M$ for all $y \in S_2$, and therefore
+   $$
+   \int_{S_2} M \, Q(x, dy) = M \, Q(x, S_2) = M < \infty.
+   $$
+   Hence the constant function $M$ is integrable with respect to the probability measure $Q(x,\cdot)$, so the Dominated Convergence Theorem applies and yields
+   $$
+   (L_Q f_n)(x) = \int_{S_2} f_n(y) \, Q(x, dy) \xrightarrow{n \to \infty} \int_{S_2} f(y) \, Q(x, dy) = (L_Q f)(x).
+   $$
+   Since this holds for every $x \in S_1$, the convergence is pointwise on $S_1$. Moreover,
+   $$
+   \|L_Q f_n\|_\infty \le \|f_n\|_\infty \le M,
+   $$
+   so the convergence $L_Q f_n \to L_Q f$ is bounded.
+:::
+
+::: {#rem-positivity-operator-norm}
+## Implication of Positivity
+If a linear operator $L: \mathcal{B}_b(S_2, \mathcal{B}_2) \to \mathcal{B}_b(S_1, \mathcal{B}_1)$ satisfies positivity ($f \ge 0 \implies L f \ge 0$) and normalization ($L \mathbb{I} = \mathbb{I}$), then for any $f \in \mathcal{B}_b(S_2, \mathcal{B}_2)$:
+$$
+-|f| \le f \le |f| \implies -L(|f|) \le L f \le L(|f|) \implies |L f| \le L(|f|).
+$$
+Because $|f| \le \|f\|_\infty \mathbb{I}_{S_2}$, monotonicity implies:
+$$
+|L f| \le L(|f|) \le L(\|f\|_\infty \mathbb{I}_{S_2}) = \|f\|_\infty L(\mathbb{I}_{S_2}) = \|f\|_\infty \mathbb{I}_{S_1}.
+$$
+Hence $\|L f\|_\infty \le \|f\|_\infty$ for every $f$, so $\|L\|_\infty \le 1$. Since $L\mathbb{I}_{S_2} = \mathbb{I}_{S_1}$, we also have $\|L\|_\infty = 1$. Thus every positive normalized linear operator is automatically a **contraction**.
+:::
+
+
+## Duality: Bijection Between Probability Kernels and Markov Operators
+
+In the next proposition, we show that the mapping $Q \mapsto L_Q$ is a bijection between probability kernels and Markov operators. This is a duality result: every probability kernel defines a Markov operator, and conversely, every Markov operator arises from a unique probability kernel. 
+
+::: {#prp-kernel-operator-bijection}
+## Representation Theorem for Markov Operators
+Let $(S, \mathcal{B})$ be a measurable space. Let $L: \mathcal{B}_b(S, \mathcal{B}) \to \mathcal{B}_b(S, \mathcal{B})$ be an operator satisfying:
+
+0. $L$ is linear.
+1. $L(\mathbb{I}_S) = \mathbb{I}_S$.
+2. $L f \ge 0$ whenever $f \ge 0$.
+3. If $f_n \to f$ boundedly in $\mathcal{B}_b(S, \mathcal{B})$, then $L f_n \to L f$ boundedly in $\mathcal{B}_b(S, \mathcal{B})$.
+
+Then there exists a unique probability kernel $Q$ over $(S, \mathcal{B})$ such that $L = L_Q$. Explicitly, $Q$ is given by:
+$$
+Q(x, B) := (L \mathbb{I}_B)(x) \quad \forall x \in S, \; B \in \mathcal{B}.
+$$
+:::
+
+::: {.proof}
+## Proof of @prp-kernel-operator-bijection
+We construct $Q(x, B) := (L \mathbb{I}_B)(x)$ and check the defining properties of a probability kernel:
+
+1. **Measurability:** For every fixed $B \in \mathcal{B}$, $\mathbb{I}_B \in \mathcal{B}_b(S, \mathcal{B})$. By definition of the domain/codomain of $L$, $Q(\cdot, B) = L(\mathbb{I}_B)(\cdot) \in \mathcal{B}_b(S, \mathcal{B})$, so $x \mapsto Q(x, B)$ is $\mathcal{B}$-measurable.
+2. **Probability Measure Properties for $Q(x, \cdot)$:**
+   * *Normalization:* $Q(x, S) = (L \mathbb{I}_S)(x) = 1$ by Property 1.
+   * *Non-negativity:* For any $B \in \mathcal{B}$, $\mathbb{I}_B \ge 0 \implies Q(x, B) = (L \mathbb{I}_B)(x) \ge 0$ by Property 2.
+   * *Countable Additivity:* Let $(B_k)_{k=1}^\infty \subseteq \mathcal{B}$ be pairwise disjoint sets, and let $B = \bigcup_{k=1}^\infty B_k$. Define $f_n = \sum_{k=1}^n \mathbb{I}_{B_k} = \mathbb{I}_{\bigcup_{k=1}^n B_k}$. Then $f_n \uparrow \mathbb{I}_B$ boundedly as $n \to \infty$. By Property 3 (boundedly monotone continuity) and linearity of $L$:
+     $$
+     \begin{align*}
+     Q(x, B) &= (L \mathbb{I}_B)(x) = \lim_{n \to \infty} (L f_n)(x)\\
+     & = \lim_{n \to \infty} \sum_{k=1}^n (L \mathbb{I}_{B_k})(x) = \sum_{k=1}^\infty Q(x, B_k) \quad \forall x \in S.
+     \end{align*}
+     $$
+   Thus $Q(x, \cdot)$ is a probability measure on $(S, \mathcal{B})$ for every fixed $x \in S$.
+
+3. **Verification of $L = L_Q$:**
+   We need to show $L f = L_Q f = \int_S f(y) \, Q(\cdot, dy)$ for all $f \in \mathcal{B}_b(S, \mathcal{B})$.
+   * For indicator functions $f = \mathbb{I}_B$: $\int_S \mathbb{I}_B(y) \, Q(x, dy) = Q(x, B) = (L \mathbb{I}_B)(x)$.
+   * By linearity, $L f = L_Q f$ for all simple functions $f = \sum_{i=1}^m c_i \mathbb{I}_{B_i}$.
+   * For an arbitrary bounded measurable $f \in \mathcal{B}_b(S, \mathcal{B})$, there exists a sequence of simple functions $f_n$ such that $f_n \to f$ boundedly. Applying Property 3 to both $L$ and $L_Q$ yields $L f = \lim_{n \to \infty} L f_n = \lim_{n \to \infty} L_Q f_n = L_Q f$.
+
+:::
+
+Thus, the mapping $Q \mapsto L_Q$ defines a bijection between probability kernels and Markov operators:
+$$
+\begin{align*}
+&Q \mapsto L(f) = \int_S f(y) \, Q(\cdot, dy).\\
+& L \mapsto Q(\cdot, B) = (L \mathbb{I}_B)(\cdot). 
+\end{align*}
+$$
+
+
+
+## Composition of Probability Kernels
+
+The algebraic correspondence between probability kernels and linear operators allows us to define the product or composition of probability kernels via operator composition.
+
+::: {#cor-kernel-composition}
+## Kernel Composition via Operator Composition
+Let $Q_1$ be a probability kernel from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$, and let $Q_2$ be a probability kernel from $(S_2, \mathcal{B}_2)$ to $(S_3, \mathcal{B}_3)$. Then there exists a unique probability kernel $Q$ from $(S_1, \mathcal{B}_1)$ to $(S_3, \mathcal{B}_3)$ such that its associated Markov operator equals the composition of the individual operators:
+$$
+L_Q = L_{Q_1} \circ L_{Q_2}.
+$$
+We write $Q = Q_1 Q_2$ or $Q = Q_1 \cdot Q_2$. In the special case $S_1=S_2=S_3=S$, this is the composition of kernels on the same space.
+:::
+
+::: {.proof}
+## Proof of @cor-kernel-composition
+Consider the operator $L := L_{Q_1} \circ L_{Q_2}: \mathcal{B}_b(S, \mathcal{B}) \to \mathcal{B}_b(S, \mathcal{B})$. We verify that $L$ satisfies properties 0–3 of @prp-kernel-operator-bijection:
+
+0. **Linearity:** Composition of linear operators is linear.
+1. **Normalization:** $(L \mathbb{I}_S) = L_{Q_1}(L_{Q_2} \mathbb{I}_S) = L_{Q_1}(\mathbb{I}_S) = \mathbb{I}_S$.
+2. **Positivity:** If $f \ge 0$, then $g := L_{Q_2}(f) \ge 0$ by positivity of $L_{Q_2}$. Then $L f = L_{Q_1}(g) \ge 0$ by positivity of $L_{Q_1}$.
+3. **Boundedly Monotone Continuity:** If $f_n \to f$ boundedly, then $g_n := L_{Q_2}(f_n) \to g := L_{Q_2}(f)$ boundedly by property 3 of $L_{Q_2}$. Subsequently, $L_{Q_1}(g_n) \to L_{Q_1}(g)$ boundedly by property 3 of $L_{Q_1}$.
+
+By @prp-kernel-operator-bijection, there exists a unique probability kernel $Q$ such that $L_Q = L_{Q_1} \circ L_{Q_2}$.
+:::
+
+::: {#rem-explicit-kernel-composition}
+## Explicit Integral Formula for Kernel Composition
+The kernel corresponding to the composed Markov operator
+$$
+L_{Q_1Q_2}=L_{Q_1}\circ L_{Q_2}
+$$
+can be obtained by evaluating the operator at the indicator function $\mathbb{I}_B$. For $B\in\mathcal{B}_3$,
+$$
+\begin{aligned}
+(Q_1Q_2)(x,B)
+&= (L_{Q_1Q_2}\mathbb{I}_B)(x)\\
+&= (L_{Q_1}(L_{Q_2}\mathbb{I}_B))(x)\\
+&= \int_{S_2} Q_2(y,B)\,Q_1(x,dy).
+\end{aligned}
+$$
+Thus, the composition of two kernels is given explicitly by
+$$
+(Q_1Q_2)(x,B) =\int_{S_2} Q_2(y,B)\,Q_1(x,dy).
+$$
+More generally, for any $f\in\mathcal{B}_b(S_3,\mathcal{B}_3)$,
+$$
+\begin{aligned}
+(L_{Q_1Q_2}f)(x)
+&= (L_{Q_1}(L_{Q_2}f))(x)\\
+&= \int_{S_2}
+\left(
+\int_{S_3} f(z)\,Q_2(y,dz)
+\right)
+Q_1(x,dy).
+\end{aligned}
+$$
+Equivalently, this can be written as the iterated integral
+$$
+(L_{Q_1Q_2}f)(x)
+=
+\int_{S_2\times S_3}
+f(z)\,Q_1(x,dy)\,Q_2(y,dz).
+$$
+Thus, kernel composition corresponds to two successive transitions:
+$$
+x \xrightarrow{Q_1} y \xrightarrow{Q_2} z.
+$$
+
+:::
+
+::: {#exm-discrete-matrix-multiplication}
+## Matrix Multiplication Analogy for Discrete Spaces
+When $S$ is countable and $\mathcal{B} = \mathcal{P}(S)$, a probability kernel is fully specified by a stochastic matrix $(Q(x, y))_{x, y \in S}$ where $Q(x, y) = Q(x, \{y\})$.
+
+Evaluating the kernel composition formula (from @rem-explicit-kernel-composition) at $B = \{z\}$ gives the $(x,z)$ entry of the composed kernel:
+$$
+Q(x, z) := Q(x, \{z\}) = \int_S Q_2(y, \{z\}) \, Q_1(x, dy) = \sum_{y \in S} Q_1(x, y) \, Q_2(y, z).
+$$
+This is precisely the $(x, z)$ entry of the matrix product $Q_1 Q_2$, confirming that **kernel composition is matrix multiplication**. The associated generator then acts on $f \in \mathcal{B}_b(S, \mathcal{B})$ by:
+$$
+(L_Q f)(x) = \sum_{z \in S} f(z) \, Q(x, z) = \sum_{z \in S} f(z) \sum_{y \in S} Q_1(x, y) \, Q_2(y, z).
+$$
+:::
+
+
+:::{#exm-discrete-matrix-multiplication}
+## Composition of Two Discrete Kernels
+
+Let $S=\{1,2,3\}$ and consider two probability kernels $Q_1$ and $Q_2$ on $S$, represented by the stochastic matrices
+$$
+Q_1=
+\begin{pmatrix}
+0.5 & 0.3 & 0.2\\
+0.1 & 0.6 & 0.3\\
+0.2 & 0.2 & 0.6
+\end{pmatrix},
+\qquad
+Q_2=
+\begin{pmatrix}
+0.7 & 0.2 & 0.1\\
+0.3 & 0.4 & 0.3\\
+0.1 & 0.2 & 0.7
+\end{pmatrix}.
+$$
+Suppose the process starts at state $x=1$. The first kernel $Q_1$ determines the distribution of the intermediate state $Y$: $Q_1(1,\cdot)=(0.5,0.3,0.2)$. The second kernel $Q_2$ then determines the distribution of the final state $Z$, conditional on $Y$.
+For example, the probability of ending at state $z=3$ is
+$$
+\begin{aligned}
+(Q_1Q_2)(1,3)
+&=
+\sum_{y\in S}Q_1(1,y)Q_2(y,3)\\
+&=
+Q_1(1,1)Q_2(1,3)
++Q_1(1,2)Q_2(2,3)
++Q_1(1,3)Q_2(3,3)\\
+&=
+(0.5)(0.1)+(0.3)(0.3)+(0.2)(0.7)\\
+&=0.28.
+\end{aligned}
+$$
+Thus, $P(Z=3\mid X=1)=0.28$. The three terms correspond to the three possible intermediate states:
+$$
+\begin{aligned}
+P(X=1\to Y=1\to Z=3)&=(0.5)(0.1)=0.05,\\
+P(X=1\to Y=2\to Z=3)&=(0.3)(0.3)=0.09,\\
+P(X=1\to Y=3\to Z=3)&=(0.2)(0.7)=0.14.
+\end{aligned}
+$$
+Adding these mutually exclusive paths gives
+$$
+0.05+0.09+0.14=0.28.
+$$
+More generally, the composition kernel is
+$$
+(Q_1Q_2)(x,z)
+=
+\sum_{y\in S}Q_1(x,y)Q_2(y,z).
+$$
+Hence, in this example,
+$$
+Q_1Q_2=
+\begin{pmatrix}
+0.40 & 0.26 & 0.34\\
+0.22 & 0.32 & 0.46\\
+0.26 & 0.28 & 0.46
+\end{pmatrix}.
+$$
+For instance, the first row gives the distribution of $Z$ after two transitions when $X=1$:
+$$
+(Q_1Q_2)(1,\cdot)=(0.40,0.26,0.34).
+$$
+Thus, kernel composition combines all possible intermediate states, weighting each two-step path by the probability of reaching that intermediate state under $Q_1$.
+
+:::
+
+
+---
+
+## Construction of Finite-Dimensional Distributions on Path Spaces
+
+Probability kernels provide the building block for constructing finite-dimensional joint distributions of Markov processes.
+
+::: {#prp-path-distribution-construction}
+## Finite-Dimensional Path Distribution
+Let $(S_0, \mathcal{B}_0), (S_1, \mathcal{B}_1), \dots, (S_n, \mathcal{B}_n)$ be measurable spaces. Let $\nu \in \mathcal{P}(S_0, \mathcal{B}_0)$ be an initial probability measure, and let $Q_k$ be a probability kernel from $(S_{k-1}, \mathcal{B}_{k-1})$ to $(S_k, \mathcal{B}_k)$ for $k = 1, \dots, n$.
+
+Then there exists a unique joint probability measure $\mu \in \mathcal{P}(S_0 \times S_1 \times \dots \times S_n, \mathcal{B}_0 \otimes \mathcal{B}_1 \otimes \dots \otimes \mathcal{B}_n)$ such that for all bounded measurable functions $f \in \mathcal{B}_b(S_0 \times \dots \times S_n)$:
+$$
+\begin{aligned}
+\int f \, d\mu &= \int_{S_0} \int_{S_1} \dots \int_{S_n} f(x_0, x_1,\dots, x_n) \, Q_n(x_{n-1}, dx_n)\\
+& \dots Q_1(x_0, dx_1) \, \nu(dx_0).
+\end{aligned}
+$$ 
+:::
+
+::: {.proof}
+## Proof of @prp-path-distribution-construction
+We construct $\mu$ iteratively using kernels lifted to product spaces. For $k \ge 2$, define the lifted kernel
+$$
+\widetilde Q_k\big((x_0,\dots,x_{k-1}), A\big) := Q_k(x_{k-1}, A), \qquad A \in \mathcal{B}_k.
+$$
+This is a probability kernel from $(S_0\times\cdots\times S_{k-1}, \mathcal{B}_0\otimes\cdots\otimes\mathcal{B}_{k-1})$ to $(S_k,\mathcal{B}_k)$.
+
+Then the construction proceeds as follows:
+
+1. Define $\mu_1 = \nu \otimes Q_1 \in \mathcal{P}(S_0 \times S_1, \mathcal{B}_0 \otimes \mathcal{B}_1)$.
+2. Define $\mu_2 = \mu_1 \otimes \widetilde Q_2 \in \mathcal{P}(S_0 \times S_1 \times S_2, \mathcal{B}_0 \otimes \mathcal{B}_1 \otimes \mathcal{B}_2)$.
+3. Continuing inductively, set
+   $$
+   \mu_k = \mu_{k-1} \otimes \widetilde Q_k \in \mathcal{P}(S_0 \times \cdots \times S_k), \qquad k=1,\dots,n.
+   $$
+   The resulting measure $\mu := \mu_n$ is the desired finite-dimensional distribution.
+
+To verify the integral identity, start with product functions
+$$
+f(x_0,\dots,x_n) = f_0(x_0) f_1(x_1) \cdots f_n(x_n),
+$$
+where each $f_i$ is bounded and measurable. Applying Fubini/Tonelli successively gives
+$$
+\begin{aligned}
+\int f \, d\mu &= \int_{S_0} f_0(x_0) \left( \int_{S_1} f_1(x_1) \dots \left( \int_{S_n} f_n(x_n) \, Q_n(x_{n-1}, dx_n) \right) \dots Q_1(x_0, dx_1) \right) \nu(dx_0) \\
+&= \int_{S_0} f_0(x_0) \Big( L_{Q_1} \big( f_1 \cdot L_{Q_2}( \dots (f_{n-1} \cdot L_{Q_n} f_n)\dots ) \big) \Big) (x_0) \, \nu(dx_0).
+\end{aligned}
+$$
+This is the claimed iterated-integral representation on tensor-product functions.
+
+To extend from product functions to arbitrary bounded measurable $f$, define
+$$
+\mathcal{C} := \left\{E \in \mathcal{B}_0\otimes\cdots\otimes\mathcal{B}_n : \int \mathbf{1}_E \, d\mu = \int \mathbf{1}_E \, d\mu' \right\},
+$$
+where $\mu'$ is the measure defined by the right-hand side of the formula. One checks that $\mathcal{C}$ is a $\lambda$-system, and it contains the class of finite rectangles (equivalently, cylinder sets) because the identity has already been verified on tensor-product functions. Since the rectangles form a $\pi$-system generating the product $\sigma$-algebra, Dynkin's $\pi$-$\lambda$ theorem yields $\mathcal{C} = \mathcal{B}_0\otimes\cdots\otimes\mathcal{B}_n$. Thus the two finite measures agree on all measurable sets, and therefore on all bounded measurable functions by standard measure-theoretic extension.
+:::
+
+---
+
+## Takeaways
+
+1. **Markov generators encode kernels.** Every probability kernel $Q$ from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$ induces a bounded linear operator $L_Q: \mathcal{B}_b(S_2) \to \mathcal{B}_b(S_1)$, $(L_Q f)(x) = \int f \, dQ(x, \cdot)$, satisfying four structural properties: linearity, normalization ($L_Q \mathbb{I} = \mathbb{I}$), positivity ($f \ge 0 \Rightarrow L_Q f \ge 0$), and continuity under bounded pointwise convergence (via DCT). These properties imply the contraction bound $\|L_Q\|_\infty \le 1$.
+
+2. **Representation theorem (duality).** The four properties characterize Markov generators completely. Every operator $L: \mathcal{B}_b(S, \mathcal{B}) \to \mathcal{B}_b(S, \mathcal{B})$ satisfying them arises from a *unique* probability kernel, recovered by the formula $Q(x, B) = (L \mathbb{I}_B)(x)$. The countable additivity of $Q(x, \cdot)$ follows from the bounded-convergence property of $L$ applied to the partial sums $\sum_{k=1}^n \mathbb{I}_{B_k} \uparrow \mathbb{I}_B$.
+
+3. **Composition of kernels.** The product $Q = Q_1 Q_2$ is the unique kernel whose generator is $L_Q = L_{Q_1} \circ L_{Q_2}$. Explicitly, $(Q_1 Q_2)(x, B) = \int_S Q_2(y, B) \, Q_1(x, dy)$. For countable $S$ this reduces to matrix multiplication: $(Q_1 Q_2)(x, z) = \sum_{y \in S} Q_1(x, y) \, Q_2(y, z)$.
+
+4. **Path-space distributions.** Given an initial distribution $\nu \in \mathcal{P}(S_0)$ and transition kernels $Q_k$ from $S_{k-1}$ to $S_k$ ($k = 1, \dots, n$), there exists a unique probability measure $\mu$ on the product space $S_0 \times \cdots \times S_n$ satisfying the iterated-integral formula $\int f \, d\mu = \int_{S_0} \cdots \int_{S_n} f(x_0, \dots, x_n) \, Q_n(x_{n-1}, dx_n) \cdots Q_1(x_0, dx_1) \, \nu(dx_0)$. This provides the foundation for constructing finite-dimensional distributions of Markov processes.

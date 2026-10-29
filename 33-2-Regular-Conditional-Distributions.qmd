@@ -1,0 +1,293 @@
+
+# Lecture 33.2: Regular Conditional Distributions
+
+In this lecture, we define **regular conditional distributions (RCDs)**, which provide a rigorous framework for conditioning on random variables. We explore the relationship between RCDs and probability kernels, and we discuss the existence and uniqueness of RCDs in various settings.
+
+## Probability Kernels and Conditional Expectation
+
+Probability kernels provide a powerful general framework for evaluating conditional expectations of joint functions $\mathbb{E}[f(X, Y) \mid X]$. The following theorem shows that if the joint distribution of $(X,Y)$ can be disintegrated into a product measure $\mu_X \otimes Q$, then the conditional expectation can be computed using the kernel $Q$.
+
+::: {#thm-joint-cond-exp-kernel}
+## Conditional Expectation via Disintegration Kernel
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space, $(S_1, \mathcal{B}_1)$ and $(S_2, \mathcal{B}_2)$ be measurable spaces, and $X: (\Omega, \mathcal{F}) \to (S_1, \mathcal{B}_1)$ and $Y: (\Omega, \mathcal{F}) \to (S_2, \mathcal{B}_2)$ be random variables.
+
+Let $\mu_{(X,Y)} = (X, Y)^* \mathbb{P} \in \mathcal{P}(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$ denote the joint pushforward distribution, and let $\mu_X = X^* \mathbb{P} \in \mathcal{P}(S_1, \mathcal{B}_1)$ denote the marginal distribution of $X$.
+
+If there exists a probability kernel $Q$ from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$ such that
+$$
+\mu_{(X,Y)} = \mu_X \otimes Q,
+$$ {#eq-joint-disintegration}
+then for any $f \in L^1(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2, \mu_{(X,Y)})$ (or $f \ge 0$), we have $\mathbb{E}[f(X, Y) \mid X] = g(X)$ a.s., where 
+$$
+g(x) = \int_{S_2} f(x, y) \, Q(x, dy).
+$$ {#eq-cond-exp-kernel-eval}
+In short, 
+$$
+\mathbb{E}[f(X, Y) \mid X = x] = \int_{S_2} f(x, y) \, Q(x, dy).
+$$
+:::
+
+:::{#rem-pushforward}
+## Pushforward Distribution
+Note that $\mu_X = X^* \mathbb{P} \in \mathcal{P}(S_1, \mathcal{B}_1)$ is the pushforward distribution of $X$:
+$$
+\mu_X(A) = \mathbb{P}(X \in A) = \mathbb{P}(X^{-1}(A)) \quad \text{for all }A \in \mathcal{B}_1.
+$$
+Similarly, $\mu_{(X,Y)} = (X,Y)^* \mathbb{P} \in \mathcal{P}(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$ is the pushforward distribution of the pair $(X,Y)$:
+$$
+\mu_{(X,Y)}(A \times B) = \mathbb{P}(X \in A, Y \in B) = \mathbb{P}((X,Y)^{-1}(A \times B)), 
+$$
+for all $A \in \mathcal{B}_1, B \in \mathcal{B}_2$.
+:::
+
+::: {.proof}
+## Proof of @thm-joint-cond-exp-kernel
+
+By the characterization of conditional expectation, $g(X) = \mathbb{E}[f(X,Y) \mid X]$ a.s. if and only if:
+
+(i) $g(X)$ is $\sigma(X)$-measurable: this holds automatically because $g$ is $\mathcal{B}_1$-measurable (by @lem-kernel-measurability applied to $Q$), and any measurable function of $X$ is $\sigma(X)$-measurable.
+
+(ii) For all bounded test functions $h \in \mathcal{B}_b(S_1, \mathcal{B}_1)$:
+$$
+\mathbb{E}\big[ f(X, Y) h(X) \big] = \mathbb{E}\big[ g(X) h(X) \big].
+$$
+
+It therefore suffices to verify condition (ii).
+
+**Case 1: Bounded Measurable Functions**:
+
+Assume $f \in \mathcal{B}_b(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$. By Change of Variables and the disintegration assumption $\mu_{(X,Y)} = \mu_X \otimes Q$:
+$$
+\begin{aligned}
+\mathbb{E}\big[ f(X, Y) h(X) \big] &= \int_{S_1 \times S_2} f(x, y) h(x) \, \mu_{(X,Y)}(dx \, dy) \\
+&= \int_{S_1 \times S_2} f(x, y) h(x) \, (\mu_X \otimes Q)(dx \, dy) \\
+&\stackrel{\text{Fubini}}{=} \int_{S_1} \left( \int_{S_2} f(x, y) \, Q(x, dy) \right) h(x) \, \mu_X(dx) \\
+&= \int_{S_1} g(x) h(x) \, \mu_X(dx) \\
+&= \mathbb{E}\big[ g(X) h(X) \big].
+\end{aligned}
+$$
+
+**Case 2: Integrable Functions ($f \in L^1$)**:
+
+If $f \in L^1(\mu_{(X,Y)})$, define $f_n = (f \wedge n) \vee (-n)$. Each $f_n$ is bounded, so by Case 1, $g_n(X) = \mathbb{E}[f_n(X,Y) \mid X]$ a.s., where $g_n(x) = \int_{S_2} f_n(x, y) \, Q(x, dy)$.
+
+As $n \to \infty$, $f_n \to f$ in $L^1(\mathbb{P})$. By $L^1$-contractivity of conditional expectation, $g_n(X) \to \mathbb{E}[f(X,Y) \mid X]$ in $L^1(\mathbb{P})$. Concurrently:
+$$
+\begin{aligned}
+&\mathbb{E}\left[ \left| g_n(X) - g(X) \right| \right] \\
+&= \int_{S_1} \left| \int_{S_2} f_n(x, y) \, Q(x, dy) - \int_{S_2} f(x, y) \, Q(x, dy) \right| \mu_X(dx) \\
+&\le \int_{S_1} \left( \int_{S_2} |f_n(x, y) - f(x, y)| \, Q(x, dy) \right) \mu_X(dx) \\
+&= \int_{S_1 \times S_2} |f_n(x, y) - f(x, y)| \, (\mu_X \otimes Q)(dx \, dy) \\
+&= \|f_n - f\|_{L^1(\mu_{(X,Y)})} \longrightarrow 0 \quad \text{as } n \to \infty.
+\end{aligned}
+$$
+Thus $g(X) = \mathbb{E}[f(X,Y) \mid X]$ a.s.
+:::
+
+:::{#exm-rcd}
+Suppose $X\sim N(0,1)$ and, conditional on $X=x$, $Y\mid X=x\sim N(x,1)$. Thus, we can write $Y=X+\varepsilon$, where $\varepsilon\sim N(0,1)$ is independent of $X$. The conditional distribution of $Y$ given $X=x$ is represented by the kernel
+$$ 
+Q(x,dy)=\phi(y-x)\,dy, 
+$$
+where $\phi$ is the standard normal density. Now consider the joint function $f(x,y)=xy$. We want to calculate $\mathbb E[XY\mid X]$. According to the theorem,
+$$ 
+\mathbb E[XY\mid X=x] = \int_{\mathbb R}xy\,Q(x,dy). 
+$$
+Since $x$ is fixed inside the conditional expectation,
+$$ 
+\begin{aligned} 
+\mathbb E[XY\mid X=x] &=x\int_{\mathbb R}y\,Q(x,dy)\\ &=x\,\mathbb E[Y\mid X=x]. 
+\end{aligned} 
+$$
+But under the kernel $Q(x,\cdot)$, $Y\mid X=x\sim N(x,1)$, so $\mathbb E[Y\mid X=x]=x$. Therefore, $\mathbb E[XY\mid X=x]=x^2$, and hence $\mathbb E[XY\mid X]=X^2$. 
+
+The important point is that we do not need to work with the joint density of $(X,Y)$. We only need to know:
+$$ 
+\boxed{Q(x,\cdot)=\text{the distribution of }Y\text{ when }X=x.} 
+$$
+Once we know this conditional distribution, the theorem tells us exactly how to calculate conditional expectations:
+$$ 
+\boxed{ \mathbb E[f(X,Y)\mid X] = \int f(X,y)\,Q(X,dy). } 
+$$
+For example, with $f(x,y)=y^2$, we immediately obtain
+$$ 
+\begin{aligned} 
+\mathbb E[Y^2\mid X=x] &=\int y^2 Q(x,dy)\\ 
+&=x^2+1, 
+\end{aligned} 
+$$
+because $Y\mid X=x\sim N(x,1)$. Hence $\mathbb E[Y^2\mid X]=X^2+1$. So the kernel provides a recipe: fix the observed value of $X$, use the corresponding distribution $Q(x,\cdot)$ for $Y$, and average the function $f(x,Y)$ with respect to that distribution.
+
+:::
+
+
+---
+
+## Regular Conditional Distributions (RCD)
+
+This raises a crucial question: *Can we always find a probability kernel $Q$ such that $\mu_{(X,Y)} = \mu_X \otimes Q$?*  Note that if such a kernel exists and $(S_2, \mathcal{B}_2)$ is countably generated, it is unique $\mu_X$-almost surely. To that end, we define  the **regular conditional distribution (RCD)** of $Y$ given $X$ as a probability kernel $Q$ satisfying the conditional expectation property in @thm-joint-cond-exp-kernel.
+
+::: {#def-rcd}
+## Regular Conditional Distribution
+Let $X: (\Omega, \mathcal{F}) \to (S_1, \mathcal{B}_1)$ and $Y: (\Omega, \mathcal{F}) \to (S_2, \mathcal{B}_2)$ be random variables. A probability kernel $Q$ from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$ is called a **regular conditional distribution (RCD)** of $Y$ given $X$ if for every $B \in \mathcal{B}_2$:
+$$
+\mathbb{E}[\mathbb{I}_{\{Y\in B\}} \mid \sigma(X)] = \mathbb{P}(Y \in B \mid X) = Q(X, B) \quad \text{a.s.}
+$$ {#eq-rcd-def}
+Equivalently, for every bounded measurable function $h \in \mathcal{B}_b(S_2, \mathcal{B}_2)$:
+$$
+\mathbb{E}[h(Y) \mid X] = \int_{S_2} h(y) \, Q(X, dy) \quad \text{a.s.}
+$$ {#eq-rcd-function-def}
+:::
+
+The following result shows that $Q$ is an RCD $\implies$ $\mu_{(X,Y)} = \mu_X \otimes Q$. That is, an RCD is equivalent to a disintegration of the joint distribution.
+
+::: {#prp-rcd-disintegration}
+## Equivalence of RCD and Product Disintegration
+If $Q$ is a regular conditional distribution of $Y$ given $X$, then $\mu_{(X,Y)} = \mu_X \otimes Q$. Consequently, $Q$ is unique $\mu_X$-almost surely if $\mathcal{B}_2$ is countably generated.
+:::
+
+::: {.proof}
+To show $\mu_{(X,Y)} = \mu_X \otimes Q$, test on measurable rectangles $A \times B \in \mathcal{B}_1 \otimes \mathcal{B}_2$:
+$$
+\begin{aligned}
+\mu_{(X,Y)}(A \times B) &= \mathbb{P}(X \in A, Y \in B) \\
+&= \mathbb{E}\left[ \mathbb{I}_A(X) \mathbb{I}_B(Y) \right] \\
+&= \mathbb{E}\left[ \mathbb{I}_A(X) \mathbb{E}[\mathbb{I}_B(Y) \mid X] \right] \\
+&= \mathbb{E}\left[ \mathbb{I}_A(X) Q(X, B) \right] \quad \\
+&= \int_A Q(x, B) \, \mu_X(dx) \\
+&= (\mu_X \otimes Q)(A \times B).
+\end{aligned}
+$$
+where the third equality uses the averaging property of conditional expectation, the fourth equality uses the RCD definition in @eq-rcd-def, and the last equality uses the definition of the product measure in @def-product-measure-kernel. Since measures agreeing on generating rectangles agree on $\mathcal{B}_1 \otimes \mathcal{B}_2$, we have $\mu_{(X,Y)} = \mu_X \otimes Q$. Uniqueness $\mu_X$-a.s. follows directly from the kernel uniqueness theorem.
+:::
+
+::: {#rem-rcd-product-rule}
+## Heuristic: The Product Rule "Jazzed Up"
+To understand why an RCD extends from single-variable functions $h(Y)$ to joint functions $f(X,Y)$, consider $f(x,y) = g(x) h(y)$:
+$$
+\begin{align*}
+\mathbb{E}[f(X, Y) \mid X] &= \mathbb{E}[g(X) h(Y) \mid X] \\
+&= g(X) \mathbb{E}[h(Y) \mid X] \\
+&= g(X) \int_{S_2} h(y) \, Q(X, dy) \\
+&= \int_{S_2} f(X, y) \, Q(X, dy).
+\end{align*}
+$$
+The formal proposition establishes that this identity extends linearly and continuously to all joint integrable functions $f(X, Y)$.
+:::
+
+The reverse implication in @prp-rcd-disintegration is also true: $Q$ is an RCD of $Y|X$ $\iff$ $\mu_{(X,Y)} = \mu_X \otimes Q$.
+
+
+## Existence of Regular Conditional Distributions
+
+Does an RCD always exist for arbitrary measurable spaces? The answer is **No!**
+However, an RCD is guaranteed to exist whenever the target space $(S_2, \mathcal{B}_2)$ is "nice enough"—specifically, a **Standard Borel Space** (a space measure-isomorphic to a Borel subset of a Polish space). Below are two standard explicit constructions.
+
+## Case 1: Absolutely Continuous Distributions (Radon-Nikodym Construction)
+
+::: {#exm-rcd-density}
+## RCD for Absolutely Continuous Measures
+Let $(S_1, \mathcal{B}_1, \nu_1)$ and $(S_2, \mathcal{B}_2, \nu_2)$ be $\sigma$-finite measure spaces. Let $(X, Y)$ have joint distribution $\mu_{(X,Y)} \ll \nu_1 \otimes \nu_2$ with joint density $f_{X,Y} = \frac{d\mu_{(X,Y)}}{d(\nu_1 \otimes \nu_2)}$.
+
+Define the marginal density $f_X(x) = \int_{S_2} f_{X,Y}(x, y) \, \nu_2(dy)$ so that $d\mu_X = f_X \, d\nu_1$. Define the conditional density:
+$$
+f_{Y \mid X}(y \mid x) := \begin{cases}
+\dfrac{f_{X,Y}(x, y)}{f_X(x)} & \text{if } f_X(x) > 0, \\[8pt]
+f_0(y) & \text{if } f_X(x) = 0,
+\end{cases}
+$$
+where $f_0(y)$ is any arbitrary probability density on $(S_2, \mathcal{B}_2, \nu_2)$.
+
+Then the mapping
+$$
+Q(x, B) := \int_B f_{Y \mid X}(y \mid x) \, \nu_2(dy)
+$$ {#eq-density-rcd-kernel}
+is a Regular Conditional Distribution of $Y$ given $X$.
+:::
+
+::: {.proof}
+We verify $\mu_{(X,Y)} = \mu_X \otimes Q$ by checking on measurable rectangles $A \times B \in \mathcal{B}_1 \otimes \mathcal{B}_2$ (which generate $\mathcal{B}_1 \otimes \mathcal{B}_2$, so equality on rectangles implies equality on the whole product $\sigma$-algebra by Dynkin's theorem):
+$$
+\begin{aligned}
+(\mu_X \otimes Q)(A \times B)
+&= \int_A Q(x, B) \, \mu_X(dx) \\
+&= \int_A Q(x, B) \, f_X(x) \, \nu_1(dx) \\
+&= \int_A \left( \int_B f_{Y \mid X}(y \mid x) \, \nu_2(dy) \right) f_X(x) \, \nu_1(dx).
+\end{aligned}
+$$
+On the set $\{x : f_X(x) > 0\}$, substituting $f_{Y \mid X}(y \mid x) = \frac{f_{X,Y}(x,y)}{f_X(x)}$ gives $f_{Y \mid X}(y \mid x) \cdot f_X(x) = f_{X,Y}(x,y)$. On the set $\{x : f_X(x) = 0\}$, $f_X(x) = \int_{S_2} f_{X,Y}(x,y) \, \nu_2(dy) = 0$ implies $f_{X,Y}(x,y) = 0$ for $\nu_2$-a.e.\ $y$, so both sides contribute zero. Hence:
+$$
+(\mu_X \otimes Q)(A \times B) = \int_A \int_B f_{X,Y}(x,y) \, \nu_2(dy) \, \nu_1(dx) = \mu_{(X,Y)}(A \times B),
+$$
+where the last equality uses the Fubini–Tonelli theorem (since $f_{X,Y} \ge 0$) and the fact that $f_{X,Y}$ is the joint density of $(X,Y)$. Thus $\mu_{(X,Y)} = \mu_X \otimes Q$, and by @prp-rcd-disintegration, $Q$ is an RCD of $Y$ given $X$.
+:::
+
+## Case 2: Discrete Distributions
+
+::: {#exm-rcd-discrete}
+## RCD for Discrete Random Variables
+Let $Y$ be a discrete random variable taking values in a countable set $S_2 = \{y_1, y_2, \dots\} \subset \mathbb{R}$.
+For $x \in S_1$ where $\mathbb{P}(X = x) > 0$, define the point probabilities:
+$$
+Q(x, \{y\}) = \mathbb{P}(Y = y \mid X = x) = \frac{\mathbb{P}(X = x, Y = y)}{\mathbb{P}(X = x)}.
+$$
+Then for any $B \in \mathcal{B}_2$:
+$$
+Q(x, B) = \sum_{y \in B \cap S_2} \mathbb{P}(Y = y \mid X = x).
+$$
+For $x$ where $\mathbb{P}(X = x) = 0$, set $Q(x, \cdot)$ to be any fixed probability measure on $(S_2, \mathcal{B}_2)$. Evaluating this kernel at $X$ yields:
+$$
+\mathbb{P}(Y \in B \mid X) = Q(X, B) = \sum_{y \in B \cap S_2} Q(X, \{y\}) \quad \text{a.s.}
+$$
+:::
+
+::: {.proof}
+We verify $Q$ is an RCD by checking $\mathbb{P}(Y \in B \mid X) = Q(X, B)$ a.s. for each $B \in \mathcal{B}_2$. Since $Y$ takes values in the countable set $S_2$, we have $\mathbb{P}(X = x) > 0$ for at most countably many $x$. For any such $x$:
+$$
+\begin{align*}
+Q(x, B)
+&= \sum_{y \in B \cap S_2} Q(x, \{y\})\\
+&= \sum_{y \in B \cap S_2} \frac{\mathbb{P}(X = x,\, Y = y)}{\mathbb{P}(X = x)}\\
+&= \frac{\mathbb{P}(X = x,\, Y \in B)}{\mathbb{P}(X = x)}\\
+&= \mathbb{P}(Y \in B \mid X = x),
+\end{align*}
+$$
+where the third equality uses countable additivity (the events $\{Y = y\}$ for $y \in B \cap S_2$ are pairwise disjoint). For $x$ with $\mathbb{P}(X = x) = 0$, the value of $Q(x, \cdot)$ does not affect any a.s. statement since $\mathbb{P}(X = x) = 0$. Hence $Q(X, B) = \mathbb{P}(Y \in B \mid X)$ a.s., so $Q$ is an RCD of $Y$ given $X$.
+:::
+
+::: {.callout-note title="Procedural Order in Discrete Conditioning"}
+When evaluating discrete RCD expressions in practice:
+
+1. First compute the two-variable deterministic function $Q(x, \{y\}) = \mathbb{P}(Y = y \mid X = x)$ on $\{x: \mathbb{P}(X=x) > 0\}$.
+2. Then evaluate $Q(X, \{y\})$ at the random variable $X$.
+3. Sum over $y \in B \cap S_2$ to obtain $\mathbb{P}(Y \in B \mid X) = \sum_{y \in B \cap S_2} Q(X, \{y\})$ a.s.
+:::
+
+---
+
+## Takeaways
+
+::: {.callout-tip}
+## Key Takeaways
+
+**1. RCDs Are the Rigorous Version of "Conditioning on $X = x$."**
+A regular conditional distribution (RCD) of $Y$ given $X$ is a probability kernel $Q: S_1 \times \mathcal{B}_2 \to [0,1]$ such that $\mathbb{P}(Y \in B \mid X) = Q(X, B)$ a.s. for every $B \in \mathcal{B}_2$. Unlike the naive conditional probability $\mathbb{P}(Y \in B \mid X = x)$, which requires $\mathbb{P}(X = x) > 0$, the kernel $Q(x, \cdot)$ is defined simultaneously for all $x$ with a single measurability condition, making it well-suited for continuous random variables.
+
+**2. RCD $\Longleftrightarrow$ Disintegration of the Joint Distribution.**
+A kernel $Q$ is an RCD of $Y$ given $X$ if and only if $\mu_{(X,Y)} = \mu_X \otimes Q$ (the semi-direct product measure from Lecture 33.1). The forward direction follows by testing on rectangles using the tower property; the reverse follows from the generalized Fubini theorem. The two conditions are therefore interchangeable.
+
+**3. Computing Conditional Expectations from the RCD.**
+When $\mu_{(X,Y)} = \mu_X \otimes Q$, the conditional expectation of any jointly measurable $f$ is given by
+$$
+\mathbb{E}[f(X, Y) \mid X = x] = \int_{S_2} f(x, y) \, Q(x, dy),
+$$
+for any $f$ that is bounded or $L^1(\mu_{(X,Y)})$. The proof verifies the two conditions for conditional expectation: (i) $\sigma(X)$-measurability (automatic since $g(x) = \int f(x,y) Q(x,dy)$ is $\mathcal{B}_1$-measurable), and (ii) the integral characterization $\mathbb{E}[g(X)h(X)] = \mathbb{E}[f(X,Y)h(X)]$ for all bounded $h$, which follows from Fubini applied to $\mu_X \otimes Q$. The $L^1$ case is obtained by truncation and $L^1$-contractivity of conditional expectation.
+
+**4. Explicit Constructions of RCDs.**
+
+- **Density case:** If $(X,Y)$ has joint density $f_{X,Y}$ with respect to $\nu_1 \otimes \nu_2$, set $Q(x, B) = \int_B f_{Y|X}(y|x) \nu_2(dy)$. This is an RCD because $(\mu_X \otimes Q)(A \times B) = \int_A \int_B f_{X,Y}(x,y) \nu_2(dy) \nu_1(dx) = \mu_{(X,Y)}(A \times B)$ by Fubini, where the key cancellation is $f_{Y|X}(y|x) \cdot f_X(x) = f_{X,Y}(x,y)$ on $\{f_X > 0\}$.
+- **Discrete case:** If $Y$ takes values in a countable set $S_2$, set $Q(x, \{y\}) = \mathbb{P}(Y = y \mid X = x)$ for $\mathbb{P}(X = x) > 0$. Verification uses the countable additivity of conditional probability: $Q(x, B) = \frac{\mathbb{P}(X = x, Y \in B)}{\mathbb{P}(X = x)} = \mathbb{P}(Y \in B \mid X = x)$.
+
+**5. Existence and Uniqueness.**
+An RCD of $Y$ given $X$ need not exist for arbitrary measurable spaces, but is guaranteed to exist whenever $(S_2, \mathcal{B}_2)$ is a **Standard Borel space** (measure-isomorphic to a Borel subset of a Polish space). When it exists and $\mathcal{B}_2$ is countably generated, the RCD is unique $\mu_X$-almost surely: if $Q$ and $\widetilde{Q}$ are both RCDs, then $\mu_X \otimes Q = \mu_X \otimes \widetilde{Q}$, and the uniqueness theorem from Lecture 33.1 gives $Q(x, \cdot) = \widetilde{Q}(x, \cdot)$ for $\mu_X$-a.e. $x$.
+:::

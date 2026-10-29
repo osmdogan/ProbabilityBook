@@ -1,0 +1,337 @@
+# Lecture 36.2: Probability Kernels Revisited
+
+## Introduction and Notation Refinement
+
+In previous discussions, we introduced probability kernels, regular conditional distributions, and their associated integral operators. To prevent confusion in subsequent developments, we establish a standardized notation and terminology convention:
+
+* **Probability Kernel:** Denoted by $q$ (formerly $Q$).
+* **Markov (Transition) Operator:** Denoted by $Q$ (formerly $L$).
+
+---
+
+## Probability Kernels
+
+Let $(S_1, \mathcal{B}_1)$ and $(S_2, \mathcal{B}_2)$ be measurable spaces.
+
+::: {#def-prob-kernel}
+## Probability Kernel
+A function $q: S_1 \times \mathcal{B}_2 \to [0, 1]$ is a **probability kernel** (or *transition probability kernel*) from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$ if:
+
+1. For each fixed $x \in S_1$, the mapping $B \mapsto q(x, B)$ is a probability measure on $(S_2, \mathcal{B}_2)$, i.e., $q(x, \cdot) \in \mathcal{P}(S_2, \mathcal{B}_2)$.
+2. For each fixed $B \in \mathcal{B}_2$, the mapping $x \mapsto q(x, B)$ is $(\mathcal{B}_1, \mathcal{B}_{\mathbb{R}})$-measurable (automatically bounded, since it takes values in $[0,1]$).
+:::
+
+The following result gives the measurability result for integrating a function against a kernel. The key idea is to regard $x\longmapsto \int_{S_2}f(y)\,q(x,\mathrm dy)$ as an integration operator indexed by $x$.
+
+::: {#prp-kernel-integration}
+## Integration with Respect to a Kernel
+If $q: S_1 \times \mathcal{B}_2 \to [0, 1]$ is a probability kernel, then for every bounded measurable function $f: (S_2, \mathcal{B}_2) \to (\mathbb{R}, \mathcal{B}_{\mathbb{R}})$, or every non-negative measurable function $f: (S_2, \mathcal{B}_2) \to ([0,\infty], \mathcal{B}_{[0,\infty]})$, the function defined by
+$$x \mapsto \int_{S_2} f(y) \, q(x, \mathrm{d}y)$$
+is $(\mathcal{B}_1, \mathcal{B}_{\mathbb{R}})$-measurable.
+:::
+
+:::{.proof}
+## Proof of @prp-kernel-integration
+See @lem-kernel-measurability.
+:::
+
+**Some Observations**:
+
+- For each fixed $x \in S_1$, $q(x,\cdot)$ is a probability measure on $(S_2,\mathcal B_2)$. Thus
+$$ 
+\int_{S_2}f(y)\,q(x,\mathrm dy) 
+$$
+is simply the expectation of $f(Y)$ when $Y$ has distribution $q(x,\cdot)$. The nontrivial part of the proposition is that this expectation varies measurably with $x$.
+
+- For example, if $f=\mathbf 1_B$, then
+$$ 
+\int_{S_2}\mathbf 1_B(y)\,q(x,\mathrm dy) =q(x,B), 
+$$
+which is measurable in $x$ by the definition of a kernel. The proposition extends this basic property from indicator functions to arbitrary bounded measurable or nonnegative measurable functions, essentially through the usual approximation arguments for measurable functions.
+
+- In particular, if $X$ is an $S_1$-valued random variable and $q(X,\cdot)$ represents the conditional distribution of $Y$ given $X$, then
+$$ 
+x\mapsto \int f(y)\,q(x,\mathrm dy) 
+$$
+is the conditional expectation function $\mathbb{E}[f(Y)\mid X=x]$.
+
+
+The following result says that a measurable family of probability densities automatically generates a probability kernel.
+
+::: {#exm-density-kernel}
+## Kernel Defined via Joint/Conditional Density
+Let $\nu_2$ be a $\sigma$-finite measure on $(S_2, \mathcal{B}_2)$. If $q_0: S_1 \times S_2 \to [0,\infty)$ is $(\mathcal{B}_1 \otimes \mathcal{B}_2)$-measurable and $\int_{S_2} q_0(x, y) \, \nu_2(\mathrm{d}y) = 1$ for all $x \in S_1$, then
+$$q(x, B) = \int_{B} q_0(x, y) \, \nu_2(\mathrm{d}y)$$
+defines a probability kernel from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$.
+
+There are two properties to verify: (i) $q(x,\cdot)$ is a probability measure.
+For fixed $x$, $y\mapsto q_0(x,y)$ is measurable, and therefore
+$$ 
+B\mapsto\int_B q_0(x,y)\,\nu_2(\mathrm dy) 
+$$
+is a measure. Moreover,
+$$ 
+q(x,S_2) = \int_{S_2}q_0(x,y)\,\nu_2(\mathrm dy) =1. 
+$$
+Hence $q(x,\cdot)$ is a probability measure.
+
+(ii) $x\mapsto q(x,B)$ is measurable. For fixed $B\in\mathcal B_2$,
+$$ 
+q(x,B) = \int_{S_2}\mathbf 1_B(y)q_0(x,y)\,\nu_2(\mathrm dy). 
+$$
+Since
+$$ 
+(x,y)\mapsto \mathbf 1_B(y)q_0(x,y) 
+$$
+is $\mathcal B_1\otimes\mathcal B_2$-measurable, the standard measurable-integration theorem implies that $x\mapsto \int_{S_2}\mathbf 1_B(y)q_0(x,y)\,\nu_2(\mathrm dy)$ is $\mathcal B_1$-measurable. Thus $q$ satisfies both defining properties of a probability kernel.
+:::
+
+---
+
+## Regular Conditional Distributions
+
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space. Let $X: (\Omega, \mathcal{F}) \to (S_1, \mathcal{B}_1)$ and $Y: (\Omega, \mathcal{F}) \to (S_2, \mathcal{B}_2)$ be random variables.
+
+::: {#def-rcd}
+## Regular Conditional Distribution
+A probability kernel $q_{Y\vert{}X}$ from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$ is called a **regular conditional distribution of $Y$ given $X$** if for all $B \in \mathcal{B}_2$,
+$$
+\mathbb{P}(Y \in B \mid X) = q_{Y\vert{}X}(X, B) \quad \text{a.s.}
+$${#eq-rcd-def}
+:::
+
+::: {#rem-rcd-existence}
+## Existence of Regular Conditional Distributions
+
+- One point worth stressing in the surrounding exposition is that $q_{Y\mid X}(X,B)$
+is a random variable, whereas $q_{Y\mid X}(x,B)$ is a measurable function of the possible value $x$ of $X$. Thus the kernel provides a measurable family of conditional distributions: $x\longmapsto q_{Y\mid X}(x,\cdot)$. For each $x$, $q_{Y\mid X}(x,\cdot)$ is a probability measure on $S_2$, while as $x$ varies, the probabilities of measurable sets vary measurably. This is precisely why a regular conditional distribution is represented by a kernel, rather than merely by a collection of conditional probabilities.
+
+- If $(S_2, \mathcal{B}_2)$ is a standard Borel space (e.g., a Polish space equipped with its Borel $\sigma$-algebra), then a regular conditional distribution $q_{Y\vert{}X}$ of $Y$ given $X$ always exists; no topological condition on $(S_1, \mathcal{B}_1)$ is required, and the same conclusion holds with $X$ replaced by an arbitrary sub-$\sigma$-algebra $\mathcal{G} \subset \mathcal{F}$.
+:::
+
+::: {#prop-rcd-properties}
+## Disintegration and Expectation
+If $q_{Y\vert{}X}$ is a regular conditional distribution of $Y$ given $X$, then for any $f \in b(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$ (or non-negative measurable $f$),
+$$
+\mathbb{E}[f(X, Y) \mid X] = \int_{S_2} f(X, y) \, q_{Y\vert{}X}(X, \mathrm{d}y) \quad \text{a.s.}
+$${#eq-cond-exp-kernel}
+In particular, taking expectations on both sides yields the disintegration formula:
+$$
+\mathbb{E}[f(X, Y)] = \int_{S_1} \left( \int_{S_2} f(x, y) \, q_{Y\vert{}X}(x, \mathrm{d}y) \right) \mathbb{P}_X(\mathrm{d}x).
+$${#eq-disintegration}
+:::
+
+## Special Cases
+
+1. **Independent Random Variables:**
+   If $X$ and $Y$ are independent with marginal law $\mu_Y = \mathbb{P}_Y$, then the constant kernel $q_{Y\vert{}X}(x,\cdot) := \mu_Y(\cdot)$, independent of $x$, is a regular conditional distribution:
+   $$q_{Y\vert{}X}(x, B) = \mu_Y(B) = \mathbb{P}(Y \in B) \quad \text{for every } x \in S_1.$$
+
+2. **Absolute Continuity with Respect to Product Measures:**
+   Suppose the joint distribution $\mathbb{P}_{(X,Y)}$ is absolutely continuous with respect to $\nu_1 \otimes \nu_2$ with joint density $f_{X,Y}(x,y)$, and let $f_X(x) = \int f_{X,Y}(x,y) \, \nu_2(\mathrm{d}y)$ denote the marginal density. For every $x$ with $f_X(x) > 0$ (a set of full $\mathbb{P}_X$-measure, since $\mathbb{P}_X(\{f_X=0\})=0$):
+   $$q_{Y\vert{}X}(x, B) = \int_{B} \frac{f_{X,Y}(x, y)}{f_X(x)} \, \nu_2(\mathrm{d}y);$$
+   on the remaining $\mathbb{P}_X$-null set $\{f_X = 0\}$, set $q_{Y\vert{}X}(x,\cdot)$ to an arbitrary fixed reference probability measure on $(S_2,\mathcal{B}_2)$, so that $q_{Y\vert{}X}$ is a genuine probability kernel on all of $S_1$.
+
+3. **Discrete Spaces:**
+   If $S_1$ and $S_2$ are countable sets with $\mathcal{B}_1, \mathcal{B}_2$ their power sets, then for any $x \in S_1$ with $\mathbb{P}(X = x) > 0$:
+   $$q_{Y\vert{}X}(x, B) = \sum_{y \in B} \mathbb{P}(Y = y \mid X = x);$$
+   on the remaining (necessarily $\mathbb{P}_X$-null) set of $x$ with $\mathbb{P}(X=x)=0$, set $q_{Y\vert{}X}(x,\cdot)$ to an arbitrary fixed reference probability measure on $S_2$.
+
+---
+
+## Markov Transition Operators
+
+Given a probability kernel $q$ from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$, we associate an operator $Q$ acting on spaces of bounded measurable functions.
+
+::: {#def-transition-operator}
+## Markov Transition Operator
+The **Markov transition operator** associated with kernel $q$ is the operator $Q: \mathcal{B}_b(S_2, \mathcal{B}_2) \to \mathcal{B}_b(S_1, \mathcal{B}_1)$ defined by
+$$
+(Qf)(x) := \int_{S_2} f(y) \, q(x, \mathrm{d}y), \quad x \in S_1.
+$${#eq-operator-def}
+*(Note: This operator is contractive on $\mathcal{B}_b(S_2, \mathcal{B}_2)$, satisfying $\Vert{}Qf\Vert{}_\infty \le \Vert{}f\Vert{}_\infty$.)*
+:::
+
+::: {#thm-operator-characterization}
+## Characterization of Transition Operators
+Let $S_1 = S_2 = S$ and $\mathcal{B}_1 = \mathcal{B}_2 = \mathcal{B}$. An operator $Q: \mathcal{B}_b(S, \mathcal{B}) \to \mathcal{B}_b(S, \mathcal{B})$ is a Markov transition operator (i.e., induced by a unique probability kernel $q$ via $q(x, B) = (Q\mathbb{I}_B)(x)$) if and only if it satisfies the following four conditions:
+
+0. **Linearity:** $Q(\alpha f + \beta g) = \alpha Qf + \beta Qg$ for all $\alpha, \beta \in \mathbb{R}$ and $f, g \in \mathcal{B}_b(S, \mathcal{B})$.
+1. **Preservation of Constants:** $Q(\mathbb{I}_S) = \mathbb{I}_S$.
+2. **Positivity:** $Qf \ge 0$ whenever $f \ge 0$.
+3. **Bounded Pointwise Continuity:** If $f_n \to f$ pointwise with $\Vert{}f_n\Vert{}_\infty \le C < \infty$ for all $n$, then $Qf_n \to Qf$ pointwise. (The bound $\Vert{}Qf_n\Vert{}_\infty \le C$ is automatic from conditions 0–2 and need not be imposed separately.)
+:::
+
+::: {.proof}
+$(\Longrightarrow)$ If $Q$ is defined via @eq-operator-def, properties (0)–(3) follow directly from the properties of Lebesgue integration with respect to the probability measures $q(x, \cdot)$.
+
+$(\Longleftarrow)$ Conversely, given such an operator $Q$, define $q(x, B) := (Q\mathbb{I}_B)(x)$ for $x \in S$ and $B \in \mathcal{B}$. Property (1) implies $q(x, S) = 1$, property (2) implies $q(x, B) \ge 0$, and property (3) together with countable additivity of indicator functions ensures that $B \mapsto q(x, B)$ is a countably additive probability measure. Since $Q$ maps $\mathcal{B}_b(S, \mathcal{B})$ into $\mathcal{B}_b(S, \mathcal{B})$, $x \mapsto q(x, B)$ is $\mathcal{B}$-measurable. Linearity extends the identity $(Qf)(x) = \int f(y)\,q(x,\mathrm{d}y)$ from indicators to simple functions, and condition (3) together with dominated convergence for the finite measure $q(x,\cdot)$ extend it to every $f \in \mathcal{B}_b(S, \mathcal{B})$.
+:::
+
+---
+
+## Composition of Operators and Action on Measures
+A probability kernel $q: S_1 \times \mathcal{B}_2 \to [0, 1]$ acts on probability measures $\nu \in \mathcal{P}(S_1, \mathcal{B}_1)$ on the left to produce a probability measure $\nu q \in \mathcal{P}(S_2, \mathcal{B}_2)$:
+
+$$
+(\nu q)(B) := \int_{S_1} q(x, B) \, \nu(\mathrm{d}x), \quad B \in \mathcal{B}_2.
+$${#eq-measure-kernel-action}
+
+::: {#lem-uniqueness-measure-kernel}
+Suppose $\mathcal{B}_2$ is countably generated, and $q_1, q_2$ are two probability kernels from $(S_1,\mathcal{B}_1)$ to $(S_2,\mathcal{B}_2)$ such that, for every $B \in \mathcal{B}_2$,
+$$q_1(x, B) = q_2(x, B) \quad \text{for } \nu\text{-almost every } x \in S_1$$
+(the exceptional $\nu$-null set may a priori depend on $B$). Then there is a single $\nu$-null set $N \subset S_1$ such that
+$$q_1(x, \cdot) = q_2(x, \cdot) \quad \text{for every } x \notin N.$$
+:::
+
+**Note**: The weaker hypothesis $\nu q_1 = \nu q_2$, i.e. equality only of the pushed-forward measures $(\nu q_i)(B) := \int_{S_1} q_i(x,B)\,\nu(\mathrm{d}x)$, does **not** suffice. Example: on $S_1=S_2=\{1,2\}$ with $\nu = \tfrac12\delta_1+\tfrac12\delta_2$, the kernels $q_1(1,\cdot)=\delta_1,\ q_1(2,\cdot)=\delta_2$ and $q_2(1,\cdot)=\delta_2,\ q_2(2,\cdot)=\delta_1$ satisfy $\nu q_1 = \nu q_2 = \tfrac12\delta_1+\tfrac12\delta_2$, yet $q_1(x,\cdot) \ne q_2(x,\cdot)$ for every $x$.
+
+
+:::{#def-composition-operators}
+## Composition of Transition Operators
+Given two transition operators $Q_1: \mathcal{B}_b(S_2,\mathcal{B}_2) \to \mathcal{B}_b(S_1,\mathcal{B}_1)$ and $Q_2: \mathcal{B}_b(S_3,\mathcal{B}_3) \to \mathcal{B}_b(S_2,\mathcal{B}_2)$ induced by kernels $q_1$ and $q_2$, their composition $Q_1 Q_2: \mathcal{B}_b(S_3,\mathcal{B}_3) \to \mathcal{B}_b(S_1,\mathcal{B}_1)$ is defined by:
+$$
+\begin{aligned}
+(Q_1 Q_2 f)(x) &= \int_{S_2} q_1(x, \mathrm{d}y) \int_{S_3} f(z) \, q_2(y, \mathrm{d}z)\\
+& = \int_{S_3} f(z) \, (q_1 q_2)(x, \mathrm{d}z).
+\end{aligned}
+$${#eq-operator-composition}
+
+where $(q_1 q_2)(x, C) := \int_{S_2} q_2(y, C) \, q_1(x, \mathrm{d}y)$ is the Chapman–Kolmogorov composition kernel.
+:::
+
+:::{#exm-composition-operators}
+## A two-step Markov transition
+
+Let $S_1=S_2=S_3=\{0,1\}$. Suppose the first transition $q_1$ is given by
+$$ 
+q_1(0,\{0\})=0.8,\, q_1(0,\{1\})=0.2,\, q_1(1,\{0\})=0.3,\, q_1(1,\{1\})=0.7. 
+$$
+Thus its transition matrix is
+$$ 
+P_1= 
+\begin{pmatrix} 
+0.8&0.2\\ 
+0.3&0.7 
+\end{pmatrix}. 
+$$
+Suppose the second transition $q_2$ is
+$$ 
+q_2(0,\{0\})=0.6,\, q_2(0,\{1\})=0.4,\, q_2(1,\{0\})=0.1,\, q_2(1,\{1\})=0.9, 
+$$
+with transition matrix
+$$
+P_2= 
+\begin{pmatrix} 0.6&0.4\\ 
+0.1&0.9 
+\end{pmatrix}. 
+$$
+So the system evolves as $X_1\overset{q_1}{\longrightarrow}X_2 \overset{q_2}{\longrightarrow}X_3$. According to the definition,
+$$ 
+(q_1q_2)(x,C) = \int_{S_2}q_2(y,C)\,q_1(x,\mathrm dy). 
+$$
+Since $S_2=\{0,1\}$, this is simply
+$$ 
+(q_1q_2)(x,C) = q_2(0,C)q_1(x,\{0\}) + q_2(1,C)q_1(x,\{1\}). 
+$$
+For example, starting from $x=0$, the probability of ending at $0$ after two transitions is
+$$ 
+\begin{aligned} 
+(q_1q_2)(0,\{0\}) &= q_1(0,\{0\})q_2(0,\{0\}) + q_1(0,\{1\})q_2(1,\{0\})\\ 
+&=(0.8)(0.6)+(0.2)(0.1)\\ 
+&=0.50. 
+\end{aligned} 
+$$
+Similarly,
+$$ 
+(q_1q_2)(0,\{1\}) =(0.8)(0.4)+(0.2)(0.9) =0.50. 
+$$
+For $x=1$,
+$$ 
+(q_1q_2)(1,\{0\}) =(0.3)(0.6)+(0.7)(0.1) =0.25, 
+$$
+and therefore $(q_1q_2)(1,\{1\})=0.75$. Hence the composition kernel has transition matrix
+$$ 
+P_1P_2 = 
+\begin{pmatrix} 
+0.8&0.2\\ 
+0.3&0.7 
+\end{pmatrix} 
+\begin{pmatrix} 
+0.6&0.4\\ 
+0.1&0.9 
+\end{pmatrix} = 
+\begin{pmatrix} 
+0.50&0.50\\ 
+0.25&0.75 
+\end{pmatrix}. 
+$$
+Now look at the transition operators.Take a bounded function $f:S_3\to\mathbb R$, say
+$f(0)=2$ and $f(1)=5$. The operator $Q_2$ first transforms $f$ into a function on $S_2$:
+$$ 
+(Q_2f)(y) = \sum_{z\in S_3}f(z)q_2(y,\{z\}). 
+$$
+Thus $(Q_2f)(0) =(2)(0.6)+(5)(0.4) =3.2$, while $(Q_2f)(1) =(2)(0.1)+(5)(0.9) =4.7$. Then $Q_1$ acts on this new function:
+$$ 
+(Q_1Q_2f)(x) = \sum_{y\in S_2}(Q_2f)(y)q_1(x,\{y\}). 
+$$
+For $x=0$, 
+$$ 
+\begin{aligned} 
+(Q_1Q_2f)(0) &=(3.2)(0.8)+(4.7)(0.2)\\ 
+&=3.5. 
+\end{aligned} 
+$$
+But using the composition kernel directly,
+$$ 
+\begin{aligned} 
+\int_{S_3}f(z)(q_1q_2)(0,\mathrm dz) &=(2)(0.50)+(5)(0.50)\\ 
+&=3.5. 
+\end{aligned} 
+$$
+So we have explicitly verified
+$$ 
+\boxed{ (Q_1Q_2f)(x) = \int_{S_3}f(z)(q_1q_2)(x,\mathrm dz). } 
+$$
+This example makes the definition particularly intuitive. If $X_1=0$, then there are two possible paths to $X_3$: $0\longrightarrow0\longrightarrow0$ with probability
+$(0.8)(0.6)=0.48$, and $0\longrightarrow1\longrightarrow0$ with probability
+$(0.2)(0.1)=0.02$. Adding these gives $P(X_3=0\mid X_1=0)=0.48+0.02=0.50$. 
+
+The composition kernel $q_1q_2$ simply sums over all possible intermediate states.
+Likewise, the operator composition says that the expected value of $f(X_3)$, conditional on $X_1=x$, can be computed in two stages:
+$$ 
+\boxed{ \mathbb E[f(X_3)\mid X_1=x] = \mathbb E\!\left[ \mathbb E[f(X_3)\mid X_2] \mid X_1=x \right]. } 
+$$
+That is the operator version of the Chapman–Kolmogorov idea.
+:::
+
+
+---
+
+## Extension to Finite-Dimensional Product Distributions
+
+Let $q_1, q_2, \dots, q_n$ be a sequence of probability kernels where, for $k = 1, \dots, n$, $q_k: S_k \times \mathcal{B}_{k+1} \to [0, 1]$ is a probability kernel from $(S_k, \mathcal{B}_k)$ to $(S_{k+1}, \mathcal{B}_{k+1})$. Given an initial probability distribution $\nu \in \mathcal{P}(S_1, \mathcal{B}_1)$, we define a unique probability measure $\mu$ on the finite product space $(S_1 \times \dots \times S_{n+1}, \mathcal{B}_1 \otimes \dots \otimes \mathcal{B}_{n+1})$ via iterated integration:
+
+$$
+\begin{aligned} 
+&\int_{S_1 \times \dots \times S_{n+1}} f(x_1, \dots, x_{n+1}) \, \mu(\mathrm{d}x_1, \dots, \mathrm{d}x_{n+1}) := \\ 
+&\int_{S_1} \nu(\mathrm{d}x_1) \int_{S_2} q_1(x_1, \mathrm{d}x_2) \int_{S_3} q_2(x_2, \mathrm{d}x_3) \dots \int_{S_{n+1}} f(x_1, \dots, x_{n+1}) \, q_n(x_n, \mathrm{d}x_{n+1}). 
+\end{aligned}
+$${#eq-product-measure-kernel}
+
+::: {#prp-product-tensor-eval}
+For product functions $f(x_1, \dots, x_{n+1}) = f_1(x_1) f_2(x_2) \cdots f_{n+1}(x_{n+1})$ with $f_k \in \mathcal{B}_b(S_k,\mathcal{B}_k)$, expression @eq-product-measure-kernel simplifies in operator notation to:
+$$
+\int f \, \mathrm{d}\mu = \mathbb{E}_\nu \left[ f_1 Q_1 \left( f_2 Q_2 \left( f_3 \dots Q_n(f_{n+1}) \dots \right) \right) \right].
+$${#eq-operator-tensor-eval}
+:::
+
+---
+
+## Takeaways
+
+* **Notation.** A probability kernel is denoted $q$ (not $Q$); its associated Markov transition operator is denoted $Q$ (not $L$), with $(Qf)(x) = \int_{S_2} f(y)\,q(x,\mathrm{d}y)$.
+* **Kernels vs. operators.** A probability kernel $q$ and its transition operator $Q$ carry the same information: $q(x,B) = (Q\mathbb{I}_B)(x)$, and $Q$ is recovered from $q$ by integration (@eq-operator-def). @thm-operator-characterization shows $Q$ is exactly a Markov transition operator iff it is linear, unit-preserving, positive, and continuous under bounded pointwise limits — the last property is what forces $q(x,\cdot)$ to be countably additive, not merely finitely additive.
+* **Regular conditional distributions are kernels.** A regular conditional distribution $q_{Y\vert X}$ is a probability kernel satisfying $\mathbb{P}(Y \in B \mid X) = q_{Y\vert X}(X,B)$ a.s. (@def-rcd). Existence is guaranteed whenever the space $Y$ takes values in is standard Borel; no topological condition on the space of $X$ is needed. Explicit constructions are available in the independent, density, and discrete cases, with the kernel extended arbitrarily off the (necessarily $\mathbb{P}_X$-null) degenerate set.
+* **Uniqueness is subtle.** Two kernels that induce the same action on a measure $\nu$ (i.e. $\nu q_1 = \nu q_2$) need **not** agree $\nu$-a.e. (@lem-uniqueness-measure-kernel). Genuine a.e.-uniqueness requires the stronger hypothesis that $q_1(x,B) = q_2(x,B)$ for $\nu$-a.e. $x$, *for every* $B$ — this is the condition that actually arises when comparing two regular conditional distributions of the same $Y$ given $X$.
+* **Composition and disintegration.** Kernels compose via the Chapman–Kolmogorov formula $(q_1q_2)(x,C) = \int_{S_2} q_2(y,C)\,q_1(x,\mathrm{d}y)$, dually to operator composition $Q_1Q_2$. Iterating kernels $q_1,\dots,q_n$ against an initial law $\nu$ builds a unique finite-dimensional product measure (@eq-product-measure-kernel), which on product functions collapses to the nested operator expression $\mathbb{E}_\nu[f_1 Q_1(f_2 Q_2(\cdots Q_n(f_{n+1})\cdots))]$ (@prp-product-tensor-eval) — the finite-dimensional precursor to the Markov semigroup construction used in later lectures.

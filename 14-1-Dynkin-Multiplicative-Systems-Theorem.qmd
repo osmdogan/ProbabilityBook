@@ -1,0 +1,179 @@
+# Lecture 14.1: Dynkin's Multiplicative Systems Theorem
+
+## Bounded Convergence and Function Spaces
+
+Let $(\Omega, \mathcal{F})$ be a measurable space.
+
+::: {#def-bounded-convergence}
+A set $\mathbb{H}$ of $\mathbb{R}$-valued functions on $\Omega$ is **closed under bounded convergence** if for every sequence $\{f_n\} \subset \mathbb{H}$ satisfying:
+
+1. **Uniform Boundedness:** $\exists M < \infty$ such that $|f_n(\omega)| \le M$ for all $n \in \mathbb{N}$ and all $\omega \in \Omega$;
+2. **Pointwise Convergence:** $\lim_{n \to \infty} f_n(\omega) = f(\omega) \in \mathbb{R}$ for all $\omega \in \Omega$;
+
+the limit function $f$ belongs to $\mathbb{H}$ ($f \in \mathbb{H}$).
+:::
+
+* **Notation:** $\mathbb{B}(\Omega, \mathcal{F}, \mathbb{R}) \triangleq \{ f: \Omega \to \mathbb{R} \mid f \text{ is } \mathcal{F}\text{-measurable and bounded} \}$. When $\mathcal{F} = 2^\Omega$, we write $\mathbb{B}(\Omega) \triangleq \mathbb{B}(\Omega, 2^\Omega, \mathbb{R})$. 
+
+* **Non-Examples:** The spaces $C_c(\mathbb{R})$ (compactly supported continuous functions) and $C_b(\mathbb{R})$ (bounded continuous functions) are **not** closed under bounded convergence.
+
+---
+
+## Trapezoidal Approximation in $C_c(\mathbb{R})$
+
+To demonstrate why $C_c(\mathbb{R})$ is not closed under bounded convergence, approximate the indicator function $\mathbf{1}_{(a, b]}$ by a sequence of trapezoidal continuous functions $\psi_n \in C_c(\mathbb{R})$:
+
+$$
+\psi_n(x) \triangleq \begin{cases}
+0 & \text{if } x \le a \text{ or } x \ge b + \frac{1}{n}, \\
+n(x - a) & \text{if } a \le x \le a + \frac{1}{n}, \\
+1 & \text{if } a + \frac{1}{n} \le x \le b, \\
+1 - n\left(x - b\right) & \text{if } b \le x \le b + \frac{1}{n}.
+\end{cases}
+$$ {#eq-trapezoid-def}
+
+### Properties of the Sequence
+
+1. **Continuity:** For each fixed $n \in \mathbb{N}$, $\psi_n \in C_c(\mathbb{R})$. At $x = b$, the left-hand limit is $\lim_{x \to b^-} \psi_n(x) = 1$ and the right-hand limit is $\lim_{x \to b^+} (1 - n(x - b)) = 1$, matching $\psi_n(b) = 1$.
+2. **Uniform Boundedness:** $|\psi_n(x)| \le 1$ for all $x \in \mathbb{R}$ and all $n \in \mathbb{N}$.
+
+### Proof of Pointwise Convergence $\psi_n(x) \to \mathbf{1}_{(a, b]}(x)$
+
+We verify $\lim_{n \to \infty} \psi_n(x) = \mathbf{1}_{(a, b]}(x)$ by partitioning $\mathbb{R}$ into four cases:
+
+* **Case 1 ($x \le a$):** For all $n \in \mathbb{N}$, $\psi_n(x) = 0$. Thus, $\lim_{n \to \infty} \psi_n(x) = 0 = \mathbf{1}_{(a, b]}(x)$.
+* **Case 2 ($x \in (a, b)$):** Since $x - a > 0$, by the Archimedean property choose $N \in \mathbb{N}$ such that $\frac{1}{N} < x - a$. For all $n \ge N$, $a + \frac{1}{n} < x \le b$, so $\psi_n(x) = 1$. Thus, $\lim_{n \to \infty} \psi_n(x) = 1 = \mathbf{1}_{(a, b]}(x)$.
+* **Case 3 ($x = b$):** For all $n$ sufficiently large such that $\frac{1}{n} \le b - a$, $a + \frac{1}{n} \le b$, so $\psi_n(b) = 1$. Thus, $\lim_{n \to \infty} \psi_n(b) = 1 = \mathbf{1}_{(a, b]}(b)$.
+* **Case 4 ($x > b$):** Since $x - b > 0$, choose $N \in \mathbb{N}$ such that $\frac{1}{N} < x - b$. For all $n \ge N$, $x > b + \frac{1}{n}$, so $\psi_n(x) = 0$. Thus, $\lim_{n \to \infty} \psi_n(x) = 0 = \mathbf{1}_{(a, b]}(x)$.
+
+Since the pointwise limit $\mathbf{1}_{(a, b]}$ has jump discontinuities at $x = a$ and $x = b$, $\mathbf{1}_{(a, b]} \notin C_c(\mathbb{R})$, establishing that $C_c(\mathbb{R})$ is not closed under bounded convergence.
+
+---
+
+## Dynkin's Multiplicative Systems Theorem
+
+::: {#def-multiplicative-system}
+A collection $\mathbb{M}$ of $\mathbb{R}$-valued bounded functions on $\Omega$ is a **multiplicative system** if:
+$$
+f, g \in \mathbb{M} \implies f \cdot g \in \mathbb{M}
+$$ {#eq-mult-system-def}
+:::
+
+* **Notation:** If $\mathbb{M}$ is any subset of $\mathbb{B}(\Omega,2^\Omega,\mathbb{R})$, let $\mathbb{H}(\mathbb{M})$ denote the smallest subspace of bounded functions on $\Omega$ which contains $\mathbb{M}\cup \{1\}$, and is closed under bounded convergence.
+
+::: {#thm-dynkin-multiplicative-system}
+## Dynkin's Multiplicative Systems Theorem
+
+Let $\mathbb{H} \subseteq \mathbb{B}(\Omega,2^\Omega,\mathbb{R})$ be a vector subspace containing the constant function $1$ and closed under bounded convergence. Let $\mathbb{M} \subseteq \mathbb{H}$ be a multiplicative system. Then $\mathbb{H}$ contains all bounded $\sigma(\mathbb{M})$-measurable functions:
+$$
+\mathbb{B}(\Omega, \sigma(\mathbb{M}), \mathbb{R}) \subseteq \mathbb{H}
+$$ {#eq-dynkin-inclusion}
+
+In particular, $\mathbb{H}(\mathbb{M}) = \mathbb{B}(\Omega, \sigma(\mathbb{M}), \mathbb{R})$.
+:::
+
+---
+
+## Applications and Corollaries
+
+::: {#cor-cc-closure}
+Let $\mathbb{H}(C_c(\mathbb{R}))$ denote the smallest subspace closed under bounded convergence containing $C_c(\mathbb{R}) \cup \{1\}$. The bounded convergence closure of $C_c(\mathbb{R}) \cup \{1\}$ equals the set of all bounded Borel-measurable functions:
+$$
+\mathbb{H}(C_c(\mathbb{R})) = \mathbb{B}(\mathbb{R}, \mathcal{B}(\mathbb{R}), \mathbb{R})
+$$ {#eq-cc-closure}
+:::
+
+::: {.proof}
+## Proof of @cor-cc-closure
+
+1. $C_c(\mathbb{R})$ is a multiplicative system because the product of two continuous compactly supported functions is continuous and compactly supported.
+2. Continuous functions generate the Borel $\sigma$-algebra: $\sigma(C_c(\mathbb{R})) = \mathcal{B}(\mathbb{R})$ because interval indicators $\mathbf{1}_{(a, b]}$ can be obtained via pointwise limits of $\psi_n \in C_c(\mathbb{R})$.
+3. Applying Dynkin's Theorem to $\mathbb{M} = C_c(\mathbb{R})$ yields $\mathbb{H}(C_c(\mathbb{R})) = \mathbb{B}(\mathbb{R}, \sigma(C_c(\mathbb{R})), \mathbb{R}) = \mathbb{B}(\mathbb{R}, \mathcal{B}(\mathbb{R}), \mathbb{R})$.
+:::
+
+::: {#cor-uniqueness-of-measures}
+Let $\mu$ and $\nu$ be Borel probability measures on $\mathbb{R}$. If
+$$
+\int_{\mathbb{R}} f \, d\mu = \int_{\mathbb{R}} f \, d\nu \quad \forall f \in C_c(\mathbb{R})
+$$ {#eq-measure-agree-cc}
+then $\mu = \nu$ on $\mathcal{B}(\mathbb{R})$.
+:::
+
+::: {.proof}
+## Proof of @cor-uniqueness-of-measures
+Define $\mathbb{H} \triangleq \left\{ g \in \mathbb{B}(\mathbb{R}, \mathcal{B}(\mathbb{R}), \mathbb{R}) \;\middle|\; \int_{\mathbb{R}} g \, d\mu = \int_{\mathbb{R}} g \, d\nu \right\}$.
+
+1. $\mathbb{H}$ is a linear subspace containing $1$ (since $\mu(\mathbb{R}) = \nu(\mathbb{R}) = 1$).
+2. By the Dominated Convergence Theorem, $\mathbb{H}$ is closed under bounded convergence.
+3. Since $\mathbb{M} = C_c(\mathbb{R}) \subseteq \mathbb{H}$ is a multiplicative system, Dynkin's Theorem implies $\mathbb{H} \supseteq \mathbb{B}(\mathbb{R}, \mathcal{B}(\mathbb{R}), \mathbb{R})$.
+4. Taking $g = \mathbf{1}_B$ for any $B \in \mathcal{B}(\mathbb{R})$ gives $\mu(B) = \nu(B)$.
+:::
+
+---
+
+## Proof of Dynkin's Multiplicative Systems Theorem
+
+Without loss of generality, assume $\mathbb{H} = \mathbb{H}(\mathbb{M})$.
+
+### Step 1: $\mathbb{H}$ Is an Algebra of Functions
+
+$\mathbb{H}$ is already a vector space containing $1$; we must show it is closed under pointwise multiplication. For any $f \in \mathbb{H}$, define:
+$$
+\mathbb{H}^f \triangleq \{ g \in \mathbb{H} \mid f \cdot g \in \mathbb{H} \}
+$$ {#eq-hf-def}
+
+* $\mathbb{H}^f \subseteq \mathbb{H}$ is a linear subspace.
+* $\mathbb{H}^f$ is closed under bounded convergence: if $g_n \in \mathbb{H}^f$ with $|g_n| \le M$ and $g_n \to g$, then $f \cdot g_n \to f \cdot g$ boundedly, so $f \cdot g \in \mathbb{H} \implies g \in \mathbb{H}^f$.
+* If $f \in \mathbb{M}$, then $\mathbb{M} \subseteq \mathbb{H}^f$ (since $\mathbb{M}$ is a multiplicative system). Thus $\mathbb{H}(\mathbb{M}) \subseteq \mathbb{H}^f \subseteq \mathbb{H}$, which implies $\mathbb{H}^f = \mathbb{H}$ for all $f \in \mathbb{M}$.
+* Repeating the argument for an arbitrary $f \in \mathbb{H}$, we conclude $\mathbb{H}^f = \mathbb{H}$ for all $f \in \mathbb{H}$. Hence $\mathbb{H}$ is an algebra.
+
+
+### Step 2: Collection of Sets $\mathcal{F}_0$ Forms a $\sigma$-Algebra
+
+Define $\mathcal{F}_0 \triangleq \{ A \subseteq \Omega \mid \mathbf{1}_A \in \mathbb{H} \}$.
+
+1. **Empty Set and Whole Space:** $\mathbf{1}_\emptyset = 0 \in \mathbb{H}$ and $\mathbf{1}_\Omega = 1 \in \mathbb{H} \implies \emptyset, \Omega \in \mathcal{F}_0$.
+2. **Complements:** If $A \in \mathcal{F}_0$, then $\mathbf{1}_{A^c} = 1 - \mathbf{1}_A \in \mathbb{H} \implies A^c \in \mathcal{F}_0$.
+3. **Intersections:** If $A, B \in \mathcal{F}_0$, then $\mathbf{1}_{A \cap B} = \mathbf{1}_A \cdot \mathbf{1}_B \in \mathbb{H}$ (since $\mathbb{H}$ is an algebra) $\implies A \cap B \in \mathcal{F}_0$.
+4. **Countable Unions:** If $A_n \in \mathcal{F}_0$ with $A_n \uparrow A$, then $\mathbf{1}_{A_n} \to \mathbf{1}_A$ boundedly $\implies \mathbf{1}_A \in \mathbb{H} \implies A \in \mathcal{F}_0$.
+
+Because $\mathcal{F}_0$ is an algebra of sets that is closed under countable increasing unions, $\mathcal{F}_0$ is a $\sigma$-algebra.
+
+---
+
+### Step 3: $\mathbb{B}(\Omega, \mathcal{F}_0) \subseteq \mathbb{H}$
+
+Since $\mathcal{F}_0$ is a $\sigma$-algebra, every simple $\mathcal{F}_0$-measurable function $\varphi = \sum_{j=1}^k c_j \mathbf{1}_{A_j}$ ($A_j \in \mathcal{F}_0$) belongs to $\mathbb{H}$.
+
+For any non-negative bounded $\mathcal{F}_0$-measurable function $f$, there exists a sequence of simple functions $\varphi_n \uparrow f$ boundedly. Since $\mathbb{H}$ is closed under bounded convergence, $f \in \mathbb{H}$. Splitting general $f = f^+ - f^-$ shows $\mathbb{B}(\Omega, \mathcal{F}_0) \subseteq \mathbb{H}$.
+
+---
+
+### Step 4: $\sigma(\mathbb{M}) \subseteq \mathcal{F}_0$
+
+We have $\sigma(\mathbb{M}) = \sigma\left( \bigcup_{f \in \mathbb{M}} f^{-1}((a, \infty)) \right)$. It suffices to show that for any $f \in \mathbb{M}$ and $a \in \mathbb{R}$, $\{ f > a \} \in \mathcal{F}_0$, i.e., $\mathbf{1}_{\{f > a\}} \in \mathbb{H}$.
+
+Let $f \in \mathbb{M}$. Since $f$ is bounded, choose $K < \infty$ such that $f(\Omega) \subseteq [-K, K]$.
+
+1. For each $n \in \mathbb{N}$, define the continuous cut-off function $\psi_n: [-K, K] \to [0, 1]$ by:
+   $$
+   \psi_n(x) \triangleq 0 \vee \big(n(x - a) \wedge 1\big)
+   $$
+2. By the Stone-Weierstrass Theorem, $\psi_n$ can be uniformly approximated on $[-K, K]$ by polynomial functions. That is, for each $n$, there exists a sequence of polynomials $\{p_{n, k}\}_{k=1}^\infty$ such that $p_{n, k} \to \psi_n$ uniformly on $[-K, K]$ as $k \to \infty$.
+3. Since $\mathbb{H}$ is an algebra containing $1$, $p_{n, k}(f) \in \mathbb{H}$ for all $k$.
+4. Uniform convergence implies $p_{n, k}(f(\omega)) \to \psi_n(f(\omega))$ boundedly on $\Omega$ as $k \to \infty$. Since $\mathbb{H}$ is closed under bounded convergence, $\psi_n(f) \in \mathbb{H}$ for every $n$.
+5. As $n \to \infty$, $\psi_n(x) \to \mathbf{1}_{(a, \infty)}(x)$ pointwise for all $x \in [-K, K]$. Thus, $\psi_n(f(\omega)) \to \mathbf{1}_{\{f > a\}}(\omega)$ pointwise and boundedly on $\Omega$.
+6. Since $\mathbb{H}$ is closed under bounded convergence, $\mathbf{1}_{\{f > a\}} \in \mathbb{H}$, which implies $\{f > a\} \in \mathcal{F}_0$.
+
+Since sets of the form $\{f > a\}$ generate $\sigma(\mathbb{M})$, it follows that $\sigma(\mathbb{M}) \subseteq \mathcal{F}_0$.
+
+---
+
+### Step 5: Conclusion
+
+From Step 4, $\sigma(\mathbb{M}) \subseteq \mathcal{F}_0$, so $\mathbb{B}(\Omega, \sigma(\mathbb{M})) \subseteq \mathbb{B}(\Omega, \mathcal{F}_0)$. Combining with Step 3:
+$$
+\mathbb{B}(\Omega, \sigma(\mathbb{M})) \subseteq \mathbb{B}(\Omega, \mathcal{F}_0) \subseteq \mathbb{H}(\mathbb{M})
+$$
+
+Conversely, $\mathbb{M} \subseteq \mathbb{B}(\Omega, \sigma(\mathbb{M}))$ and $\mathbb{B}(\Omega, \sigma(\mathbb{M}))$ is closed under bounded convergence, so $\mathbb{H}(\mathbb{M}) \subseteq \mathbb{B}(\Omega, \sigma(\mathbb{M}))$. Hence $\mathbb{H}(\mathbb{M}) = \mathbb{B}(\Omega, \sigma(\mathbb{M}))$. $\blacksquare$

@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>54&nbsp; Lecture 25.2: Fourier Inversion – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./25-3-The-Continuity-Theorem.html" rel="next">
+<link href="./25-1-Riemann-Lebesge-Lemma.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./25-2-Fourier-Inversion.html"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#measure-theoretic-foundations-uniqueness" id="toc-measure-theoretic-foundations-uniqueness" class="nav-link active" data-scroll-target="#measure-theoretic-foundations-uniqueness"><span class="header-section-number">54.1</span> Measure-Theoretic Foundations &amp; Uniqueness</a></li>
+  <li><a href="#lévys-fourier-inversion-theorem" id="toc-lévys-fourier-inversion-theorem" class="nav-link" data-scroll-target="#lévys-fourier-inversion-theorem"><span class="header-section-number">54.2</span> Lévy’s Fourier Inversion Theorem</a></li>
+  <li><a href="#key-technical-lemma-the-sine-integral-trick" id="toc-key-technical-lemma-the-sine-integral-trick" class="nav-link" data-scroll-target="#key-technical-lemma-the-sine-integral-trick"><span class="header-section-number">54.3</span> Key Technical Lemma: The Sine Integral Trick</a></li>
+  <li><a href="#complete-proof-of-lévys-inversion-formula" id="toc-complete-proof-of-lévys-inversion-formula" class="nav-link" data-scroll-target="#complete-proof-of-lévys-inversion-formula"><span class="header-section-number">54.4</span> Complete Proof of Lévy’s Inversion Formula</a></li>
+  <li><a href="#step-1-imaginary-term-cancellation" id="toc-step-1-imaginary-term-cancellation" class="nav-link" data-scroll-target="#step-1-imaginary-term-cancellation"><span class="header-section-number">54.5</span> Step 1: Imaginary Term Cancellation</a></li>
+  <li><a href="#step-2-change-of-variables" id="toc-step-2-change-of-variables" class="nav-link" data-scroll-target="#step-2-change-of-variables"><span class="header-section-number">54.6</span> Step 2: Change of Variables</a></li>
+  <li><a href="#step-3-pointwise-limit-and-dominated-convergence" id="toc-step-3-pointwise-limit-and-dominated-convergence" class="nav-link" data-scroll-target="#step-3-pointwise-limit-and-dominated-convergence"><span class="header-section-number">54.7</span> Step 3: Pointwise Limit and Dominated Convergence</a></li>
+  <li><a href="#continuous-densities-l1-integrable-characteristic-functions" id="toc-continuous-densities-l1-integrable-characteristic-functions" class="nav-link" data-scroll-target="#continuous-densities-l1-integrable-characteristic-functions"><span class="header-section-number">54.8</span> Continuous Densities (<span class="math inline">\(L^1\)</span> Integrable Characteristic Functions)</a></li>
+  <li><a href="#example-1-triangular-density-squared-sinc-characteristic-function" id="toc-example-1-triangular-density-squared-sinc-characteristic-function" class="nav-link" data-scroll-target="#example-1-triangular-density-squared-sinc-characteristic-function"><span class="header-section-number">54.9</span> Example 1: Triangular Density &amp; Squared Sinc Characteristic Function</a>
+  <ul class="collapse">
+  <li><a href="#step-1-compute-characteristic-function-hatgxi" id="toc-step-1-compute-characteristic-function-hatgxi" class="nav-link" data-scroll-target="#step-1-compute-characteristic-function-hatgxi"><span class="header-section-number">54.9.1</span> Step 1: Compute Characteristic Function <span class="math inline">\(\hat{g}(\xi)\)</span></a></li>
+  <li><a href="#step-2-duality-and-inversion" id="toc-step-2-duality-and-inversion" class="nav-link" data-scroll-target="#step-2-duality-and-inversion"><span class="header-section-number">54.9.2</span> Step 2: Duality and Inversion</a></li>
+  </ul></li>
+  <li><a href="#example-2-gaussian-normal-distribution-verification" id="toc-example-2-gaussian-normal-distribution-verification" class="nav-link" data-scroll-target="#example-2-gaussian-normal-distribution-verification"><span class="header-section-number">54.10</span> Example 2: Gaussian / Normal Distribution Verification</a></li>
+  <li><a href="#example-3-laplace-distribution" id="toc-example-3-laplace-distribution" class="nav-link" data-scroll-target="#example-3-laplace-distribution"><span class="header-section-number">54.11</span> Example 3: Laplace Distribution</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/25-2-Fourier-Inversion.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./25-2-Fourier-Inversion.html"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="measure-theoretic-foundations-uniqueness" class="level2" data-number="54.1">
+<h2 data-number="54.1" class="anchored" data-anchor-id="measure-theoretic-foundations-uniqueness"><span class="header-section-number">54.1</span> Measure-Theoretic Foundations &amp; Uniqueness</h2>
+<p>Using <strong>Dynkin’s Complex Multiplicative Systems Theorem</strong> (or the <span class="math inline">\(\pi\)</span>-<span class="math inline">\(\lambda\)</span> System Theorem), we establish that the mapping <span class="math inline">\(\mu \mapsto \hat{\mu}\)</span> from probability measures on <span class="math inline">\((\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))\)</span> to their characteristic functions is <strong>injective</strong>.</p>
+<p>Thus, in principle, a probability measure <span class="math inline">\(\mu\)</span> can be uniquely recovered from its characteristic function <span class="math inline">\(\hat{\mu}(\xi) = \mathbb{E}[e^{i\xi X}] = \int_{\mathbb{R}^d} e^{i\xi x} \mu(dx)\)</span>.</p>
+<hr>
+</section>
+<section id="lévys-fourier-inversion-theorem" class="level2" data-number="54.2">
+<h2 data-number="54.2" class="anchored" data-anchor-id="lévys-fourier-inversion-theorem"><span class="header-section-number">54.2</span> Lévy’s Fourier Inversion Theorem</h2>
+<p>A probability distribution can be completely reconstructed from its characteristic function; Lévy’s inversion formula provides an explicit Fourier-integral formula for recovering its interval probabilities.</p>
+<div id="thm-levy-inversion" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 54.1 (Lévy’s Inversion Theorem)</strong></span> Let <span class="math inline">\(\mu \in \operatorname{Prob}(\mathbb{R}, \mathcal{B}(\mathbb{R}))\)</span> with characteristic function <span class="math inline">\(\hat{\mu}(\xi)\)</span>. For any <span class="math inline">\(a &lt; b\)</span> in <span class="math inline">\(\mathbb{R}\)</span>:</p>
+<p><span class="math display">\[
+\lim_{R \to \infty} \frac{1}{2\pi} \int_{-R}^{R} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \hat{\mu}(\xi) \, d\xi = \mu((a, b)) + \frac{1}{2}\mu(\{a\}) + \frac{1}{2}\mu(\{b\}),
+\]</span> where</p>
+<p><span class="math display">\[
+\mu(\{c\})=\lim_{R \to \infty} \frac{1}{2R} \int_{-R}^{R} e^{-i\xi c} \hat{\mu}(\xi) \, d\xi, \quad c \in \{a, b\}.
+\]</span></p>
+<p>In particular, if <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are continuity points of the cumulative distribution function <span class="math inline">\(F(x) = \mu((-\infty, x])\)</span>, then:</p>
+<p><span class="math display">\[
+\mu((a, b)) = \lim_{R \to \infty} \frac{1}{2\pi} \int_{-R}^{R} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \hat{\mu}(\xi) \, d\xi
+\]</span></p>
+</div>
+<p><strong>Note on Boundedness</strong>: The integrand kernel <span class="math inline">\(\frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} = \int_a^b e^{-i\xi x} dx\)</span> is bounded by <span class="math inline">\(|b - a|\)</span> because <span class="math display">\[
+\left| \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \right| = \left| \int_a^b e^{-i\xi x} dx \right| \le \int_a^b |e^{-i\xi x}| dx = |b - a|.
+\]</span> However, it is generally <strong>not</strong> integrable on <span class="math inline">\(\mathbb{R}\)</span> with respect to Lebesgue measure (<span class="math inline">\(\notin L^1(\mathbb{R})\)</span>), which is why we must compute the symmetric limit as <span class="math inline">\(R \to \infty\)</span>.</p>
+<hr>
+</section>
+<section id="key-technical-lemma-the-sine-integral-trick" class="level2" data-number="54.3">
+<h2 data-number="54.3" class="anchored" data-anchor-id="key-technical-lemma-the-sine-integral-trick"><span class="header-section-number">54.3</span> Key Technical Lemma: The Sine Integral Trick</h2>
+<div id="lem-sine-integral" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 54.1 (Properties of the Sine Integral Function)</strong></span> For <span class="math inline">\(r \ge 0\)</span>, define the sine integral, interpreting <span class="math inline">\(\sin(\xi)/\xi\)</span> at <span class="math inline">\(\xi=0\)</span> by its continuous extension with value <span class="math inline">\(1\)</span>:</p>
+<p><span class="math display">\[
+S(r) := \int_{-r}^{r} \frac{\sin(\xi)}{\xi} \, d\xi = 2 \int_{0}^{r} \frac{\sin(\xi)}{\xi} \, d\xi
+\]</span></p>
+<p>Then <span class="math inline">\(S(r)\)</span> is continuous on <span class="math inline">\([0, \infty)\)</span>, and <span class="math inline">\(\lim_{r \to \infty} S(r) = \pi\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof via the “One Simple Trick”). </span>We express <span class="math inline">\(\frac{1}{\xi}\)</span> as an exponential integral <span class="math inline">\(\int_{0}^{\infty} e^{-\xi t} \, dt = \frac{1}{\xi}\)</span> (for <span class="math inline">\(\xi &gt; 0\)</span>), and substitute directly:</p>
+<p><span class="math display">\[
+\int_{0}^{r} \frac{\sin(\xi)}{\xi} \, d\xi = \int_{0}^{r} \sin(\xi) \left( \int_{0}^{\infty} e^{-\xi t} \, dt \right) d\xi
+\]</span></p>
+<p>By Fubini’s Theorem (justified since <span class="math inline">\(\int_0^r\int_0^\infty e^{-\xi t}|\sin\xi|\,dt\,d\xi \le r &lt; \infty\)</span>):</p>
+<p><span class="math display">\[
+= \int_{0}^{\infty} \left( \int_{0}^{r} e^{-\xi t} \sin(\xi) \, d\xi \right) dt
+\]</span></p>
+<p>Evaluating the inner integral via integration by parts:</p>
+<p><span class="math display">\[
+\int_{0}^{r} e^{-\xi t} \sin(\xi) \, d\xi = \frac{1}{1+t^2} \left[ 1 - e^{-rt}(\cos r + t \sin r) \right]
+\]</span></p>
+<p>Substituting back and recalling <span class="math inline">\(S(r) = 2\int_{0}^{r} \frac{\sin(\xi)}{\xi} \, d\xi\)</span>:</p>
+<p><span class="math display">\[
+S(r) = 2 \int_{0}^{\infty} \frac{1}{1+t^2} \left[ 1 - e^{-rt}(\cos r + t \sin r) \right] dt
+\]</span></p>
+<p>We now let <span class="math inline">\(r\to\infty\)</span>. For every <span class="math inline">\(t&gt;0\)</span>, <span class="math inline">\(e^{-rt}(\cos r+t\sin r)\longrightarrow0\)</span>. Moreover, for <span class="math inline">\(r\ge1\)</span>, <span class="math display">\[
+\left| \frac{e^{-rt}(\cos r+t\sin r)} {1+t^2} \right| \le e^{-t}\frac{1+t}{1+t^2}.
+\]</span> Note that <span class="math inline">\(e^{-t}\frac{1+t}{1+t^2} \le 2 e^{-t}\)</span> for <span class="math inline">\(t \ge 0\)</span>. Thus, <span class="math display">\[
+\int_0^\infty e^{-t}\frac{1+t}{1+t^2}\,dt&lt;\infty.
+\]</span> Hence, by the Dominated Convergence Theorem, <span class="math display">\[
+\int_0^\infty \frac{e^{-rt}(\cos r+t\sin r)}{1+t^2}\,dt \longrightarrow 0.
+\]</span> Therefore, <span class="math display">\[
+\lim_{r \to \infty} S(r) = 2 \int_{0}^{\infty} \frac{1}{1+t^2} \, dt = 2 \left[ \arctan(t) \right]_{0}^{\infty} = 2 \cdot \frac{\pi}{2} = \pi.
+\]</span></p>
+</div>
+<hr>
+</section>
+<section id="complete-proof-of-lévys-inversion-formula" class="level2" data-number="54.4">
+<h2 data-number="54.4" class="anchored" data-anchor-id="complete-proof-of-lévys-inversion-formula"><span class="header-section-number">54.4</span> Complete Proof of Lévy’s Inversion Formula</h2>
+<p>Let <span class="math inline">\(I(R)\)</span> be defined as:</p>
+<p><span class="math display">\[
+I(R) := \frac{1}{2\pi} \int_{-R}^{R} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \hat{\mu}(\xi) \, d\xi
+\]</span></p>
+<p>The quotient at <span class="math inline">\(\xi=0\)</span> is understood by continuous extension, with value <span class="math inline">\(b-a\)</span>. We first record the atom identity used in the theorem. For any <span class="math inline">\(c\in\mathbb R\)</span>, Fubini’s theorem gives <span class="math display">\[
+\begin{align*}
+\frac{1}{2R}\int_{-R}^{R}e^{-i\xi c}\hat\mu(\xi)\,d\xi
+&amp;=\int_{\mathbb R}\frac{1}{2R}\int_{-R}^{R}e^{i\xi(x-c)}\,d\xi\,\mu(dx)\\
+&amp;=\int_{\mathbb R}\frac{\sin(R(x-c))}{R(x-c)}\,\mu(dx),
+\end{align*}
+\]</span> where the quotient is defined to be <span class="math inline">\(1\)</span> at <span class="math inline">\(x=c\)</span>. Its absolute value is at most <span class="math inline">\(1\)</span>, and it converges pointwise to <span class="math inline">\(\mathbf 1_{\{c\}}(x)\)</span>. The Dominated Convergence Theorem therefore yields <span class="math display">\[
+\mu(\{c\})=\lim_{R\to\infty}\frac{1}{2R}\int_{-R}^{R}e^{-i\xi c}\hat\mu(\xi)\,d\xi.
+\]</span></p>
+<p>Substitute <span class="math inline">\(\hat{\mu}(\xi) = \int_{\mathbb{R}} e^{i\xi x} \, \mu(dx)\)</span>:</p>
+<p><span class="math display">\[
+I(R) = \frac{1}{2\pi} \int_{-R}^{R} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \left( \int_{\mathbb{R}} e^{i\xi x} \, \mu(dx) \right) d\xi
+\]</span></p>
+<p>Applying Fubini’s Theorem to swap integration order (justified since <span class="math inline">\(\left|\frac{e^{i\xi(x-a)}-e^{i\xi(x-b)}}{i\xi}\right| \le |b-a|\)</span>, so the double integral over <span class="math inline">\([-R,R]\times\mathbb{R}\)</span> is absolutely bounded by <span class="math inline">\(2R|b-a|\mu(\mathbb{R}) &lt; \infty\)</span>):</p>
+<p><span class="math display">\[
+I(R) = \frac{1}{2\pi} \int_{\mathbb{R}} \left( \int_{-R}^{R} \frac{e^{i\xi(x-a)} - e^{i\xi(x-b)}}{i\xi} \, d\xi \right) \mu(dx)
+\]</span></p>
+</section>
+<section id="step-1-imaginary-term-cancellation" class="level2" data-number="54.5">
+<h2 data-number="54.5" class="anchored" data-anchor-id="step-1-imaginary-term-cancellation"><span class="header-section-number">54.5</span> Step 1: Imaginary Term Cancellation</h2>
+<p>Expanding via Euler’s identity <span class="math inline">\(e^{i\theta} = \cos(\theta) + i\sin(\theta)\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{e^{i\xi(x-a)} - e^{i\xi(x-b)}}{i\xi} &amp;= \frac{\sin(\xi(x-a)) - \sin(\xi(x-b))}{\xi}\\
+&amp; - i \frac{\cos(\xi(x-a)) - \cos(\xi(x-b))}{\xi}
+\end{align*}
+\]</span></p>
+<p>The imaginary part is an odd function of <span class="math inline">\(\xi\)</span>, so its symmetric integral over <span class="math inline">\([-R, R]\)</span> vanishes identically:</p>
+<p><span class="math display">\[
+\int_{-R}^{R} \frac{\cos(\xi(x-a)) - \cos(\xi(x-b))}{\xi} \, d\xi = 0
+\]</span></p>
+</section>
+<section id="step-2-change-of-variables" class="level2" data-number="54.6">
+<h2 data-number="54.6" class="anchored" data-anchor-id="step-2-change-of-variables"><span class="header-section-number">54.6</span> Step 2: Change of Variables</h2>
+<p>The remaining real integrand becomes:</p>
+<p><span class="math display">\[
+I(R) = \frac{1}{2\pi} \int_{\mathbb{R}} \left( \int_{-R}^{R} \frac{\sin(\xi(x-a)) - \sin(\xi(x-b))}{\xi} \, d\xi \right) \mu(dx)
+\]</span></p>
+<p>For <span class="math inline">\(x\ne a\)</span>, set <span class="math inline">\(u=\xi(x-a)\)</span>. Then <span class="math display">\[
+\frac{\sin(\xi(x-a))}{\xi}\,d\xi=\frac{\sin u}{u}\,du.
+\]</span> If <span class="math inline">\(x-a&lt;0\)</span>, the transformed limits are reversed, which produces the factor <span class="math inline">\(\operatorname{sgn}(x-a)\)</span>. For <span class="math inline">\(x=a\)</span>, the integrand is identically zero. Thus, in all cases:</p>
+<p><span class="math display">\[
+\begin{align*}
+\int_{-R}^{R} \frac{\sin(\xi(x-a))}{\xi} \, d\xi &amp;= \operatorname{sgn}(x-a) \int_{-R|x-a|}^{R|x-a|} \frac{\sin(u)}{u} \, du\\
+&amp;= \operatorname{sgn}(x-a)\, S(R|x-a|)
+\end{align*}
+\]</span></p>
+<p>Thus:</p>
+<p><span class="math display">\[
+I(R) = \frac{1}{2\pi} \int_{\mathbb{R}} \left[ \operatorname{sgn}(x-a) S(R|x-a|) - \operatorname{sgn}(x-b) S(R|x-b|) \right] \mu(dx)
+\]</span></p>
+</section>
+<section id="step-3-pointwise-limit-and-dominated-convergence" class="level2" data-number="54.7">
+<h2 data-number="54.7" class="anchored" data-anchor-id="step-3-pointwise-limit-and-dominated-convergence"><span class="header-section-number">54.7</span> Step 3: Pointwise Limit and Dominated Convergence</h2>
+<p>As <span class="math inline">\(R \to \infty\)</span>, <span class="math inline">\(S(R|y|) \to \pi\)</span> for any <span class="math inline">\(y \neq 0\)</span>. The inner integrand converges pointwise to:</p>
+<p><span class="math display">\[
+\Psi(x) = \lim_{R \to \infty} \frac{1}{2\pi} \left[ \operatorname{sgn}(x-a) S(R|x-a|) - \operatorname{sgn}(x-b) S(R|x-b|) \right]
+\]</span></p>
+<p>Evaluating <span class="math inline">\(\Psi(x)\)</span> region by region:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Interval / Point</th>
+<th style="text-align: center;"><span class="math inline">\(\operatorname{sgn}(x-a)\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\operatorname{sgn}(x-b)\)</span></th>
+<th style="text-align: center;">Limiting Value <span class="math inline">\(\Psi(x)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(x &lt; a\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(-1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(-1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{1}{2\pi} [-\pi - (-\pi)] = 0\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(x = a\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(-1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{1}{2\pi} [0 - (-\pi)] = \frac{1}{2}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(a &lt; x &lt; b\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(-1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{1}{2\pi} [\pi - (-\pi)] = 1\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(x = b\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{1}{2\pi} [\pi - 0] = \frac{1}{2}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(x &gt; b\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{1}{2\pi} [\pi - \pi] = 0\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Since <span class="math inline">\(S\)</span> is continuous on <span class="math inline">\([0,\infty)\)</span> and has the finite limit <span class="math inline">\(\pi\)</span>, it is bounded; write <span class="math inline">\(C:=\sup_{r\ge0}|S(r)|&lt;\infty\)</span>. The integrand in the last display is therefore bounded in absolute value by <span class="math inline">\(C/\pi\)</span>, which is <span class="math inline">\(\mu\)</span>-integrable because <span class="math inline">\(\mu\)</span> is a probability measure. By Lebesgue’s Dominated Convergence Theorem:</p>
+<p><span class="math display">\[
+\lim_{R \to \infty} I(R) = \int_{\mathbb{R}} \Psi(x) \, \mu(dx) = \mu((a, b)) + \frac{1}{2}\mu(\{a\}) + \frac{1}{2}\mu(\{b\}) \quad \blacksquare
+\]</span></p>
+<hr>
+</section>
+<section id="continuous-densities-l1-integrable-characteristic-functions" class="level2" data-number="54.8">
+<h2 data-number="54.8" class="anchored" data-anchor-id="continuous-densities-l1-integrable-characteristic-functions"><span class="header-section-number">54.8</span> Continuous Densities (<span class="math inline">\(L^1\)</span> Integrable Characteristic Functions)</h2>
+<p>If a probability distribution has a sufficiently well-behaved characteristic function—specifically, an integrable characteristic function—then the distribution must have a continuous density, and that density can be recovered explicitly from the characteristic function by Fourier inversion.</p>
+<div id="cor-density-inversion" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 54.1 (Density Inversion Formula)</strong></span> If <span class="math inline">\(\mu \in \operatorname{Prob}(\mathbb{R}, \mathcal{B}(\mathbb{R}))\)</span> and its characteristic function satisfies <span class="math inline">\(\hat{\mu} \in L^1(\mathbb{R})\)</span> (i.e., <span class="math inline">\(\int_{\mathbb{R}} |\hat{\mu}(\xi)| d\xi &lt; \infty\)</span>), then <span class="math inline">\(\mu\)</span> is absolutely continuous with respect to Lebesgue measure (<span class="math inline">\(\mu \ll \lambda\)</span>), and its continuous density function <span class="math inline">\(g(x) = \frac{d\mu}{dx}\)</span> is given by:</p>
+<p><span class="math display">\[
+g(x) = \frac{1}{2\pi} \int_{\mathbb{R}} e^{-i\xi x} \hat{\mu}(\xi) \, d\xi
+\]</span></p>
+</div>
+<p><strong>Some Observations</strong>:</p>
+<ol type="1">
+<li><p>In other words, the corollary establishes the chain <span class="math display">\[
+\boxed{ \hat\mu\in L^1 \quad\Longrightarrow\quad \mu\ll\lambda \quad\Longrightarrow\quad \mu(dx)=g(x)\,dx }
+\]</span> with the density explicitly given by <span class="math display">\[
+\boxed{ g(x)=\frac{1}{2\pi}\int_{\mathbb R}e^{-i\xi x}\hat\mu(\xi)\,d\xi. }
+\]</span></p></li>
+<li><p>So there are really two messages:</p>
+<ul>
+<li><p><strong>Existence</strong>: An integrable characteristic function rules out discrete or singular components; the distribution has a density.</p></li>
+<li><p><strong>Recovery</strong>: The density is not merely known to exist—it can be reconstructed directly from the characteristic function.</p></li>
+</ul></li>
+<li><p>The characteristic function contains the entire distribution. When it is integrable, Fourier inversion allows us to recover the distribution’s density directly. This is the key bridge between characteristic functions and densities.</p></li>
+</ol>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#cor-density-inversion" class="quarto-xref">Corollary&nbsp;<span>54.1</span></a>). </span>Define <span class="math inline">\(g(x) := \frac{1}{2\pi} \int_{\mathbb{R}} e^{-i\xi x} \hat{\mu}(\xi) \, d\xi\)</span>. Since <span class="math inline">\(\hat{\mu} \in L^1(\mathbb{R})\)</span>, <span class="math inline">\(g(x)\)</span> is continuous and bounded by the Riemann-Lebesgue Lemma (<a href="25-1-Riemann-Lebesge-Lemma.html#thm-riemann-lebesgue" class="quarto-xref">Theorem&nbsp;<span>53.1</span></a>) (<span class="math inline">\(g \in C_0(\mathbb{R})\)</span>).</p>
+<p>For every finite interval <span class="math inline">\((a,b)\)</span>, Fubini’s theorem applies because <span class="math display">\[
+\int_a^b\int_{\mathbb R}|e^{-i\xi x}\hat\mu(\xi)|\,d\xi\,dx
+=(b-a)\|\hat\mu\|_{L^1}&lt;\infty.
+\]</span> Therefore,</p>
+<p><span class="math display">\[
+\begin{align*}
+\int_a^b g(x) \, dx &amp;= \int_a^b \left( \frac{1}{2\pi} \int_{\mathbb{R}} e^{-i\xi x} \hat{\mu}(\xi) \, d\xi \right) dx \\
+&amp;= \frac{1}{2\pi} \int_{\mathbb{R}} \left( \int_a^b e^{-i\xi x} dx \right) \hat{\mu}(\xi) \, d\xi \\
+&amp;= \frac{1}{2\pi} \int_{\mathbb{R}} \frac{e^{-i\xi a} - e^{-i\xi b}}{i\xi} \hat{\mu}(\xi) \, d\xi\\
+&amp; = \lim_{R\to\infty}\frac{1}{2\pi}\int_{-R}^{R}\frac{e^{-i\xi a}-e^{-i\xi b}}{i\xi}\hat\mu(\xi)\,d\xi
+\end{align*}
+\]</span> If <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are continuity points of <span class="math inline">\(F\)</span>, Lévy’s inversion theorem gives <span class="math display">\[
+\int_a^b g(x)\,dx=\mu((a,b)).
+\]</span> The discontinuities of the monotone function <span class="math inline">\(F\)</span> are countable. Hence, for arbitrary <span class="math inline">\(a&lt;b\)</span>, choose continuity points <span class="math inline">\(a_n\downarrow a\)</span> and <span class="math inline">\(b_n\uparrow b\)</span> with <span class="math inline">\(a_n&lt;b_n\)</span>. The intervals <span class="math inline">\((a_n,b_n)\)</span> increase to <span class="math inline">\((a,b)\)</span>. Continuity from below gives the result for <span class="math inline">\(\mu\)</span>, while the result for the integral of <span class="math inline">\(g\)</span> follows from the Dominated Convergence Theorem on the bounded interval <span class="math inline">\((a,b)\)</span>, since <span class="math inline">\(g\)</span> is bounded: <span class="math display">\[
+\int_a^b g(x)\,dx=\mu((a,b)).
+\]</span> In particular, the integral of <span class="math inline">\(g\)</span> over every bounded interval is real and nonnegative. Since <span class="math inline">\(g\)</span> is continuous, this implies that <span class="math inline">\(g\)</span> is real-valued and nonnegative everywhere. Letting the intervals increase to <span class="math inline">\(\mathbb R\)</span> gives <span class="math inline">\(\int_{\mathbb R}g\,dx=1\)</span>, so <span class="math inline">\(g\,dx\)</span> is a probability measure. Equality on all bounded intervals then implies <span class="math inline">\(\mu(dx)=g(x)\,dx\)</span> on <span class="math inline">\(\mathcal B(\mathbb R)\)</span>. Thus, <span class="math inline">\(g(x)\)</span> is indeed the density of <span class="math inline">\(\mu\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="example-1-triangular-density-squared-sinc-characteristic-function" class="level2" data-number="54.9">
+<h2 data-number="54.9" class="anchored" data-anchor-id="example-1-triangular-density-squared-sinc-characteristic-function"><span class="header-section-number">54.9</span> Example 1: Triangular Density &amp; Squared Sinc Characteristic Function</h2>
+<p>Consider the continuous triangular density centered at zero:</p>
+<p><span class="math display">\[
+g(x) = (1 - |x|)_+ = \begin{cases} 1 - |x| &amp; \text{if } |x| \le 1 \\ 0 &amp; \text{otherwise} \end{cases}
+\]</span></p>
+<section id="step-1-compute-characteristic-function-hatgxi" class="level3" data-number="54.9.1">
+<h3 data-number="54.9.1" class="anchored" data-anchor-id="step-1-compute-characteristic-function-hatgxi"><span class="header-section-number">54.9.1</span> Step 1: Compute Characteristic Function <span class="math inline">\(\hat{g}(\xi)\)</span></h3>
+<p><span class="math display">\[
+\hat{g}(\xi) = \int_{-1}^{1} (1 - |x|) e^{i\xi x} \, dx = 2 \operatorname{Re} \int_{0}^{1} (1 - x) e^{i\xi x} \, dx
+\]</span></p>
+<p>Using integration by parts:</p>
+<p><span class="math display">\[
+\hat{g}(\xi) = 2 \cdot \frac{1 - \cos(\xi)}{\xi^2} = \left( \frac{\sin(\xi/2)}{\xi/2} \right)^2 = \operatorname{sinc}^2(\xi/2)
+\]</span> where <span class="math inline">\(\operatorname{sinc}(u):=\sin(u)/u\)</span> for <span class="math inline">\(u\ne0\)</span> and <span class="math inline">\(\operatorname{sinc}(0):=1\)</span>.</p>
+</section>
+<section id="step-2-duality-and-inversion" class="level3" data-number="54.9.2">
+<h3 data-number="54.9.2" class="anchored" data-anchor-id="step-2-duality-and-inversion"><span class="header-section-number">54.9.2</span> Step 2: Duality and Inversion</h3>
+<p>By <a href="#cor-density-inversion" class="quarto-xref">Corollary&nbsp;<span>54.1</span></a>, since <span class="math inline">\(\hat{g}(\xi) \in L^1(\mathbb{R})\)</span>:</p>
+<p><span class="math display">\[
+g(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{-i\xi x} \left( \frac{\sin(\xi/2)}{\xi/2} \right)^2 d\xi
+\]</span></p>
+<p>This validates the Fourier inversion duality between triangular densities and squared sinc functions.</p>
+<hr>
+</section>
+</section>
+<section id="example-2-gaussian-normal-distribution-verification" class="level2" data-number="54.10">
+<h2 data-number="54.10" class="anchored" data-anchor-id="example-2-gaussian-normal-distribution-verification"><span class="header-section-number">54.10</span> Example 2: Gaussian / Normal Distribution Verification</h2>
+<p>Let <span class="math inline">\(X \sim \mathcal{N}(0, 1)\)</span> with density <span class="math inline">\(f_X(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}\)</span> and characteristic function <span class="math inline">\(\phi_X(\xi) = e^{-\xi^2/2}\)</span>.</p>
+<p>Since <span class="math inline">\(e^{-\xi^2/2} \in L^1(\mathbb{R})\)</span>, applying density inversion:</p>
+<p><span class="math display">\[
+f_X(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{-i\xi x} e^{-\xi^2/2} \, d\xi
+\]</span></p>
+<p>Define <span class="math display">\[
+J(x):=\int_{\mathbb R}e^{-i\xi x}e^{-\xi^2/2}\,d\xi.
+\]</span> Since <span class="math inline">\(|\xi|e^{-\xi^2/2}\in L^1(\mathbb R)\)</span>, differentiation under the integral sign is justified by the Dominated Convergence Theorem. Thus <span class="math display">\[
+J'(x)=-i\int_{\mathbb R}\xi e^{-i\xi x}e^{-\xi^2/2}\,d\xi.
+\]</span> Using <span class="math inline">\(\frac{d}{d\xi}e^{-\xi^2/2}=-\xi e^{-\xi^2/2}\)</span> and integration by parts, we have <span class="math display">\[
+\begin{aligned}
+\int_{\mathbb R}\xi e^{-i\xi x}e^{-\xi^2/2}\,d\xi &amp;=-\int_{\mathbb R}e^{-i\xi x} \frac{d}{d\xi}e^{-\xi^2/2}\,d\xi\\
+&amp;=-\left[e^{-i\xi x}e^{-\xi^2/2}\right]_{-\infty}^{\infty} -\;ix\int_{\mathbb R}e^{-i\xi x}e^{-\xi^2/2}\,d\xi\\
+&amp;=-ixJ(x).
+\end{aligned}
+\]</span> Therefore <span class="math inline">\(J'(x)=-xJ(x)\implies J(x)=Ce^{-x^2/2}\)</span>. Since <span class="math inline">\(J(0)=\int_{\mathbb R}e^{-\xi^2/2}\,d\xi=\sqrt{2\pi}\)</span>, solving this differential equation gives <span class="math display">\[
+J(x)=\sqrt{2\pi}\,e^{-x^2/2}.
+\]</span> Consequently, <span class="math display">\[
+f_X(x)=\frac{1}{2\pi}J(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}.
+\]</span></p>
+<p>The inverted density matches the target distribution. The particularly nice feature of this example is <span class="math display">\[
+\boxed{ \phi_X(\xi)=e^{-\xi^2/2} \quad\xrightarrow{\text{Fourier inversion}}\quad f_X(x)=\frac1{\sqrt{2\pi}}e^{-x^2/2}. }
+\]</span> Thus, the characteristic function and density are Fourier-transform pairs (up to the <span class="math inline">\(2\pi\)</span> normalization). The Gaussian is especially elegant because the Fourier transform of a Gaussian is another Gaussian.</p>
+<hr>
+</section>
+<section id="example-3-laplace-distribution" class="level2" data-number="54.11">
+<h2 data-number="54.11" class="anchored" data-anchor-id="example-3-laplace-distribution"><span class="header-section-number">54.11</span> Example 3: Laplace Distribution</h2>
+<p>Let <span class="math inline">\(X\)</span> have characteristic function <span class="math inline">\(\phi_X(\xi)=\frac{1}{1+\xi^2}\)</span>. We have <span class="math display">\[
+\int_{\mathbb R}|\phi_X(\xi)|\,d\xi = \int_{-\infty}^{\infty}\frac{1}{1+\xi^2}\,d\xi.
+\]</span> Since <span class="math inline">\(\frac{d}{d\xi}\arctan(\xi)=\frac{1}{1+\xi^2}\)</span>, we obtain <span class="math display">\[
+\begin{aligned} \int_{-\infty}^{\infty}\frac{1}{1+\xi^2}\,d\xi &amp;= \lim_{a\to\infty} \int_{-a}^{a}\frac{1}{1+\xi^2}\,d\xi\\
+&amp;= \lim_{a\to\infty} \left[\arctan(\xi)\right]_{-a}^{a}\\
+&amp;= \lim_{a\to\infty} \left(\arctan(a)-\arctan(-a)\right)\\
+&amp;= \lim_{a\to\infty}2\arctan(a)\\
+&amp;=2\cdot\frac{\pi}{2}=\pi.
+\end{aligned}
+\]</span> Thus, the density inversion formula applies. Therefore <span class="math inline">\(X\)</span> has a continuous density <span class="math display">\[
+f_X(x) = \frac{1}{2\pi} \int_{\mathbb R} \frac{e^{-i\xi x}}{1+\xi^2}\,d\xi.
+\]</span> We can evaluate this integral using the known Fourier transform pair <span class="math display">\[
+\int_{\mathbb R}\frac{e^{-i\xi x}}{1+\xi^2}\,d\xi = \pi e^{-|x|}.
+\]</span> Hence <span class="math inline">\(f_X(x)=\frac12e^{-|x|}\)</span>. Thus the inversion formula recovers the Laplace density directly from its characteristic function: <span class="math display">\[
+\boxed{ \phi_X(\xi)=\frac{1}{1+\xi^2} \quad\Longrightarrow\quad f_X(x)=\frac12e^{-|x|}. }
+\]</span></p>
+<hr>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./25-1-Riemann-Lebesge-Lemma.html" class="pagination-link" aria-label="Lecture 25.1: The Riemann-Lebesgue Lemma">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./25-3-The-Continuity-Theorem.html" class="pagination-link" aria-label="Lecture 25.3: The Continuity Theorem">
+        <span class="nav-page-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/25-2-Fourier-Inversion.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,236 @@
+# Lecture 13.1: Convergence in Measure
+
+## Definition and Examples of Convergence in Measure
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space.
+
+::: {#def-conv-in-measure}
+Let $f, f_1, f_2, \dots$ be $\mathcal{F}$-measurable functions mapping $\Omega$ to $\mathbb{R}$. We say that $f_n$ **converges in measure** to $f$, denoted $f_n \xrightarrow{\mu} f$, if for every $\epsilon > 0$:
+$$
+\lim_{n \to \infty} \mu\left( \{ \omega \in \Omega \mid |f_n(\omega) - f(\omega)| \ge \epsilon \} \right) = 0.
+$$ {#eq-conv-in-measure-def}
+
+When $\mu = \mathbb{P}$ is a probability measure, convergence in measure is called **convergence in probability**, denoted $X_n \xrightarrow{\mathbb{P}} X$.
+:::
+
+---
+
+## The "Typewriter Sequence" Example
+
+Consider the Lebesgue measure space $([0, 1], \mathcal{B}([0, 1]), \lambda)$. We construct a sequence of indicator functions $\{f_n\}$ whose interval support shrinks to zero width while repeatedly sweeping across $[0, 1]$.
+
+For any $n \in \mathbb{N}_0$, write $j = 2^n + k$ where $0 \le k \le 2^n - 1$. Define:
+$$
+f_{2^n + k} \triangleq \mathbf{1}_{\left[ \frac{k}{2^n}, \frac{k+1}{2^n} \right]}.
+$$ {#eq-typewriter-def}
+
+* **Visualizing the Sequence:**
+  * $f_1 = \mathbf{1}_{[0, 1]}$
+  * $f_2 = \mathbf{1}_{[0, 1/2]}$, $f_3 = \mathbf{1}_{[1/2, 1]}$
+  * $f_4 = \mathbf{1}_{[0, 1/4]}$, $f_5 = \mathbf{1}_{[1/4, 1/2]}$, $f_6 = \mathbf{1}_{[1/2, 3/4]}$, $f_7 = \mathbf{1}_{[3/4, 1]}$
+
+* **Convergence in Measure:** For any $0 < \epsilon \le 1$:
+  $$
+  \lambda\left( \{ |f_{2^n + k} - 0| \ge \epsilon \} \right) = \lambda\left( \left[ \frac{k-1}{2^n}, \frac{k}{2^n} \right] \right) = \frac{1}{2^n} \xrightarrow{n \to \infty} 0.
+  $$
+  Thus, $f_j \xrightarrow{\lambda} 0$.
+
+* **Failure of Pointwise Convergence:** For every $x \in [0, 1]$, $f_j(x) = 1$ for infinitely many $j$ and $f_j(x) = 0$ for infinitely many $j$. Hence, $\lim_{j \to \infty} f_j(x)$ does not exist anywhere in $[0, 1]$.
+
+---
+
+## Metrization of Convergence in Measure
+
+Convergence is generally defined with respect to a metric topology.
+
+## Pseudo-Metric Attempt and Triangle Inequality
+
+Consider $d_\epsilon(f, g) \triangleq \mu(\{|f - g| \ge \epsilon\})$ for a fixed $\epsilon > 0$. This does not define a metric or pseudo-metric because it fails the standard triangle inequality. However, an adjusted version holds:
+
+::: {#lem-d-epsilon-triangle}
+For any $f, g, h \in L^0(\Omega, \mathcal{F}, \mu)$ and $\epsilon > 0$:
+$$
+d_\epsilon(f, h) \le d_{\epsilon/2}(f, g) + d_{\epsilon/2}(g, h).
+$$ {#eq-d-epsilon-triangle}
+:::
+
+::: {.proof}
+## Proof @lem-d-epsilon-triangle
+By point-wise triangle inequality, $|f - h| \le |f - g| + |g - h|$. If $|f(\omega) - h(\omega)| \ge \epsilon$, then either $|f(\omega) - g(\omega)| \ge \frac{\epsilon}{2}$ or $|g(\omega) - h(\omega)| \ge \frac{\epsilon}{2}$. Thus:
+$$
+\{ |f - h| \ge \epsilon \} \subseteq \left\{ |f - g| \ge \frac{\epsilon}{2} \right\} \cup \left\{ |g - h| \ge \frac{\epsilon}{2} \right\}.
+$$
+
+Applying monotonicity and subadditivity of $\mu$:
+$$
+\begin{align*}
+\mu(\{|f - h| \ge \epsilon\}) &\le \mu\left(\left\{|f - g| \ge \frac{\epsilon}{2}\right\}\right) + \mu\left(\left\{|g - h| \ge \frac{\epsilon}{2}\right\}\right) \\
+&= d_{\epsilon/2}(f, g) + d_{\epsilon/2}(g, h).
+\end{align*}
+$$
+:::
+
+---
+
+## The $d_0$ Metric for $L^0(\Omega, \mathcal{F}, \mu)$
+
+::: {#def-l0-space}
+Define the space $L^0(\Omega, \mathcal{F}, \mu)$ as the set of all equivalence classes of measurable functions $f: \Omega \to \mathbb{R}$ under $\mu$-almost sure equality.
+:::
+
+::: {#thm-d0-metric}
+The function $d_0: L^0 \times L^0 \to [0, \infty)$ defined by:
+$$
+d_0(f, g) \triangleq \inf_{\epsilon > 0} \left( \mu(\{|f - g| \ge \epsilon\}) + \epsilon \right),
+$$ {#eq-d0-metric-def}
+defines a metric on $L^0(\Omega, \mathcal{F}, \mu)$. Moreover, $f_n \xrightarrow{\mu} f$ if and only if $d_0(f_n, f) \to 0$ as $n \to \infty$.
+:::
+
+::: {#rem-probability-metric}
+On a probability space $(\Omega, \mathcal{F}, \mathbb{P})$, alternative metrics characterize convergence in probability, such as $d(X, Y) \triangleq \mathbb{E}[\min(|X - Y|, 1)]$.
+:::
+
+---
+
+## Properties and Completeness of $L^0$
+
+::: {#def-l0-cauchy}
+A sequence $\{f_n\} \subset L^0(\Omega, \mathcal{F}, \mu)$ is **Cauchy in measure** (or $L^0$-Cauchy) if for every $\epsilon > 0$:
+$$
+\lim_{n, m \to \infty} \mu(\{|f_n - f_m| \ge \epsilon\}) = 0.
+$$ {#eq-l0-cauchy-def}
+:::
+
+---
+
+## Basic Limit Properties
+
+::: {#thm-l0-limit-properties}
+Let $f_n, g_n, f, g \in L^0(\Omega, \mathcal{F}, \mu)$.
+
+1. **Uniqueness of Limits:** If $f_n \xrightarrow{\mu} f$ and $f_n \xrightarrow{\mu} g$, then $f = g$ $\mu$-a.s.
+2. **Linearity:** If $a, b \in \mathbb{R}$, $f_n \xrightarrow{\mu} f$, and $g_n \xrightarrow{\mu} g$, then $a f_n + b g_n \xrightarrow{\mu} a f + b g$.
+3. **Cauchy Property:** If $f_n \xrightarrow{\mu} f$, then $\{f_n\}$ is Cauchy in measure.
+:::
+
+::: {.proof}
+## Proof of @thm-l0-limit-properties
+
+**Property 1 (Uniqueness of Limits).** Suppose $f_n \xrightarrow{\mu} f$ and $f_n \xrightarrow{\mu} g$. We show $\mu(\{f \neq g\}) = 0$. Write:
+$$
+\{f \neq g\} = \bigcup_{m=1}^{\infty} \left\{ |f - g| \ge \tfrac{1}{m} \right\}.
+$$
+By countable subadditivity it suffices to show $\mu(\{|f - g| \ge \epsilon\}) = 0$ for every fixed $\epsilon > 0$. By the pointwise triangle inequality $|f - g| \le |f - f_n| + |f_n - g|$, so:
+$$
+\left\{ |f - g| \ge \epsilon \right\} \subseteq \left\{ |f_n - f| \ge \tfrac{\epsilon}{2} \right\} \cup \left\{ |f_n - g| \ge \tfrac{\epsilon}{2} \right\}.
+$$
+Applying subadditivity of $\mu$:
+$$
+\mu\!\left(\left\{ |f - g| \ge \epsilon \right\}\right) \le \mu\!\left(\left\{|f_n - f| \ge \tfrac{\epsilon}{2}\right\}\right) + \mu\!\left(\left\{|f_n - g| \ge \tfrac{\epsilon}{2}\right\}\right).
+$$
+Both terms tend to $0$ as $n \to \infty$ by assumption. Since the left side is a fixed non-negative number independent of $n$, we conclude $\mu(\{|f - g| \ge \epsilon\}) = 0$, and hence $\mu(\{f \neq g\}) = 0$.
+
+---
+
+**Property 2 (Linearity).** Let $\epsilon > 0$. The pointwise bound
+$$
+|(af_n + bg_n) - (af + bg)| = |a(f_n - f) + b(g_n - g)| \le |a|\,|f_n - f| + |b|\,|g_n - g|
+$$
+implies that if the left side is $\ge \epsilon$, then at least one of $|a|\,|f_n - f| \ge \epsilon/2$ or $|b|\,|g_n - g| \ge \epsilon/2$ must hold. Therefore:
+$$
+\left\{ |(af_n + bg_n) - (af + bg)| \ge \epsilon \right\} \subseteq \left\{|f_n - f| \ge \frac{\epsilon}{2|a|}\right\} \cup \left\{|g_n - g| \ge \frac{\epsilon}{2|b|}\right\}
+$$
+when $a, b \neq 0$ (if $a = 0$ the first set is empty and the argument reduces to the $b \neq 0$ case, and vice versa). Applying subadditivity:
+$$
+\mu\!\left(\left\{|(af_n+bg_n)-(af+bg)| \ge \epsilon\right\}\right) \le \mu\!\left(\left\{|f_n - f| \ge \frac{\epsilon}{2|a|}\right\}\right) + \mu\!\left(\left\{|g_n - g| \ge \frac{\epsilon}{2|b|}\right\}\right) \to 0
+$$
+as $n \to \infty$, since $f_n \xrightarrow{\mu} f$ and $g_n \xrightarrow{\mu} g$.
+
+---
+
+**Property 3 (Cauchy Property).** By the triangle inequality $|f_n - f_m| \le |f_n - f| + |f_m - f|$:
+$$
+\begin{align*}
+\mu(\{|f_n - f_m| \ge \epsilon\}) &\le \mu\!\left(\left\{|f_n - f| \ge \tfrac{\epsilon}{2}\right\}\right) + \mu\!\left(\left\{|f_m - f| \ge \tfrac{\epsilon}{2}\right\}\right) \xrightarrow{n, m \to \infty} 0.
+\end{align*}
+$$
+:::
+
+---
+
+## Completeness of $L^0$ and Almost Sure Subsequences
+
+::: {#thm-l0-completeness}
+If $\{f_n\}$ is an $L^0$-Cauchy sequence in measure, there exists $f \in L^0$ such that $f_n \xrightarrow{\mu} f$. Furthermore, there exists a subsequence $\{f_{n_k}\}$ that converges to $f$ $\mu$-almost surely.
+:::
+
+::: {.proof}
+## Proof of @thm-l0-completeness
+**Step 1: Constructing the Subsequence.** Since $\{f_n\}$ is Cauchy in measure, for each $k \in \mathbb{N}$, choose an index $n_k$ with $n_{k+1} > n_k$ such that:
+$$
+\mu\left( \left\{ |f_{n_{k+1}} - f_{n_k}| \ge 2^{-k} \right\} \right) \le 2^{-k}.
+$$
+
+Define $A_k \triangleq \left\{ |f_{n_{k+1}} - f_{n_k}| \ge 2^{-k} \right\}$. Since $\sum_{k=1}^{\infty} \mu(A_k) \le \sum_{k=1}^{\infty} 2^{-k} = 1 < \infty$, the First Borel-Cantelli Lemma implies:
+$$
+\mu(E) = 0 \quad \text{where } E \triangleq \{A_k \text{ i.o.}\} = \bigcap_{N=1}^\infty \bigcup_{k=N}^\infty A_k.
+$$
+
+**Step 2: Pointwise Convergence on $E^c$.** On $E^c$, there exists $K(\omega)$ such that for all $k \ge K(\omega)$, $|f_{n_{k+1}}(\omega) - f_{n_k}(\omega)| < 2^{-k}$. The series $\sum_{k=1}^\infty (f_{n_{k+1}}(\omega) - f_{n_k}(\omega))$ converges absolutely by comparison with $\sum 2^{-k}$.
+
+Define $f: \Omega \to \mathbb{R}$ by:
+$$
+f(\omega) \triangleq \begin{cases} 
+f_{n_1}(\omega) + \sum_{k=1}^\infty \left( f_{n_{k+1}}(\omega) - f_{n_k}(\omega) \right) & \text{for } \omega \in E^c, \\
+0 & \text{for } \omega \in E.
+\end{cases}
+$$
+
+Because $f_{n_j} = f_{n_1} + \sum_{k=1}^{j-1} (f_{n_{k+1}} - f_{n_k})$, $f_{n_k}(\omega) \to f(\omega)$ pointwise on $E^c$, so $f_{n_k} \xrightarrow{\text{a.s.}} f$.
+
+**Step 3: Convergence of $f_{n_k} \xrightarrow{\mu} f$.** For any $\omega \in E^c \setminus \bigcup_{k=l}^\infty A_k$, we have $|f_{n_{k+1}}(\omega) - f_{n_k}(\omega)| < 2^{-k}$ for every $k \ge l$, so:
+$$
+|f(\omega) - f_{n_l}(\omega)| = \left| \sum_{k=l}^\infty (f_{n_{k+1}}(\omega) - f_{n_k}(\omega)) \right| \le \sum_{k=l}^\infty 2^{-k} = 2^{-l+1}.
+$$
+
+Therefore $\left\{ |f - f_{n_l}| \ge 2^{-l+1} \right\} \subseteq E \cup \bigcup_{k=l}^\infty A_k$, and since $\mu(E) = 0$:
+$$
+\mu\left( \left\{ |f - f_{n_l}| \ge 2^{-l+1} \right\} \right) \le \sum_{k=l}^\infty \mu(A_k) \le \sum_{k=l}^\infty 2^{-k} = 2^{-l+1} \xrightarrow{l \to \infty} 0.
+$$
+
+**Step 4: Convergence of Full Sequence $f_n \xrightarrow{\mu} f$.** For any $\epsilon > 0$:
+$$
+\mu(\{|f_n - f| \ge \epsilon\}) \le \mu\left(\left\{|f_n - f_{n_l}| \ge \frac{\epsilon}{2}\right\}\right) + \mu\left(\left\{|f_{n_l} - f| \ge \frac{\epsilon}{2}\right\}\right)
+$$
+
+Choosing $l$ sufficiently large so that $\mu(\{|f_{n_l} - f| \ge \epsilon/2\}) < \epsilon/2$ and $n, n_l$ sufficiently large so that $\mu(\{|f_n - f_{n_l}| \ge \epsilon/2\}) < \epsilon/2$ establishes $f_n \xrightarrow{\mu} f$.
+:::
+
+---
+
+## Almost Sure Convergence Implies Convergence in Measure (Finite Measure Case)
+
+::: {#thm-as-implies-measure}
+Let $(\Omega, \mathcal{F}, \mu)$ be a finite measure space ($\mu(\Omega) < \infty$). If $f_n \xrightarrow{\text{a.s.}} f$, then $f_n \xrightarrow{\mu} f$.
+:::
+
+::: {.proof}
+Let $\epsilon > 0$ and define $A_n \triangleq \{ |f_n - f| \ge \epsilon \}$. Since $f_n \xrightarrow{\text{a.s.}} f$, the set where $f_n \not\to f$ has measure zero:
+$$
+\mu(\{ A_n \text{ i.o.} \}) = \mu\left( \bigcap_{k=1}^{\infty} \bigcup_{n=k}^{\infty} A_n \right) = 0
+$$
+
+Define $B_k \triangleq \bigcup_{n=k}^{\infty} A_n$. The sequence of sets $\{B_k\}$ is non-increasing ($B_{k+1} \subseteq B_k$) and $\mu(B_1) \le \mu(\Omega) < \infty$. By continuity of measure from above:
+$$
+\lim_{k \to \infty} \mu(B_k) = \mu\left( \bigcap_{k=1}^{\infty} B_k \right) = 0
+$$
+
+Since $A_k \subseteq B_k = \bigcup_{n=k}^{\infty} A_n$, monotonicity implies:
+$$
+\mu(A_k) \le \mu(B_k) \xrightarrow{k \to \infty} 0 \implies \mu(\{|f_k - f| \ge \epsilon\}) \to 0
+$$
+
+Thus, $f_k \xrightarrow{\mu} f$.
+:::
+
+---

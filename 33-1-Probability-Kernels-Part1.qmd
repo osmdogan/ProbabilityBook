@@ -1,0 +1,565 @@
+
+# Lecture 33.1:  Probability Kernels-Part 1
+
+In this lecture, we study probability kernels, which are a generalization of conditional distributions. We will define probability kernels, discuss their measurability and integration properties, and construct the semi-direct product measure $\mu \otimes Q$ associated with a probability kernel $Q$ and a probability measure $\mu$. We will also establish a generalized Fubini's theorem for integration with respect to $\mu \otimes Q$.
+
+## Introduction to Probability Kernels
+
+Recall that if a random vector $(X, Y)$ on $\mathbb{R}^d \times \mathbb{R}^k$ possesses a joint probability density $f_{X,Y}(x, y)$, then for any $f \in \mathcal{B}_b(\mathbb{R}^d \times \mathbb{R}^k)$, where $\mathcal{B}_b(\mathbb{R}^d \times \mathbb{R}^k)$ is the space of bounded, Borel-measurable functions on $\mathbb{R}^d \times \mathbb{R}^k$, we have
+$$
+\mathbb{E}[f(X, Y) \mid X = x] = \int_{\mathbb{R}^k} f(x, y) f_{Y \mid X}(y \mid x) \, dy,
+$$
+where the conditional density is given by $f_{Y \mid X}(y \mid x) = \frac{f_{X,Y}(x, y)}{f_X(x)}$ whenever $f_X(x) > 0$.
+
+That is, for each fixed $x \in \mathbb{R}^d$, we can define a **probability measure** $Q_x$ on $(\mathbb{R}^k, \mathcal{B}_{\mathbb{R}^k})$ via
+$$
+Q_x(B) = \int_B f_{Y \mid X}(y \mid x) \, dy.
+$$
+Then 
+$$
+\mathbb{E}[f(X, Y) \mid X = x] = \int_{\mathbb{R}^k} f(x, y) \, Q_x(dy).
+$$
+The family $\{Q_x\}_{x \in \mathbb{R}^d}$ provides a concrete instance of a **conditional probability distribution** or **probability kernel**.
+
+---
+
+## Formal Definition of a Probability Kernel
+
+A probability kernel is a function in one variable and a probability measure in another variable. It is a generalization of the conditional distribution of one random variable given another. 
+
+::: {#def-prob-kernel}
+## Probability Kernel
+Let $(S_1, \mathcal{B}_1)$ and $(S_2, \mathcal{B}_2)$ be two measurable spaces. A function $Q: S_1 \times \mathcal{B}_2 \to [0, 1]$ is called a **probability kernel** (or Markov kernel) from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$ if it satisfies two conditions:
+
+1. **Measure Property:** For every fixed $x \in S_1$, the mapping
+   $$
+   Q(x, \cdot): \mathcal{B}_2 \to [0, 1], \quad B \mapsto Q(x, B),
+   $$
+   is a probability measure on $(S_2, \mathcal{B}_2)$.
+2. **Measurability Property:** For every fixed $B \in \mathcal{B}_2$, the mapping
+   $$
+   Q(\cdot, B): S_1 \to [0, 1], \quad x \mapsto Q(x, B),
+   $$
+   is $\mathcal{B}_1 / \mathcal{B}([0, 1])$-measurable.
+:::
+
+**Some remarks on the definition:**
+
+1. Note that the domain of $Q$ is $S_1 \times \mathcal{B}_2$, where the first argument is a point in $S_1$ and the second argument is a measurable set in $\mathcal{B}_2$. The range of $Q$ is the interval $[0, 1]$, representing probabilities.
+
+2. If we think of $Q$ as measure of $y$ for a fixed $x$, the notation we used when integrating with respect to $Q$ is
+$$
+\int_{S_2} f(x, y) \, Q(x, dy),
+$$
+where 
+   - $x$ is fixed, 
+   - $y$ is the variable of integration, and 
+   - $Q(x, \cdot)$ is the probability measure on $(S_2, \mathcal{B}_2)$ for each fixed $x \in S_1$. 
+
+3. This is consistent with the notation for integrating with respect to a measure $\mu$ on $(S, \mathcal{B})$, where we write $\int_S f(y) \, \mu(dy)$ rather than $\int_S f(y) \, d\mu(y)$.
+4. Since $Q(x, \cdot): \mathcal{B}_2 \to [0, 1]$ is probability measure is on $(S_2,\mathcal B_2)$ for each fixed $x \in S_1$, it satisfies the usual properties of a probability measure:
+   - **Non-negativity:** $Q(x, B) \ge 0$ for all $B \in \mathcal{B}_2$.
+   - **Normalization:** $Q(x, S_2) = 1$.
+   - **Countable Additivity:** For any countable collection $\{B_i\}_{i \in \mathbb{N}}$ of disjoint sets in $\mathcal{B}_2$,
+     $$
+     Q\Big(x, \bigcup_{i \in \mathbb{N}} B_i\Big) = \sum_{i \in \mathbb{N}} Q(x, B_i).
+     $$
+5. The mapping $x \mapsto Q(x, B)$ is $\mathcal{B}_1 / \mathcal{B}([0, 1])$-measurable:  
+   $$
+   \{x \in S_1 : Q(x, B) \in A\} \in \mathcal{B}_1,
+   $$
+for all $A \in \mathcal{B}([0, 1])$.
+
+::: {#exm-kernel-examples}
+## Standard Examples of Probability Kernels
+1. **Constant / Product Measure Kernel:** If $\nu \in \mathcal{P}(S_2, \mathcal{B}_2)$ is a fixed probability measure, then
+   $$
+   Q(x, B) := \nu(B) \quad \forall x \in S_1, \; B \in \mathcal{B}_2
+   $$
+   is a probability kernel. This is called a **constant kernel** or **product measure kernel**. Note that this defines a probability kernel from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$ for any measurable space $(S_1, \mathcal{B}_1)$.
+
+2. **Conditional Density Kernel:** If $(X, Y)$ has joint density $f_{X,Y}(x, y)$ on $\mathbb{R}^d \times \mathbb{R}^k$, then
+   $$
+   \begin{align*}
+   Q(x, B) &:= \int_B f_{Y \mid X}(y \mid x) \, dy \\
+   &= 
+   \begin{cases}
+   \frac{\int_B f_{X,Y}(x, y) \, dy}{\int_{\mathbb{R}^k} f_{X,Y}(x, y) \, dy} & \text{if } f_X(x) > 0, \\
+   \nu_0(B) & \text{if } f_X(x) = 0,
+   \end{cases}
+   \end{align*}
+   $$
+   where $\nu_0 \in \mathcal{P}(\mathbb{R}^k, \mathcal{B}_{\mathbb{R}^k})$ is an arbitrary probability measure. This defines a probability kernel from $(\mathbb{R}^d, \mathcal{B}_{\mathbb{R}^d})$ to $(\mathbb{R}^k, \mathcal{B}_{\mathbb{R}^k})$.
+:::
+
+
+:::{#exm-bernoulli-kernel}
+## A Bernoulli probability kernel
+A very simple example is a kernel describing a Bernoulli random variable whose success probability depends on the value of $x$. Let $S_1=S_2=\mathbb R$, and $\mathcal B_1=\mathcal B_2=\mathcal B(\mathbb R)$. Define
+$$ 
+Q(x,B) = (1-p(x))\mathbf 1_B(0)+p(x)\mathbf 1_B(1), \qquad B\in\mathcal B(\mathbb R), 
+$$
+where, for example, $p(x)=\frac{e^x}{1+e^x}$. Thus, for each $x$, $Q(x,\cdot)$ is the probability distribution of a Bernoulli random variable with success probability $p(x)$:
+$$ 
+Y\mid X=x \sim \operatorname{Bernoulli}\left(\frac{e^x}{1+e^x}\right). 
+$$
+
+1. Measure property: Fix $x\in\mathbb R$. Then
+$$ 
+Q(x,B) = (1-p(x))\mathbf 1_B(0)+p(x)\mathbf 1_B(1). 
+$$
+This is the probability measure that assigns $Q(x,\{0\})=1-p(x)$
+and $Q(x,\{1\})=p(x)$. Since $0\leq p(x)\leq1$, we have $Q(x,\mathbb R)=1-p(x)+p(x)=1$. Moreover, because it is a weighted sum of the point-mass probability measures
+$\delta_0$ and $\delta_1$, it is a probability measure on $(\mathbb R,\mathcal B(\mathbb R))$.
+
+2. Measurability property: Now fix $B\in\mathcal B(\mathbb R)$. We need to show that
+$x\mapsto Q(x,B)$ is measurable. There are only four possibilities concerning whether $0$ and $1$ belong to $B$. For example, if $0\in B$ and $1\notin B$, then
+$Q(x,B)=1-p(x) =\frac{1}{1+e^x}$, which is a continuous, hence measurable, function of $x$. If $0\notin B$ and $1\in B$, then $Q(x,B)=p(x) =\frac{e^x}{1+e^x}$, which is also continuous. If both $0,1\in B$, then $Q(x,B)=1$, and if neither belongs to $B$, then
+$Q(x,B)=0$. Therefore $x\mapsto Q(x,B)$ is measurable for every $B\in\mathcal B(\mathbb R)$.
+
+The easiest way to visualize the kernel is $x\longmapsto Q(x,\cdot)$. It takes an input $x$ and returns a probability distribution. For example,
+$x=0\Rightarrow p(0)=\frac12$, so $Q(0,\cdot) = \frac12\delta_0+\frac12\delta_1$. At $x=1$, $p(1)=\frac{e}{1+e}\approx0.731$, so $Q(1,\cdot) = 0.269\,\delta_0+0.731\,\delta_1$. At $x=-1$, $p(-1)=\frac{1}{1+e}\approx0.269$, so $Q(-1,\cdot) = 0.731\,\delta_0+0.269\,\delta_1$. Thus the kernel is essentially a **family of probability distributions indexed by $x$**.
+
+Suppose $X$ itself is a random variable. We can then use the kernel to define the conditional distribution of $Y$ given $X$: $\mathbb P(Y\in B\mid X) = Q(X,B)$. For example,
+$$ 
+\mathbb P(Y=1\mid X) = Q(X,\{1\}) = \frac{e^X}{1+e^X}. 
+$$
+The measurability condition guarantees that this is a legitimate random variable: $Q(X,B)$ is measurable whenever $X$ is measurable.
+:::
+
+---
+
+## Measurability and Integration Properties
+The following lemma establishes the measurability of integral functions with respect to a probability kernel. It says that integrating a measurable function with respect to a probability kernel preserves measurability in the remaining variable.
+
+::: {#lem-kernel-measurability}
+## Measurability of Integral Functions
+Let $Q$ be a probability kernel from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$. If $f: S_1 \times S_2 \to \mathbb{R}$ is $(\mathcal{B}_1 \otimes \mathcal{B}_2)$-measurable and is either bounded or non-negative, then the function
+$$
+g(x) := \int_{S_2} f(x, y) \, Q(x, dy)
+$$ {#eq-kernel-integral-map}
+is $\mathcal{B}_1$-measurable.
+:::
+
+::: {.proof}
+We divide the proof into two main stages: bounded functions and non-negative functions (via Monotone Convergence).
+
+**Step 1: Bounded Measurable Functions**
+Let $\mathbb{H}$ be the vector space of bounded, $(\mathcal{B}_1 \otimes \mathcal{B}_2)$-measurable functions $f: S_1 \times S_2 \to \mathbb{R}$ for which $x \mapsto \int_{S_2} f(x, y) \, Q(x, dy)$ is $\mathcal{B}_1$-measurable.
+
+Let $\mathbb{M} = \{ \mathbb{I}_{B_1 \times B_2} : B_1 \in \mathcal{B}_1, B_2 \in \mathcal{B}_2 \}$ be the collection of indicator functions of measurable rectangles. Note that $\mathbb{M}$ is a **multiplicative system** — closed under pointwise products, since $\mathbb{I}_{B_1 \times B_2} \cdot \mathbb{I}_{C_1 \times C_2} = \mathbb{I}_{(B_1 \cap C_1) \times (B_2 \cap C_2)} \in \mathbb{M}$ — and generates $\sigma(\mathbb{M}) = \mathcal{B}_1 \otimes \mathcal{B}_2$. For any indicator function $f = \mathbb{I}_{B_1 \times B_2}$ where $B_1 \in \mathcal{B}_1$ and $B_2 \in \mathcal{B}_2$:
+$$
+\int_{S_2} \mathbb{I}_{B_1 \times B_2}(x, y) \, Q(x, dy) = \mathbb{I}_{B_1}(x) \int_{S_2} \mathbb{I}_{B_2}(y) \, Q(x, dy) = \mathbb{I}_{B_1}(x) Q(x, B_2).
+$$
+Since $\mathbb{I}_{B_1}(\cdot)$ is $\mathcal{B}_1$-measurable and $Q(\cdot, B_2)$ is $\mathcal{B}_1$-measurable by definition of a probability kernel, their product is $\mathcal{B}_1$-measurable. Thus, $\mathbb{M} \subseteq \mathbb{H}$. $\mathbb{H}$ also includes constant functions, so it contains the constant function $1$.
+
+Next, we will show that $\mathbb{H}$ is closed under bounded monotone convergence.
+By linearity of integration, $\mathbb{H}$ is a vector space. Furthermore, if $(f_n)_{n=1}^\infty \subseteq \mathbb{H}$ is a sequence of bounded non-negative functions such that $f_n \uparrow f$ with $f$ bounded, then by the Dominated Convergence Theorem (or Monotone Convergence Theorem) applied to the probability measure $Q(x, \cdot)$ for each $x \in S_1$:
+$$
+g_n(x) = \int_{S_2} f_n(x, y) \, Q(x, dy) \longrightarrow \int_{S_2} f(x, y) \, Q(x, dy) = g(x) \quad \forall x \in S_1.
+$$
+As a pointwise limit of $\mathcal{B}_1$-measurable functions $g_n$, $g$ is $\mathcal{B}_1$-measurable. By Dynkin's Multiplicative System Theorem, $\mathbb{H}$ contains all bounded $\sigma(\mathbb{M})$-measurable functions: $\mathbb{B}(\sigma(\mathbb{M}))\subseteq \mathbb{H}$. But $\sigma(\mathbb{M}) = \mathcal{B}_1 \otimes \mathcal{B}_2$, so we conclude that $x \mapsto \int_{S_2} f(x, y) \, Q(x, dy)$ is $\mathcal{B}_1$-measurable for all bounded $(\mathcal{B}_1 \otimes \mathcal{B}_2)$-measurable functions $f$.
+
+**Step 2: Non-Negative Measurable Functions**
+If $f \ge 0$ is $(\mathcal{B}_1 \otimes \mathcal{B}_2)$-measurable, define the truncated sequence $f_n(x, y) = f(x, y) \wedge n$. Each $f_n$ is bounded and measurable, so $x \mapsto \int_{S_2} f_n(x, y) \, Q(x, dy)$ is $\mathcal{B}_1$-measurable by Step 1. Since $f_n \uparrow f$, the Monotone Convergence Theorem yields:
+$$
+\int_{S_2} f_n(x, y) \, Q(x, dy) \uparrow \int_{S_2} f(x, y) \, Q(x, dy) \quad \text{pointwise for all } x \in S_1.
+$$
+Being the pointwise limit of a non-decreasing sequence of measurable functions, $x \mapsto \int_{S_2} f(x, y) \, Q(x, dy)$ is $\mathcal{B}_1$-measurable.
+:::
+
+:::{#rem-measurability-of-integral}
+The lemma is essentially a **parameterized integration theorem**. The ordinary result says that if $f(x,y)$ is measurable, then integrating out $y$ gives a measurable function of $x$. Here the measure with respect to which we integrate also depends on $x$:
+$$
+g(x)=\int f(x,y)\,Q(x,dy)
+$$
+The kernel's measurability condition is exactly what makes this dependence on $x$ well behaved.
+:::
+
+
+---
+
+## Construction of the Semi-Direct Product Measure $\mu \otimes Q$
+In the previous section, we defined a probability kernel $Q$ from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$. We now show how to construct a probability measure $\mu \otimes Q$ on the product space $(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$ given a probability measure $\mu$ on $(S_1, \mathcal{B}_1)$ and a probability kernel $Q$.
+
+::: {#def-product-measure-kernel}
+## Product Measure $\mu \otimes Q$
+Let $\mu \in \mathcal{P}(S_1, \mathcal{B}_1)$ be a probability measure on $(S_1, \mathcal{B}_1)$, and let $Q$ be a probability kernel from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$. We define a set function $\mu \otimes Q$ on measurable rectangles $B_1 \times B_2 \in \mathcal{B}_1 \otimes \mathcal{B}_2$ by:
+$$
+\begin{align*}
+(\mu \otimes Q)(B_1 \times B_2) &:= \int_{B_1} Q(x, B_2) \, \mu(dx)\\
+&= \int_{S_1} \mathbb{I}_{B_1}(x) Q(x, B_2) \, \mu(dx).
+\end{align*}
+$$
+This extends uniquely to a probability measure on $(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$, defined for any $C \in \mathcal{B}_1 \otimes \mathcal{B}_2$ by:
+$$
+(\mu \otimes Q)(C) := \int_{S_1} \left( \int_{S_2} \mathbb{I}_C(x, y) \, Q(x, dy) \right) \mu(dx).
+$$
+:::
+
+**Some observations on the definition:**
+
+1. When $Q$ is a constant kernel $Q(x, \cdot) = \nu(\cdot)$ for all $x \in S_1$, then $\mu \otimes Q$ reduces to the standard product measure $\mu \otimes \nu$ on $(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$:
+$$
+\begin{align*}
+(\mu \otimes Q)(B_1 \times B_2) &= \int_{B_1} Q(x, B_2) \, \mu(dx) \\
+&= \int_{B_1} \nu(B_2) \, \mu(dx) \\
+&= \nu(B_2) \mu(B_1) \\
+&= (\mu \otimes \nu)(B_1 \times B_2).
+\end{align*}
+$$
+
+2. If we define $C_x := \{ y \in S_2 : (x, y) \in C \}$, then we can write:
+$$
+\begin{align*}
+(\mu \otimes Q)(C) &= \int_{S_1} \left( \int_{S_2} \mathbb{I}_C(x, y) \, Q(x, dy) \right) \mu(dx) \\
+&= \int_{S_1} Q(x, C_x) \, \mu(dx).
+\end{align*}
+$$
+where $Q(x, C_x)=\int_{S_2}\mathbb{I}_C(x,y)Q(x,dy)$ is the probability of the "slice" $C_x$ under the measure $Q(x, \cdot)$. 
+
+::: {#rem-validity-product-measure}
+## Well-Definedness as a Probability Measure
+
+To verify that
+$$
+\mu\otimes Q\in\mathcal P(S_1\times S_2,\mathcal B_1\otimes\mathcal B_2),
+$$
+we verify the defining properties of a probability measure.
+
+1. **Non-negativity:** For every $C\in\mathcal B_1\otimes\mathcal B_2$,
+   $$
+   (\mu\otimes Q)(C)
+   =\int_{S_1}\int_{S_2}
+   \mathbb I_C(x,y)Q(x,dy)\mu(dx)
+   \ge 0,
+   $$
+   since $\mathbb I_C\ge0$ and both $Q(x,\cdot)$ and $\mu$ are non-negative measures.
+
+2. **Total Mass:**
+   $$
+   \begin{aligned}
+   (\mu\otimes Q)(S_1\times S_2)
+   &=
+   \int_{S_1}\left[\int_{S_2} \mathbb{I}_{S_1 \times S_2}(x, y) \, Q(x, dy) \right] \mu(dx) \\
+   &=
+   \int_{S_1}\left[\int_{S_2} 1 \cdot Q(x, dy) \right] \mu(dx)\\
+   &= \int_{S_1} Q(x, S_2) \, \mu(dx)\\
+   &= \int_{S_1} 1 \, \mu(dx)\\
+   &= \mu(S_1) = 1.
+   \end{aligned}
+   $$
+where the third equality follows because for each fixed $x$, $Q(x,⋅)$ is a probability measure on $S_2$ and therefore $Q(x,S_2)=1$.
+
+3. **Countable Additivity:** Let $\{C_k\}_{k=1}^\infty\subseteq\mathcal B_1\otimes\mathcal B_2$ be pairwise disjoint. Then, $\mathbb I_{\cup_{k=1}^\infty C_k}(x,y)=\sum_{k=1}^\infty\mathbb{I}_{C_k}(x,y)$. Since the partial sums on the right-hand side increase monotonically, the Monotone Convergence Theorem gives
+$$
+\begin{aligned}
+(\mu\otimes Q)\left(\bigcup_{k=1}^\infty C_k\right)
+&=
+\int_{S_1}\int_{S_2}
+\sum_{k=1}^\infty\mathbb I_{C_k}(x,y)Q(x,dy)\mu(dx)\\
+&=
+\sum_{k=1}^\infty
+\int_{S_1}\int_{S_2}
+\mathbb I_{C_k}(x,y)Q(x,dy)\mu(dx)\\
+&=
+\sum_{k=1}^\infty(\mu\otimes Q)(C_k).
+\end{aligned}
+$$
+Hence $\mu\otimes Q$ is countably additive.
+:::
+
+
+:::{#exm-integration-with-kernel}
+The measure $\mu\otimes Q$ describes a two-stage experiment:
+
+1. Draw $X\sim\mu$.
+2. Given $X=x$, draw $Y\sim Q(x,\cdot)$.
+
+Then $\mu\otimes Q$ is the joint distribution of $(X,Y)$.
+
+Suppose $S_1=S_2=\mathbb R$, $X\sim\mu$, and conditional on $X=x$, $Y\mid X=x\sim N(x,1)$. Then define
+$$ 
+Q(x,B) = \int_B \frac{1}{\sqrt{2\pi}} e^{-(y-x)^2/2}\,dy. 
+$$
+The joint distribution of $(X,Y)$ is $\mu\otimes Q$. For example,
+$$ 
+\begin{aligned}
+P(X\in B_1,Y\in B_2) &= (\mu\otimes Q)(B_1\times B_2)\\
+&= \int_{B_1} P(Y\in B_2\mid X=x)\,\mu(dx)\\
+&= \int_{B_1} Q(x, B_2) \, \mu(dx)
+\end{aligned}
+$$
+This is precisely the familiar formula
+$$ 
+P(X\in B_1,Y\in B_2) = \int_{B_1} P(Y\in B_2\mid X=x)\,P_X(dx). 
+$$
+So the abstract notation $\mu\otimes Q$ is essentially a rigorous measure-theoretic formulation of "first draw $X$, then draw $Y$ according to a distribution that depends on $X$."
+:::
+
+
+## Generalized Fubini's Theorem for Probability Kernels
+
+The following result gives a generalized version of Fubini's theorem for the semi-direct product measure $\mu\otimes Q$. It expresses integration with respect to $\mu\otimes Q$ as an iterated integral: first integrate with respect to the kernel $Q(x,\cdot)$, and then integrate with respect to $\mu$.
+
+::: {#lem-fubini-kernel}
+## Integration with Respect to $\mu \otimes Q$
+Let $\mu \in \mathcal{P}(S_1, \mathcal{B}_1)$ and let $Q$ be a probability kernel from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$. If $f: S_1 \times S_2 \to \mathbb{R}$ is $(\mathcal{B}_1 \otimes \mathcal{B}_2)$-measurable and is either bounded or non-negative ($f \ge 0$), then:
+$$
+\begin{align*}
+&\int_{S_1 \times S_2} f(x, y) \, d(\mu \otimes Q)\\
+&=\int_{S_1 \times S_2} f(x, y) \, (\mu \otimes Q)(d(x,y)) \\
+&= \int_{S_1} \left( \int_{S_2} f(x, y) \, Q(x, dy) \right) \mu(dx).
+\end{align*}
+$$ {#eq-fubini-kernel}
+:::
+
+::: {.proof}
+## Proof of @lem-fubini-kernel
+The proof proceeds by extending @eq-fubini-kernel from the simplest functions to the full class via the standard monotone-class machinery.
+
+**Step 1: Indicator Functions**:
+
+For $f = \mathbb{I}_C$ with $C \in \mathcal{B}_1 \otimes \mathcal{B}_2$, @eq-fubini-kernel holds directly from the definition of $\mu \otimes Q$ (@def-product-measure-kernel):
+$$
+\begin{align*}
+&\int_{S_1 \times S_2} \mathbb{I}_C(x, y) \, d(\mu \otimes Q) = (\mu \otimes Q)(C)\\
+&= \int_{S_1} \left( \int_{S_2} \mathbb{I}_C(x, y) \, Q(x, dy) \right) \mu(dx).
+\end{align*}
+$$
+In the special case $C = B_1 \times B_2$, the inner integral simplifies as $\int_{S_2} \mathbb{I}_{B_1 \times B_2}(x, y) \, Q(x, dy) = \mathbb{I}_{B_1}(x) Q(x, B_2)$, recovering $(\mu \otimes Q)(B_1 \times B_2) = \int_{B_1} Q(x, B_2) \, \mu(dx)$.
+
+**Step 2: Non-Negative Simple Functions**:
+
+Let $f = \sum_{i=1}^n c_i \, \mathbb{I}_{C_i}$ with $c_i \ge 0$ and pairwise disjoint $C_i \in \mathcal{B}_1 \otimes \mathcal{B}_2$. By linearity of integration on both sides and Step 1 applied to each $\mathbb{I}_{C_i}$:
+$$
+\begin{aligned}
+&\int_{S_1 \times S_2} f \, d(\mu \otimes Q)
+= \sum_{i=1}^n c_i \, (\mu \otimes Q)(C_i) \\
+&= \sum_{i=1}^n c_i \int_{S_1} \left( \int_{S_2} \mathbb{I}_{C_i}(x, y) \, Q(x, dy) \right) \mu(dx) \\
+&= \int_{S_1} \left( \int_{S_2} \sum_{i=1}^n c_i \, \mathbb{I}_{C_i}(x, y) \, Q(x, dy) \right) \mu(dx) \\
+&= \int_{S_1} \left( \int_{S_2} f(x, y) \, Q(x, dy) \right) \mu(dx).
+\end{aligned}
+$$
+(The interchange of the finite sum with the integrals is justified by linearity.)
+
+**Step 3: Non-Negative Measurable Functions**:
+
+Let $f \ge 0$ be $(\mathcal{B}_1 \otimes \mathcal{B}_2)$-measurable. By the standard approximation theorem, there exist non-negative simple functions $f_n \uparrow f$ pointwise. Step 2 gives @eq-fubini-kernel for each $f_n$:
+$$
+\begin{align*}
+\int_{S_1 \times S_2} f_n \, d(\mu \otimes Q) = \int_{S_1} \left( \int_{S_2} f_n(x, y) \, Q(x, dy) \right) \mu(dx).
+\end{align*}
+$$
+
+- **Left side:** By the Monotone Convergence Theorem applied to $\mu \otimes Q$,
+  $$\int_{S_1 \times S_2} f_n \, d(\mu \otimes Q) \uparrow \int_{S_1 \times S_2} f \, d(\mu \otimes Q).$$
+- **Right side:** For each fixed $x$, MCT applied to $Q(x, \cdot)$ gives $\int_{S_2} f_n(x, y) \, Q(x, dy) \uparrow \int_{S_2} f(x, y) \, Q(x, dy)$. The resulting pointwise non-decreasing sequence of $\mathcal{B}_1$-measurable functions (measurable by @lem-kernel-measurability) converges, and another application of MCT applied to $\mu$ gives
+  $$
+  \begin{align*}
+  &\int_{S_1} \left( \int_{S_2} f_n(x,y) \, Q(x, dy) \right) \mu(dx) \\
+  &\uparrow \int_{S_1} \left( \int_{S_2} f(x,y) \, Q(x, dy) \right) \mu(dx).
+  \end{align*}
+  $$
+
+Passing to the limit in the identity for $f_n$ establishes @eq-fubini-kernel for $f$.
+
+**Step 4: Bounded Measurable Functions**:
+
+Let $f$ be bounded and $(\mathcal{B}_1 \otimes \mathcal{B}_2)$-measurable. Decompose $f = f^+ - f^-$ where $f^+ = \max(f, 0)$ and $f^- = \max(-f, 0)$ are both bounded, non-negative, and jointly measurable. Applying Step 3 to each:
+$$
+\begin{aligned}
+&\int_{S_1 \times S_2} f \, d(\mu \otimes Q)
+= \int_{S_1 \times S_2} f^+ \, d(\mu \otimes Q) - \int_{S_1 \times S_2} f^- \, d(\mu \otimes Q) \\
+&= \int_{S_1} \left( \int_{S_2} f^+(x,y) \, Q(x,dy) \right) \mu(dx) - \int_{S_1} \left( \int_{S_2} f^-(x,y) \, Q(x,dy) \right) \mu(dx) \\
+&= \int_{S_1} \left( \int_{S_2} \bigl[f^+(x,y) - f^-(x,y)\bigr] \, Q(x,dy) \right) \mu(dx) \\
+&= \int_{S_1} \left( \int_{S_2} f(x,y) \, Q(x,dy) \right) \mu(dx).
+\end{aligned}
+$$
+(The subtraction is valid since both $f^+$ and $f^-$ are bounded, so both integrals are finite.)
+:::
+
+:::{#rem-fubini-kernel}
+The result in @lem-fubini-kernel has a very simple probabilistic interpretation.
+Suppose $X\sim\mu$ and, conditional on $X=x$, $Y\mid X=x\sim Q(x,\cdot)$. Then
+$(X,Y)\sim\mu\otimes Q$. Consequently,
+$$ 
+\mathbb E_{\mu\otimes Q}[f(X,Y)] = \mathbb E_\mu \left[ \mathbb E_{Q(X,\cdot)}[f(X,Y)] \right]. 
+$$
+In other words,
+$$ 
+\boxed{ \text{joint expectation} = \text{expectation of the conditional expectation}. } $$
+This is essentially the law of iterated expectations, expressed in measure-theoretic kernel notation. One particularly useful consequence is
+$$\int_{S_1\times S_2}f(x,y)\,(\mu\otimes Q)(d(x,y)) = \int_{S_1} \mathbb E_Q[f(x,Y)\mid X=x]\,\mu(dx), 
+$$
+which makes the connection with conditional distributions very transparent.
+:::
+
+
+:::{#exm-fubini-kernel}
+Let $S_1=S_2=\mathbb R$, $\mathcal{B}_1=\mathcal{B}_2=\mathcal{B}(\mathbb R)$, and let $\mu$ be the distribution of $X$. Define the probability kernel $Q(x,dy) = \frac{1}{\sqrt{2\pi}} e^{-(y-x)^2/2}\,dy$. Thus, for each fixed $x$, $Y\mid X=x\sim N(x,1)$. The semi-direct product measure $\mu\otimes Q$ is therefore the joint distribution of $(X,Y)$.
+
+Take $f(x,y)=y$. The kernel Fubini lemma says
+$$ 
+\int_{\mathbb R^2}y\,(\mu\otimes Q)(d(x,y)) = \int_{\mathbb R} \left[ \int_{\mathbb R}y\,Q(x,dy) \right]\mu(dx). 
+$$
+Now consider the inner integral. Since $Y\mid X=x\sim N(x,1)$,
+$\int_{\mathbb R}y\,Q(x,dy) = \mathbb E[Y\mid X=x] = x$. Therefore,
+$\int_{\mathbb R^2}y\,(\mu\otimes Q)(d(x,y)) = \mathbb E[X]$. Hence
+$\mathbb E[Y]=\mathbb E[X]$. This is exactly what we would expect because
+$\mathbb E[Y\mid X]=X$. 
+
+Take instead $f(x,y)=xy$. Then the kernel Fubini formula gives
+$$ 
+\int_{\mathbb R^2}xy\,(\mu\otimes Q)(d(x,y)) = \int_{\mathbb R} \left[ \int_{\mathbb R}xy\,Q(x,dy) \right]\mu(dx). 
+$$
+Since $x$ is fixed in the inner integral,
+$$ 
+\int_{\mathbb R}xy\,Q(x,dy) = x\int_{\mathbb R}y\,Q(x,dy) = x^2. 
+$$
+Consequently,
+$$ 
+\int_{\mathbb R^2}xy\,(\mu\otimes Q)(d(x,y)) = \int_{\mathbb R}x^2\,\mu(dx)
+$$
+or, in probabilistic notation, $\mathbb E[XY]=\mathbb E[X^2]$. Again, this follows from
+$\mathbb E[XY\mid X] = X\mathbb E[Y\mid X] = X^2$. 
+
+:::
+
+The following corollary gives the integrability criterion needed to extend the preceding kernel Fubini formula from bounded or non-negative functions to arbitrary integrable functions.
+
+::: {#cor-integrability-kernel}
+## Integrability Criterion for $\mu \otimes Q$
+Suppose $f \in L^1(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2, \mu \otimes Q)$. Then:
+
+1. The integral $\int_{S_2} |f(x, y)| \, Q(x, dy) < \infty$ for $\mu$-almost every $x \in S_1$.
+2. The partial integral mapping
+   $$
+   g(x) = 
+   \begin{cases}
+   \int_{S_2} f(x, y) \, Q(x, dy) & \text{if } \int_{S_2} |f(x, y)| \, Q(x, dy) < \infty, 
+   \\ 0 & \text{otherwise}
+   \end{cases}
+   $$
+   is $\mathcal{B}_1$-measurable and belongs to $L^1(S_1, \mathcal{B}_1, \mu)$.
+3. The identity @eq-fubini-kernel continues to hold.
+:::
+
+:::{#rem-integrability-kernel}
+## Conceptual Point
+This corollary is the exact analogue of the standard Fubini theorem:
+$$ 
+f\in L^1(\mu\otimes\nu) \quad\Longrightarrow
+\begin{cases}
+f(x,\cdot)\in L^1(\nu)\text{ for a.e. }x \\
+x\mapsto\int f(x,y)\,\nu(dy)\in L^1(\mu). 
+\end{cases}
+$$
+The only difference is that here the measure in the inner integral is allowed to depend on $x$:
+$$ 
+\nu(dy) \longrightarrow Q(x,dy). 
+$$
+:::
+
+
+::: {.proof}
+## Proof of @cor-integrability-kernel
+Since $f \in L^1(\mu \otimes Q)$, we have $\|f\|_{L^1} = \int_{S_1 \times S_2} |f(x, y)| \, (\mu \otimes Q)(dx \, dy) < \infty$. By @lem-fubini-kernel applied to $|f| \ge 0$:
+$$
+\int_{S_1} \left( \int_{S_2} |f(x, y)| \, Q(x, dy) \right) \mu(dx) = \|f\|_{L^1} < \infty.
+$$
+Because the outer integral is finite, the non-negative integrand $\int_{S_2} |f(x, y)| \, Q(x, dy)$ must be finite $\mu$-a.e. Thus $\mu(\{ x \in S_1 : \int_{S_2} |f(x, y)| \, Q(x, dy) = \infty \}) = 0$.
+
+Decomposing $f = f^+ - f^-$, both $f^+, f^- \in L^1(\mu \otimes Q)$. Applying linearity to the set where the integrals are finite gives:
+$$
+\begin{aligned}
+\int_{S_1} g(x) \, \mu(dx) &= \int_{S_1} \left( \int_{S_2} f^+(x, y) \, Q(x, dy) \right) \mu(dx) - \int_{S_1} \left( \int_{S_2} f^-(x, y) \, Q(x, dy) \right) \mu(dx) \\
+&= \int_{S_1 \times S_2} f^+(x, y) \, (\mu \otimes Q)(dx \, dy) - \int_{S_1 \times S_2} f^-(x, y) \, (\mu \otimes Q)(dx \, dy) \\
+&= \int_{S_1 \times S_2} f(x, y) \, (\mu \otimes Q)(dx \, dy).
+\end{aligned}
+$$
+:::
+
+---
+
+## Uniqueness and Equivalence of Product Measures
+The following result characterizes when two probability kernels induce the same semi-direct product measure. The forward implication always holds, while the reverse implication requires a countability condition on the target measurable space.
+
+::: {#lem-kernel-uniqueness}
+## Almost-Sure Equality of Kernels and Product Measures
+Let $Q$ and $\widetilde{Q}$ be probability kernels from $(S_1, \mathcal{B}_1)$ to $(S_2, \mathcal{B}_2)$, and let $\mu \in \mathcal{P}(S_1, \mathcal{B}_1)$.
+
+1. **Forward Implication:** If $Q(x, \cdot) = \widetilde{Q}(x, \cdot)$ for $\mu$-almost every $x \in S_1$, then $\mu \otimes Q = \mu \otimes \widetilde{Q}$ on $\mathcal{B}_1 \otimes \mathcal{B}_2$.
+2. **Reverse Implication:** If $(S_2, \mathcal{B}_2)$ is **countably generated** (i.e., its $\sigma$-algebra $\mathcal{B}_2$ possesses a countable generator), then $\mu \otimes Q = \mu \otimes \widetilde{Q}$ implies:
+   $$
+   Q(x, \cdot) = \widetilde{Q}(x, \cdot) \quad \text{for } \mu\text{-almost every } x \in S_1.
+   $$
+:::
+
+::: {.proof}
+## Proof of @lem-kernel-uniqueness
+
+**Proof of Forward Implication ($\Longrightarrow$)**
+Assume $Q(x, \cdot) = \widetilde{Q}(x, \cdot)$ for $\mu$-a.e. $x \in S_1$. By Dynkin's $\pi$-$\lambda$ Theorem, it suffices to verify equality on measurable rectangles $B_1 \times B_2 \in \mathcal{B}_1 \otimes \mathcal{B}_2$:
+$$
+\begin{align*}
+(\mu \otimes Q)(B_1 \times B_2) &= \int_{B_1} Q(x, B_2) \, \mu(dx) \\
+&= \int_{B_1} \widetilde{Q}(x, B_2) \, \mu(dx) \\
+&= (\mu \otimes \widetilde{Q})(B_1 \times B_2).
+\end{align*}
+$$
+Hence $\mu \otimes Q = \mu \otimes \widetilde{Q}$.
+
+**Proof of Reverse Implication ($\Longleftarrow$)**
+Assume $\mu \otimes Q = \mu \otimes \widetilde{Q}$. Testing on rectangles $B_1 \times B_2 \in \mathcal{B}_1 \otimes \mathcal{B}_2$:
+$$
+\int_{B_1} Q(x, B_2) \, \mu(dx) = \int_{B_1} \widetilde{Q}(x, B_2) \, \mu(dx) \quad \forall B_1 \in \mathcal{B}_1, \, B_2 \in \mathcal{B}_2.
+$$
+Rearranging terms:
+$$
+\int_{B_1} \left( Q(x, B_2) - \widetilde{Q}(x, B_2) \right) \mu(dx) = 0 \quad \forall B_1 \in \mathcal{B}_1.
+$$
+Setting $B_1 = \{ x \in S_1 : Q(x, B_2) - \widetilde{Q}(x, B_2) > 0 \} \in \mathcal{B}_1$: the integrand is non-negative on $B_1$ and the integral equals zero, so $\mu\{Q(\cdot, B_2) > \widetilde{Q}(\cdot, B_2)\} = 0$. Setting $B_1 = \{ x \in S_1 : Q(x, B_2) - \widetilde{Q}(x, B_2) < 0 \} \in \mathcal{B}_1$: the integrand is non-positive on $B_1$ and the integral equals zero, so $\mu\{Q(\cdot, B_2) < \widetilde{Q}(\cdot, B_2)\} = 0$. Together, $Q(x, B_2) = \widetilde{Q}(x, B_2)$ for $\mu$-a.e. $x \in S_1$. Let $N_{B_2} = \{ x \in S_1 : Q(x, B_2) \neq \widetilde{Q}(x, B_2) \}$, so $\mu(N_{B_2}) = 0$.
+
+Since $\mathcal{B}_2$ is countably generated, there exists a countable algebra $\mathcal{A}_2 \subseteq \mathcal{B}_2$ generating $\mathcal{B}_2$. Define the exceptional set:
+$$
+N := \bigcup_{B \in \mathcal{A}_2} N_B.
+$$
+As a countable union of $\mu$-null sets, $\mu(N) = 0$. For any fixed $x \notin N$, $Q(x, B) = \widetilde{Q}(x, B)$ for all $B \in \mathcal{A}_2$. By the uniqueness of extension in Carathéodory's / Dynkin's Theorem, two probability measures agreeing on a generating algebra $\mathcal{A}_2$ must coincide on all of $\mathcal{B}_2$. Thus, $Q(x, \cdot) = \widetilde{Q}(x, \cdot)$ for all $x \notin N$.
+:::
+
+---
+
+## Takeaways
+
+::: {.callout-tip}
+## Key Takeaways
+
+**1. Probability Kernels Generalize Conditional Distributions.**
+A probability kernel $Q: S_1 \times \mathcal{B}_2 \to [0,1]$ is simultaneously a probability measure in its second argument (for each fixed $x$) and a measurable function in its first argument (for each fixed $B$). This two-in-one structure is the rigorous formalization of a family of conditional distributions $\{Q_x\}_{x \in S_1}$, as illustrated by $Q_x(B) = \int_B f_{Y|X}(y|x)\,dy$ in the density setting. Any fixed probability measure $\nu$ defines a constant (trivial) kernel $Q(x,\cdot) = \nu$.
+
+**2. Integration Against a Kernel Preserves Measurability.**
+For a jointly measurable $f: S_1 \times S_2 \to \mathbb{R}$ that is bounded or non-negative, the partial integral
+$$x \mapsto \int_{S_2} f(x,y)\,Q(x,dy)$$
+is $\mathcal{B}_1$-measurable. The proof uses the **Multiplicative System Theorem**: indicator functions of measurable rectangles form a multiplicative system inside $\mathcal{B}_1 \otimes \mathcal{B}_2$, and the class $\mathbb{H}$ of functions for which the conclusion holds is a vector space closed under bounded monotone limits. Since $\mathbb{M} \subseteq \mathbb{H}$, the theorem forces all bounded jointly measurable functions into $\mathbb{H}$; non-negative functions are then handled by truncation and MCT.
+
+**3. The Semi-Direct Product Measure $\mu \otimes Q$.**
+Given $\mu \in \mathcal{P}(S_1)$ and a kernel $Q$, the formula
+$$
+(\mu \otimes Q)(C) = \int_{S_1} Q(x, C_x)\,\mu(dx), \qquad C_x := \{y \in S_2 : (x,y) \in C\},
+$$
+defines a probability measure on $(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)$, verified via non-negativity, total mass $= 1$ (since $Q(x, S_2) = 1$ for each $x$), and countable additivity (via MCT for the indicator sum). When $Q(x,\cdot) = \nu$ (constant kernel), $\mu \otimes Q$ reduces to the ordinary product measure $\mu \otimes \nu$.
+
+**4. Generalized Fubini–Tonelli Theorem.**
+For any $f$ that is jointly measurable and bounded, non-negative, or $L^1(\mu \otimes Q)$:
+$$
+\int_{S_1 \times S_2} f(x,y)\,d(\mu \otimes Q) = \int_{S_1}\!\left(\int_{S_2} f(x,y)\,Q(x,dy)\right)\mu(dx).
+$$
+This reduces to classical Fubini–Tonelli when $Q$ is constant. For $f \in L^1(\mu \otimes Q)$: applying this identity to $|f|$ shows the inner integral is finite $\mu$-a.e., and the full identity then follows by splitting $f = f^+ - f^-$.
+
+**5. Uniqueness: Kernels Are Determined $\mu$-Almost Everywhere.**
+Two kernels $Q$ and $\widetilde{Q}$ satisfy $\mu \otimes Q = \mu \otimes \widetilde{Q}$ if and only if $Q(x,\cdot) = \widetilde{Q}(x,\cdot)$ for $\mu$-almost every $x$ (the reverse direction requires $\mathcal{B}_2$ to be countably generated).
+
+- **Forward:** Agreement $\mu$-a.s. implies equal integrals over every $B_1$ for every $B_2$, so the two product measures agree on all rectangles, hence on all of $\mathcal{B}_1 \otimes \mathcal{B}_2$ by Dynkin's theorem.
+- **Reverse:** Testing against $B_1 = \{Q(\cdot, B_2) > \widetilde{Q}(\cdot, B_2)\}$ and $B_1 = \{Q(\cdot, B_2) < \widetilde{Q}(\cdot, B_2)\}$ separately gives $\mu$-a.s. equality for each fixed $B_2$. Countable generation of $\mathcal{B}_2$ yields a single $\mu$-null exceptional set $N$ (a countable union of null sets) outside of which $Q(x,\cdot) = \widetilde{Q}(x,\cdot)$ on a generating algebra, and hence on all of $\mathcal{B}_2$ by Carathéodory's uniqueness theorem.
+:::

@@ -1,0 +1,405 @@
+# Lecture 37.1: Markov Processes
+
+## Foundations of Markov Processes
+
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space and let $T \subseteq [0, \infty)$ or $T \subseteq \mathbb{Z}$ be the parameter set (time domain). 
+
+- A **filtration** $\{\mathcal{F}_t\}_{t \in T}$ is a family of sub-$\sigma$-algebras of $\mathcal{F}$ with $\mathcal{F}_s \subseteq \mathcal{F}_t$ whenever $s \le t$. Let $(S, \mathcal{B})$ be a measurable state space, and write $\mathcal{B}_b(S) = \mathcal{B}_b(S, \mathcal{B})$ for the bounded $\mathcal{B}$-measurable functions $S \to \mathbb{R}$.
+
+- A **probability kernel** on $(S, \mathcal{B})$ is a map $q : S \times \mathcal{B} \to [0, 1]$ such that $q(x, \cdot)$ is a probability measure on $(S, \mathcal{B})$ for every $x \in S$, and $x \mapsto q(x, B)$ is $\mathcal{B}$-measurable for every $B \in \mathcal{B}$. 
+
+- Its associated **operator** acts on $f \in \mathcal{B}_b(S)$ by
+$$
+(Qf)(x) = \int_S f(y) \, q(x, dy),
+$$
+and $Qf \in \mathcal{B}_b(S)$ with $\|Qf\|_\infty \le \|f\|_\infty$. 
+
+- The **composition** of two kernels is the probability kernel $(q q')(x, B) = \int_S q(x, dy) \, q'(y, B)$, whose operator is $Q Q'$.
+
+::: {#def-adapted-process}
+## Adapted Process
+A stochastic process $X = \{X_t\}_{t \in T}$ defined on $(\Omega, \mathcal{F}, \mathbb{P})$ taking values in $(S, \mathcal{B})$ is said to be **adapted** to the filtration $\{\mathcal{F}_t\}_{t \in T}$ if $X_t : \Omega \to S$ is $(\mathcal{F}_t, \mathcal{B})$-measurable for each $t \in T$.
+:::
+
+::: {#def-markov-property}
+## Markov Property
+An adapted stochastic process $X = \{X_t\}_{t \in T}$ on $(\Omega, \mathcal{F}, \{\mathcal{F}_t\}_{t \in T}, \mathbb{P})$ satisfies the **Markov property** (with respect to $\{\mathcal{F}_t\}$) if, for every $s, t \in T$ with $s < t$ and every $f \in \mathcal{B}_b(S)$, we have:
+$$
+\mathbb{E}[f(X_t) \mid \mathcal{F}_s] = \mathbb{E}[f(X_t) \mid X_s] \quad \mathbb{P}\text{-almost surely.}
+$$ {#eq-markov-property}
+:::
+
+- Suppose that $(S, \mathcal{B})$ is a **standard Borel space** (e.g., a Polish space equipped with its Borel $\sigma$-algebra). Then, for all $s < t$ in $T$, there exists a **regular conditional distribution** of $X_t$ given $X_s$, i.e. a probability kernel $q_{s,t}$ on $(S, \mathcal{B})$ such that
+$$
+\mathbb{E}[f(X_t) \mid X_s] = \int_S f(y) \, q_{s,t}(X_s, dy) = (Q_{s,t} f)(X_s) \quad \mathbb{P}\text{-a.s.}
+$$ {#eq-rcd-operator}
+for all $f \in \mathcal{B}_b(S)$, where $Q_{s,t}$ is the operator of $q_{s,t}$. 
+
+- So $Q_{s,t}$ is the operator that takes a function of the future state $X_t$ and produces its conditional expectation as a function of the current state $X_s$:
+$$ 
+\boxed{ \mathbb E[f(X_t)\mid X_s] = (Q_{s,t}f)(X_s). } 
+$$
+
+- Existence holds for any random element $X_t$ with values in a standard Borel space (the Markov property is not needed), and the kernel is unique only up to $\mu_{X_s}$-null sets, where $\mu_{X_s} = \text{Law}(X_s)$. Throughout, "the" kernel $q_{s,t}$ means a fixed choice of such a version.
+
+## Derivation of Transition Operators and the Chapman–Kolmogorov Property
+
+We now investigate the properties of the transition operators $Q_{s,t}$.
+
+::: {#prp-ck-almost-everywhere}
+## Chapman–Kolmogorov Equations Hold Almost Everywhere
+Let $X$ be adapted and satisfy the Markov property, let $(S, \mathcal{B})$ be standard Borel, and let $q_{s,t}$ ($s < t$) be regular conditional distributions as in @eq-rcd-operator. Then for all $r < s < t$ in $T$ and every $f \in \mathcal{B}_b(S)$,
+$$
+Q_{r,t} f = Q_{r,s} (Q_{s,t} f) \quad \mu_{X_r}\text{-almost everywhere.}
+$$ {#eq-operator-ck-almost-sure}
+Moreover, there is a $\mu_{X_r}$-null set $N$ (depending on $r,s,t$ but not on $B$) such that
+$$
+q_{r,t}(x, B) = \int_S q_{r,s}(x, dy) \, q_{s,t}(y, B), 
+$$ {#eq-ck-almost-sure}
+for all $x \in S \setminus N$ and all $B \in \mathcal{B}$.
+:::
+
+::: {.proof}
+## Proof of @prp-ck-almost-everywhere
+Since $X$ is adapted and the filtration is increasing, $\sigma(X_r) \subseteq \mathcal{F}_r \subseteq \mathcal{F}_s$. The function $Q_{s,t} f$ is bounded and measurable, so by the tower property, the Markov property, and @eq-rcd-operator applied to $f$ at times $(s,t)$ and to $Q_{s,t}f$ at times $(r,s)$:
+$$
+\begin{aligned}
+(Q_{r,t} f)(X_r) &= \mathbb{E}[f(X_t) \mid X_r] \\
+&= \mathbb{E} \Big[ \mathbb{E}[f(X_t) \mid \mathcal{F}_s] \;\Big|\; X_r \Big] \\
+&= \mathbb{E} \Big[ \mathbb{E}[f(X_t) \mid X_s] \;\Big|\; X_r \Big] \\
+&= \mathbb{E} \Big[ (Q_{s,t} f)(X_s) \;\Big|\; X_r \Big] \\
+&= \big(Q_{r,s}(Q_{s,t} f)\big)(X_r) \quad \mathbb{P}\text{-a.s.}
+\end{aligned}
+$$ {#eq-operator-semigroup-derivation}
+Put $h = Q_{r,t} f - Q_{r,s}(Q_{s,t} f)$, a bounded measurable function on $S$. Then $\mu_{X_r}(h \neq 0) = \mathbb{P}(h(X_r) \neq 0) = 0$, which is @eq-operator-ck-almost-sure.
+
+(The left-hand side does not depend on the version chosen for $Q_{s,t}f$: since $\mu_{X_s} = \mu_{X_r} q_{r,s}$, two versions that agree $\mu_{X_s}$-a.e. have images under $Q_{r,s}$ that agree $\mu_{X_r}$-a.e.)
+
+For the kernel form, the difficulty is that @eq-operator-ck-almost-sure only gives, for *each fixed* $B$, a null set $N_B$ outside of which equality holds for that $B$; since $\mathcal{B}$ is uncountable, naively taking $N = \bigcup_{B \in \mathcal{B}} N_B$ could fail to be null. The standard Borel hypothesis repairs this, by letting us reduce to countably many $B$'s before taking the union, and then use Dynkin's theorem to recover all of $\mathcal B$.
+
+- *A countable generating $\pi$-system.* Since $(S,\mathcal{B})$ is standard Borel, it is Borel-isomorphic to a Polish space with its Borel $\sigma$-algebra, which has a countable base $\{U_n\}_{n \ge 1}$ of open sets. Let $\mathcal{C}$ be the collection of all finite intersections $U_{n_1} \cap \cdots \cap U_{n_k}$ together with $S$ itself. Then $\mathcal{C}$ is countable, closed under finite intersections (a $\pi$-system), and $\sigma(\mathcal{C}) = \mathcal{B}$.
+
+- *One null set per $B \in \mathcal{C}$, then a countable union.* For each $B \in \mathcal{C}$, apply @eq-operator-ck-almost-sure with $f = \mathbf{1}_B$: by @rem-operator-integral-form this produces a $\mu_{X_r}$-null set $N_B$ such that $q_{r,t}(x,B) = (q_{r,s}q_{s,t})(x,B)$ for all $x \notin N_B$. Set
+$$
+N := \bigcup_{B \in \mathcal{C}} N_B.
+$$
+Because $\mathcal{C}$ is countable, $N$ is a countable union of $\mu_{X_r}$-null sets, so $\mu_{X_r}(N) \le \sum_{B \in \mathcal{C}} \mu_{X_r}(N_B) = 0$. Crucially, $N$ was built by exhausting all of $\mathcal{C}$ in advance, so it no longer depends on $B$.
+
+- *Agreement on $\mathcal{C}$, for a fixed $x$.* Fix any $x \in S \setminus N$. Since $N = \bigcup_{B \in \mathcal{C}} N_B$, this single $x$ avoids every $N_B$ simultaneously, so
+$$
+q_{r,t}(x,B) = (q_{r,s}q_{s,t})(x,B) \qquad \text{for all } B \in \mathcal{C}.
+$$
+(This is the key swap of quantifiers: having fixed $x$ first, we now let $B$ range over all of $\mathcal{C}$, rather than fixing $B$ first and asking for a.e. $x$.)
+
+- *Extension from $\mathcal{C}$ to $\mathcal{B}$ via Dynkin.* For this fixed $x$, the set functions $\nu_1(B) := q_{r,t}(x,B)$ and $\nu_2(B) := (q_{r,s}q_{s,t})(x,B) = \int_S q_{s,t}(y,B)\,q_{r,s}(x,dy)$ are both probability measures on $(S,\mathcal{B})$: $\nu_1$ because $q_{r,t}(x,\cdot)$ is a probability measure, and $\nu_2$ because $q_{s,t}(y,\cdot)$ is countably additive in $B$ for each $y$ with total mass $1$, so integrating term by term against $q_{r,s}(x,dy)$ (monotone convergence) shows $\nu_2$ is countably additive with $\nu_2(S) = 1$. Since $\nu_1 = \nu_2$ on the $\pi$-system $\mathcal{C}$ and both are finite measures, Dynkin's $\pi$-$\lambda$ theorem gives $\nu_1 = \nu_2$ on $\sigma(\mathcal{C}) = \mathcal{B}$, i.e.
+$$
+q_{r,t}(x,B) = (q_{r,s}q_{s,t})(x,B) \qquad \text{for all } B \in \mathcal{B}.
+$$
+
+As $x \in S \setminus N$ was arbitrary, this is @eq-ck-almost-sure, with $N$ depending only on $r,s,t$ and not on $B$.
+:::
+
+:::{#rem-operator-integral-form}
+For $f=\mathbf 1_B$,
+$$ 
+Q_{r,t}\mathbf 1_B(x) = q_{r,t}(x,B), 
+$$
+while
+$$ 
+\begin{aligned} 
+Q_{r,s}(Q_{s,t}\mathbf 1_B)(x) &= \int_S Q_{s,t}\mathbf 1_B(y)\,q_{r,s}(x,dy)\\ 
+&= \int_S q_{s,t}(y,B)\,q_{r,s}(x,dy)\\ 
+&=(q_{r,s}q_{s,t})(x,B). 
+\end{aligned} 
+$$
+Thus, $Q_{r,t}\mathbf 1_B = Q_{r,s} (Q_{s,t} \mathbf 1_B)$ gives $q_{r,t}(x,B) = (q_{r,s}q_{s,t})(x,B)$ for $\mu_{X_r}$-a.e. $x$, for each fixed $B$. 
+
+The standard Borel assumption allows this conclusion to be strengthened: there exists a single $\mu_{X_r}$-null set $N$ such that the equality holds for every $x\notin N$ and every $B\in\mathcal B$. Indeed, choose a countable generating $\pi$-system for $\mathcal B$, take the union of the corresponding null sets, and use Dynkin's $\pi$-$\lambda$ theorem to extend the equality from the generating $\pi$-system to all of $\mathcal B$.
+:::
+
+
+Integrating @eq-operator-ck-almost-sure against $\mu_{X_r}$ gives only the weaker identity $\int Q_{r,t} f \, d\mu_{X_r} = \int Q_{r,s} Q_{s,t} f \, d\mu_{X_r}$ (equality of the laws of $X_t$ computed via both kernels), which does **not** characterize @eq-ck-almost-sure: with $S = \{0,1\}$, $\mu$ uniform, $q_{r,t} = I$ and $q_{r,s} q_{s,t}$ equal to the swap matrix, both sides agree for all $f$ although the kernels differ everywhere. The correct joint-law version tests against functions of both coordinates: for all bounded measurable $g, f$,
+$$
+\int_S g(x) \, (Q_{r,t} f)(x) \, \mu_{X_r}(dx) = \int_S g(x) \, \big(Q_{r,s} Q_{s,t} f\big)(x) \, \mu_{X_r}(dx),
+$$ {#eq-operator-integral-form}
+i.e. $\mu_{X_r} \otimes q_{r,t} = \mu_{X_r} \otimes (q_{r,s} q_{s,t})$ as measures on $S \times S$.
+
+::: {#rem-ck-equation-interpretation}
+## The Chapman–Kolmogorov Equation
+The key idea is that to calculate the probability of being in $B$ at time $t$, given the state $x$ at time $r$, you can condition on the intermediate state at time $s$ and average over all possible intermediate states.
+The Chapman–Kolmogorov equation expresses this idea mathematically:
+$$
+q_{r,t}(x,B)=\int_S q_{s,t}(y,B)\,q_{r,s}(x,dy).
+$$
+
+- **Left-hand side**: $q_{r,t}(x,B)$ is the probability of being in $B$ at time $t$, starting from state $x$ at time $r$.
+
+- **First kernel on the right**: $q_{r,s}(x,dy)$ is the distribution of the intermediate state $X_s$, given $X_r=x$.
+
+
+- **Second kernel on the right**: $q_{s,t}(y,B)$ is the probability of reaching $B$ at time $t$, starting from state $y$ at time $s$.
+
+The integral averages the last quantity over the distribution of the intermediate state $y$.
+
+:::
+
+**Intuitively**, @prp-ck-almost-everywhere says something very simple: If $X$ is Markov, then predicting the future from the present can be done in stages: first predict the intermediate state, and then predict the later state from that intermediate state.
+Suppose $r<s<t$. Think of the process as $X_r \longrightarrow X_s \longrightarrow X_t$. 
+
+The kernel $q_{r,t}(x,\cdot)$ describes the distribution of $X_t$ when the process is currently at $x$ at time $r$. The Chapman–Kolmogorov result says that this distribution can be obtained by:
+
+Move from $x$ at time $r$ to the possible states $y$ at time $s$ according to $q_{r,s}(x,dy)$. From each such $y$, move to the possible states at time $t$ according to $q_{s,t}(y,dz)$. Average over all possible intermediate states $y$. In symbols,
+$$
+q_{r,t}(x,C) = \int_S q_{s,t}(y,C)\,q_{r,s}(x,dy),
+$$
+for $\mu_{X_r}$-almost every $x$.
+
+Why is this a Markov property? The crucial idea is that once we know $X_s$, the earlier state $X_r$ contains no additional information about $X_t$. Schematically, $X_r \quad\longrightarrow\quad X_s \quad\longrightarrow\quad X_t$. Thus, to predict $X_t$ from $X_r$, we do not need to carry the entire history from $r$ to $s$. We can simply pass through the intermediate state $X_s$. For a function $f$, the same idea appears even more clearly:
+$$ 
+\boxed{ Q_{r,t}f = Q_{r,s}(Q_{s,t}f) \qquad \mu_{X_r}\text{-a.e.} } 
+$$
+Here $Q_{s,t}f(y)$ is the expected value of $f(X_t)$ if the process is at $y$ at time $s$. Then $Q_{r,s}$ averages those conditional expectations over the possible values of $X_s$ given $X_r=x$. So it is essentially the tower property combined with the Markov property:
+$$ 
+\begin{aligned} 
+\mathbb E[f(X_t)\mid X_r] &= \mathbb E\left[ \mathbb E[f(X_t)\mid X_s] \mid X_r \right]\\ &= \mathbb E\left[ (Q_{s,t}f)(X_s) \mid X_r \right]\\ &= (Q_{r,s}Q_{s,t}f)(X_r). 
+\end{aligned} 
+$$
+A useful interpretation of the operators is the following. You can think of $Q_{r,t}$ as a prediction operator:
+$$ 
+f \quad\xrightarrow{\quad Q_{r,t}\quad}\quad \text{expected value of }f(X_t)\text{ given }X_r. 
+$$
+Then Chapman–Kolmogorov says that prediction over a long interval is equivalent to successive prediction over shorter intervals:
+$$ 
+\boxed{ \text{prediction from }r\text{ to }t = \text{prediction from }r\text{ to }s \;\circ\; \text{prediction from }s\text{ to }t. } 
+$$
+That is the fundamental intuition behind the semigroup/transition-operator viewpoint. One subtlety the proposition captures especially well is that, because regular conditional distributions are only defined up to null sets, this equality is initially an almost-everywhere statement, rather than necessarily a pointwise statement for every $x\in S$.
+
+
+
+---
+
+## Markov Transition Kernels and Markov Processes
+
+::: {#def-transition-kernel}
+## Markov Transition Kernels and Operators
+A collection of probability kernels $\{q_{s,t}\}_{s \le t,\; s,t \in T}$ on $(S, \mathcal{B})$ (with corresponding operators $\{Q_{s,t}\}_{s \le t}$ acting on $\mathcal{B}_b(S)$) is called a family of **Markov transition kernels (operators)** if:
+
+1. For all $s \in T$ and all $x \in S$, $q_{s,s}(x, \cdot) = \delta_x(\cdot)$ (or $Q_{s,s} = \text{Id}$).
+2. For all $r \le s \le t$ in $T$ and all $x \in S$, the **Chapman–Kolmogorov equations** hold pointwise:
+   $$
+   Q_{r,t} = Q_{r,s} Q_{s,t},
+   $$ {#eq-ck-operator}
+   which is explicitly written in kernel form as:
+   $$
+   q_{r,t}(x, B) = \int_S q_{r,s}(x, dy) \, q_{s,t}(y, B) \quad \forall B \in \mathcal{B}, \, \forall x \in S.
+   $$ {#eq-ck-kernel}
+:::
+
+(The operator and kernel forms are equivalent by the standard monotone class argument: kernels are determined by their action on indicators, and operators by their action on $\mathcal{B}_b(S)$.)
+
+::: {#def-markov-process}
+## Markov Process
+Given a filtered probability space $(\Omega, \mathcal{F}, \{\mathcal{F}_t\}_{t \in T}, \mathbb{P})$ and a state space $(S, \mathcal{B})$, an adapted stochastic process $X = \{X_t\}_{t \in T}$ is a **Markov process** (with respect to $\{\mathcal{F}_t\}$) if it satisfies the Markov property (@eq-markov-property) and there exists a family of Markov transition operators $\{Q_{s,t}\}_{s \le t}$ in the sense of @def-transition-kernel such that:
+$$
+\mathbb{E}[f(X_t) \mid X_s] = (Q_{s,t} f)(X_s) \quad \mathbb{P}\text{-a.s.} \quad \forall s \le t \text{ in } T, \, \forall f \in \mathcal{B}_b(S).
+$$ {#eq-markov-process-def}
+:::
+
+(For $s = t$, @eq-markov-process-def is trivial since $f(X_s)$ is $\sigma(X_s)$-measurable.)
+
+::: {#exm-markov-both-clauses-needed}
+## Why Both Clauses of @def-markov-process Are Needed
+Let $Z_0, Z_1$ be i.i.d. uniform on $\{0,1\}$, set $Z_2 = Z_0 \oplus Z_1$ (addition modulo $2$), and put $X_0 = Z_0$, $X_1 = Z_1$, $X_2 = Z_2$ on $T = \{0,1,2\}$ with $\mathcal{F}_t = \sigma(X_0, \dots, X_t)$. Then $(Z_0, Z_1, Z_2)$ are pairwise independent, so in particular $X_1$ is independent of $X_0$, and, given $X_1 = y$, $X_2 = Z_0 \oplus y$ with $Z_0$ independent of $X_1$.
+
+Take $q_{0,1}(x, \cdot)$ to be uniform on $\{0,1\}$ (not depending on $x$) and $q_{1,2}(y, \{z\}) = \tfrac12$ for $z \in \{0,1\}$ (not depending on $y$). Both reproduce @eq-markov-process-def: $\mathbb{E}[f(X_1) \mid X_0] = \tfrac12(f(0)+f(1)) = (Q_{0,1}f)(X_0)$ since $X_1 \perp X_0$, and $\mathbb{E}[f(X_2) \mid X_1] = \tfrac12(f(0)+f(1)) = (Q_{1,2}f)(X_1)$ since $X_2 = X_1 \oplus Z_0$ with $Z_0 \perp X_1$ uniform. Composing, $(q_{0,1}q_{1,2})(x, \cdot)$ is again uniform on $\{0,1\}$ for every $x$, which coincides with $q_{0,2}(x,\cdot) := \mathrm{Law}(X_2 \mid X_0 = x)$ (also uniform on $\{0,1\}$, since $X_2 = X_0 \oplus Z_1$ with $Z_1 \perp X_0$ uniform). So Chapman–Kolmogorov holds pointwise, and this family satisfies @eq-markov-process-def at every pair $(s,t)$.
+
+Yet $X$ is **not** Markov: $X_2 = X_0 \oplus X_1$ is a deterministic, non-constant function of $\mathcal{F}_1 = \sigma(X_0, X_1)$, so $\mathbb{E}[f(X_2) \mid \mathcal{F}_1] = f(X_0 \oplus X_1)$ depends on $X_0$ for non-constant $f$, whereas $\mathbb{E}[f(X_2) \mid X_1] = \tfrac12(f(0)+f(1))$ does not; these disagree, so @eq-markov-property fails at $(s,t) = (1,2)$. Hence a Chapman–Kolmogorov-consistent transition family satisfying @eq-markov-process-def is not enough to make $X$ a Markov process — @def-markov-process imposes the Markov property as a genuinely separate requirement.
+:::
+
+---
+
+## Independent Increment Processes
+
+In this section $S = \mathbb{R}^d$ with its Borel $\sigma$-algebra (more generally, a measurable group), so that addition and subtraction are measurable.
+
+::: {#def-independent-increments}
+## Independent Increment Process
+Let $\{\mathcal{F}_t\}$ be a filtration. An adapted process $X = \{X_t\}_{t \in T}$ in $\mathbb{R}^d$ has **independent increments** (with respect to $\{\mathcal{F}_t\}$) if, for all $s < t$ in $T$, the increment $X_t - X_s$ is independent of $\mathcal{F}_s$. When no filtration is mentioned, $\mathcal{F}_t = \mathcal{F}_t^X = \sigma(X_u : u \le t)$.
+:::
+
+::: {#rem-independent-increments-equivalent}
+## On the Definition
+In particular, for $t_0 < t_1 < \dots < t_n$ the increments $X_{t_1} - X_{t_0}, \dots, X_{t_n} - X_{t_{n-1}}$ are independent. This weaker property alone is **not** sufficient for the Markov property, because it says nothing about the initial value: with $T = \{0,1\}$, $X_0 = \pm 1$ with probability $\tfrac12$ each, and $X_1 = 2X_0$, there is a single increment $X_1 - X_0 = X_0$, which is trivially "independent", yet it is not independent of $\mathcal{F}_0^X = \sigma(X_0)$.
+
+If $T$ has a least element $t_*$, the definition above is equivalent to: for all $t_* < t_1 < \dots < t_n$ the random variables $X_{t_*}, X_{t_1} - X_{t_*}, X_{t_2} - X_{t_1}, \dots, X_{t_n} - X_{t_{n-1}}$ are independent. Thus random walks require $X_0$ independent of the steps, and Poisson processes (with $X_0 = 0$) are examples.
+:::
+
+::: {#prp-independent-increments-markov}
+## Independent Increment Processes are Markovian
+Let $X = \{X_t\}_{t \in T}$ be an $\mathbb{R}^d$-valued process with independent increments with respect to $\{\mathcal{F}_t\}$. Then $X$ is a Markov process with respect to $\{\mathcal{F}_t\}$, and the transition kernel is given by:
+$$
+q_{s,t}(x, B) = \mathbb{P}\left( x + X_t - X_s \in B \right), \, s \le t, \; x \in \mathbb{R}^d, \, B \in \mathcal{B}(\mathbb{R}^d),
+$$
+and this family satisfies the Chapman–Kolmogorov equations at every $x \in \mathbb{R}^d$.
+:::
+
+::: {.proof}
+## Proof of @prp-independent-increments-markov
+- *Step 0 (a $\sigma$-algebra form of the freezing lemma).* We will repeatedly use the following generalization of @prp-independence-substitution: if $Z$ is $\mathcal{G}$-measurable, $W$ is independent of $\mathcal{G}$ (not merely of $Z$), and $\phi \in \mathcal{B}_b(\mathbb{R}^d \times \mathbb{R}^d)$, then
+$$
+\mathbb{E}[\phi(Z,W) \mid \mathcal{G}] = \psi(Z) \text{ a.s.}, \qquad \psi(z) := \mathbb{E}[\phi(z,W)],
+$$
+and consequently, taking total expectation, $\mathbb{E}[\phi(Z,W)] = \mathbb{E}[\psi(Z)]$. Indeed, for any bounded $\mathcal{G}$-measurable $h$, the pair $(Z,h)$ is $\mathcal{G}$-measurable, hence independent of $W$ (since $W \perp \mathcal{G}$); applying Fubini–Tonelli to the product measure $\mu_{(Z,h)} \otimes \mu_W$, exactly as in the proof of @prp-independence-substitution but with $h$ in place of the test function there, gives $\mathbb{E}[\phi(Z,W) h] = \mathbb{E}[\psi(Z) h]$ for every such $h$, which is the defining property of $\mathbb{E}[\phi(Z,W) \mid \mathcal{G}] = \psi(Z)$.
+
+- *Step 1 (the kernel is well defined and measurable).* Fix $s \le t$, let $\Delta = X_t - X_s$ with law $\mu_\Delta$, and fix $B \in \mathcal{B}(\mathbb{R}^d)$. Then $q_{s,t}(x,B) = \mathbb{P}(x + \Delta \in B) = \int_{\mathbb{R}^d} \mathbf{1}_B(x+z) \, \mu_\Delta(dz)$. For fixed $x$, $B \mapsto q_{s,t}(x,B)$ is the law of $x + \Delta$, hence a probability measure. For fixed $B$, the map $(x,z) \mapsto \mathbf{1}_B(x+z)$ is the indicator of the preimage of $B$ under the continuous (hence Borel) addition map, so it is jointly measurable and nonnegative; by Tonelli's theorem, $x \mapsto \int \mathbf{1}_B(x+z)\,\mu_\Delta(dz) = q_{s,t}(x,B)$ is Borel measurable. So $q_{s,t}$ is a probability kernel.
+
+- *Step 2 (Markov property and @eq-markov-process-def).* Fix $f \in \mathcal{B}_b(\mathbb{R}^d)$ and $s \le t$, and let $\Delta = X_t - X_s$, so $X_t = X_s + \Delta$ with $X_s$ being $\mathcal{F}_s$-measurable (as $X$ is adapted). If $s = t$, then $\Delta = 0$ a.s., so $H(x) := \mathbb{E}[f(x+\Delta)] = f(x)$, and since $f(X_t) = f(X_s)$ is already $\sigma(X_s)$-measurable, $\mathbb{E}[f(X_t) \mid \mathcal{F}_s] = f(X_s) = H(X_s)$ trivially — no independence is needed in this degenerate case. If $s < t$, then by definition of independent increments $\Delta$ is independent of $\mathcal{F}_s$; the map $\phi(x,z) = f(x+z)$ is bounded and jointly measurable (addition is continuous, $f$ is Borel), so Step 0 with $\mathcal{G} = \mathcal{F}_s$, $Z = X_s$, $W = \Delta$ gives
+$$
+\mathbb{E}[f(X_t) \mid \mathcal{F}_s] = H(X_s), \qquad H(x) = \mathbb{E}[f(x+\Delta)] = \int f(y) \, q_{s,t}(x,dy).
+$$
+In either case $H(X_s)$ is $\sigma(X_s)$-measurable, and $\sigma(X_s) \subseteq \mathcal{F}_s$, so the tower property gives $\mathbb{E}[f(X_t) \mid X_s] = \mathbb{E}[\mathbb{E}[f(X_t) \mid \mathcal{F}_s] \mid X_s] = \mathbb{E}[H(X_s) \mid X_s] = H(X_s)$. Comparing the two displays, $\mathbb{E}[f(X_t)\mid \mathcal{F}_s] = \mathbb{E}[f(X_t) \mid X_s]$, which is @eq-markov-property, and $\mathbb{E}[f(X_t) \mid X_s] = H(X_s) = (Q_{s,t}f)(X_s)$, which is @eq-markov-process-def.
+
+- *Step 3 (@def-transition-kernel, part 1).* Taking $s=t$ in Step 1, $\Delta = X_s - X_s = 0$ a.s., so $q_{s,s}(x,B) = \mathbb{P}(x \in B) = \mathbf{1}_B(x)$, i.e. $q_{s,s}(x,\cdot) = \delta_x$.
+
+- *Step 4 (@def-transition-kernel, part 2: pointwise Chapman–Kolmogorov).* Fix $r \le s \le t$, $x \in \mathbb{R}^d$, $B \in \mathcal{B}(\mathbb{R}^d)$. Let $Y := x + (X_s - X_r)$ and $\Delta_2 := X_t - X_s$; by Step 1 applied to $(r,s)$, $Y$ has law $q_{r,s}(x,\cdot)$. Since $X$ is adapted and $\mathcal{F}_r \subseteq \mathcal{F}_s$, both $X_r$ and $X_s$ (hence $X_s - X_r$, and hence $Y$) are $\mathcal{F}_s$-measurable; and $\Delta_2$ is independent of $\mathcal{F}_s$ (trivially if $s=t$, as in Step 2; by definition of independent increments if $s < t$). By Step 1 applied to $(s,t)$, $y \mapsto q_{s,t}(y,B)$ is bounded and measurable, so by the change-of-variables formula (law of the unconscious statistician) applied to the law $q_{r,s}(x,\cdot)$ of $Y$,
+$$
+\int_{\mathbb{R}^d} q_{r,s}(x,dy)\, q_{s,t}(y,B) = \mathbb{E}[q_{s,t}(Y,B)].
+$$
+Now apply Step 0, in its total-expectation form, with $\mathcal{G} = \mathcal{F}_s$, $Z = Y$, $W = \Delta_2$, $\phi(y,w) = \mathbf{1}_B(y+w)$: since $q_{s,t}(Y,B) = \psi(Y)$ with $\psi(y) = \mathbb{E}[\mathbf{1}_B(y+\Delta_2)]$,
+$$
+\mathbb{E}[q_{s,t}(Y,B)] = \mathbb{E}[\psi(Y)] = \mathbb{E}[\mathbf{1}_B(Y + \Delta_2)] = \mathbb{P}(Y + \Delta_2 \in B).
+$$
+Since $Y + \Delta_2 = x + (X_s - X_r) + (X_t - X_s) = x + (X_t - X_r)$, this equals $\mathbb{P}(x + (X_t-X_r) \in B) = q_{r,t}(x,B)$. Hence
+$$
+\int_{\mathbb{R}^d} q_{r,s}(x,dy)\, q_{s,t}(y,B) = q_{r,t}(x,B)
+$$
+for *every* $x \in \mathbb{R}^d$ and every $B \in \mathcal{B}(\mathbb{R}^d)$ — i.e. @eq-ck-kernel holds pointwise, not merely $\mu_{X_r}$-almost everywhere as in the general setting of @prp-ck-almost-everywhere.
+:::
+
+---
+
+## Discrete-Time Parameterization and Discrete State Spaces
+
+Let us now focus on discrete time $T = \mathbb{N} = \{0, 1, 2, \dots\}$. The family of transition operators is $\{Q_{m,n} : 0 \le m \le n < \infty\}$.
+
+By the (pointwise) Chapman–Kolmogorov equations and induction on $n - m$:
+$$
+Q_{m,n} = Q_{m,m+1} Q_{m+1,m+2} \cdots Q_{n-1,n}.
+$$ {#eq-discrete-ck-decomposition}
+
+Hence, in discrete time, a transition family is determined by the one-step operators $\{Q_{m,m+1} : m \in \mathbb{N}\}$. Conversely, any sequence of probability kernels $\{q_{m,m+1}\}_{m \in \mathbb{N}}$, together with $q_{m,m} = \delta_x$ and $q_{m,n}$ defined by composition, satisfies @def-transition-kernel. In particular, in discrete time the pointwise requirement of @def-transition-kernel is automatic once the one-step kernels are chosen (for $S$ standard Borel, with one-step kernels taken as regular conditional distributions).
+
+## Discrete State Space
+
+If $S$ is countable (equipped with the discrete $\sigma$-algebra $\mathcal{B} = 2^S$), write $q_{m,n}(x, y) := q_{m,n}(x, \{y\})$, so that
+$$
+q_{m,m+1}(x, B) = \sum_{y \in B} q_{m,m+1}(x, y),
+$$ {#eq-discrete-kernel-sum}
+where $q_{m,m+1}(x, y)$ is a regular conditional distribution of $X_{m+1}$ given $X_m$, characterized by
+$$
+\begin{aligned}
+q_{m,m+1}(x, y) &= \mathbb{P}(X_{m+1} = y \mid X_m = x) \\
+&= \frac{\mathbb{P}(X_{m+1} = y, X_m = x)}{\mathbb{P}(X_m = x)},
+\end{aligned}
+$$ {#eq-discrete-rcd-conditional-prob}
+whenever $\mathbb{P}(X_m = x) > 0$. For $x$ with $\mathbb{P}(X_m = x) = 0$ the row $q_{m,m+1}(x, \cdot)$ is not determined by the process; it may be any probability vector, and the pointwise convention of @def-transition-kernel simply fixes one such choice.
+
+In this framework, for $n \ge m + 2$ the Chapman–Kolmogorov equation represents a sum over intermediate states ("sum over paths"):
+$$
+\begin{aligned}
+&q_{m,n}(x, y) = \sum_{x_{m+1} \in S} \sum_{x_{m+2} \in S} \dots \\
+&\sum_{x_{n-1} \in S} q_{m,m+1}(x, x_{m+1}) q_{m+1,m+2}(x_{m+1}, x_{m+2}) \cdots q_{n-1,n}(x_{n-1}, y).
+\end{aligned}
+$$ {#eq-path-integral-ck}
+(For $n = m+1$ there are no intermediate sums, and for $n = m$ one has $q_{m,m}(x,y) = \mathbf{1}_{\{x = y\}}$.) The order of the countable sums is immaterial since all terms are nonnegative.
+
+---
+
+## Finite-Dimensional Distributions
+
+Let $(X_t)_{t \in T}$ be a Markov process (in the sense of @def-markov-process) with transition kernels $\{q_{s,t}\}_{s \le t}$. Fix arbitrary ordered time points $t_0 < t_1 < \dots < t_n$ in $T$, and let $\nu_0 = \text{Law}(X_{t_0})$ be the initial law. We write $\mathbb{E}_{\nu_0}[h] := \int_S h \, d\nu_0$ for $h \in \mathcal{B}_b(S)$.
+
+The measure on the right of @eq-fdd-law below is the probability measure on $(S^{n+1}, \mathcal{B}^{\otimes(n+1)})$ defined by iterated integration of the kernels:
+$$
+A \mapsto \int \nu_0(dx_0) \int q_{t_0,t_1}(x_0, dx_1) \cdots \int q_{t_{n-1},t_n}(x_{n-1}, dx_n) \, \mathbf{1}_A(x_0, \dots, x_n).
+$$
+
+::: {#prp-fdds}
+## Finite-Dimensional Distributions
+The joint distribution $\text{Law}(X_{t_0}, X_{t_1}, \dots, X_{t_n})$ on $S^{n+1}$ is given by:
+$$
+\begin{aligned}
+&\text{Law}(X_{t_0}, X_{t_1}, \dots, X_{t_n})(dx_0, dx_1, \dots, dx_n) \\
+&= \nu_0(dx_0) q_{t_0, t_1}(x_0, dx_1) q_{t_1, t_2}(x_1, dx_2) \cdots q_{t_{n-1}, t_n}(x_{n-1}, dx_n).
+\end{aligned}
+$$ {#eq-fdd-law}
+Equivalently, for all bounded measurable functions $f_0, f_1, \dots, f_n \in \mathcal{B}_b(S)$:
+$$
+\begin{aligned}
+&\mathbb{E}\left[ \prod_{i=0}^n f_i(X_{t_i}) \right] \\
+&= \mathbb{E}_{\nu_0} \left[ f_0 Q_{t_0, t_1} \left( f_1 Q_{t_1, t_2} \left( \cdots (f_{n-1} Q_{t_{n-1}, t_n} f_n) \cdots \right) \right) \right],
+\end{aligned}
+$$ {#eq-fdd-expectation}
+where for $n = 0$ the right-hand side is read as $\mathbb{E}_{\nu_0}[f_0]$.
+:::
+
+::: {.proof}
+## Proof of @prp-fdds
+We prove @eq-fdd-expectation by induction on $n$, simultaneously for all time points $t_0 < \dots < t_n$ and all bounded measurable $f_0, \dots, f_n$.
+
+**Base Case ($n=0$):**
+$\mathbb{E}[f_0(X_{t_0})] = \int_S f_0 \, d\nu_0 = \mathbb{E}_{\nu_0}[f_0]$ by definition of $\nu_0$.
+
+**Inductive Step:**
+Assume @eq-fdd-expectation holds for $n$ (all tuples of $n+1$ times and all bounded measurable functions). Consider $n+2$ time points $t_0 < t_1 < \dots < t_n < t_{n+1}$. Since $X$ is adapted and the filtration is increasing, $\prod_{i=0}^n f_i(X_{t_i})$ is bounded and $\mathcal{F}_{t_n}$-measurable, so by the tower property and "taking out what is known":
+$$
+\begin{aligned}
+\mathbb{E} \left[ \prod_{i=0}^{n+1} f_i(X_{t_i}) \right] &= \mathbb{E} \left[ \mathbb{E} \left[ \prod_{i=0}^{n+1} f_i(X_{t_i}) \;\middle|\; \mathcal{F}_{t_n} \right] \right] \\
+&= \mathbb{E} \left[ \left( \prod_{i=0}^n f_i(X_{t_i}) \right) \mathbb{E} \left[ f_{n+1}(X_{t_{n+1}}) \;\middle|\; \mathcal{F}_{t_n} \right] \right].
+\end{aligned}
+$$
+
+By the Markov property at $(t_n, t_{n+1})$ and @eq-markov-process-def:
+$$
+\begin{aligned}
+\mathbb{E}[f_{n+1}(X_{t_{n+1}}) \mid \mathcal{F}_{t_n}] &= \mathbb{E}[f_{n+1}(X_{t_{n+1}}) \mid X_{t_n}] \\
+&= (Q_{t_n, t_{n+1}} f_{n+1})(X_{t_n}) \quad \mathbb{P}\text{-a.s.}
+\end{aligned}
+$$ {#eq-proof-step-markov}
+
+Define $g_n \in \mathcal{B}_b(S)$ as:
+$$
+g_n(x) := f_n(x) \cdot (Q_{t_n, t_{n+1}} f_{n+1})(x).
+$$ {#eq-proof-step-gn}
+
+Substituting @eq-proof-step-markov and @eq-proof-step-gn gives:
+$$
+\mathbb{E} \left[ \prod_{i=0}^{n+1} f_i(X_{t_i}) \right] = \mathbb{E} \left[ \left( \prod_{i=0}^{n-1} f_i(X_{t_i}) \right) g_n(X_{t_n}) \right]
+$$ {#eq-proof-step-reduced}
+(for $n = 0$ the empty product is $1$). By the induction hypothesis applied to the $n+1$ times $t_0 < \dots < t_n$ and the functions $f_0, \dots, f_{n-1}, g_n$, the right-hand side equals
+$$
+\mathbb{E}_{\nu_0} \left[ f_0 Q_{t_0, t_1} \left( f_1 Q_{t_1, t_2} \left( \cdots (f_{n-1} Q_{t_{n-1}, t_n} g_n) \cdots \right) \right) \right].
+$$
+Replacing $g_n$ with $f_n Q_{t_n, t_{n+1}} f_{n+1}$ yields
+$$
+\mathbb{E}_{\nu_0} \left[ f_0 Q_{t_0, t_1} \left( f_1 Q_{t_1, t_2} \left( \cdots \Big( f_{n-1} Q_{t_{n-1}, t_n} (f_n Q_{t_n, t_{n+1}} f_{n+1}) \Big) \cdots \right) \right) \right],
+$$
+which is @eq-fdd-expectation for $n+1$.
+
+**From @eq-fdd-expectation to @eq-fdd-law:**
+Unwinding the nested expression by iterated integration of the kernels shows that its right-hand side equals $\int \prod_i f_i \, d\pi$, where $\pi$ is the iterated-kernel measure defined before the proposition. Taking $f_i = \mathbf{1}_{B_i}$, the laws $\text{Law}(X_{t_0}, \dots, X_{t_n})$ and $\pi$ agree on measurable rectangles $B_0 \times \dots \times B_n$. These form a $\pi$-system generating $\mathcal{B}^{\otimes(n+1)}$, so the two probability measures coincide by Dynkin's $\pi$-$\lambda$ theorem. $\blacksquare$
+:::
+
+The proof uses only the Markov property and @eq-markov-process-def; it does not depend on which version of the kernels is used, since different versions differ only on null sets of the relevant marginal laws.
+
+---
+
+## Takeaways
+
+- **Markov property.** An adapted process is Markov with respect to $\{\mathcal{F}_t\}$ if conditioning on the whole past $\mathcal{F}_s$ is the same as conditioning on the present $X_s$, for every bounded measurable test function.
+- **Transition kernels.** On a standard Borel state space, $\mathbb{E}[f(X_t) \mid X_s] = (Q_{s,t}f)(X_s)$ for a probability kernel $q_{s,t}$ that is unique only $\mu_{X_s}$-almost everywhere.
+- **Chapman–Kolmogorov.** The Markov property implies $Q_{r,t} = Q_{r,s}Q_{s,t}$ only almost everywhere with respect to $\mu_{X_r}$, with exceptional sets depending on $(r,s,t)$. For this reason a Markov process is *defined* via a transition family satisfying Chapman–Kolmogorov at every point.
+- **Both clauses are needed.** A Chapman–Kolmogorov family satisfying @eq-markov-process-def does not make a process Markov; @exm-markov-both-clauses-needed (the pairwise independent triple $X_2 = X_0 \oplus X_1$) shows that the Markov property is a genuinely separate condition on the joint law.
+- **Independent increments.** An $\mathbb{R}^d$-valued process whose increments are independent of the past (including the initial value) is Markov with the translation kernel $q_{s,t}(x,B) = \mathbb{P}(x + X_t - X_s \in B)$. Independence of the increments among themselves is not enough.
+- **Discrete time.** The one-step kernels determine everything via $Q_{m,n} = Q_{m,m+1} \cdots Q_{n-1,n}$, and the Chapman–Kolmogorov equation becomes a sum over intermediate states (matrix multiplication for countable $S$).
+- **Finite-dimensional distributions.** The law of $(X_{t_0}, \dots, X_{t_n})$ is $\nu_0(dx_0)\,q_{t_0,t_1}(x_0,dx_1)\cdots q_{t_{n-1},t_n}(x_{n-1},dx_n)$. Hence the initial law and the transition kernels determine the law of the process on the product $\sigma$-algebra.

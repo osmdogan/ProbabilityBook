@@ -1,0 +1,439 @@
+# Lecture 17.1: Kolmogorov's 0-1 Law
+
+## Tail $\sigma$-Algebras and Tail Events
+
+Let $\{X_n\}_{n=1}^\infty$ be a sequence of random variables defined on a common probability space $(\Omega, \mathcal{F}, P)$ taking values in $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$.
+
+::: {#def-tail-field}
+For each $n \in \mathbb{N}$, define the sequence's tail $\sigma$-algebras:
+$$
+\mathcal{T}_n \triangleq \sigma(X_n, X_{n+1}, X_{n+2}, \dots) = \sigma(X_k \mid k \ge n)
+$$ {#eq-tail-field-tail-n}
+
+The **tail $\sigma$-algebra** (or tail field) $\mathcal{T}$ of the sequence $\{X_n\}_{n=1}^\infty$ is:
+$$
+\mathcal{T} \triangleq \bigcap_{n=1}^\infty \mathcal{T}_n = \bigcap_{n=1}^\infty \sigma(X_k \mid k \ge n)
+$$ {#eq-tail-field-def}
+
+Events $E \in \mathcal{T}$ are called **tail events**. A random variable $Y$ is **tail-measurable** if it is $\mathcal{T}$-measurable.
+:::
+
+---
+
+## Examples and Counterexamples of Tail Events
+
+* **Convergence Events:** The events $\{\lim_{n\to\infty}X_n\text{ exists}\}$ and, in the real-valued case, $\{\lim_{n\to\infty}X_n>0\}$ are tail events. Indeed, for every $N$, whether the sequence converges and the value of its limit are determined entirely by $(X_N,X_{N+1},\ldots)$; consequently these events belong to $\sigma(X_k:k\ge N)$ for every $N$, and hence to $\mathcal T$.
+* **Partial Sums $S_n = \sum_{k=1}^n X_k$:**
+  * $\{\lim_{n\to\infty}S_n\text{ exists}\}\in\mathcal T$. For every fixed $N$ and $n\ge N$,
+    $$
+    S_n=S_{N-1}+\sum_{k=N}^nX_k.
+    $$
+    Adding the fixed finite random vector $S_{N-1}$ does not affect convergence as $n\to\infty$. Thus convergence of $(S_n)$ is equivalent to convergence of the tail partial sums $(\sum_{k=N}^nX_k)_{n\ge N}$, an event in $\sigma(X_k:k\ge N)$. Since this holds for every $N$, the event is in $\mathcal T$.
+  * $\{ \limsup_{n \to \infty} \frac{S_n}{b_n} > 0 \} \in \mathcal{T}$ for normalizing constants $b_n \to \infty$, because for any fixed $N$:
+    $$
+    \begin{align*}
+    \frac{S_n}{b_n} &= \frac{S_{N-1}}{b_n} + \frac{\sum_{k=N}^n X_k}{b_n} \\
+    \frac{S_{N-1}}{b_n}&\longrightarrow 0,
+    \end{align*}
+    $$ {#eq-tail-sum-invariance}
+    and therefore
+    $$
+    \limsup_{n\to\infty}\frac{S_n}{b_n}
+    =\limsup_{n\to\infty}\frac{\sum_{k=N}^nX_k}{b_n}.
+    $$
+    The right-hand side is measurable with respect to $\sigma(X_k:k\ge N)$. Since $N$ is arbitrary, the event belongs to $\mathcal T$.
+* **Non-Tail Event:** $\{ X_1 < 1 \} \notin \mathcal{T}$ in general, as $X_1$ is not measurable with respect to $\sigma(X_2, X_3, \dots)$.
+* **Identical RV Dependency:** If $X_1 = X_2 = X_3 = \dots$, then $\sigma(X_n, X_{n+1}, \dots) = \sigma(X_1)$ for all $n$, so $\mathcal{T} = \sigma(X_1)$.
+
+---
+
+## Kolmogorov's 0-1 Law
+
+::: {#thm-kolmogorov-0-1}
+## Kolmogorov's 0-1 Law
+
+Let $\{X_n\}_{n=1}^\infty$ be a sequence of **independent** random variables on $(\Omega, \mathcal{F}, P)$. If $E \in \mathcal{T}$ is any tail event, then:
+$$
+P(E) = 0 \quad \text{or} \quad P(E) = 1
+$$ {#eq-kolmogorov-01-statement}
+:::
+
+::: {.proof}
+## Proof of @thm-kolmogorov-0-1
+
+Throughout, we use the following elementary fact twice, so we isolate it once:
+
+> **Fact.** If $(\mathcal H_m)_{m\ge1}$ is a non-decreasing sequence of $\sigma$-algebras ($\mathcal H_m\subseteq\mathcal H_{m+1}$), then $\mathcal H\triangleq\bigcup_{m\ge1}\mathcal H_m$ is an algebra, hence in particular a $\pi$-system. Indeed, $\Omega\in\mathcal H_1\subseteq\mathcal H$; if $A\in\mathcal H$, then $A\in\mathcal H_m$ for some $m$, so $A^c\in\mathcal H_m\subseteq\mathcal H$; and if $A\in\mathcal H_m$, $B\in\mathcal H_{m'}$, then both lie in $\mathcal H_{\max(m,m')}$ by monotonicity, so $A\cap B,\,A\cup B\in\mathcal H_{\max(m,m')}\subseteq\mathcal H$.
+
+1. **The past $\mathcal B_n$ and the strict future $\mathcal T_{n+1}$ are independent.** For $n\in\mathbb N$, define
+  $$
+  \mathcal{B}_n \triangleq \sigma(X_1,\ldots,X_n),
+  \qquad
+  \mathcal{T}_{n+1}\triangleq\sigma(X_{n+1},X_{n+2},\ldots).
+  $$
+  Fix $n$. Since $\{X_k\}_{k\ge1}$ are independent, @def-indep-rvs gives that $\sigma(X_1),\ldots,\sigma(X_m)$ are independent $\sigma$-algebras for every $m$. For $m>n$, applying @lem-grouping-sigma-fields with the two blocks $\{1,\ldots,n\}$ and $\{n+1,\ldots,m\}$ shows that the block-generated $\sigma$-algebras
+  $$
+  \begin{align*}
+  &\mathcal B_n=\sigma\big(\sigma(X_1)\cup\cdots\cup\sigma(X_n)\big)
+  \quad\text{and}\\
+  &\sigma(X_{n+1},\ldots,X_m)=\sigma\big(\sigma(X_{n+1})\cup\cdots\cup\sigma(X_m)\big)
+  \end{align*}
+  $$
+  are independent.
+
+  Applying the Fact above to the increasing sequence $\mathcal H_k\triangleq\sigma(X_{n+1},\ldots,X_{n+k})$, $k\ge1$, shows that
+  $$
+  \mathcal C_n\triangleq\bigcup_{m>n}\sigma(X_{n+1},\ldots,X_m)
+  $$
+  is a $\pi$-system. Since every $X_{n+1},X_{n+2},\ldots$ appears as a coordinate of some $\sigma(X_{n+1},\ldots,X_m)\subseteq\mathcal C_n$, we get $\sigma(\mathcal C_n)=\sigma(X_{n+1},X_{n+2},\ldots)=\mathcal T_{n+1}$.
+
+  Every $A\in\mathcal B_n$ and $C\in\mathcal C_n$ lie, respectively, in $\mathcal B_n$ and in $\sigma(X_{n+1},\ldots,X_m)$ for some $m>n$, so the independence established above gives $P(A\cap C)=P(A)P(C)$. Thus $\mathcal B_n$ and $\mathcal C_n$ are independent $\pi$-systems, so @thm-indep-pi-systems shows that the generated $\sigma$-algebras $\sigma(\mathcal B_n)=\mathcal B_n$ and $\sigma(\mathcal C_n)=\mathcal T_{n+1}$ are independent.
+
+  Finally, independence of $\mathcal B_n$ and $\mathcal T_{n+1}$ means $P(A\cap C)=P(A)P(C)$ for all $A\in\mathcal B_n$ and $C\in\mathcal T_{n+1}$; since $\mathcal T\subseteq\mathcal T_{n+1}$, this identity holds in particular for all $C\in\mathcal T$, so $\mathcal B_n$ and $\mathcal T$ are independent.
+
+2. **$\sigma(X_1,X_2,\ldots)$ is generated by an algebra.** The $\sigma$-algebras $\mathcal B_n$ increase with $n$, so applying the Fact above to $\mathcal H_n\triangleq\mathcal B_n$ shows that
+  $$
+  \mathcal{A} \triangleq \bigcup_{n=1}^\infty \mathcal{B}_n
+  $$
+  is an algebra, hence a $\pi$-system, and (since $\mathcal A$ is literally this union)
+  $$
+  \sigma(\mathcal A)=\sigma(X_1,X_2,\ldots).
+  $$
+
+3. **Every tail event $E$ is independent of all of $\sigma(X_1,X_2,\ldots)$.** Fix $E\in\mathcal T$. For every $A\in\mathcal A$, there is an $n$ with $A\in\mathcal B_n$, so Step 1 gives $P(A\cap E)=P(A)P(E)$; that is,
+  $$
+  \mathcal D_E\triangleq\{A\in\sigma(X_1,X_2,\ldots):P(A\cap E)=P(A)P(E)\}
+  $$
+  satisfies $\mathcal A\subseteq\mathcal D_E$. We check $\mathcal D_E$ is a $\lambda$-system:
+   * $\Omega\in\mathcal D_E$, since $P(\Omega\cap E)=P(E)=P(\Omega)P(E)$.
+   * *Closed under complements:* if $A\in\mathcal D_E$, then $E=(A\cap E)\sqcup(A^c\cap E)$ is a disjoint union, so
+     $$
+     \begin{align*}
+     P(A^c\cap E)&=P(E)-P(A\cap E)=P(E)-P(A)P(E)\\
+     &=\big(1-P(A)\big)P(E)=P(A^c)P(E),
+     \end{align*}
+     $$
+     i.e. $A^c\in\mathcal D_E$.
+   * *Closed under countable disjoint unions:* if $A_1,A_2,\ldots\in\mathcal D_E$ are pairwise disjoint with union $A$, then $A\cap E=\bigsqcup_iA_i\cap E$ is also a disjoint union, so countable additivity gives
+     $$
+     \begin{align*}
+     P(A\cap E)&=\sum_iP(A_i\cap E)=\sum_iP(A_i)P(E)\\
+     &=P(E)\sum_iP(A_i)=P(E)P(A),
+     \end{align*}
+     $$
+     i.e. $A\in\mathcal D_E$.
+
+  Thus $\mathcal D_E$ is a $\lambda$-system containing the $\pi$-system $\mathcal A$, so Dynkin's $\pi$-$\lambda$ theorem gives $\sigma(\mathcal A)\subseteq\mathcal D_E$. By Step 2, $\sigma(\mathcal A)=\sigma(X_1,X_2,\ldots)$, so $E$ is independent of every event in $\sigma(X_1,X_2,\ldots)$.
+
+4. **Self-independence forces $P(E)\in\{0,1\}$.** Because $\mathcal T_1\subseteq\sigma(X_1,X_2,\ldots)$ and $\mathcal{T} \subseteq \mathcal T_1$, the tail event $E$ itself belongs to $\sigma(X_1, X_2, \dots)$, so Step 3 applies with $A=E$, giving $E$ independent of itself:
+   $$
+   \begin{align*}
+   &P(E) = P(E \cap E) = P(E) P(E) = P(E)^2\\
+   & \implies P(E) \in \{0, 1\}
+   \end{align*}
+   $$ {#eq-self-independence-trick}
+:::
+
+---
+
+## Applications and Consequences
+
+### Borel-Cantelli Dichotomy
+
+Let $(A_n)_{n\ge1}$ be independent events and define their tail $\sigma$-algebra by
+$$
+\mathcal T_A\triangleq\bigcap_{N=1}^\infty\sigma(A_n:n\ge N),
+$$
+where $\sigma(A_n:n\ge N)$ means the $\sigma$-algebra generated by the events $A_N,A_{N+1},\ldots$. Equivalently, this is the tail $\sigma$-algebra of the independent indicator random variables $\mathbf1_{A_n}$.
+
+The event that infinitely many $A_n$ occur is
+$$
+\{A_n\text{ i.o.}\}=\limsup_{n\to\infty}A_n
+=\bigcap_{m=1}^\infty\bigcup_{n=m}^\infty A_n.
+$$
+It also has the following equivalent indicator-function representations:
+$$
+\mathbf 1_{\{A_n\text{ i.o.}\}}
+=\limsup_{n\to\infty}\mathbf 1_{A_n}
+=\mathbf 1_{\left\{\sum_{n=1}^\infty\mathbf 1_{A_n}=\infty\right\}},
+$$
+and hence
+$$
+\{A_n\text{ i.o.}\}
+=\left\{\limsup_{n\to\infty}\mathbf 1_{A_n}=1\right\}
+=\left\{\sum_{n=1}^\infty\mathbf 1_{A_n}=\infty\right\}.
+$$
+Indeed, for each $\omega\in\Omega$, the sequence $\mathbf 1_{A_n}(\omega)$ takes only the values $0$ and $1$. Its limsup equals $1$, equivalently its series diverges to $\infty$, exactly when $\omega$ belongs to infinitely many of the events $A_n$.
+
+Fix $N\in\mathbb N$. Removing the first $N-1$ events cannot change whether infinitely many events occur, so
+$$
+\{A_n\text{ i.o.}\}
+=\bigcap_{m=N}^\infty\bigcup_{n=m}^\infty A_n.
+$$
+Every event on the right belongs to $\sigma(A_n:n\ge N)$; hence $\{A_n\text{ i.o.}\}\in\sigma(A_n:n\ge N)$. Since this holds for every $N$,
+$$
+\{A_n\text{ i.o.}\}\in\mathcal T_A.
+$$
+Kolmogorov's 0-1 law therefore gives $P(A_n\text{ i.o.})\in\{0,1\}$. The Borel-Cantelli lemmas identify which value occurs:
+
+* If $\sum_{n=1}^\infty P(A_n)<\infty$, then @thm-borel-cantelli-1 gives $P(A_n\text{ i.o.})=0$. Independence is not needed in this case.
+* If $\sum_{n=1}^\infty P(A_n)=\infty$, then independence and @thm-borel-cantelli-2 give $P(A_n\text{ i.o.})=1$.
+
+Thus, for independent events,
+$$
+P(A_n\text{ i.o.})=
+\begin{cases}
+0,&\displaystyle\sum_{n=1}^\infty P(A_n)<\infty,\\
+1,&\displaystyle\sum_{n=1}^\infty P(A_n)=\infty.
+\end{cases}
+$$
+
+### Normalized Partial-Sum Limits
+
+Let $(X_n)_{n\ge1}$ be independent $\mathbb R^d$-valued random variables, let
+$$
+S_n\triangleq\sum_{k=1}^nX_k,
+$$
+and let $(b_n)$ be positive constants with $b_n\to\infty$. Fix $c\in\mathbb R^d$ and consider
+$$
+E_c\triangleq\left\{\frac{S_n}{b_n}\to c\right\}.
+$$
+For every fixed $N$ and every $n\ge N$,
+$$
+\frac{S_n}{b_n}
+=\frac{S_{N-1}}{b_n}+\frac{\sum_{k=N}^nX_k}{b_n}.
+$$
+For each $\omega\in\Omega$, the vector $S_{N-1}(\omega)$ is fixed as $n\to\infty$, and therefore
+$$
+\frac{S_{N-1}(\omega)}{b_n}\longrightarrow0.
+$$
+Consequently,
+$$
+E_c
+=\left\{\frac{\sum_{k=N}^nX_k}{b_n}\to c\right\}.
+$$
+The event on the right depends only on $X_N,X_{N+1},\ldots$ and is measurable with respect to $\sigma(X_k:k\ge N)$. For example, writing $\|\cdot\|$ for the Euclidean norm, it has the explicit measurable representation
+$$
+\bigcap_{r=1}^\infty\bigcup_{M=N}^\infty\bigcap_{n=M}^\infty
+\left\{\left\|\frac{\sum_{k=N}^nX_k}{b_n}-c\right\|<\frac1r\right\}.
+$$
+Since $N$ was arbitrary, $E_c\in\mathcal T$. Kolmogorov's 0-1 law now yields
+$$
+P\left(\frac{S_n}{b_n}\to c\right)=P(E_c)\in\{0,1\}.
+$$
+The 0-1 law determines only that the probability is extreme; additional information about the distributions of the $X_n$ and the normalization $b_n$ is needed to determine whether it is $0$ or $1$.
+
+---
+
+## Tail-Measurable Functions and Constant A.S. Realizations
+
+The following result shows that if a random variable $Y$ is determined by the entire infinite sequence $X_1,X_2,\ldots$, then we can approximate $Y$ arbitrarily well in $L^1$ using a function of only finitely many $X_i$'s.
+
+::: {#prp-bounded-sigma-approx}
+Let $Y$ be a bounded $\sigma(X_1, X_2, \dots)$-measurable random variable. For any $\epsilon > 0$, there exists $N \in \mathbb{N}$ and a Borel function $F:(\mathbb R^d)^N\cong\mathbb R^{dN}\to\mathbb R$ such that:
+$$
+\mathbb{E}\left[ |Y - F(X_1, \dots, X_N)| \right] < \epsilon,
+$$ {#eq-sigma-approx-bound}
+:::
+
+::: {.proof}
+## Proof of @prp-bounded-sigma-approx
+
+Throughout, write
+$$
+\mathcal B_n\triangleq\sigma(X_1,\ldots,X_n),\qquad
+\mathcal A\triangleq\bigcup_{n\ge1}\mathcal B_n,\qquad
+\mathcal G\triangleq\sigma(\mathcal A)=\sigma(X_1,X_2,\ldots),
+$$
+and recall the elementary identity
+$$
+\mathbb E\left|\mathbf1_A-\mathbf1_B\right|=P(A\triangle B),
+\qquad A\triangle B\triangleq(A\setminus B)\cup(B\setminus A).
+$$ {#eq-indicator-l1-symdiff}
+
+**Step 1: $\mathcal A$ is an algebra.**
+The $\sigma$-algebras $\mathcal B_n$ increase in $n$, since $\sigma(X_1,\ldots,X_n)\subseteq\sigma(X_1,\ldots,X_{n+1})$. Hence $\Omega\in\mathcal B_1\subseteq\mathcal A$; if $A\in\mathcal A$, then $A\in\mathcal B_n$ for some $n$ and $A^c\in\mathcal B_n\subseteq\mathcal A$; and if $A\in\mathcal B_m$, $A'\in\mathcal B_n$, then both lie in $\mathcal B_{\max(m,n)}$, so $A\cup A'\in\mathcal B_{\max(m,n)}\subseteq\mathcal A$. Thus $\mathcal A$ is an algebra (it is in general *not* a $\sigma$-algebra).
+
+**Step 2: every $B\in\mathcal G$ is approximable in probability by sets of $\mathcal A$.**
+Since $\mathcal A$ is an algebra (Step 1) generating $\mathcal G=\sigma(\mathcal A)$ and $P$ is a finite measure, Part 3 of @prp-approximation-properties-sigma-finite (with $\mu=P$, which is trivially $\sigma$-finite since $P(\Omega)=1<\infty$) applies to every $B\in\mathcal G$, as $P(B)\le1<\infty$: for every $\delta>0$ there exists $A\in\mathcal A$ with
+$$
+P(A\triangle B)<\delta .
+$$
+
+**Step 3: approximate $Y$ by a $\mathcal G$-measurable simple function.**
+Let $M<\infty$ be such that $|Y|\le M$ everywhere, and put $h\triangleq\epsilon/4$. Choose an integer $r$ with $rh>M$ and define, for $j=-r,\ldots,r-1$, the disjoint half-open intervals $I_j\triangleq[jh,(j+1)h)$, which cover $[-rh,rh)\supseteq[-M,M]$, together with $B_j\triangleq Y^{-1}(I_j)\in\mathcal G$ and $a_j\triangleq jh$. Then
+$$
+s\triangleq\sum_{j=-r}^{r-1}a_j\mathbf1_{B_j}
+$$
+is a $\mathcal G$-measurable simple function taking finitely many values, and by construction $|Y(\omega)-s(\omega)|\le h$ for every $\omega$ (since $Y(\omega)\in I_j\Rightarrow Y(\omega)-a_j\in[0,h)$ on the unique $j$ with $\omega\in B_j$), whence
+$$
+\mathbb E|Y-s|\le h=\frac\epsilon4<\frac\epsilon2 .
+$$
+The sum has $r'\triangleq 2r$ terms, and $K\triangleq\max_j|a_j|=rh<\infty$.
+
+**Step 4: replace the sets $B_j$ by sets of $\mathcal A$.**
+By Step 2, for each $j$ choose $A_j\in\mathcal A$ with
+$$
+P(A_j\triangle B_j)<\frac{\epsilon}{2r'(K+1)} .
+$$
+Put $\varphi\triangleq\sum_ja_j\mathbf1_{A_j}$. By the triangle inequality in $L^1$ and @eq-indicator-l1-symdiff,
+$$
+\begin{align*}
+\mathbb E\left|s-\varphi\right|
+&\le\sum_j|a_j|\,\mathbb E\left|\mathbf1_{B_j}-\mathbf1_{A_j}\right|\\
+&=\sum_j|a_j|\,P(A_j\triangle B_j)\\
+&< r'\cdot K\cdot\frac{\epsilon}{2r'(K+1)}<\frac\epsilon2 .
+\end{align*}
+$$
+
+**Step 5: realize $\varphi$ as a Borel function of finitely many $X_i$.**
+Each $A_j$ lies in $\mathcal A$, so there is $n_j$ with $A_j\in\mathcal B_{n_j}$. Set $N\triangleq\max_jn_j$; by monotonicity of the $\mathcal B_n$, every $A_j\in\mathcal B_N$, so each $\mathbf1_{A_j}$ — and hence the finite linear combination $\varphi$ — is $\sigma(X_1,\ldots,X_N)$-measurable. Regarding $(X_1,\ldots,X_N)$ as the vector of its $dN$ real coordinates, @thm-doob-dynkin supplies a Borel function $F:\mathbb R^{dN}\to\mathbb R$ with
+$$
+\varphi=F(X_1,\ldots,X_N)\quad\text{everywhere on }\Omega .
+$$
+
+**Step 6: conclusion.**
+Combining Steps 3 and 4 with the triangle inequality,
+$$
+\begin{align*}
+\mathbb E\left[\left|Y-F(X_1,\ldots,X_N)\right|\right]
+&=\mathbb E|Y-\varphi|
+\le\mathbb E|Y-s|+\mathbb E|s-\varphi|\\
+&<\frac\epsilon2+\frac\epsilon2=\epsilon .
+\end{align*}
+$$
+:::
+
+:::{#exm-weighted-sum}
+## An infinite weighted sum
+
+Let $X_1,X_2,\ldots \overset{\text{i.i.d.}}{\sim}\operatorname{Uniform}(0,1)$. Define
+$Y=\sum_{n=1}^{\infty}2^{-n}X_n$. Since $0\leq X_n\leq1$,
+$$ 
+0\leq Y \leq \sum_{n=1}^{\infty}2^{-n} =1. 
+$$
+Thus $Y$ is bounded. Moreover, $Y = X_1/2+X_2/4+X_3/8+\cdots$ is clearly $\sigma(X_1,X_2,\ldots)$-measurable. For each $N$, define
+$$ 
+F_N(x_1,\ldots,x_N) = \sum_{n=1}^N2^{-n}x_n. 
+$$
+
+This is a continuous, hence Borel function $F_N​:\mathbb{R}^N\to\mathbb{R}$. The approximation error is exactly the tail:
+$$ 
+Y-F_N(X_1,\ldots,X_N) = \sum_{n=N+1}^{\infty}2^{-n}X_n. 
+$$
+Since $0\leq X_n\leq1$, we have
+$$
+Y-F_N(X_1,\ldots,X_N) \leq \sum_{n=N+1}^{\infty}2^{-n}=2^{-N}
+$$
+Therefore,
+$$ 
+\mathbb E\left[ |Y-F_N(X_1,\ldots,X_N)| \right] \leq 2^{-N}. 
+$$
+Given any $\epsilon>0$, choosing $N$ such that $2^{-N}$ yields the result.
+
+:::
+
+
+
+The next result shows that if $Y$ depends only on the infinitely remote future of an independent sequence, then there is actually no randomness left in $Y$.
+
+::: {#prp-tail-measurable-rv-constant}
+Let $\{X_n\}_{n=1}^\infty$ be independent random variables. If $Y$ is a real-valued tail-measurable random variable ($\mathcal{T}$-measurable), then $Y$ is constant almost surely:
+$$
+\exists c \in \mathbb{R} \quad \text{s.t.} \quad Y = c \quad \text{a.s.}
+$$ {#eq-tail-rv-constant}
+:::
+
+::: {.proof}
+## Proof of @prp-tail-measurable-rv-constant
+
+1. Consider the cumulative distribution function $F_Y(t) \triangleq P(Y \le t)$ for $t \in \mathbb{R}$.
+2. Because $Y$ is $\mathcal{T}$-measurable, the event $\{Y \le t\} \in \mathcal{T}$ for every $t \in \mathbb{R}$.
+3. By Kolmogorov's 0-1 Law, $P(Y \le t) \in \{0, 1\}$ for all $t \in \mathbb{R}$.
+4. $F_Y: \mathbb{R} \to \{0, 1\}$ is a non-decreasing, right-continuous function satisfying $\lim_{t \to -\infty} F_Y(t) = 0$ and $\lim_{t \to \infty} F_Y(t) = 1$.
+5. Define $S\triangleq\{t\in\mathbb R:F_Y(t)=1\}$ and $c\triangleq\inf S$. The limits of the CDF at $\pm\infty$ imply that $S$ is non-empty and bounded below, so $c\in\mathbb R$. If $t<c$, then $t\notin S$ and hence $F_Y(t)=0$. If $s>c$, the definition of the infimum gives some $u\in S$ with $u<s$; monotonicity then gives $F_Y(s)\ge F_Y(u)=1$, so $F_Y(s)=1$. Taking $s\downarrow c$ and using right-continuity yields $F_Y(c)=1$.
+6. Finally,
+   $$
+   P(Y<c)=P\left(\bigcup_{m=1}^\infty\{Y\le c-1/m\}\right)
+   =\lim_{m\to\infty}F_Y(c-1/m)=0,
+   $$
+   by continuity from below. Therefore $P(Y=c)=P(Y\le c)-P(Y<c)=1-0=1$, so $Y=c$ almost surely.
+:::
+
+:::{#exm-limsup-bernoulli}
+## The limsup of an independent Bernoulli sequence
+
+Let $\{X_n\}_{n=1}^\infty$ be **independent** with $X_n\sim\operatorname{Bernoulli}(p_n)$, i.e.
+$$
+P(X_n=1)=p_n,\qquad P(X_n=0)=1-p_n,\qquad 0<p_n<1,
+$$
+and set
+$$
+Y\triangleq\limsup_{n\to\infty}X_n .
+$$
+Each individual $X_n$ is genuinely random (it is non-degenerate, since $0<p_n<1$), yet @prp-tail-measurable-rv-constant forces $Y$ to be deterministic. We verify this and identify the constant.
+
+**Step 1: $Y$ is tail-measurable.**
+Fix $N\in\mathbb N$. Discarding the first $N-1$ terms of a sequence does not change its limsup, so
+$$
+Y=\limsup_{n\to\infty}X_n=\inf_{m\ge N}\ \sup_{n\ge m}X_n .
+$$
+For each $m\ge N$, the function $\sup_{n\ge m}X_n$ is a countable supremum of $\sigma(X_k:k\ge N)$-measurable functions, hence $\sigma(X_k:k\ge N)$-measurable; the countable infimum over $m\ge N$ is then also $\sigma(X_k:k\ge N)$-measurable. Thus $Y$ is $\mathcal T_N$-measurable for every $N$, so
+$$
+Y\ \text{is}\ \mathcal T=\bigcap_{N\ge1}\mathcal T_N\ \text{-measurable}.
+$$
+By @prp-tail-measurable-rv-constant there exists $c\in\mathbb R$ with $Y=c$ a.s. Since $X_n\in\{0,1\}$ we already know $Y\in\{0,1\}$ pointwise, so necessarily $c\in\{0,1\}$.
+
+**Step 2: identifying $c$ via Borel-Cantelli.**
+Put $A_n\triangleq\{X_n=1\}$, so that $P(A_n)=p_n$ and the events $A_n$ are independent. Because $X_n$ takes only the values $0$ and $1$,
+$$
+\left\{\limsup_{n\to\infty}X_n=1\right\}=\{A_n\ \text{i.o.}\},
+\qquad
+\left\{\limsup_{n\to\infty}X_n=0\right\}=\{A_n\ \text{i.o.}\}^c .
+$$
+Hence:
+
+* If $\sum_{n=1}^\infty p_n=\infty$, then @thm-borel-cantelli-2 (which uses independence) gives $P(A_n\ \text{i.o.})=1$, so
+  $$
+  Y=1\quad\text{a.s.},\qquad c=1 .
+  $$
+* If $\sum_{n=1}^\infty p_n<\infty$, then @thm-borel-cantelli-1 gives $P(A_n\ \text{i.o.})=0$; almost every $\omega$ therefore satisfies $X_n(\omega)=0$ for all large $n$, and
+  $$
+  Y=0\quad\text{a.s.},\qquad c=0 .
+  $$
+
+**Step 3: two concrete instances.**
+
+* $p_n=\tfrac12$ for all $n$ (fair coin tosses): $\sum_n p_n=\infty$, so $\limsup_n X_n=1$ almost surely. Every finite block $(X_1,\ldots,X_N)$ is completely undetermined, but "a head occurs infinitely often'' is certain.
+* $p_n=2^{-n}$: $\sum_n p_n=1<\infty$, so $\limsup_n X_n=0$ almost surely, i.e. only finitely many $1$'s ever appear.
+
+**Step 4: the CDF picture behind the proof.**
+In the first instance the distribution function of $Y$ is
+$$
+F_Y(t)=P(Y\le t)=
+\begin{cases}
+0,&t<1,\\
+1,&t\ge1,
+\end{cases}
+$$
+which indeed takes only the values $0$ and $1$, as Step 3 of the proof asserts, and
+$$
+c=\inf\{t\in\mathbb R:F_Y(t)=1\}=1
+$$
+is exactly the constant produced in Step 5 of the proof. In the second instance $F_Y$ is the same function shifted to $0$, and $c=0$.
+
+**Step 5: independence is essential.**
+If we drop independence and take $X_1=X_2=\cdots$ with $X_1\sim\operatorname{Bernoulli}(1/2)$, then $\mathcal T=\sigma(X_1)$ and
+$$
+Y=\limsup_{n\to\infty}X_n=X_1 ,
+$$
+which is $\mathcal T$-measurable but takes the values $0$ and $1$ each with probability $1/2$. So $Y$ is not a.s. constant: the conclusion of @prp-tail-measurable-rv-constant genuinely requires the independence hypothesis.
+
+**Step 6: constancy does not reveal the value.**
+The same argument applied to $Y'\triangleq\limsup_{n\to\infty}\frac1n\sum_{k=1}^nX_k$ (a tail-measurable random variable, by the invariance computation in @eq-tail-sum-invariance with $b_n=n$) shows only that $Y'$ is a.s. equal to some constant. For i.i.d. $\operatorname{Bernoulli}(p)$ variables that constant turns out to be $p$, but identifying it requires a law of large numbers, not the 0-1 law.
+
+:::
+
+
+---
+

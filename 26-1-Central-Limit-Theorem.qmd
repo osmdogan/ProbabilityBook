@@ -1,0 +1,215 @@
+# Lecture 26.1: The Central Limit Theorem
+
+## The $L^2$ Strong Law of Large Numbers ($L^2$-SLLN)
+
+We begin with an $L^2$ version of the Strong Law of Large Numbers for independent random variables with a common mean.
+
+:::{#thm-l2-slln}
+## $L^2$-SLLN
+Let $\{X_n\}_{n=1}^\infty$ be independent $L^2$ random variables with common mean $\mathbb{E}[X_n] = t$. Let $S_n = X_1 + \dots + X_n$, and let $\{b_n\}_{n=1}^\infty$ be a deterministic, nondecreasing sequence such that $b_n > 0$, $b_n \to \infty$, and
+$$ \sum_{n=1}^\infty \frac{\operatorname{Var}[X_n]}{b_n^2} < \infty $$
+
+Then, defining $\dot{S}_n = S_n - nt$, we have:
+$$ \frac{\dot{S}_n}{b_n} = \frac{S_n - nt}{b_n} \xrightarrow{\text{a.s. and } L^2} 0 $$
+:::
+
+:::{.proof}
+## Proof of @thm-l2-slln
+Set $Y_n = X_n - t$ and $T_n = \sum_{k=1}^n Y_k$. The variables $Y_n/b_n$ are independent, centered, and satisfy
+$$
+\sum_{n=1}^\infty \operatorname{Var}\left[\frac{Y_n}{b_n}\right]
+= \sum_{n=1}^\infty \frac{\operatorname{Var}[X_n]}{b_n^2}<\infty.
+$$
+Therefore, the hypotheses of Kolmogorov's Convergence Criterion (@thm-kolmogorov-convergence-criterion) are satisfied, and
+$\sum_{n=1}^\infty Y_n/b_n$ converges almost surely. Since $b_n$ is nondecreasing and $b_n\to\infty$, the hypotheses of Kronecker's lemma (@lem-kronecker) are also satisfied, so
+$$
+\frac{T_n}{b_n}
+= \frac{1}{b_n}\sum_{k=1}^n b_k\frac{Y_k}{b_k}
+\longrightarrow 0 \quad\text{almost surely}.
+$$
+
+For $L^2$ convergence, independence and centering give
+$$
+\left\|\frac{T_n}{b_n}\right\|_2^2
+= \mathbb{E}\left[\left|\frac{T_n}{b_n}\right|^2\right]
+= \frac{1}{b_n^2}\sum_{k=1}^n \operatorname{Var}[X_k],
+$$
+because $T_n$ is centered. Fix $K$. For $n>K$, monotonicity of $b_n$ yields
+
+$$
+\frac{1}{b_n^2}\sum_{k=1}^n \operatorname{Var}[X_k]
+\leq \frac{1}{b_n^2}\sum_{k=1}^K \operatorname{Var}[X_k]
+ + \sum_{k=K+1}^n \frac{\operatorname{Var}[X_k]}{b_k^2}.
+$$
+
+The first term tends to zero as $n\to\infty$, and the second can be made arbitrarily small by choosing $K$ large. Hence $T_n/b_n\to0$ in $L^2$.
+
+:::
+
+---
+
+## Example
+For i.i.d. $L^2$ variables with common variance $\operatorname{Var}[X_n] = \sigma^2$, the condition $\sum_{n=1}^\infty \frac{\operatorname{Var}[X_n]}{b_n^2} < \infty$ reduces to $\sigma^2 \sum_{n=1}^\infty \frac{1}{b_n^2} < \infty$.
+
+If $\alpha > \frac{1}{2}$ and $b_n = n^\alpha$, then:
+$$ \sigma^2\sum_{n=1}^\infty \frac{1}{(n^\alpha)^2} = \sigma^2\sum_{n=1}^\infty \frac{1}{n^{2\alpha}} < \infty $$
+since $2\alpha > 1$. Thus, by the $L^2$-SLLN:
+$$ \frac{\dot{S}_n}{n^\alpha} \xrightarrow{\text{a.s. and } L^2} 0 $$
+
+However, if $\sigma^2>0$ and we choose $b_n = \sqrt{n}$ (i.e., $\alpha = \frac{1}{2}$), the condition fails:
+$$ \sigma^2\sum_{n=1}^\infty \frac{1}{(\sqrt{n})^2} = \sigma^2\sum_{n=1}^\infty \frac{1}{n} = \infty $$
+In this critical normalization regime, the $L^2$-SLLN above does not apply. The Central Limit Theorem instead gives weak convergence under the nondegeneracy assumption $\sigma^2>0$.
+
+---
+
+## Basic Central Limit Theorem (1D)
+
+::: {#thm-basic-clt}
+## Basic Central Limit Theorem
+Let $\{X_n\}_{n=1}^\infty$ be i.i.d. $L^2$ random variables with common mean $\mathbb{E}[X_n] = t$ and variance $\text{Var}[X_n] = \sigma^2>0$. Let $S_n = X_1 + \dots + X_n$ and $\dot{S}_n = S_n - nt$. Then:
+$$ \frac{\dot{S}_n}{\sigma\sqrt{n}} = \frac{S_n - nt}{\sigma\sqrt{n}} \xrightarrow{w} Z \sim \mathcal{N}(0, 1) $$
+:::
+
+---
+
+:::{.proof}
+## Proof of @thm-basic-clt
+Define $\dot{X}_i = X_i - t$. Then $\{\dot{X}_i\}$ are i.i.d., centered, and satisfy $\mathbb{E}[\dot{X}_i^2] = \operatorname{Var}[X_i] = \sigma^2$.
+
+By **Lévy's Continuity Theorem** (@thm-levy), it suffices to show that the characteristic function of $\frac{\dot{S}_n}{\sigma\sqrt{n}}$ converges pointwise to the characteristic function of $\mathcal{N}(0, 1)$:
+$$
+\varphi_{\dot{S}_n / \sigma\sqrt{n}}(\xi) \longrightarrow e^{-\xi^2 / 2}, \quad \forall \xi \in \mathbb{R}. 
+$$
+
+1. **Factorization via Independence:**
+   $$ 
+   \begin{aligned}
+   \varphi_{\dot{S}_n / \sigma\sqrt{n}}(\xi) &= \varphi_{\dot{S}_n}\left( \frac{\xi}{\sigma\sqrt{n}} \right) \\
+   &= \varphi_{\dot{X}_1 + \dots + \dot{X}_n}\left( \frac{\xi}{\sigma\sqrt{n}} \right) \\
+   &= \left( \varphi_{\dot{X}_1}\left( \frac{\xi}{\sigma\sqrt{n}} \right) \right)^n.
+   \end{aligned} 
+   $$
+
+2. **Taylor Expansion:**
+   Since $\dot{X}_1 \in L^2$, $\mathbb{E}[\dot{X}_1^2] = \sigma^2 < \infty$, which implies $\varphi_{\dot{X}_1} \in C^2(\mathbb{R};\mathbb{C})$ (the derivatives $\varphi^{(k)}(\xi) = \mathbb{E}[(i\dot{X}_1)^k e^{i\xi\dot{X}_1}]$ exist and are continuous by dominated convergence, since $|\dot{X}_1|^k e^{i\xi\dot{X}_1}$ is dominated by $|\dot{X}_1|^k \in L^1$ for $k\le 2$). Since $\varphi_{\dot{X}_1}$ is complex-valued, we apply Taylor's theorem to its real and imaginary parts separately, yielding the $o$-term expansion:
+   $$ \varphi_{\dot{X}_1}(x) = \varphi_{\dot{X}_1}(0) + \varphi_{\dot{X}_1}'(0)\, x + \tfrac{1}{2}\varphi_{\dot{X}_1}''(0)\, x^2 + o(x^2) \quad (x \to 0) $$
+
+3. **Evaluating Derivatives at $0$:**
+   * $\varphi_{\dot{X}_1}(0) = \mathbb{E}[e^{i \cdot 0 \cdot \dot{X}_1}] = 1$
+   * $\varphi_{\dot{X}_1}'(0) = \mathbb{E}[i \dot{X}_1 e^{i \xi \dot{X}_1}]\big|_{\xi=0} = i \mathbb{E}[\dot{X}_1] = 0$
+   * $\varphi_{\dot{X}_1}''(0) = \mathbb{E}[(i \dot{X}_1)^2 e^{i \xi \dot{X}_1}]\big|_{\xi=0} = -\mathbb{E}[\dot{X}_1^2] = -\text{Var}[X_1] = -\sigma^2$
+
+   Thus the Taylor expansion simplifies to:
+   $$ \varphi_{\dot{X}_1}(x) = 1 - \tfrac{\sigma^2}{2}\, x^2 + o(x^2) \quad (x \to 0) $$
+
+4. **Evaluating at $x = \frac{\xi}{\sigma\sqrt{n}}$ and taking $n \to \infty$:**
+   As $n\to\infty$ the argument $x = \frac{\xi}{\sigma\sqrt{n}} \to 0$, so the Taylor expansion gives:
+   $$ \varphi_{\dot{X}_1}\!\left(\frac{\xi}{\sigma\sqrt{n}}\right) = 1 - \frac{\sigma^2}{2}\cdot\frac{\xi^2}{\sigma^2 n} + o\!\left(\frac{1}{n}\right) = 1 - \frac{\xi^2}{2n} + o\!\left(\frac{1}{n}\right) $$
+   Define $a_n := -\frac{\xi^2}{2n} + o\!\left(\frac{1}{n}\right)$, so that $n\,a_n \to -\frac{\xi^2}{2}$. Since $a_n\to0$, for all sufficiently large $n$ the numbers $1+a_n$ lie in a neighborhood of $1$ on which a consistent analytic branch of the complex logarithm is defined. Thus the standard complex limit $(1+a_n)^n \to e^L$ whenever $n\,a_n\to L$ applies, using $\log(1+a_n)=a_n+O(a_n^2)$:
+   $$ \left( \varphi_{\dot{X}_1}\!\left( \frac{\xi}{\sigma\sqrt{n}} \right) \right)^n = (1 + a_n)^n \longrightarrow e^{-\xi^2/2} $$
+
+By Lévy's Continuity Theorem (@thm-levy), $\frac{\dot{S}_n}{\sigma\sqrt{n}} \xrightarrow{w} \mathcal{N}(0, 1)$. 
+
+::: 
+
+---
+
+## Multivariate Central Limit Theorem
+
+Before proving the multivariate extension of the CLT, we define the centered multivariate normal distribution and establish the Cramér-Wold device.
+
+:::{#def-centered-normal}
+## Centered Normal Distribution in $\mathbb{R}^d$
+Let $Q$ be a positive semi-definite $d \times d$ matrix, meaning that $Q$ is symmetric with nonnegative eigenvalues. Equivalently, $Q = A A^T$ for some $d \times d$ matrix $A$.
+The **centered normal distribution of covariance $Q$** is the unique measure $\mu \in \text{Prob}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ whose characteristic function, for $\xi\in\mathbb{R}^d$, is
+$$ \hat{\mu}(\xi) = e^{-\frac{1}{2} \xi^T Q\xi} = e^{-\frac{1}{2} |A^T \xi|^2}. $$
+We denote this as $\mathcal{N}(0, Q)$.
+
+Existence follows by taking $AG$, where $G=(G_1,\dots,G_d)^T$ has independent $\mathcal{N}(0,1)$ coordinates, and uniqueness follows from the uniqueness theorem for characteristic functions.
+:::
+
+
+**Exercise:** If $X \sim \mathcal{N}(0, Q)$, then $\text{Cov}[X_i, X_j] = Q_{ij}$, $X_i \sim \mathcal{N}(0, Q_{ii})$, and $Q = \mathbb{E}[X X^T]$.
+
+---
+
+
+:::{#lem-cramer-wold}
+## Cramér-Wold Device
+Let $\{X_n\}_{n=1}^\infty$ and $X$ be random vectors in $\mathbb{R}^d$. Then:
+$$ X_n \xrightarrow{w} X \iff \xi \cdot X_n \xrightarrow{w} \xi \cdot X \quad \forall \xi \in \mathbb{R}^d $$
+:::
+
+:::{.proof}
+## Proof of @lem-cramer-wold
+$(\Longrightarrow)$ Fix any $\xi \in \mathbb{R}^d$. For any $g \in C_b(\mathbb{R})$, the composition $x \mapsto g(\xi \cdot x)$ is bounded and continuous on $\mathbb{R}^d$ (since $x\mapsto\xi\cdot x$ is a continuous linear map). Therefore, by definition of $X_n \xrightarrow{w} X$:
+$$\mathbb{E}[g(\xi \cdot X_n)] \to \mathbb{E}[g(\xi \cdot X)] \quad \forall g \in C_b(\mathbb{R})$$
+Since this holds for every $g \in C_b(\mathbb{R})$, we conclude $\xi \cdot X_n \xrightarrow{w} \xi \cdot X$.
+
+$(\Longleftarrow)$ Conversely, if $\xi \cdot X_n \xrightarrow{w} \xi \cdot X$ for all $\xi \in \mathbb{R}^d$, then for any fixed $\xi\in\mathbb{R}^d$ and $u\in\mathbb{R}$, the hypothesis applied to the vector $u\xi$ gives, since $t\mapsto e^{it}$ is bounded and continuous:
+$$ \varphi_{\xi \cdot X_n}(u) = \mathbb{E}[e^{i (u\xi) \cdot X_n}] \longrightarrow \mathbb{E}[e^{i (u\xi) \cdot X}] = \varphi_{\xi \cdot X}(u) $$
+Evaluating at $u=1$ gives
+$$
+\varphi_{X_n}(\xi)=\mathbb{E}[e^{i\xi\cdot X_n}]
+\longrightarrow \mathbb{E}[e^{i\xi\cdot X}]=\varphi_X(\xi)
+$$
+for every $\xi\in\mathbb{R}^d$. By **Lévy's Continuity Theorem** (since $\varphi_X$ is the characteristic function of $X$, hence continuous at the origin), $X_n \xrightarrow{w} X$.
+:::
+
+
+:::{#rem-cramer-wold}
+One conceptual point that is particularly useful: the forward direction is just the continuous mapping theorem (@cor-continuous-mapping), whereas the reverse direction is the substantive content of Cramér–Wold. The characteristic-function argument is what turns convergence of every scalar projection into convergence of the joint distribution.
+:::
+
+
+---
+
+:::{#thm-multivariate-clt}
+## Multivariate Central Limit Theorem
+If $\{X_n\}_{n=1}^\infty$ are i.i.d. random vectors in $\mathbb{R}^d$ whose coordinates belong to $L^2$, with centered mean $\mathbb{E}[X_n] = 0\in\mathbb{R}^d$, and covariance matrix $Q = \mathbb{E}[X_1 X_1^T]$, then:
+$$ \frac{1}{\sqrt{n}} \sum_{j=1}^n X_j \xrightarrow{w} \mathcal{N}(0, Q) $$
+:::
+
+---
+
+
+:::{.proof}
+## Proof of @thm-multivariate-clt
+Fix $\xi \in \mathbb{R}^d$. Define the scalar random variables:
+$$ X_n^\xi := \xi \cdot X_n $$
+
+1. **Independence and Identical Distribution:**
+   Since $\{X_n\}$ are i.i.d. vectors, $\{X_n^\xi\}_{n=1}^\infty$ are i.i.d. scalar random variables, with characteristic function:
+   $$ \varphi_{X_n^\xi}(u) = \mathbb{E}[e^{i u \xi \cdot X_n}] = \varphi_{X_n}(u\xi) = \varphi_{X_1}(u\xi) $$
+
+2. **Moments of $X_n^\xi$:**
+   * Mean: $\mathbb{E}[X_n^\xi] = \mathbb{E}[\xi \cdot X_n] = \xi \cdot \mathbb{E}[X_n] = 0$.
+   * Variance:
+     $$ \text{Var}[X_n^\xi] = \mathbb{E}[(\xi \cdot X_n)^2] - (\xi \cdot \mathbb{E}[X_n])^2 = \mathbb{E}[(\xi \cdot X_n)^2] $$
+   Using the vector identity $(v \cdot w)^2 = v^T (w w^T) v$:
+     $$ 
+     \begin{align*}
+   \mathbb{E}[(\xi \cdot X_n)^2] &= \mathbb{E}[\xi^T (X_n X_n^T) \xi]\\
+   & = \xi^T \mathbb{E}[(X_n - \mathbb{E}[X_n])(X_n - \mathbb{E}[X_n])^T] \xi\\
+   & = \xi^T Q \xi.
+     \end{align*}
+     $$
+
+3. **Applying 1D CLT and Cramér-Wold Device:**
+   If $\xi^TQ\xi>0$, the univariate Central Limit Theorem applied to the i.i.d. centered sequence $\{X_n^\xi\}$ gives
+   $$ \xi \cdot \left( \frac{1}{\sqrt{n}} \sum_{j=1}^n X_j \right) = \frac{1}{\sqrt{n}} \sum_{j=1}^n X_j^\xi \xrightarrow{w} \mathcal{N}(0,\, \xi^TQ\xi). $$
+   If $\xi^TQ\xi=0$, then $\mathbb{E}[(X_1^\xi)^2]=0$, so $X_1^\xi=0$ almost surely. Thus every normalized sum of the projections is identically zero, and the same conclusion holds.
+
+   For any $Z \sim \mathcal{N}(0, Q)$, the projection $\xi \cdot Z$ has characteristic function
+   $$
+   \mathbb{E}[e^{iu(\xi\cdot Z)}]
+   =e^{-\frac{1}{2}u^2\xi^TQ\xi},
+   $$
+   so $\xi \cdot Z \sim \mathcal{N}(0,\xi^TQ\xi)$, including the degenerate case. Therefore, in both cases,
+   $$\frac{1}{\sqrt{n}}\sum_{j=1}^n X_j^\xi \xrightarrow{w} \xi\cdot Z.$$
+
+Since this holds for every fixed $\xi \in \mathbb{R}^d$, applying the **Cramér-Wold Device** yields:
+$$ \frac{1}{\sqrt{n}} \sum_{j=1}^n X_j \xrightarrow{w} \mathcal{N}(0, Q) $$
+This completes the proof.
+
+:::

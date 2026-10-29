@@ -1,0 +1,265 @@
+# Lecture 25.3: The Continuity Theorem
+
+## Introduction
+
+In probability theory, weak convergence of probability measures ($\mu_n \implies \mu$) is equivalent to pointwise convergence of their characteristic functions ($\hat{\mu}_n(\xi) \to \hat{\mu}(\xi)$). 
+
+A key result is that the converse also holds provided the pointwise limit function $\varphi(\xi)$ is continuous at the origin $\xi = 0$.
+
+---
+
+## Key Theorems and Technical Lemmas
+
+The characteristic function of one probability measure can be integrated against another probability measure in either order, because the Fourier kernel $e^{i\xi^\top x}$ is bounded and Fubini's theorem allows the order of integration to be exchanged.
+
+::: {#lem-fubini}
+## Fubini/Fourier Duality Identity
+Let $\mu, \nu \in \mathcal{P}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ be probability measures on $\mathbb{R}^d$. Then:
+$$
+\int_{\mathbb{R}^d} \hat{\mu}(\xi) \nu(d\xi) = \int_{\mathbb{R}^d} \hat{\nu}(x) \mu(dx)
+$$
+:::
+
+:::{.proof}
+## Proof of @lem-fubini
+By definition of the characteristic function $\hat{\mu}(\xi) = \int_{\mathbb{R}^d} e^{i x \cdot \xi} \mu(dx)$, we write:
+$$
+\int_{\mathbb{R}^d} \hat{\mu}(\xi) \nu(d\xi) = \int_{\mathbb{R}^d} \left( \int_{\mathbb{R}^d} e^{i x \cdot \xi} \mu(dx) \right) \nu(d\xi)
+$$
+Since $|e^{i x \cdot \xi}| = 1$, we apply **Fubini's Theorem** to interchange the order of integration:
+$$
+= \int_{\mathbb{R}^d} \mu(dx) \left( \int_{\mathbb{R}^d} e^{i x \cdot \xi} \nu(d\xi) \right) = \int_{\mathbb{R}^d} \hat{\nu}(x) \mu(dx)
+$$
+:::
+
+:::{#rem-fourier-duality}
+This identity says that the two measures can be interchanged in the Fourier kernel:
+$$
+\int\!\!\int e^{i\xi^\top x}\,\mu(dx)\nu(d\xi) 
+$$
+can be integrated first with respect to either measure. Symbolically,
+$$ 
+\boxed{ \int \hat\mu\,d\nu = \int \hat\nu\,d\mu. } 
+$$
+This is essentially a **Fourier duality identity**: the characteristic function of $\mu$, integrated against $\nu$, equals the characteristic function of $\nu$, integrated against $\mu$.
+
+:::
+
+The following corollary shows that the real part of the characteristic function also satisfies a similar duality identity. Using $\operatorname{Re}\hat\mu(\xi) = \int_{\mathbb R^d}\cos(\xi^\top x)\,\mu(dx)$, we have
+$$
+1 - \operatorname{Re}\hat{\mu}(\xi) = \int_{\mathbb{R}^d} \left[ 1 - \cos(\xi^\top x) \right] \mu(dx).
+$$
+
+::: {#cor-fubini}
+## Real Part Difference Identity
+Taking the real part of both sides yields:
+$$
+\int_{\mathbb{R}^d} \left[ 1 - \operatorname{Re}\hat{\mu}(\xi) \right] \nu(d\xi) = \int_{\mathbb{R}^d} \left[ 1 - \operatorname{Re}\hat{\nu}(x) \right] \mu(dx)
+$$
+:::
+
+:::{.proof}
+## Proof of @cor-fubini
+From the previous lemma,
+$$ 
+\int_{\mathbb R^d}\hat\mu(\xi)\,\nu(d\xi) = \int_{\mathbb R^d}\hat\nu(x)\,\mu(dx). 
+$$
+Since both sides are absolutely integrable, we may take real parts:
+$$ 
+\int_{\mathbb R^d}\operatorname{Re}\hat\mu(\xi)\,\nu(d\xi) = \int_{\mathbb R^d}\operatorname{Re}\hat\nu(x)\,\mu(dx). 
+$$
+Now use the fact that both $\mu$ and $\nu$ are probability measures. Hence
+$$ 
+\int_{\mathbb R^d}1\,\nu(d\xi)=1 \qquad\text{and}\qquad \int_{\mathbb R^d}1\,\mu(dx)=1. $$
+Subtracting the preceding equality from $1=1$, we obtain
+$$ \begin{aligned} \int_{\mathbb R^d} \left[1-\operatorname{Re}\hat\mu(\xi)\right]\nu(d\xi) &= 1-\int_{\mathbb R^d}\operatorname{Re}\hat\mu(\xi)\,\nu(d\xi)\\ &= 1-\int_{\mathbb R^d}\operatorname{Re}\hat\nu(x)\,\mu(dx)\\ &= \int_{\mathbb R^d} \left[1-\operatorname{Re}\hat\nu(x)\right]\mu(dx). \end{aligned} $$
+:::
+
+---
+
+## Characteristic Tail Estimate
+A characteristic function being sufficiently close to 1 around the origin forces the underlying probability distribution to put little mass in the tails.
+
+::: {#thm-tail-estimate}
+## Characteristic Tail Estimate
+Let $\rho(x)$ be a probability density on $\mathbb{R}^d$ supported in the closed unit ball $\bar{B}_1 = \{x \in \mathbb{R}^d : |x| \le 1\}$. 
+
+Write
+$$
+\hat{\rho}(\xi) := \int_{\mathbb{R}^d} e^{i\xi\cdot x}\rho(x)\,dx.
+$$
+
+By the Riemann--Lebesgue lemma (@thm-riemann-lebesgue), $\hat{\rho}(\xi) \to 0$ as $|\xi| \to \infty$, so choose $M > 0$ such that $|\hat{\rho}(\xi)| \le \frac{1}{2}$ for all $|\xi| \ge M$.
+
+Then for any probability measure $\mu \in \mathcal{P}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ and any $a > 0$:
+$$
+\mu\left( \{ x \in \mathbb{R}^d : |x| \ge a \} \right) \le 2 \int_{B_1} \left[ 1 - \operatorname{Re}\hat{\mu}\left( \frac{M}{a} x \right) \right] \rho(x) \, dx
+$$
+:::
+
+**Special Case: 1D Uniform Density ($d = 1$)**:
+
+Let $\rho(x) = \frac{1}{2} \mathbf{1}_{\{|x| \le 1\}}$. Its characteristic function is
+$$
+\hat{\rho}(\xi) =
+\begin{cases}
+\dfrac{\sin \xi}{\xi}, & \xi \ne 0,\\
+1, & \xi = 0.
+\end{cases}
+$$
+
+- We have $|\hat{\rho}(\xi)| \le \frac{1}{|\xi|} \le \frac{1}{2} \iff |\xi| \ge 2$, so we choose $M = 2$.
+- For any real-valued random variable $X$:
+$$
+\mathbb{P}(|X| \ge a) \le \int_{-1}^{1} \left[ 1 - \operatorname{Re}\varphi_X\left( \frac{2}{a} x \right) \right] dx = \frac{a}{2} \int_{-2/a}^{2/a} \left[ 1 - \operatorname{Re}\varphi_X(u) \right] du
+$$
+This is a very useful inequality because it relates a tail probability to the behavior of the characteristic function arbitrarily close to zero. For large $a$, $\left[-\frac2a,\frac2a\right]$ is a very small neighborhood of zero. 
+
+
+:::{.proof}
+## Proof of @thm-tail-estimate
+For any $\varepsilon > 0$, define the rescaled probability measure $\nu(dx) = \varepsilon^{-d} \rho(x/\varepsilon) \, dx$. Its characteristic function is:
+$$
+\hat{\nu}(\xi) = \int_{\mathbb{R}^d} e^{i \xi \cdot x} \varepsilon^{-d} \rho(x/\varepsilon) \, dx = \int_{\mathbb{R}^d} e^{i (\varepsilon \xi) \cdot y} \rho(y) \, dy = \hat{\rho}(\varepsilon \xi)$$
+
+Applying @cor-fubini, we have:
+$$\int_{\mathbb{R}^d} \left[ 1 - \operatorname{Re}\hat{\mu}(\xi) \right] \varepsilon^{-d} \rho(\xi/\varepsilon) \, d\xi = \int_{\mathbb{R}^d} \left[ 1 - \operatorname{Re}\hat{\rho}(\varepsilon x) \right] \mu(dx)$$
+Restricting the integral on the right-hand side to $\{x \in \mathbb{R}^d : |x| \ge M/\varepsilon\}$, where $1 - \operatorname{Re}\hat{\rho}(\varepsilon x) \ge 1 - \frac{1}{2} = \frac{1}{2}$:
+$$
+\int_{\mathbb{R}^d} \left[ 1 - \operatorname{Re}\hat{\rho}(\varepsilon x) \right] \mu(dx) \ge \frac{1}{2} \mu\left( \{x \in \mathbb{R}^d : |x| \ge M/\varepsilon\} \right)
+$$
+Setting $a = M/\varepsilon$ (so $\varepsilon = M/a$) and combining the two displays above:
+$$
+\frac{1}{2}\mu\left( \{x \in \mathbb{R}^d : |x| \ge a\} \right) \le \int_{\mathbb{R}^d} \left[ 1 - \operatorname{Re}\hat{\mu}(\xi) \right] \varepsilon^{-d} \rho(\xi/\varepsilon) \, d\xi
+$$
+Substitute $x = \xi/\varepsilon$ (so $\xi = \tfrac{M}{a}x$ and $d\xi = (M/a)^d\,dx$) on the right-hand side. The factors $\varepsilon^{-d}$ and $(M/a)^d = \varepsilon^d$ cancel, and since $\rho$ is supported on $\bar{B}_1$:
+$$
+\int_{\mathbb{R}^d} \left[ 1 - \operatorname{Re}\hat{\mu}(\xi) \right] \varepsilon^{-d} \rho(\xi/\varepsilon) \, d\xi
+= \int_{\bar{B}_1} \left[ 1 - \operatorname{Re}\hat{\mu}\!\left( \tfrac{M}{a} x \right) \right] \rho(x) \, dx
+$$
+Multiplying both sides by $2$ yields:
+$$
+\mu\left( \{x \in \mathbb{R}^d : |x| \ge a\} \right) \le 2 \int_{B_1} \left[ 1 - \operatorname{Re}\hat{\mu}\left( \frac{M}{a} x \right) \right] \rho(x) \, dx
+$$
+:::
+
+:::{#exm-characteristic-tail-estimate}
+
+Take $d=1$ and choose $\rho(x)=\frac12\mathbf 1_{\{|x|\le1\}}$ so that
+$\hat\rho(u)=\frac{\sin u}{u} and $M=2$. Now let $X\sim N(0,1)$. Its characteristic function is $\varphi_X(u)=e^{-u^2/2}$. Since this is real and positive,
+$$ 
+1-\operatorname{Re}\varphi_X(u) = 1-e^{-u^2/2}. 
+$$
+The theorem therefore says that, for every $a>0$,
+$$ 
+\mathbb P(|X|\ge a) \le \int_{-1}^{1} \left[ 1-e^{-\frac12(2x/a)^2} \right]dx, 
+$$
+Take $a=2$. Then $\mathbb P(|X|\ge2) \le \int_{-1}^{1} (1-e^{-x^2/2})\,dx$. The right-hand side is approximately $0.301$. The actual normal tail is
+$\mathbb P(|X|\ge2) = 2(1-\Phi(2)) \approx0.0455$. So the bound is not particularly sharp here: $0.0455\le0.301$. But sharpness is not the main purpose of the theorem.
+
+Think of the two sides as measuring two completely different things:
+$$ 
+\underbrace{\mathbb P(|X|\ge a)}_{\text{probability in the far tail}} 
+$$
+versus
+$$ 
+\underbrace{ \int_{-1}^{1} \left[1-\varphi_X\left(\frac{2x}{a}\right)\right]dx }_{\text{behavior of }\varphi_X\text{ near }0}. 
+$$
+As $a$ gets large, the arguments $\frac{2x}{a}$ become very small. Thus the theorem says:
+To control the probability that $X$ is very large, it is enough to understand how its characteristic function behaves very close to zero.
+:::
+
+---
+
+## Tightness Criterion
+If a sequence of probability distributions has characteristic functions that converge pointwise to a function that is continuous at the origin, then the probability mass cannot escape to infinity.
+
+::: {#cor-tightness-levy}
+## Tightness Criterion
+Let $\{\mu_n\}_{n=1}^\infty$ be a sequence of probability measures on $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$. If:
+
+1. $\varphi(\xi) := \lim_{n \to \infty} \hat{\mu}_n(\xi)$ exists for all $\xi \in \mathbb{R}^d$, and
+2. $\varphi(\xi)$ is continuous at $\xi = 0$,
+
+then the family $\{\mu_n\}_{n=1}^\infty$ is **tight**.
+:::
+
+:::{.proof}
+## Proof of @cor-tightness-levy
+Fix $\varepsilon > 0$. By @thm-tail-estimate
+$$
+\mu_n(\{x \in \mathbb{R}^d : |x| > a\}) \le 2 \int_{B_1} \left[ 1 - \operatorname{Re}\hat{\mu}_n\left( \frac{M}{a} x \right) \right] \rho(x) \, dx
+$$
+Since $\hat{\mu}_n(0) = 1$ for all $n$, we have $\varphi(0) = \lim_n \hat{\mu}_n(0) = 1$. Since $\varphi$ is continuous at $0$:
+$$
+\delta(a) := \sup_{|x| \le 1} \left[ 1 - \operatorname{Re}\varphi\left( \frac{M}{a} x \right) \right] \xrightarrow{a \to \infty} 0
+$$
+(Note $1 - \operatorname{Re}\varphi(\xi) \ge 0$ since $|\varphi(\xi)| \le 1$, so the supremum equals $\sup|\cdots|$.) As $a \to \infty$, $\frac{M}{a}x \to 0$ uniformly for $|x| \le 1$, so $\operatorname{Re}\varphi(\frac{M}{a}x) \to 1$ uniformly by continuity, giving $\delta(a) \to 0$.
+
+Choose $a_0 > 0$ large enough such that $2 \delta(a_0) < \frac{\varepsilon}{4}$.
+
+Since $|\hat{\mu}_n(\xi)| \le 1$ for all $n$ and $\xi$, the integrand satisfies $0 \le 1 - \operatorname{Re}\hat{\mu}_n(\frac{M}{a}x) \le 2$, so $2\rho(x)$ is an integrable dominating function on $B_1$ (as $\int_{B_1}\rho(x)\,dx \le 1$). By the **Dominated Convergence Theorem**, using pointwise convergence $\hat{\mu}_n(\xi) \to \varphi(\xi)$ for each fixed $\xi$:
+$$
+\begin{align*}
+&2 \int_{B_1} \left[ 1 - \operatorname{Re}\hat{\mu}_n\left( \frac{M}{a_0} x \right) \right] \rho(x) \, dx\\
+ &\longrightarrow 2 \int_{B_1} \left[ 1 - \operatorname{Re}\varphi\left( \frac{M}{a_0} x \right) \right] \rho(x) \, dx \le 2\delta(a_0) < \frac{\varepsilon}{4}
+\end{align*}
+$$
+Here DCT is applied to the integrands inside the integral, dominated by $2\rho(x)$; the constant factor $2$ is outside the integral. Since the limit is $< \varepsilon/4$, there exists $N \in \mathbb{N}$ such that for all $n \ge N$ the integral is within $\varepsilon/4$ of its limit, hence:
+$$
+\mu_n(\mathbb{R}^d \setminus \bar{B}_{a_0}) \le 2\int_{B_1}\left[1 - \operatorname{Re}\hat{\mu}_n\!\left(\tfrac{M}{a_0}x\right)\right]\rho(x)\,dx < \frac{\varepsilon}{4} + \frac{\varepsilon}{4} = \frac{\varepsilon}{2}
+$$
+For each of the finitely many $n<N$, $\mu_n(\mathbb{R}^d\setminus\bar{B}_a)\to0$ as $a\to\infty$. Choose $a\ge a_0$ so that these finitely many tails are all less than $\varepsilon$. For $n\ge N$, enlarging the ball can only decrease the tail, so
+$$
+\mu_n(\mathbb{R}^d\setminus\bar{B}_a) \le \mu_n(\mathbb{R}^d\setminus\bar{B}_{a_0}) < \frac{\varepsilon}{2}.
+$$
+Thus $\sup_n \mu_n(\mathbb{R}^d\setminus\bar{B}_a) < \varepsilon$, and $\{\mu_n\}$ is tight. 
+:::
+
+---
+
+## Main Result: Lévy's Continuity Theorem
+A pointwise limit of characteristic functions is automatically a characteristic function of a probability distribution, provided the limit is continuous at the origin; moreover, the corresponding probability distributions converge weakly.
+
+::: {#thm-levy}
+## Lévy's Continuity Theorem
+Let $\{\mu_n\}_{n=1}^\infty \subset \mathcal{P}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$. Suppose that $\lim_{n \to \infty} \hat{\mu}_n(\xi) = \varphi(\xi)$ exists for all $\xi \in \mathbb{R}^d$.
+
+If $\varphi$ is continuous at $\xi = 0$, then:
+
+1. $\varphi$ is the characteristic function of a unique probability measure $\mu \in \mathcal{P}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ (i.e., $\varphi = \hat{\mu}$).
+2. $\mu_n \implies \mu$ weakly as $n \to \infty$.
+:::
+
+:::{.proof}
+## Proof Strategy (Subsequence Argument)
+
+1. **Tightness:** By the Tightness Criterion above, $\{\mu_n\}$ is tight.
+2. **Relative Compactness:** By **Prokhorov's Theorem** (@thm-prokhorov and @cor-tightness), tightness implies relative compactness. Thus, every subsequence of $\{\mu_n\}$ has a further weakly convergent subsequence.
+3. **Construction of $\mu$:** By Step 2, pick any subsequence with $\mu_{n_k} \implies \mu$ for some $\mu \in \mathcal{P}(\mathbb{R}^d)$. Since $x \mapsto e^{i\xi\cdot x}$ is bounded and continuous, weak convergence gives $\hat{\mu}_{n_k}(\xi) \to \hat{\mu}(\xi)$ for every $\xi$. But by assumption $\hat{\mu}_{n_k}(\xi) \to \varphi(\xi)$, so $\hat{\mu} = \varphi$. This establishes Conclusion 1: $\varphi$ is the characteristic function of $\mu$, and $\mu$ is the unique such probability measure (by injectivity of the Fourier transform on $\mathcal{P}(\mathbb{R}^d)$).
+4. **Uniqueness of Every Subsequential Limit:**
+   Suppose for contradiction that $\mu_n \not\implies \mu$. Then there exist $f \in C_b(\mathbb{R}^d)$, $\varepsilon > 0$, and a subsequence $\{\mu_{n_j}\}$ such that:
+   $$
+   \left| \int f \, d\mu_{n_j} - \int f \, d\mu \right| \ge \varepsilon \quad \forall j
+   $$
+   By relative compactness, $\{\mu_{n_j}\}$ has a further subsequence $\mu_{n_{j_k}} \implies \nu$ for some $\nu \in \mathcal{P}(\mathbb{R}^d)$.
+   
+   Since $x \mapsto e^{i\xi\cdot x}$ is bounded and continuous, weak convergence $\mu_{n_{j_k}} \implies \nu$ gives $\hat{\mu}_{n_{j_k}}(\xi) \to \hat{\nu}(\xi)$ for all $\xi$. But $\hat{\mu}_{n_{j_k}}(\xi) \to \varphi(\xi) = \hat{\mu}(\xi)$ by assumption and Step 3. By uniqueness of limits:
+   $$
+   \hat{\nu}(\xi) = \varphi(\xi) = \hat{\mu}(\xi)
+   $$
+   Since characteristic functions uniquely determine probability measures, $\nu = \mu$.
+
+5. **Conclusion:** 
+   Since $\mu_{n_{j_k}} \implies \nu = \mu$ and $f \in C_b(\mathbb{R}^d)$, we have $\int f\,d\mu_{n_{j_k}} \to \int f\,d\mu$. This contradicts $\left|\int f\,d\mu_{n_j} - \int f\,d\mu\right| \ge \varepsilon$ for all $j$ (in particular for $j = j_k$ with $k$ large). Therefore, the entire sequence $\mu_n \implies \mu$. 
+
+:::
+---
+
+## Takeaways
+
+1. On $\mathbb{R}^d$, a characteristic function is a complete distributional fingerprint: if two probability measures have the same characteristic function, then they are equal.
+2. Pointwise convergence of characteristic functions is not enough by itself; the crucial extra hypothesis is continuity at the origin. This ensures the limit function is a genuine characteristic function and prevents pathological non-tight behavior.
+3. Lévy's continuity theorem turns Fourier-space convergence into weak convergence of laws: if $\hat{\mu}_n(\xi) \to \varphi(\xi)$ for all $\xi$ and $\varphi$ is continuous at $0$, then there exists a probability measure $\mu$ with $\varphi = \hat{\mu}$ and $\mu_n \implies \mu$.
+4. The proof hinges on tightness and Prokhorov's theorem: from pointwise convergence of characteristic functions, one obtains tightness, hence relative compactness of the sequence, and every subsequential limit must have the same Fourier transform.
+5. In practice, the continuity theorem is the Fourier-analytic bridge between transform convergence and distributional convergence. It is the standard tool for proving CLTs and other weak-limit results by checking pointwise convergence of characteristic functions.

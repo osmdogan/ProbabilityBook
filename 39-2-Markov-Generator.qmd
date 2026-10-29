@@ -1,0 +1,219 @@
+# Lecture 39.2: Markov Generator
+
+## Continuous-Time Semigroups and Matrix Exponential
+
+In continuous time $T = [0, \infty)$, the Chapman-Kolmogorov equations take the semigroup form:
+$$
+Q_{t+s} = Q_t Q_s, \quad Q_0 = \mathrm{Id}.
+$$ {#eq-semigroup-continuous}
+
+This semigroup property $Q_{t+s} = Q_t Q_s$ is strongly suggestive of the exponential function $e^{tA}$.
+
+## Finite State Space
+
+Let the state space be finite, $S = \{1, 2, \dots, n\}$. If there exists an $n \times n$ matrix $A \in \mathbb{M}_{n \times n}(\mathbb{R})$ such that $Q_t = e^{tA} = \sum_{k=0}^\infty \frac{t^k A^k}{k!}$, then:
+
+1. $Q_0 = e^{0 \cdot A} = \mathrm{Id}$;
+2. $Q_{t+s} = e^{(t+s)A} = e^{tA} e^{sA} = Q_t Q_s$ (since $tA$ and $sA$ commute).
+
+The matrix $A$ is called the **infinitesimal generator** of the transition semigroup $(Q_t)_{t \ge 0}$. 
+
+If $A$ exists, it can be recovered via the time derivative at $t = 0$:
+$$
+\frac{\mathrm{d}}{\mathrm{d}t} Q_t = A e^{tA} = e^{tA} A \implies A = \left. \frac{\mathrm{d}}{\mathrm{d}t} Q_t \right|_{t=0} = \lim_{t \downarrow 0} \frac{Q_t - \mathrm{Id}}{t}.
+$$ {#eq-generator-derivative}
+
+Because $q_t(i, j) = \mathbb{P}(X_t = j \mid X_0 = i)$ denotes the scalar entries of the transition kernel of $Q_t$ on $S$ (so that $Q_t = (q_t(i,j))_{i,j\in S}$, matching the operator/matrix-entry convention of Lecture 39.1), $q_t$ satisfies:
+$$
+q_t(i, j) \ge 0 \quad \forall i, j \in S, \quad \text{and} \quad \sum_{j=1}^n q_t(i, j) = 1 \quad \forall i \in S.
+$$ {#eq-stochastic-kernel-cond}
+
+::: {#prp-generator-characterization}
+## Characterization of Finite Generator Matrices
+Let $A \in \mathbb{M}_{n \times n}(\mathbb{R})$. Then $Q_t = e^{tA}$ is a time-homogeneous Markov transition operator for all $t \ge 0$ if and only if $A$ is an **intensity matrix** (or $Q$-matrix), meaning:
+
+1. $A_{ij} \ge 0$ for all $i \ne j$;
+2. $\sum_{j=1}^n A_{ij} = 0$ for all $i \in \{1, \dots, n\}$ (implying $A_{ii} = -\sum_{j \ne i} A_{ij} \le 0$).
+:::
+
+::: {.proof}
+$(\implies)$ Since $q_t(i, j) \ge 0$ for all $t > 0$, taking off-diagonal entries $i \ne j$ gives:
+$$
+A_{ij} = \lim_{t \downarrow 0} \frac{q_t(i, j) - q_0(i, j)}{t} = \lim_{t \downarrow 0} \frac{q_t(i, j)}{t} \ge 0.
+$$
+Furthermore, since $\sum_{j=1}^n q_t(i, j) = 1$ for all $t \ge 0$, differentiating with respect to $t$ at $t = 0$ yields:
+$$
+\sum_{j=1}^n A_{ij} = \left. \frac{\mathrm{d}}{\mathrm{d}t} \sum_{j=1}^n q_t(i, j) \right|_{t=0} = \frac{\mathrm{d}}{\mathrm{d}t}(1) = 0.
+$$
+
+
+$(\impliedby)$ Suppose $A$ satisfies conditions 1–2. Let $c := \max_{i} (-A_{ii}) = \max_i \sum_{j \ne i} A_{ij} < \infty$ (finite since $S$ is finite), and set $B := A + cI$. Then $B_{ij} = A_{ij} \ge 0$ for $i \ne j$, and $B_{ii} = A_{ii} + c \ge 0$ by the choice of $c$; so $B$ has **all** entries $\ge 0$. Since $B$ and $cI$ commute,
+$$
+Q_t = e^{tA} = e^{t(B - cI)} = e^{-ct} e^{tB} = e^{-ct} \sum_{k=0}^\infty \frac{t^k B^k}{k!}.
+$$
+For $t \ge 0$, every term $\frac{t^k}{k!} B^k$ has non-negative entries (a product, and hence any power, of entrywise non-negative matrices is entrywise non-negative), so the convergent series $\sum_k \frac{t^kB^k}{k!}$ has non-negative entries; multiplying by the positive scalar $e^{-ct}$ preserves this, giving $q_t(i,j) \ge 0$ for all $i,j$.
+
+For the row sums, condition 2 says $A\mathbf{1} = 0$ where $\mathbf{1} = (1,\dots,1)^\top$, so by induction $A^k\mathbf{1} = A^{k-1}(A\mathbf{1}) = 0$ for every $k \ge 1$. Hence
+$$
+Q_t \mathbf{1} = \sum_{k=0}^\infty \frac{t^k}{k!} A^k \mathbf{1} = \mathbf{1} + \sum_{k=1}^\infty \frac{t^k}{k!}\cdot 0 = \mathbf{1},
+$$
+i.e. $\sum_{j=1}^n q_t(i,j) = 1$ for every $i \in S$ and every $t \ge 0$. Together with $Q_0 = \mathrm{Id}$ and the semigroup property already verified, $(Q_t)_{t\ge0}$ is a time-homogeneous Markov transition semigroup. 
+:::
+
+---
+
+## Non-Continuous Transition Semigroups
+
+Is every transition semigroup of the form $Q_t = e^{tA}$ for some operator $A$? The answer is **no** if continuity at $t=0$ fails.
+
+::: {#exm-discontinuous-semigroup}
+## Discontinuous Semigroup
+Fix a probability mass vector $\boldsymbol{\nu} = (\nu(1), \dots, \nu(n))$ on $S = \{1, \dots, n\}$. Define $P \in \mathbb{M}_{n \times n}(\mathbb{R})$ by $P_{ij} = \nu(j)$ for all $i \in S$.
+
+Consider the family $q_t(i, j) = P_{ij} = \nu(j)$ for all $t > 0$ and $q_0(i, j) = \delta_{ij}$. Check the semigroup property for $s, t > 0$:
+$$
+\sum_{k \in S} q_s(i, k) q_t(k, j) = \sum_{k \in S} \nu(k) \nu(j) = \nu(j) \sum_{k \in S} \nu(k) = \nu(j) = q_{s+t}(i, j).
+$$
+
+However, this semigroup is discontinuous at $t = 0$ whenever $n \ge 2$: since $\boldsymbol\nu$ is a single fixed vector (not depending on $i$), there is no choice of $\boldsymbol\nu$ for which $\nu(j) = \delta_{ij}$ holds simultaneously for every pair $i,j \in S$ — this would require $\nu(i) = 1$ for every $i \in S$, impossible once $n \ge 2$. Hence for every $i$ there is some $j$ with
+$$
+\lim_{t \downarrow 0} q_t(i, j) = P_{ij} = \nu(j) \ne \delta_{ij} = q_0(i, j).
+$$
+(The degenerate case $n=1$ is the only exception, where $S$ is a single point and the semigroup is trivially continuous.)
+
+Probabilistically, $\mathbb{P}(X_t = j \mid X_s = i) = q_{t-s}(i, j) = \nu(j) = \mathbb{P}(X_t = j)$, which corresponds to $(X_t)_{t > 0}$ being an i.i.d. family of random variables with law $\boldsymbol{\nu}$ for all $t > 0$, completely independent of $X_0$.
+:::
+
+---
+
+## Generator of the Poisson Process
+
+Consider a Poisson process $(N_t)_{t \ge 0}$ with intensity $\lambda > 0$ on state space $S = \mathbb{N}_0 = \{0, 1, 2, \dots\}$. 
+
+The transition kernel is:
+$$
+\begin{aligned}
+q_{s,t}(m, n) &= \mathbb{P}(N_t = n \mid N_s = m) \\
+&= \mathbb{P}(N_t - N_s = n - m) \\
+&= e^{-\lambda(t-s)} \frac{(\lambda(t-s))^{n-m}}{(n-m)!} \mathbf{1}_{\{n \ge m\}}.
+\end{aligned}
+$$
+
+For any $f \in \mathcal{B}_b(\mathbb{N}_0)$, the operator $Q_t$ acts on $f$ as:
+$$
+(Q_t f)(k) = \sum_{n=0}^\infty q_t(k, k+n) f(k+n) = e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n).
+$$ {#eq-poisson-qt}
+
+Differentiating $(Q_t f)(k)$ with respect to $t$ using power series term-by-term differentiation (valid since $f$ is bounded):
+$$
+\begin{aligned}
+\frac{\mathrm{d}}{\mathrm{d}t} (Q_t f)(k) &= -\lambda e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n) + e^{-\lambda t} \sum_{n=1}^\infty \lambda \frac{n (\lambda t)^{n-1}}{n!} f(k+n) \\
+&= -\lambda (Q_t f)(k) + \lambda e^{-\lambda t} \sum_{m=0}^\infty \frac{(\lambda t)^m}{m!} f(k+m+1) \quad (\text{setting } m = n-1) \\
+&= -\lambda (Q_t f)(k) + \lambda Q_t f(k+1) \\
+&= \lambda \left[ (Q_t f)(k+1) - (Q_t f)(k) \right].
+\end{aligned}
+$$
+
+Defining the operator $A$ by:
+$$
+(A f)(k) := \lambda [f(k+1) - f(k)],
+$$ {#eq-poisson-generator-def}
+the computation above shows $\frac{\mathrm{d}}{\mathrm{d}t} Q_t f = A Q_t f$. The companion identity $A Q_t f = Q_t A f$ follows from the translation-invariance of the Poisson kernel, $q_t(k, k+n) = q_t(k+1, k+1+n)$ for every $n \ge 0$ (both sides equal $e^{-\lambda t}(\lambda t)^n/n!$): reindexing,
+$$
+\begin{aligned}
+(Q_t A f)(k) &= \lambda \sum_{n=0}^\infty q_t(k,k+n)\big[f(k+n+1) - f(k+n)\big] \\
+&= \lambda\big[(Q_tf)(k+1) - (Q_tf)(k)\big] = (AQ_tf)(k),
+\end{aligned}
+$$
+using $\sum_n q_t(k,k+n) f(k+n+1) = \sum_n q_t(k+1,(k+1)+n) f((k+1)+n) = (Q_tf)(k+1)$. Hence we obtain the differential equation $\frac{\mathrm{d}}{\mathrm{d}t} Q_t f = Q_t A f = A Q_t f$.
+
+::: {#thm-poisson-exponential-representation}
+## Exponential Representation for Poisson Generator
+Let $A = \lambda (T - \mathrm{Id})$ where $T f(k) = f(k+1)$ is the forward shift operator on $\mathcal{B}_b(\mathbb{N}_0)$. Then $A$ is a bounded operator on $(\mathcal{B}_b(\mathbb{N}_0), \|\cdot\|_\infty)$ with $\|A\| \le 2\lambda$.
+
+Consequently, the operator exponential series $e^{tA} = \sum_{n=0}^\infty \frac{t^n A^n}{n!}$ converges uniformly, and:
+$$
+\begin{aligned}
+e^{tA} &= e^{t \lambda (T - \mathrm{Id})} \\
+&= e^{-\lambda t \mathrm{Id}} e^{\lambda t T} \\
+&= e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} T^n \\
+&= Q_t.
+\end{aligned}
+$$ {#eq-poisson-exp-proof}
+Thus, $A = \lambda (T - \mathrm{Id})$ is the explicit infinitesimal generator of the Poisson process.
+:::
+
+---
+
+## Generator of Brownian Motion
+
+Consider standard Brownian motion $(B_t)_{t \ge 0}$ on $\mathbb{R}$. Its transition density is the Gaussian heat kernel:
+$$
+q_t(x, y) = \frac{1}{\sqrt{2\pi t}} e^{-\frac{|x-y|^2}{2t}}, \quad t > 0, \, x, y \in \mathbb{R}.
+$$ {#eq-heat-kernel}
+
+The transition operator $Q_t$ acts via convolution:
+$$
+(Q_t f)(x) = \int_{\mathbb{R}} q_t(x, y) f(y) \, \mathrm{d}y = (q_t * f)(x).
+$$ {#eq-bm-convolution}
+
+::: {#prp-brownian-generator}
+## Infinitesimal Generator of Brownian Motion
+If $f \in C_b^2(\mathbb{R})$ (bounded, with bounded continuous first and second derivatives), then $(Q_t f)(x)$ satisfies the Kolmogorov forward/backward equations:
+$$
+\frac{\mathrm{d}}{\mathrm{d}t} (Q_t f)(x) = A (Q_t f)(x) = Q_t (A f)(x),
+$$ {#eq-bm-diff-eq}
+where the generator operator $A$ on $C_b^2(\mathbb{R})$ is given by:
+$$
+A f(x) = \frac{1}{2} \frac{\mathrm{d}^2 f}{\mathrm{d}x^2}(x) = \frac{1}{2} f''(x).
+$$ {#eq-bm-generator-formula}
+:::
+
+::: {.proof}
+**Step 1: $A f(x) = \frac12 f''(x)$ at $t=0$.** Fix $x \in \mathbb{R}$ and write $(Q_tf)(x) = \mathbb{E}[f(x+B_t)]$ (using $B_0=0$ and the translation structure of @eq-bm-convolution). By Taylor's theorem with Lagrange remainder, for each realization of $B_t$ there is $\xi$ between $x$ and $x+B_t$ with
+$$
+f(x+B_t) = f(x) + f'(x)B_t + \tfrac12 f''(x) B_t^2 + \tfrac12\big[f''(\xi) - f''(x)\big]B_t^2.
+$$
+Taking expectations and using $\mathbb{E}[B_t]=0$, $\mathbb{E}[B_t^2]=t$:
+$$
+\frac{(Q_tf)(x) - f(x)}{t} = \tfrac12 f''(x) + \tfrac12\,\mathbb{E}\!\left[\big(f''(\xi)-f''(x)\big)\frac{B_t^2}{t}\right].
+$$
+Write $B_t = \sqrt t\, Z$ with $Z \sim N(0,1)$, and set $g_t(z) := f''(\xi(x,\sqrt t z)) - f''(x)$, so the remainder term is $\tfrac12\mathbb{E}[g_t(Z)Z^2]$. Since $f''$ is bounded, $|g_t(Z)Z^2| \le 2\|f''\|_\infty Z^2$ with $\mathbb{E}[Z^2] < \infty$; and since $\sqrt t Z \to 0$ a.s. as $t \downarrow 0$ while $\xi$ lies between $x$ and $x+\sqrt t Z$, continuity of $f''$ at $x$ gives $g_t(Z) \to 0$ a.s. By the Dominated Convergence Theorem, $\mathbb{E}[g_t(Z)Z^2] \to 0$ as $t \downarrow 0$. Hence
+$$
+Af(x) := \lim_{t\downarrow0}\frac{(Q_tf)(x)-f(x)}{t} = \tfrac12 f''(x).
+$$
+
+**Step 2: extension to all $t \ge 0$.** The heat kernel @eq-heat-kernel is $C^\infty$ in $x$ with all $x$-derivatives bounded by integrable functions of $y$ uniformly for $x$ in compacts (Gaussian tails dominate any polynomial prefactor), so differentiation under the integral sign in @eq-bm-convolution is justified and $Q_tf \in C_b^2(\mathbb{R})$ for every $t>0$ and every $f\in\mathcal B_b(\mathbb R)$, in particular for $f \in C_b^2(\mathbb{R})$. Using the semigroup property $Q_{t+h}=Q_tQ_h=Q_hQ_t$ (@eq-semigroup-continuous),
+$$
+\frac{\mathrm{d}}{\mathrm{d}t}(Q_tf)(x) = \lim_{h\downarrow0}\frac{(Q_h(Q_tf))(x) - (Q_tf)(x)}{h} = A(Q_tf)(x)
+$$
+by Step 1 applied to $Q_tf \in C_b^2(\mathbb{R})$ in place of $f$; and, since $Q_t$ is a bounded operator ($\|Q_tg\|_\infty \le \|g\|_\infty$) and hence continuous,
+$$
+\begin{aligned}
+\frac{\mathrm{d}}{\mathrm{d}t}(Q_tf)(x) &= \lim_{h\downarrow0}\frac{(Q_t(Q_hf))(x) - (Q_t f)(x)}{h} \\
+&= Q_t\!\left(\lim_{h\downarrow0}\frac{Q_hf - f}{h}\right)\!(x) = Q_t(Af)(x),
+\end{aligned}
+$$
+where passing the limit inside $Q_t$ uses boundedness/linearity of $Q_t$ together with Step 1 applied at the point $x$ after convolving. This proves @eq-bm-diff-eq. 
+:::
+
+::: {#rem-feller-domain-problem}
+## Domain Restrictions and Feller Processes
+Unlike the Poisson generator $A = \lambda(T - \mathrm{Id})$, which is bounded on all of $\mathcal{B}_b(\mathbb{N}_0)$, the Laplacian operator $A = \frac{1}{2} \frac{\mathrm{d}^2}{\mathrm{d}x^2}$ is **unbounded**.
+
+It cannot be defined on all of $\mathcal{B}_b(\mathbb{R})$ because discontinuous or non-differentiable functions (such as $f = \mathbf{1}_{[0,1]}$) cannot be differentiated twice in the classical sense. Sequences $\psi_n \in C_c^2(\mathbb{R})$ approximating $\mathbf{1}_{[0,1]}$ pointwise have unbounded second derivatives $\|\psi_n''\|_\infty \to \infty$.
+
+
+This domain issue motivates the theory of **Feller semigroups** and **Feller processes**, where the domain of $A$ is restricted to continuous functions vanishing at infinity, $\mathcal{D}(A) \subset C_0(\mathbb{R})$.
+:::
+
+---
+
+## Takeaways
+
+- **The generator turns the semigroup law into a differential equation.** Since $(Q_t)_{t\ge0}$ satisfies $Q_{t+s}=Q_tQ_s$, $Q_0=\mathrm{Id}$ (@eq-semigroup-continuous), *if* $Q_t=e^{tA}$ for some operator $A$, then $A$ is recovered as the one-sided derivative $A=\lim_{t\downarrow0}(Q_t-\mathrm{Id})/t$ (@eq-generator-derivative), and conversely the whole semigroup is reconstructed from $A$ by exponentiating. The generator is thus the "infinitesimal description" of a Markov process.
+- **On a finite state space, generators are exactly the $Q$-matrices.** @prp-generator-characterization shows $Q_t=e^{tA}$ defines a valid Markov semigroup iff $A$ has non-negative off-diagonal entries and zero row sums — the classical intensity-matrix conditions. The ($\Leftarrow$) direction is proved via the shift trick $A=B-cI$ with $B\ge0$ entrywise, which simultaneously gives positivity of $Q_t$ (via the non-negative series $e^{tB}$) and conservation of probability (via $A\mathbf 1=0 \Rightarrow A^k\mathbf 1 = 0$ for $k\ge1$).
+- **Not every Markov semigroup has a generator.** @exm-discontinuous-semigroup exhibits a perfectly valid semigroup ($Q_t=P$ for all $t>0$, $Q_0=\mathrm{Id}$) that is discontinuous at $t=0$ whenever $|S|\ge2$, so no bounded $A$ with $Q_t=e^{tA}$ can exist (such a family is automatically continuous at $0$). Existence of a generator is therefore a genuine extra hypothesis (continuity of $t\mapsto Q_t$ at $t=0$), not automatic.
+- **Bounded generators: the Poisson process.** For the Poisson process, $A=\lambda(T-\mathrm{Id})$ (forward-shift minus identity, scaled by the rate $\lambda$) is a *bounded* operator on $\mathcal{B}_b(\mathbb{N}_0)$ (@thm-poisson-exponential-representation), so $Q_t=e^{tA}$ holds literally as a convergent operator-norm series — the discrete-state-space picture carries over verbatim to the countably infinite case because $\|A\|\le2\lambda<\infty$.
+- **Unbounded generators: Brownian motion.** The generator of Brownian motion is $Af=\tfrac12f''$ (@prp-brownian-generator), proved via a second-order Taylor expansion of $f(x+B_t)$ combined with dominated convergence. Unlike the Poisson case, $A$ cannot be bounded on all of $\mathcal{B}_b(\mathbb{R})$: it is not even classically defined outside $C_b^2(\mathbb{R})$, since indicator-type functions have no second derivative and their smooth approximations have second derivatives blowing up (@rem-feller-domain-problem). This is the generic situation for diffusions, not a pathology specific to Brownian motion.
+- **Domain restriction, not boundedness, is the right generalization.** The Brownian/Poisson contrast shows that "bounded generator on $\mathcal{B}_b$" is too strong a requirement for continuous-state-space processes; the correct framework (Feller semigroups, restricting to $C_0(\mathbb{R})$ with a dense domain $\mathcal{D}(A)$) is what must replace it, motivating the operator-theoretic machinery developed in Lecture 40.1.

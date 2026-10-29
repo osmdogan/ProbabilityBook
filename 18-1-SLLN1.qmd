@@ -1,0 +1,189 @@
+# Lecture 18.1: Strong Law of Large Numbers (I)
+
+## Classical Weak Law vs. Strong Law Motivations
+
+Recall the **Weak Law of Large Numbers (WLLN)** for uncorrelated $L^2$ random variables:
+
+::: {#thm-wlln-uncorrelated}
+Let $\{X_n\}_{n=1}^\infty$ be uncorrelated random variables in $L^2(\Omega, \mathcal{F}, P)$ with identical mean $\mathbb{E}[X_n] = \alpha$ and bounded variance $\operatorname{Var}(X_n) \le s^2 < \infty$. For $S_n = \sum_{k=1}^n X_k$:
+$$
+P\left( \left| \frac{S_n}{n} - \alpha \right| > \epsilon \right) \le \frac{s^2}{n \epsilon^2} \xrightarrow{n \to \infty} 0,
+$$ {#eq-chebyshev-wlln}
+implying $\frac{S_n}{n} \xrightarrow{P} \alpha$.
+:::
+
+To generalize this fundamental result, two distinct paths present themselves:
+
+1. **Weaken Integrability:** Relax the $L^2$ assumption down to $L^1$ ($\mathbb{E}[|X_1|] < \infty$).
+2. **Strengthen Convergence Mode:** Elevate convergence in probability ($\xrightarrow{P}$) to almost sure convergence ($\xrightarrow{\text{a.s.}}$).
+
+---
+
+## The Cut-Off Technique & Tail Equivalence
+
+Let $X$ be a random variable and $M < \infty$. Define the truncated random variable:
+$$
+X^M \triangleq X \mathbf{1}_{\{|X| \le M\}}.
+$$
+It is measurable since it is the product of measurable functions: $X$ and $\mathbf{1}_{\{|X| \le M\}}$. It is also bounded hence is in $L^\infty(\Omega, \mathcal{F}, P)$ and consequently in all $L^p(\Omega, \mathcal{F}, P)$ spaces for $p \ge 1$. 
+
+However, entrywise truncation does not preserve uncorrelatedness in general: $Cov(X, Y) = 0 \centernot\implies Cov(X \mathbf{1}_{\{|X| \le M\}}, Y \mathbf{1}_{\{|Y| \le M\}}) = 0$. To preserve structural invariance under truncation, we strengthen uncorrelatedness to **full independence**.
+
+::: {#def-tail-equivalence}
+Two sequences of random variables $\{X_n\}_{n=1}^\infty$ and $\{X_n'\}_{n=1}^\infty$ defined on a common probability space are **tail equivalent** if:
+$$
+\sum_{n=1}^\infty P(X_n \neq X_n') < \infty
+$$ {#eq-tail-equivalence-def}
+:::
+
+**Some Remarks on Tail Equivalence:**
+
+- Intuitively, tail equivalence means that the two sequences differ only finitely often with probability 1. So the two sequences may have different initial behavior, but their tails are eventually identical almost surely.
+- Formally, tail equivalence is a probabilistic analogue of the notion that **two sequences eventually coincide**.
+- Tail equivalence is an equivalence relation on sequences of random variables: it is reflexive, symmetric, and transitive.
+- Finally, the following proposition shows that tail equivalence **preserves almost sure limits of scaled sums**.
+
+::: {#prp-tail-equivalence-slln}
+If $\{X_n\}$ and $\{X_n'\}$ are tail equivalent and $b_n \uparrow \infty$, then for any random variable $X$:
+$$
+\lim_{n \to \infty} \frac{1}{b_n} \sum_{j=1}^n X_j' = X \quad \text{a.s.} \iff \lim_{n \to \infty} \frac{1}{b_n} \sum_{j=1}^n X_j = X \quad \text{a.s.}
+$$ {#eq-tail-equivalence-limit-preservation}
+:::
+
+::: {.proof}
+## Proof of @prp-tail-equivalence-slln
+Setting $A_n \triangleq \{X_n \neq X_n'\}$, condition $\sum_{n=1}^\infty P(A_n) < \infty$ implies $P(A_n \text{ i.o.}) = 0$ by the first Borel-Cantelli Lemma. Thus, for almost every $\omega \in \Omega$, there exists an $N(\omega) < \infty$ such that $X_n(\omega) = X_n'(\omega)$ for all $n \ge N(\omega)$. Split the scaled difference:
+$$
+\begin{aligned}
+&\frac{1}{b_n} \sum_{j=1}^n X_j(\omega) - \frac{1}{b_n} \sum_{j=1}^n X_j'(\omega) \\
+&= \frac{1}{b_n} \sum_{j=1}^{N(\omega)-1} \left( X_j(\omega) - X_j'(\omega) \right) \xrightarrow{n \to \infty} 0,
+\end{aligned}
+$$ {#eq-tail-equivalence-diff-vanish}
+since the numerator sum is a fixed finite constant while $b_n \to \infty$.
+:::
+
+---
+
+## Integral Sum Lemma & SLLN Reduction
+The following lemma provides a useful bound on the tail probabilities of an $L^1$ random variable.
+
+::: {#lem-l1-tail-sum-bound}
+If $X \in L^1(\Omega, \mathcal{F}, P)$ and $\epsilon > 0$, then:
+$$
+\sum_{n=1}^\infty P(|X| \ge n\epsilon) \le \frac{1}{\epsilon} \mathbb{E}[|X|] < \infty
+$$ {#eq-l1-tail-sum-integral-bound}
+:::
+
+::: {.proof}
+## Proof of @lem-l1-tail-sum-bound
+Observe the pointwise inequality of functions on $\mathbb{R}_{\ge 0}$:
+$$
+\sum_{n=1}^\infty \mathbf{1}_{[n, \infty)}(y) \le y \quad \forall y \ge 0
+$$ {#eq-indicator-sum-linear-bound}
+
+Setting $y=|X|/\epsilon$, we obtain the pointwise inequality
+$$
+\sum_{n=1}^\infty\mathbf{1}_{\{|X|/\epsilon\ge n\}}\le\frac{|X|}{\epsilon}.
+$$
+
+Since the terms on the left-hand side are nonnegative, the Monotone Convergence Theorem gives
+
+$$
+\begin{aligned}
+\sum_{n=1}^\infty P(|X|\ge n\epsilon)
+&=
+\sum_{n=1}^\infty
+\mathbb{E}\left[
+\mathbf{1}_{\{|X|/\epsilon\ge n\}}
+\right] \\
+&=
+\mathbb{E}\left[
+\sum_{n=1}^\infty
+\mathbf{1}_{\{|X|/\epsilon\ge n\}}
+\right] \\
+&\le
+\mathbb{E}\left[\frac{|X|}{\epsilon}\right] \\
+&=
+\frac{1}{\epsilon}\mathbb{E}[|X|]
+<\infty.
+\end{aligned}
+$$
+
+:::
+
+:::{#exm-exponential-distribution-tail-sum}
+## Exponential Distribution Example
+Assume that $X$ is an exponentially distributed random variable with rate parameter $1$, i.e., $P(X\ge x)=e^{-x}$ for $x\ge0$. Since $\mathbb E[X]=1<\infty$, we have $X\in L^1$. Take $\epsilon=1$. The lemma says
+$$
+\sum_{n=1}^\infty P(|X| \ge n) \le \mathbb{E}[|X|] = 1.
+$$
+In this example, we can calculate the left-hand side explicitly: $P(X\ge n)=e^{-n}$. Therefore,
+$$
+\sum_{n=1}^\infty P(|X| \ge n) = \sum_{n=1}^\infty e^{-n} = \frac{e^{-1}}{1-e^{-1}}\approx 0.582.
+$$
+Thus, the bound given by the lemma is not tight in this example.
+$$
+\sum_{n=1}^\infty P(|X| \ge n) = \frac{e^{-1}}{1-e^{-1}} < 1,
+$$
+
+
+:::
+
+
+
+The following result shows that any i.i.d. sequence of $L^1$ random variables is tail equivalent to its truncated version, which will be useful for applying the Strong Law of Large Numbers to truncated sequences.
+
+::: {#cor-iid-tail-truncation}
+Let $\{X_n\}_{n=1}^\infty$ be an i.i.d. sequence of $L^1$ random variables. Then $\{X_n\}$ is tail equivalent to the truncated sequence $X_n' \triangleq X_n \mathbf{1}_{\{|X_n| \le n\}}$.
+:::
+
+::: {.proof}
+## Proof of @cor-iid-tail-truncation
+
+By identical distribution, monotonicity $P(|X_1| > n) \le P(|X_1| \ge n)$, and @lem-l1-tail-sum-bound with $\epsilon = 1$:
+$$
+\begin{aligned}
+\sum_{n=1}^\infty P(X_n \neq X_n') &= \sum_{n=1}^\infty P(|X_n| > n) \\
+&\le \sum_{n=1}^\infty P(|X_1| \ge n)\\
+& \le E[|X_1|] < \infty.
+\end{aligned}
+$$ {#eq-tail-truncation-proof-sum}
+:::
+
+- Thus, by @prp-tail-equivalence-slln, the Strong Law of Large Numbers for the truncated sequence $X_n'$ implies the Strong Law of Large Numbers for the original sequence $X_n$.
+
+
+---
+
+## Extension to Infinite Mean Cases
+
+We close this section by discussing the extension of the Strong Law of Large Numbers to cases where the random variables have infinite mean.
+
+::: {#cor-infinite-mean-slln}
+Let $\{X_n\}_{n=1}^\infty$ be i.i.d. random variables with $X_n \notin L^1$ but $X_n^- \in L^1$ (so $E[X_n] = +\infty$). Then $\frac{S_n}{n} \xrightarrow{\text{a.s.}} +\infty$.
+:::
+
+::: {.proof}
+## Proof of @cor-infinite-mean-slln
+For any threshold $M < \infty$, define $X_n^M \triangleq X_n \wedge M = \min(X_n, M) \in L^1$. Applying Kolmogorov's SLLN to the sequence $\{X_n^M\}_{n=1}^\infty$ yields $\frac{1}{n} \sum_{k=1}^n X_k^M \xrightarrow{\text{a.s.}} E[X_1 \wedge M]$. Since $X_n \ge X_n^M$, we have:
+$$
+\begin{aligned}
+\liminf_{n \to \infty} \frac{S_n}{n} &\ge \lim_{n \to \infty} \frac{1}{n} \sum_{k=1}^n X_k^M \\
+&= E[X_1 \wedge M] \\
+&= E[(X_1 \wedge M)^+] - E[(X_1 \wedge M)^-] \quad \text{a.s.}
+\end{aligned}
+$$ {#eq-infinite-mean-liminf-bound}
+Taking $M \to \infty$, Monotone Convergence Theorem implies $E[X_1 \wedge M] \uparrow E[X_1] = +\infty$, proving $\frac{S_n}{n} \xrightarrow{\text{a.s.}} +\infty$.
+:::
+
+---
+
+
+## Takeaways
+
+- **Two roads beyond WLLN.** The Chebyshev-based WLLN for uncorrelated $L^2$ sequences only yields convergence in probability. Reaching the Strong Law requires either weakening the moment assumption to $L^1$, strengthening the mode of convergence to almost sure, or both — this lecture lays the groundwork for the $L^1$ i.i.d. case proved in full in [19-1-SLLN2.qmd](19-1-SLLN2.qmd).
+- **Truncation needs independence.** Truncating $X$ at level $M$ preserves integrability and boundedness for free, but destroys uncorrelatedness in general. This is why the SLLN program (unlike the $L^2$-WLLN) is built on full independence rather than mere uncorrelatedness.
+- **Tail equivalence lets us swap sequences.** Two sequences that agree eventually (in the summable-probability sense of @def-tail-equivalence) have identical almost-sure limits of their scaled partial sums (@prp-tail-equivalence-slln), via Borel-Cantelli. This is the key device that lets us replace an arbitrary $L^1$ sequence with a more tractable truncated one without changing the a.s. limit of $S_n/n$.
+- **The $L^1$ tail bound is the engine.** @lem-l1-tail-sum-bound converts a single moment bound $E[|X|]<\infty$ into summability of tail probabilities, which is exactly the hypothesis Borel-Cantelli needs. Applied to an i.i.d. $L^1$ sequence, it shows $X_n$ is tail equivalent to its self-truncation $X_n \mathbf{1}_{\{|X_n|\le n\}}$ (@cor-iid-tail-truncation) — so proving the SLLN for the bounded-in-$n$ truncated sequence suffices for the original one.
+- **Infinite mean still has a strong law.** When only $E[X_n^-]<\infty$ but $E[X_n]=+\infty$, truncating from above at a finite level $M$ and letting $M\to\infty$ via monotone convergence shows $S_n/n \to +\infty$ a.s. (@cor-infinite-mean-slln), extending the SLLN philosophy beyond the integrable case.
+- **Net effect:** these reduction tools (tail equivalence + truncation) turn the general $L^1$ Strong Law into a problem about uniformly truncated, tail-equivalent sequences — precisely the setup exploited in the next lecture's full proof of Kolmogorov's SLLN.

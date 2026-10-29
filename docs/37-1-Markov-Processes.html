@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>80&nbsp; Lecture 37.1: Markov Processes – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./37-2-Kolmogorov-Extension-Theorem.html" rel="next">
+<link href="./36-2-Probability-Kernels-Revisited.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./37-1-Markov-Processes.html"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#foundations-of-markov-processes" id="toc-foundations-of-markov-processes" class="nav-link active" data-scroll-target="#foundations-of-markov-processes"><span class="header-section-number">80.1</span> Foundations of Markov Processes</a></li>
+  <li><a href="#derivation-of-transition-operators-and-the-chapmankolmogorov-property" id="toc-derivation-of-transition-operators-and-the-chapmankolmogorov-property" class="nav-link" data-scroll-target="#derivation-of-transition-operators-and-the-chapmankolmogorov-property"><span class="header-section-number">80.2</span> Derivation of Transition Operators and the Chapman–Kolmogorov Property</a></li>
+  <li><a href="#markov-transition-kernels-and-markov-processes" id="toc-markov-transition-kernels-and-markov-processes" class="nav-link" data-scroll-target="#markov-transition-kernels-and-markov-processes"><span class="header-section-number">80.3</span> Markov Transition Kernels and Markov Processes</a></li>
+  <li><a href="#independent-increment-processes" id="toc-independent-increment-processes" class="nav-link" data-scroll-target="#independent-increment-processes"><span class="header-section-number">80.4</span> Independent Increment Processes</a></li>
+  <li><a href="#discrete-time-parameterization-and-discrete-state-spaces" id="toc-discrete-time-parameterization-and-discrete-state-spaces" class="nav-link" data-scroll-target="#discrete-time-parameterization-and-discrete-state-spaces"><span class="header-section-number">80.5</span> Discrete-Time Parameterization and Discrete State Spaces</a></li>
+  <li><a href="#discrete-state-space" id="toc-discrete-state-space" class="nav-link" data-scroll-target="#discrete-state-space"><span class="header-section-number">80.6</span> Discrete State Space</a></li>
+  <li><a href="#finite-dimensional-distributions" id="toc-finite-dimensional-distributions" class="nav-link" data-scroll-target="#finite-dimensional-distributions"><span class="header-section-number">80.7</span> Finite-Dimensional Distributions</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">80.8</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/37-1-Markov-Processes.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./37-1-Markov-Processes.html"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="foundations-of-markov-processes" class="level2" data-number="80.1">
+<h2 data-number="80.1" class="anchored" data-anchor-id="foundations-of-markov-processes"><span class="header-section-number">80.1</span> Foundations of Markov Processes</h2>
+<p>Let <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> be a probability space and let <span class="math inline">\(T \subseteq [0, \infty)\)</span> or <span class="math inline">\(T \subseteq \mathbb{Z}\)</span> be the parameter set (time domain).</p>
+<ul>
+<li><p>A <strong>filtration</strong> <span class="math inline">\(\{\mathcal{F}_t\}_{t \in T}\)</span> is a family of sub-<span class="math inline">\(\sigma\)</span>-algebras of <span class="math inline">\(\mathcal{F}\)</span> with <span class="math inline">\(\mathcal{F}_s \subseteq \mathcal{F}_t\)</span> whenever <span class="math inline">\(s \le t\)</span>. Let <span class="math inline">\((S, \mathcal{B})\)</span> be a measurable state space, and write <span class="math inline">\(\mathcal{B}_b(S) = \mathcal{B}_b(S, \mathcal{B})\)</span> for the bounded <span class="math inline">\(\mathcal{B}\)</span>-measurable functions <span class="math inline">\(S \to \mathbb{R}\)</span>.</p></li>
+<li><p>A <strong>probability kernel</strong> on <span class="math inline">\((S, \mathcal{B})\)</span> is a map <span class="math inline">\(q : S \times \mathcal{B} \to [0, 1]\)</span> such that <span class="math inline">\(q(x, \cdot)\)</span> is a probability measure on <span class="math inline">\((S, \mathcal{B})\)</span> for every <span class="math inline">\(x \in S\)</span>, and <span class="math inline">\(x \mapsto q(x, B)\)</span> is <span class="math inline">\(\mathcal{B}\)</span>-measurable for every <span class="math inline">\(B \in \mathcal{B}\)</span>.</p></li>
+<li><p>Its associated <strong>operator</strong> acts on <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span> by <span class="math display">\[
+(Qf)(x) = \int_S f(y) \, q(x, dy),
+\]</span> and <span class="math inline">\(Qf \in \mathcal{B}_b(S)\)</span> with <span class="math inline">\(\|Qf\|_\infty \le \|f\|_\infty\)</span>.</p></li>
+<li><p>The <strong>composition</strong> of two kernels is the probability kernel <span class="math inline">\((q q')(x, B) = \int_S q(x, dy) \, q'(y, B)\)</span>, whose operator is <span class="math inline">\(Q Q'\)</span>.</p></li>
+</ul>
+<div id="def-adapted-process" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 80.1 (Adapted Process)</strong></span> A stochastic process <span class="math inline">\(X = \{X_t\}_{t \in T}\)</span> defined on <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> taking values in <span class="math inline">\((S, \mathcal{B})\)</span> is said to be <strong>adapted</strong> to the filtration <span class="math inline">\(\{\mathcal{F}_t\}_{t \in T}\)</span> if <span class="math inline">\(X_t : \Omega \to S\)</span> is <span class="math inline">\((\mathcal{F}_t, \mathcal{B})\)</span>-measurable for each <span class="math inline">\(t \in T\)</span>.</p>
+</div>
+<div id="def-markov-property" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 80.2 (Markov Property)</strong></span> An adapted stochastic process <span class="math inline">\(X = \{X_t\}_{t \in T}\)</span> on <span class="math inline">\((\Omega, \mathcal{F}, \{\mathcal{F}_t\}_{t \in T}, \mathbb{P})\)</span> satisfies the <strong>Markov property</strong> (with respect to <span class="math inline">\(\{\mathcal{F}_t\}\)</span>) if, for every <span class="math inline">\(s, t \in T\)</span> with <span class="math inline">\(s &lt; t\)</span> and every <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span>, we have: <span id="eq-markov-property"><span class="math display">\[
+\mathbb{E}[f(X_t) \mid \mathcal{F}_s] = \mathbb{E}[f(X_t) \mid X_s] \quad \mathbb{P}\text{-almost surely.}
+\tag{80.1}\]</span></span></p>
+</div>
+<ul>
+<li><p>Suppose that <span class="math inline">\((S, \mathcal{B})\)</span> is a <strong>standard Borel space</strong> (e.g., a Polish space equipped with its Borel <span class="math inline">\(\sigma\)</span>-algebra). Then, for all <span class="math inline">\(s &lt; t\)</span> in <span class="math inline">\(T\)</span>, there exists a <strong>regular conditional distribution</strong> of <span class="math inline">\(X_t\)</span> given <span class="math inline">\(X_s\)</span>, i.e.&nbsp;a probability kernel <span class="math inline">\(q_{s,t}\)</span> on <span class="math inline">\((S, \mathcal{B})\)</span> such that <span id="eq-rcd-operator"><span class="math display">\[
+\mathbb{E}[f(X_t) \mid X_s] = \int_S f(y) \, q_{s,t}(X_s, dy) = (Q_{s,t} f)(X_s) \quad \mathbb{P}\text{-a.s.}
+\tag{80.2}\]</span></span> for all <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span>, where <span class="math inline">\(Q_{s,t}\)</span> is the operator of <span class="math inline">\(q_{s,t}\)</span>.</p></li>
+<li><p>So <span class="math inline">\(Q_{s,t}\)</span> is the operator that takes a function of the future state <span class="math inline">\(X_t\)</span> and produces its conditional expectation as a function of the current state <span class="math inline">\(X_s\)</span>: <span class="math display">\[
+\boxed{ \mathbb E[f(X_t)\mid X_s] = (Q_{s,t}f)(X_s). }
+\]</span></p></li>
+<li><p>Existence holds for any random element <span class="math inline">\(X_t\)</span> with values in a standard Borel space (the Markov property is not needed), and the kernel is unique only up to <span class="math inline">\(\mu_{X_s}\)</span>-null sets, where <span class="math inline">\(\mu_{X_s} = \text{Law}(X_s)\)</span>. Throughout, “the” kernel <span class="math inline">\(q_{s,t}\)</span> means a fixed choice of such a version.</p></li>
+</ul>
+</section>
+<section id="derivation-of-transition-operators-and-the-chapmankolmogorov-property" class="level2" data-number="80.2">
+<h2 data-number="80.2" class="anchored" data-anchor-id="derivation-of-transition-operators-and-the-chapmankolmogorov-property"><span class="header-section-number">80.2</span> Derivation of Transition Operators and the Chapman–Kolmogorov Property</h2>
+<p>We now investigate the properties of the transition operators <span class="math inline">\(Q_{s,t}\)</span>.</p>
+<div id="prp-ck-almost-everywhere" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 80.1 (Chapman–Kolmogorov Equations Hold Almost Everywhere)</strong></span> Let <span class="math inline">\(X\)</span> be adapted and satisfy the Markov property, let <span class="math inline">\((S, \mathcal{B})\)</span> be standard Borel, and let <span class="math inline">\(q_{s,t}\)</span> (<span class="math inline">\(s &lt; t\)</span>) be regular conditional distributions as in <a href="#eq-rcd-operator" class="quarto-xref">Equation&nbsp;<span>80.2</span></a>. Then for all <span class="math inline">\(r &lt; s &lt; t\)</span> in <span class="math inline">\(T\)</span> and every <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span>, <span id="eq-operator-ck-almost-sure"><span class="math display">\[
+Q_{r,t} f = Q_{r,s} (Q_{s,t} f) \quad \mu_{X_r}\text{-almost everywhere.}
+\tag{80.3}\]</span></span> Moreover, there is a <span class="math inline">\(\mu_{X_r}\)</span>-null set <span class="math inline">\(N\)</span> (depending on <span class="math inline">\(r,s,t\)</span> but not on <span class="math inline">\(B\)</span>) such that <span id="eq-ck-almost-sure"><span class="math display">\[
+q_{r,t}(x, B) = \int_S q_{r,s}(x, dy) \, q_{s,t}(y, B),
+\tag{80.4}\]</span></span> for all <span class="math inline">\(x \in S \setminus N\)</span> and all <span class="math inline">\(B \in \mathcal{B}\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-ck-almost-everywhere" class="quarto-xref">Proposition&nbsp;<span>80.1</span></a>). </span>Since <span class="math inline">\(X\)</span> is adapted and the filtration is increasing, <span class="math inline">\(\sigma(X_r) \subseteq \mathcal{F}_r \subseteq \mathcal{F}_s\)</span>. The function <span class="math inline">\(Q_{s,t} f\)</span> is bounded and measurable, so by the tower property, the Markov property, and <a href="#eq-rcd-operator" class="quarto-xref">Equation&nbsp;<span>80.2</span></a> applied to <span class="math inline">\(f\)</span> at times <span class="math inline">\((s,t)\)</span> and to <span class="math inline">\(Q_{s,t}f\)</span> at times <span class="math inline">\((r,s)\)</span>: <span id="eq-operator-semigroup-derivation"><span class="math display">\[
+\begin{aligned}
+(Q_{r,t} f)(X_r) &amp;= \mathbb{E}[f(X_t) \mid X_r] \\
+&amp;= \mathbb{E} \Big[ \mathbb{E}[f(X_t) \mid \mathcal{F}_s] \;\Big|\; X_r \Big] \\
+&amp;= \mathbb{E} \Big[ \mathbb{E}[f(X_t) \mid X_s] \;\Big|\; X_r \Big] \\
+&amp;= \mathbb{E} \Big[ (Q_{s,t} f)(X_s) \;\Big|\; X_r \Big] \\
+&amp;= \big(Q_{r,s}(Q_{s,t} f)\big)(X_r) \quad \mathbb{P}\text{-a.s.}
+\end{aligned}
+\tag{80.5}\]</span></span> Put <span class="math inline">\(h = Q_{r,t} f - Q_{r,s}(Q_{s,t} f)\)</span>, a bounded measurable function on <span class="math inline">\(S\)</span>. Then <span class="math inline">\(\mu_{X_r}(h \neq 0) = \mathbb{P}(h(X_r) \neq 0) = 0\)</span>, which is <a href="#eq-operator-ck-almost-sure" class="quarto-xref">Equation&nbsp;<span>80.3</span></a>.</p>
+<p>(The left-hand side does not depend on the version chosen for <span class="math inline">\(Q_{s,t}f\)</span>: since <span class="math inline">\(\mu_{X_s} = \mu_{X_r} q_{r,s}\)</span>, two versions that agree <span class="math inline">\(\mu_{X_s}\)</span>-a.e. have images under <span class="math inline">\(Q_{r,s}\)</span> that agree <span class="math inline">\(\mu_{X_r}\)</span>-a.e.)</p>
+<p>For the kernel form, the difficulty is that <a href="#eq-operator-ck-almost-sure" class="quarto-xref">Equation&nbsp;<span>80.3</span></a> only gives, for <em>each fixed</em> <span class="math inline">\(B\)</span>, a null set <span class="math inline">\(N_B\)</span> outside of which equality holds for that <span class="math inline">\(B\)</span>; since <span class="math inline">\(\mathcal{B}\)</span> is uncountable, naively taking <span class="math inline">\(N = \bigcup_{B \in \mathcal{B}} N_B\)</span> could fail to be null. The standard Borel hypothesis repairs this, by letting us reduce to countably many <span class="math inline">\(B\)</span>’s before taking the union, and then use Dynkin’s theorem to recover all of <span class="math inline">\(\mathcal B\)</span>.</p>
+<ul>
+<li><p><em>A countable generating <span class="math inline">\(\pi\)</span>-system.</em> Since <span class="math inline">\((S,\mathcal{B})\)</span> is standard Borel, it is Borel-isomorphic to a Polish space with its Borel <span class="math inline">\(\sigma\)</span>-algebra, which has a countable base <span class="math inline">\(\{U_n\}_{n \ge 1}\)</span> of open sets. Let <span class="math inline">\(\mathcal{C}\)</span> be the collection of all finite intersections <span class="math inline">\(U_{n_1} \cap \cdots \cap U_{n_k}\)</span> together with <span class="math inline">\(S\)</span> itself. Then <span class="math inline">\(\mathcal{C}\)</span> is countable, closed under finite intersections (a <span class="math inline">\(\pi\)</span>-system), and <span class="math inline">\(\sigma(\mathcal{C}) = \mathcal{B}\)</span>.</p></li>
+<li><p><em>One null set per <span class="math inline">\(B \in \mathcal{C}\)</span>, then a countable union.</em> For each <span class="math inline">\(B \in \mathcal{C}\)</span>, apply <a href="#eq-operator-ck-almost-sure" class="quarto-xref">Equation&nbsp;<span>80.3</span></a> with <span class="math inline">\(f = \mathbf{1}_B\)</span>: by <a href="#rem-operator-integral-form" class="quarto-xref">Remark&nbsp;<span>80.1</span></a> this produces a <span class="math inline">\(\mu_{X_r}\)</span>-null set <span class="math inline">\(N_B\)</span> such that <span class="math inline">\(q_{r,t}(x,B) = (q_{r,s}q_{s,t})(x,B)\)</span> for all <span class="math inline">\(x \notin N_B\)</span>. Set <span class="math display">\[
+N := \bigcup_{B \in \mathcal{C}} N_B.
+\]</span> Because <span class="math inline">\(\mathcal{C}\)</span> is countable, <span class="math inline">\(N\)</span> is a countable union of <span class="math inline">\(\mu_{X_r}\)</span>-null sets, so <span class="math inline">\(\mu_{X_r}(N) \le \sum_{B \in \mathcal{C}} \mu_{X_r}(N_B) = 0\)</span>. Crucially, <span class="math inline">\(N\)</span> was built by exhausting all of <span class="math inline">\(\mathcal{C}\)</span> in advance, so it no longer depends on <span class="math inline">\(B\)</span>.</p></li>
+<li><p><em>Agreement on <span class="math inline">\(\mathcal{C}\)</span>, for a fixed <span class="math inline">\(x\)</span>.</em> Fix any <span class="math inline">\(x \in S \setminus N\)</span>. Since <span class="math inline">\(N = \bigcup_{B \in \mathcal{C}} N_B\)</span>, this single <span class="math inline">\(x\)</span> avoids every <span class="math inline">\(N_B\)</span> simultaneously, so <span class="math display">\[
+q_{r,t}(x,B) = (q_{r,s}q_{s,t})(x,B) \qquad \text{for all } B \in \mathcal{C}.
+\]</span> (This is the key swap of quantifiers: having fixed <span class="math inline">\(x\)</span> first, we now let <span class="math inline">\(B\)</span> range over all of <span class="math inline">\(\mathcal{C}\)</span>, rather than fixing <span class="math inline">\(B\)</span> first and asking for a.e. <span class="math inline">\(x\)</span>.)</p></li>
+<li><p><em>Extension from <span class="math inline">\(\mathcal{C}\)</span> to <span class="math inline">\(\mathcal{B}\)</span> via Dynkin.</em> For this fixed <span class="math inline">\(x\)</span>, the set functions <span class="math inline">\(\nu_1(B) := q_{r,t}(x,B)\)</span> and <span class="math inline">\(\nu_2(B) := (q_{r,s}q_{s,t})(x,B) = \int_S q_{s,t}(y,B)\,q_{r,s}(x,dy)\)</span> are both probability measures on <span class="math inline">\((S,\mathcal{B})\)</span>: <span class="math inline">\(\nu_1\)</span> because <span class="math inline">\(q_{r,t}(x,\cdot)\)</span> is a probability measure, and <span class="math inline">\(\nu_2\)</span> because <span class="math inline">\(q_{s,t}(y,\cdot)\)</span> is countably additive in <span class="math inline">\(B\)</span> for each <span class="math inline">\(y\)</span> with total mass <span class="math inline">\(1\)</span>, so integrating term by term against <span class="math inline">\(q_{r,s}(x,dy)\)</span> (monotone convergence) shows <span class="math inline">\(\nu_2\)</span> is countably additive with <span class="math inline">\(\nu_2(S) = 1\)</span>. Since <span class="math inline">\(\nu_1 = \nu_2\)</span> on the <span class="math inline">\(\pi\)</span>-system <span class="math inline">\(\mathcal{C}\)</span> and both are finite measures, Dynkin’s <span class="math inline">\(\pi\)</span>-<span class="math inline">\(\lambda\)</span> theorem gives <span class="math inline">\(\nu_1 = \nu_2\)</span> on <span class="math inline">\(\sigma(\mathcal{C}) = \mathcal{B}\)</span>, i.e. <span class="math display">\[
+q_{r,t}(x,B) = (q_{r,s}q_{s,t})(x,B) \qquad \text{for all } B \in \mathcal{B}.
+\]</span></p></li>
+</ul>
+<p>As <span class="math inline">\(x \in S \setminus N\)</span> was arbitrary, this is <a href="#eq-ck-almost-sure" class="quarto-xref">Equation&nbsp;<span>80.4</span></a>, with <span class="math inline">\(N\)</span> depending only on <span class="math inline">\(r,s,t\)</span> and not on <span class="math inline">\(B\)</span>.</p>
+</div>
+<div id="rem-operator-integral-form" class="proof remark">
+<p><span class="proof-title"><em>Remark 80.1</em>. </span>For <span class="math inline">\(f=\mathbf 1_B\)</span>, <span class="math display">\[
+Q_{r,t}\mathbf 1_B(x) = q_{r,t}(x,B),
+\]</span> while <span class="math display">\[
+\begin{aligned}
+Q_{r,s}(Q_{s,t}\mathbf 1_B)(x) &amp;= \int_S Q_{s,t}\mathbf 1_B(y)\,q_{r,s}(x,dy)\\
+&amp;= \int_S q_{s,t}(y,B)\,q_{r,s}(x,dy)\\
+&amp;=(q_{r,s}q_{s,t})(x,B).
+\end{aligned}
+\]</span> Thus, <span class="math inline">\(Q_{r,t}\mathbf 1_B = Q_{r,s} (Q_{s,t} \mathbf 1_B)\)</span> gives <span class="math inline">\(q_{r,t}(x,B) = (q_{r,s}q_{s,t})(x,B)\)</span> for <span class="math inline">\(\mu_{X_r}\)</span>-a.e. <span class="math inline">\(x\)</span>, for each fixed <span class="math inline">\(B\)</span>.</p>
+<p>The standard Borel assumption allows this conclusion to be strengthened: there exists a single <span class="math inline">\(\mu_{X_r}\)</span>-null set <span class="math inline">\(N\)</span> such that the equality holds for every <span class="math inline">\(x\notin N\)</span> and every <span class="math inline">\(B\in\mathcal B\)</span>. Indeed, choose a countable generating <span class="math inline">\(\pi\)</span>-system for <span class="math inline">\(\mathcal B\)</span>, take the union of the corresponding null sets, and use Dynkin’s <span class="math inline">\(\pi\)</span>-<span class="math inline">\(\lambda\)</span> theorem to extend the equality from the generating <span class="math inline">\(\pi\)</span>-system to all of <span class="math inline">\(\mathcal B\)</span>.</p>
+</div>
+<p>Integrating <a href="#eq-operator-ck-almost-sure" class="quarto-xref">Equation&nbsp;<span>80.3</span></a> against <span class="math inline">\(\mu_{X_r}\)</span> gives only the weaker identity <span class="math inline">\(\int Q_{r,t} f \, d\mu_{X_r} = \int Q_{r,s} Q_{s,t} f \, d\mu_{X_r}\)</span> (equality of the laws of <span class="math inline">\(X_t\)</span> computed via both kernels), which does <strong>not</strong> characterize <a href="#eq-ck-almost-sure" class="quarto-xref">Equation&nbsp;<span>80.4</span></a>: with <span class="math inline">\(S = \{0,1\}\)</span>, <span class="math inline">\(\mu\)</span> uniform, <span class="math inline">\(q_{r,t} = I\)</span> and <span class="math inline">\(q_{r,s} q_{s,t}\)</span> equal to the swap matrix, both sides agree for all <span class="math inline">\(f\)</span> although the kernels differ everywhere. The correct joint-law version tests against functions of both coordinates: for all bounded measurable <span class="math inline">\(g, f\)</span>, <span id="eq-operator-integral-form"><span class="math display">\[
+\int_S g(x) \, (Q_{r,t} f)(x) \, \mu_{X_r}(dx) = \int_S g(x) \, \big(Q_{r,s} Q_{s,t} f\big)(x) \, \mu_{X_r}(dx),
+\tag{80.6}\]</span></span> i.e.&nbsp;<span class="math inline">\(\mu_{X_r} \otimes q_{r,t} = \mu_{X_r} \otimes (q_{r,s} q_{s,t})\)</span> as measures on <span class="math inline">\(S \times S\)</span>.</p>
+<div id="rem-ck-equation-interpretation" class="proof remark">
+<p><span class="proof-title"><em>Remark 80.2</em> (The Chapman–Kolmogorov Equation). </span>The key idea is that to calculate the probability of being in <span class="math inline">\(B\)</span> at time <span class="math inline">\(t\)</span>, given the state <span class="math inline">\(x\)</span> at time <span class="math inline">\(r\)</span>, you can condition on the intermediate state at time <span class="math inline">\(s\)</span> and average over all possible intermediate states. The Chapman–Kolmogorov equation expresses this idea mathematically: <span class="math display">\[
+q_{r,t}(x,B)=\int_S q_{s,t}(y,B)\,q_{r,s}(x,dy).
+\]</span></p>
+<ul>
+<li><p><strong>Left-hand side</strong>: <span class="math inline">\(q_{r,t}(x,B)\)</span> is the probability of being in <span class="math inline">\(B\)</span> at time <span class="math inline">\(t\)</span>, starting from state <span class="math inline">\(x\)</span> at time <span class="math inline">\(r\)</span>.</p></li>
+<li><p><strong>First kernel on the right</strong>: <span class="math inline">\(q_{r,s}(x,dy)\)</span> is the distribution of the intermediate state <span class="math inline">\(X_s\)</span>, given <span class="math inline">\(X_r=x\)</span>.</p></li>
+<li><p><strong>Second kernel on the right</strong>: <span class="math inline">\(q_{s,t}(y,B)\)</span> is the probability of reaching <span class="math inline">\(B\)</span> at time <span class="math inline">\(t\)</span>, starting from state <span class="math inline">\(y\)</span> at time <span class="math inline">\(s\)</span>.</p></li>
+</ul>
+<p>The integral averages the last quantity over the distribution of the intermediate state <span class="math inline">\(y\)</span>.</p>
+</div>
+<p><strong>Intuitively</strong>, <a href="#prp-ck-almost-everywhere" class="quarto-xref">Proposition&nbsp;<span>80.1</span></a> says something very simple: If <span class="math inline">\(X\)</span> is Markov, then predicting the future from the present can be done in stages: first predict the intermediate state, and then predict the later state from that intermediate state. Suppose <span class="math inline">\(r&lt;s&lt;t\)</span>. Think of the process as <span class="math inline">\(X_r \longrightarrow X_s \longrightarrow X_t\)</span>.</p>
+<p>The kernel <span class="math inline">\(q_{r,t}(x,\cdot)\)</span> describes the distribution of <span class="math inline">\(X_t\)</span> when the process is currently at <span class="math inline">\(x\)</span> at time <span class="math inline">\(r\)</span>. The Chapman–Kolmogorov result says that this distribution can be obtained by:</p>
+<p>Move from <span class="math inline">\(x\)</span> at time <span class="math inline">\(r\)</span> to the possible states <span class="math inline">\(y\)</span> at time <span class="math inline">\(s\)</span> according to <span class="math inline">\(q_{r,s}(x,dy)\)</span>. From each such <span class="math inline">\(y\)</span>, move to the possible states at time <span class="math inline">\(t\)</span> according to <span class="math inline">\(q_{s,t}(y,dz)\)</span>. Average over all possible intermediate states <span class="math inline">\(y\)</span>. In symbols, <span class="math display">\[
+q_{r,t}(x,C) = \int_S q_{s,t}(y,C)\,q_{r,s}(x,dy),
+\]</span> for <span class="math inline">\(\mu_{X_r}\)</span>-almost every <span class="math inline">\(x\)</span>.</p>
+<p>Why is this a Markov property? The crucial idea is that once we know <span class="math inline">\(X_s\)</span>, the earlier state <span class="math inline">\(X_r\)</span> contains no additional information about <span class="math inline">\(X_t\)</span>. Schematically, <span class="math inline">\(X_r \quad\longrightarrow\quad X_s \quad\longrightarrow\quad X_t\)</span>. Thus, to predict <span class="math inline">\(X_t\)</span> from <span class="math inline">\(X_r\)</span>, we do not need to carry the entire history from <span class="math inline">\(r\)</span> to <span class="math inline">\(s\)</span>. We can simply pass through the intermediate state <span class="math inline">\(X_s\)</span>. For a function <span class="math inline">\(f\)</span>, the same idea appears even more clearly: <span class="math display">\[
+\boxed{ Q_{r,t}f = Q_{r,s}(Q_{s,t}f) \qquad \mu_{X_r}\text{-a.e.} }
+\]</span> Here <span class="math inline">\(Q_{s,t}f(y)\)</span> is the expected value of <span class="math inline">\(f(X_t)\)</span> if the process is at <span class="math inline">\(y\)</span> at time <span class="math inline">\(s\)</span>. Then <span class="math inline">\(Q_{r,s}\)</span> averages those conditional expectations over the possible values of <span class="math inline">\(X_s\)</span> given <span class="math inline">\(X_r=x\)</span>. So it is essentially the tower property combined with the Markov property: <span class="math display">\[
+\begin{aligned}
+\mathbb E[f(X_t)\mid X_r] &amp;= \mathbb E\left[ \mathbb E[f(X_t)\mid X_s] \mid X_r \right]\\ &amp;= \mathbb E\left[ (Q_{s,t}f)(X_s) \mid X_r \right]\\ &amp;= (Q_{r,s}Q_{s,t}f)(X_r).
+\end{aligned}
+\]</span> A useful interpretation of the operators is the following. You can think of <span class="math inline">\(Q_{r,t}\)</span> as a prediction operator: <span class="math display">\[
+f \quad\xrightarrow{\quad Q_{r,t}\quad}\quad \text{expected value of }f(X_t)\text{ given }X_r.
+\]</span> Then Chapman–Kolmogorov says that prediction over a long interval is equivalent to successive prediction over shorter intervals: <span class="math display">\[
+\boxed{ \text{prediction from }r\text{ to }t = \text{prediction from }r\text{ to }s \;\circ\; \text{prediction from }s\text{ to }t. }
+\]</span> That is the fundamental intuition behind the semigroup/transition-operator viewpoint. One subtlety the proposition captures especially well is that, because regular conditional distributions are only defined up to null sets, this equality is initially an almost-everywhere statement, rather than necessarily a pointwise statement for every <span class="math inline">\(x\in S\)</span>.</p>
+<hr>
+</section>
+<section id="markov-transition-kernels-and-markov-processes" class="level2" data-number="80.3">
+<h2 data-number="80.3" class="anchored" data-anchor-id="markov-transition-kernels-and-markov-processes"><span class="header-section-number">80.3</span> Markov Transition Kernels and Markov Processes</h2>
+<div id="def-transition-kernel" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 80.3 (Markov Transition Kernels and Operators)</strong></span> A collection of probability kernels <span class="math inline">\(\{q_{s,t}\}_{s \le t,\; s,t \in T}\)</span> on <span class="math inline">\((S, \mathcal{B})\)</span> (with corresponding operators <span class="math inline">\(\{Q_{s,t}\}_{s \le t}\)</span> acting on <span class="math inline">\(\mathcal{B}_b(S)\)</span>) is called a family of <strong>Markov transition kernels (operators)</strong> if:</p>
+<ol type="1">
+<li>For all <span class="math inline">\(s \in T\)</span> and all <span class="math inline">\(x \in S\)</span>, <span class="math inline">\(q_{s,s}(x, \cdot) = \delta_x(\cdot)\)</span> (or <span class="math inline">\(Q_{s,s} = \text{Id}\)</span>).</li>
+<li>For all <span class="math inline">\(r \le s \le t\)</span> in <span class="math inline">\(T\)</span> and all <span class="math inline">\(x \in S\)</span>, the <strong>Chapman–Kolmogorov equations</strong> hold pointwise: <span id="eq-ck-operator"><span class="math display">\[
+Q_{r,t} = Q_{r,s} Q_{s,t},
+\tag{80.7}\]</span></span> which is explicitly written in kernel form as: <span id="eq-ck-kernel"><span class="math display">\[
+q_{r,t}(x, B) = \int_S q_{r,s}(x, dy) \, q_{s,t}(y, B) \quad \forall B \in \mathcal{B}, \, \forall x \in S.
+\tag{80.8}\]</span></span></li>
+</ol>
+</div>
+<p>(The operator and kernel forms are equivalent by the standard monotone class argument: kernels are determined by their action on indicators, and operators by their action on <span class="math inline">\(\mathcal{B}_b(S)\)</span>.)</p>
+<div id="def-markov-process" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 80.4 (Markov Process)</strong></span> Given a filtered probability space <span class="math inline">\((\Omega, \mathcal{F}, \{\mathcal{F}_t\}_{t \in T}, \mathbb{P})\)</span> and a state space <span class="math inline">\((S, \mathcal{B})\)</span>, an adapted stochastic process <span class="math inline">\(X = \{X_t\}_{t \in T}\)</span> is a <strong>Markov process</strong> (with respect to <span class="math inline">\(\{\mathcal{F}_t\}\)</span>) if it satisfies the Markov property (<a href="#eq-markov-property" class="quarto-xref">Equation&nbsp;<span>80.1</span></a>) and there exists a family of Markov transition operators <span class="math inline">\(\{Q_{s,t}\}_{s \le t}\)</span> in the sense of <a href="#def-transition-kernel" class="quarto-xref">Definition&nbsp;<span>80.3</span></a> such that: <span id="eq-markov-process-def"><span class="math display">\[
+\mathbb{E}[f(X_t) \mid X_s] = (Q_{s,t} f)(X_s) \quad \mathbb{P}\text{-a.s.} \quad \forall s \le t \text{ in } T, \, \forall f \in \mathcal{B}_b(S).
+\tag{80.9}\]</span></span></p>
+</div>
+<p>(For <span class="math inline">\(s = t\)</span>, <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a> is trivial since <span class="math inline">\(f(X_s)\)</span> is <span class="math inline">\(\sigma(X_s)\)</span>-measurable.)</p>
+<div id="exm-markov-both-clauses-needed" class="theorem example">
+<p><span class="theorem-title"><strong>Example 80.1 (Why Both Clauses of <a href="#def-markov-process" class="quarto-xref">Definition&nbsp;<span>80.4</span></a> Are Needed)</strong></span> Let <span class="math inline">\(Z_0, Z_1\)</span> be i.i.d. uniform on <span class="math inline">\(\{0,1\}\)</span>, set <span class="math inline">\(Z_2 = Z_0 \oplus Z_1\)</span> (addition modulo <span class="math inline">\(2\)</span>), and put <span class="math inline">\(X_0 = Z_0\)</span>, <span class="math inline">\(X_1 = Z_1\)</span>, <span class="math inline">\(X_2 = Z_2\)</span> on <span class="math inline">\(T = \{0,1,2\}\)</span> with <span class="math inline">\(\mathcal{F}_t = \sigma(X_0, \dots, X_t)\)</span>. Then <span class="math inline">\((Z_0, Z_1, Z_2)\)</span> are pairwise independent, so in particular <span class="math inline">\(X_1\)</span> is independent of <span class="math inline">\(X_0\)</span>, and, given <span class="math inline">\(X_1 = y\)</span>, <span class="math inline">\(X_2 = Z_0 \oplus y\)</span> with <span class="math inline">\(Z_0\)</span> independent of <span class="math inline">\(X_1\)</span>.</p>
+<p>Take <span class="math inline">\(q_{0,1}(x, \cdot)\)</span> to be uniform on <span class="math inline">\(\{0,1\}\)</span> (not depending on <span class="math inline">\(x\)</span>) and <span class="math inline">\(q_{1,2}(y, \{z\}) = \tfrac12\)</span> for <span class="math inline">\(z \in \{0,1\}\)</span> (not depending on <span class="math inline">\(y\)</span>). Both reproduce <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a>: <span class="math inline">\(\mathbb{E}[f(X_1) \mid X_0] = \tfrac12(f(0)+f(1)) = (Q_{0,1}f)(X_0)\)</span> since <span class="math inline">\(X_1 \perp X_0\)</span>, and <span class="math inline">\(\mathbb{E}[f(X_2) \mid X_1] = \tfrac12(f(0)+f(1)) = (Q_{1,2}f)(X_1)\)</span> since <span class="math inline">\(X_2 = X_1 \oplus Z_0\)</span> with <span class="math inline">\(Z_0 \perp X_1\)</span> uniform. Composing, <span class="math inline">\((q_{0,1}q_{1,2})(x, \cdot)\)</span> is again uniform on <span class="math inline">\(\{0,1\}\)</span> for every <span class="math inline">\(x\)</span>, which coincides with <span class="math inline">\(q_{0,2}(x,\cdot) := \mathrm{Law}(X_2 \mid X_0 = x)\)</span> (also uniform on <span class="math inline">\(\{0,1\}\)</span>, since <span class="math inline">\(X_2 = X_0 \oplus Z_1\)</span> with <span class="math inline">\(Z_1 \perp X_0\)</span> uniform). So Chapman–Kolmogorov holds pointwise, and this family satisfies <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a> at every pair <span class="math inline">\((s,t)\)</span>.</p>
+<p>Yet <span class="math inline">\(X\)</span> is <strong>not</strong> Markov: <span class="math inline">\(X_2 = X_0 \oplus X_1\)</span> is a deterministic, non-constant function of <span class="math inline">\(\mathcal{F}_1 = \sigma(X_0, X_1)\)</span>, so <span class="math inline">\(\mathbb{E}[f(X_2) \mid \mathcal{F}_1] = f(X_0 \oplus X_1)\)</span> depends on <span class="math inline">\(X_0\)</span> for non-constant <span class="math inline">\(f\)</span>, whereas <span class="math inline">\(\mathbb{E}[f(X_2) \mid X_1] = \tfrac12(f(0)+f(1))\)</span> does not; these disagree, so <a href="#eq-markov-property" class="quarto-xref">Equation&nbsp;<span>80.1</span></a> fails at <span class="math inline">\((s,t) = (1,2)\)</span>. Hence a Chapman–Kolmogorov-consistent transition family satisfying <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a> is not enough to make <span class="math inline">\(X\)</span> a Markov process — <a href="#def-markov-process" class="quarto-xref">Definition&nbsp;<span>80.4</span></a> imposes the Markov property as a genuinely separate requirement.</p>
+</div>
+<hr>
+</section>
+<section id="independent-increment-processes" class="level2" data-number="80.4">
+<h2 data-number="80.4" class="anchored" data-anchor-id="independent-increment-processes"><span class="header-section-number">80.4</span> Independent Increment Processes</h2>
+<p>In this section <span class="math inline">\(S = \mathbb{R}^d\)</span> with its Borel <span class="math inline">\(\sigma\)</span>-algebra (more generally, a measurable group), so that addition and subtraction are measurable.</p>
+<div id="def-independent-increments" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 80.5 (Independent Increment Process)</strong></span> Let <span class="math inline">\(\{\mathcal{F}_t\}\)</span> be a filtration. An adapted process <span class="math inline">\(X = \{X_t\}_{t \in T}\)</span> in <span class="math inline">\(\mathbb{R}^d\)</span> has <strong>independent increments</strong> (with respect to <span class="math inline">\(\{\mathcal{F}_t\}\)</span>) if, for all <span class="math inline">\(s &lt; t\)</span> in <span class="math inline">\(T\)</span>, the increment <span class="math inline">\(X_t - X_s\)</span> is independent of <span class="math inline">\(\mathcal{F}_s\)</span>. When no filtration is mentioned, <span class="math inline">\(\mathcal{F}_t = \mathcal{F}_t^X = \sigma(X_u : u \le t)\)</span>.</p>
+</div>
+<div id="rem-independent-increments-equivalent" class="proof remark">
+<p><span class="proof-title"><em>Remark 80.3</em> (On the Definition). </span>In particular, for <span class="math inline">\(t_0 &lt; t_1 &lt; \dots &lt; t_n\)</span> the increments <span class="math inline">\(X_{t_1} - X_{t_0}, \dots, X_{t_n} - X_{t_{n-1}}\)</span> are independent. This weaker property alone is <strong>not</strong> sufficient for the Markov property, because it says nothing about the initial value: with <span class="math inline">\(T = \{0,1\}\)</span>, <span class="math inline">\(X_0 = \pm 1\)</span> with probability <span class="math inline">\(\tfrac12\)</span> each, and <span class="math inline">\(X_1 = 2X_0\)</span>, there is a single increment <span class="math inline">\(X_1 - X_0 = X_0\)</span>, which is trivially “independent”, yet it is not independent of <span class="math inline">\(\mathcal{F}_0^X = \sigma(X_0)\)</span>.</p>
+<p>If <span class="math inline">\(T\)</span> has a least element <span class="math inline">\(t_*\)</span>, the definition above is equivalent to: for all <span class="math inline">\(t_* &lt; t_1 &lt; \dots &lt; t_n\)</span> the random variables <span class="math inline">\(X_{t_*}, X_{t_1} - X_{t_*}, X_{t_2} - X_{t_1}, \dots, X_{t_n} - X_{t_{n-1}}\)</span> are independent. Thus random walks require <span class="math inline">\(X_0\)</span> independent of the steps, and Poisson processes (with <span class="math inline">\(X_0 = 0\)</span>) are examples.</p>
+</div>
+<div id="prp-independent-increments-markov" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 80.2 (Independent Increment Processes are Markovian)</strong></span> Let <span class="math inline">\(X = \{X_t\}_{t \in T}\)</span> be an <span class="math inline">\(\mathbb{R}^d\)</span>-valued process with independent increments with respect to <span class="math inline">\(\{\mathcal{F}_t\}\)</span>. Then <span class="math inline">\(X\)</span> is a Markov process with respect to <span class="math inline">\(\{\mathcal{F}_t\}\)</span>, and the transition kernel is given by: <span class="math display">\[
+q_{s,t}(x, B) = \mathbb{P}\left( x + X_t - X_s \in B \right), \, s \le t, \; x \in \mathbb{R}^d, \, B \in \mathcal{B}(\mathbb{R}^d),
+\]</span> and this family satisfies the Chapman–Kolmogorov equations at every <span class="math inline">\(x \in \mathbb{R}^d\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-independent-increments-markov" class="quarto-xref">Proposition&nbsp;<span>80.2</span></a>). </span></p>
+<ul>
+<li><p><em>Step 0 (a <span class="math inline">\(\sigma\)</span>-algebra form of the freezing lemma).</em> We will repeatedly use the following generalization of <a href="32-3-Conditioning-on-Random-Variables.html#prp-independence-substitution" class="quarto-xref">Proposition&nbsp;<span>71.2</span></a>: if <span class="math inline">\(Z\)</span> is <span class="math inline">\(\mathcal{G}\)</span>-measurable, <span class="math inline">\(W\)</span> is independent of <span class="math inline">\(\mathcal{G}\)</span> (not merely of <span class="math inline">\(Z\)</span>), and <span class="math inline">\(\phi \in \mathcal{B}_b(\mathbb{R}^d \times \mathbb{R}^d)\)</span>, then <span class="math display">\[
+\mathbb{E}[\phi(Z,W) \mid \mathcal{G}] = \psi(Z) \text{ a.s.}, \qquad \psi(z) := \mathbb{E}[\phi(z,W)],
+\]</span> and consequently, taking total expectation, <span class="math inline">\(\mathbb{E}[\phi(Z,W)] = \mathbb{E}[\psi(Z)]\)</span>. Indeed, for any bounded <span class="math inline">\(\mathcal{G}\)</span>-measurable <span class="math inline">\(h\)</span>, the pair <span class="math inline">\((Z,h)\)</span> is <span class="math inline">\(\mathcal{G}\)</span>-measurable, hence independent of <span class="math inline">\(W\)</span> (since <span class="math inline">\(W \perp \mathcal{G}\)</span>); applying Fubini–Tonelli to the product measure <span class="math inline">\(\mu_{(Z,h)} \otimes \mu_W\)</span>, exactly as in the proof of <a href="32-3-Conditioning-on-Random-Variables.html#prp-independence-substitution" class="quarto-xref">Proposition&nbsp;<span>71.2</span></a> but with <span class="math inline">\(h\)</span> in place of the test function there, gives <span class="math inline">\(\mathbb{E}[\phi(Z,W) h] = \mathbb{E}[\psi(Z) h]\)</span> for every such <span class="math inline">\(h\)</span>, which is the defining property of <span class="math inline">\(\mathbb{E}[\phi(Z,W) \mid \mathcal{G}] = \psi(Z)\)</span>.</p></li>
+<li><p><em>Step 1 (the kernel is well defined and measurable).</em> Fix <span class="math inline">\(s \le t\)</span>, let <span class="math inline">\(\Delta = X_t - X_s\)</span> with law <span class="math inline">\(\mu_\Delta\)</span>, and fix <span class="math inline">\(B \in \mathcal{B}(\mathbb{R}^d)\)</span>. Then <span class="math inline">\(q_{s,t}(x,B) = \mathbb{P}(x + \Delta \in B) = \int_{\mathbb{R}^d} \mathbf{1}_B(x+z) \, \mu_\Delta(dz)\)</span>. For fixed <span class="math inline">\(x\)</span>, <span class="math inline">\(B \mapsto q_{s,t}(x,B)\)</span> is the law of <span class="math inline">\(x + \Delta\)</span>, hence a probability measure. For fixed <span class="math inline">\(B\)</span>, the map <span class="math inline">\((x,z) \mapsto \mathbf{1}_B(x+z)\)</span> is the indicator of the preimage of <span class="math inline">\(B\)</span> under the continuous (hence Borel) addition map, so it is jointly measurable and nonnegative; by Tonelli’s theorem, <span class="math inline">\(x \mapsto \int \mathbf{1}_B(x+z)\,\mu_\Delta(dz) = q_{s,t}(x,B)\)</span> is Borel measurable. So <span class="math inline">\(q_{s,t}\)</span> is a probability kernel.</p></li>
+<li><p><em>Step 2 (Markov property and <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a>).</em> Fix <span class="math inline">\(f \in \mathcal{B}_b(\mathbb{R}^d)\)</span> and <span class="math inline">\(s \le t\)</span>, and let <span class="math inline">\(\Delta = X_t - X_s\)</span>, so <span class="math inline">\(X_t = X_s + \Delta\)</span> with <span class="math inline">\(X_s\)</span> being <span class="math inline">\(\mathcal{F}_s\)</span>-measurable (as <span class="math inline">\(X\)</span> is adapted). If <span class="math inline">\(s = t\)</span>, then <span class="math inline">\(\Delta = 0\)</span> a.s., so <span class="math inline">\(H(x) := \mathbb{E}[f(x+\Delta)] = f(x)\)</span>, and since <span class="math inline">\(f(X_t) = f(X_s)\)</span> is already <span class="math inline">\(\sigma(X_s)\)</span>-measurable, <span class="math inline">\(\mathbb{E}[f(X_t) \mid \mathcal{F}_s] = f(X_s) = H(X_s)\)</span> trivially — no independence is needed in this degenerate case. If <span class="math inline">\(s &lt; t\)</span>, then by definition of independent increments <span class="math inline">\(\Delta\)</span> is independent of <span class="math inline">\(\mathcal{F}_s\)</span>; the map <span class="math inline">\(\phi(x,z) = f(x+z)\)</span> is bounded and jointly measurable (addition is continuous, <span class="math inline">\(f\)</span> is Borel), so Step 0 with <span class="math inline">\(\mathcal{G} = \mathcal{F}_s\)</span>, <span class="math inline">\(Z = X_s\)</span>, <span class="math inline">\(W = \Delta\)</span> gives <span class="math display">\[
+\mathbb{E}[f(X_t) \mid \mathcal{F}_s] = H(X_s), \qquad H(x) = \mathbb{E}[f(x+\Delta)] = \int f(y) \, q_{s,t}(x,dy).
+\]</span> In either case <span class="math inline">\(H(X_s)\)</span> is <span class="math inline">\(\sigma(X_s)\)</span>-measurable, and <span class="math inline">\(\sigma(X_s) \subseteq \mathcal{F}_s\)</span>, so the tower property gives <span class="math inline">\(\mathbb{E}[f(X_t) \mid X_s] = \mathbb{E}[\mathbb{E}[f(X_t) \mid \mathcal{F}_s] \mid X_s] = \mathbb{E}[H(X_s) \mid X_s] = H(X_s)\)</span>. Comparing the two displays, <span class="math inline">\(\mathbb{E}[f(X_t)\mid \mathcal{F}_s] = \mathbb{E}[f(X_t) \mid X_s]\)</span>, which is <a href="#eq-markov-property" class="quarto-xref">Equation&nbsp;<span>80.1</span></a>, and <span class="math inline">\(\mathbb{E}[f(X_t) \mid X_s] = H(X_s) = (Q_{s,t}f)(X_s)\)</span>, which is <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a>.</p></li>
+<li><p><em>Step 3 (<a href="#def-transition-kernel" class="quarto-xref">Definition&nbsp;<span>80.3</span></a>, part 1).</em> Taking <span class="math inline">\(s=t\)</span> in Step 1, <span class="math inline">\(\Delta = X_s - X_s = 0\)</span> a.s., so <span class="math inline">\(q_{s,s}(x,B) = \mathbb{P}(x \in B) = \mathbf{1}_B(x)\)</span>, i.e.&nbsp;<span class="math inline">\(q_{s,s}(x,\cdot) = \delta_x\)</span>.</p></li>
+<li><p><em>Step 4 (<a href="#def-transition-kernel" class="quarto-xref">Definition&nbsp;<span>80.3</span></a>, part 2: pointwise Chapman–Kolmogorov).</em> Fix <span class="math inline">\(r \le s \le t\)</span>, <span class="math inline">\(x \in \mathbb{R}^d\)</span>, <span class="math inline">\(B \in \mathcal{B}(\mathbb{R}^d)\)</span>. Let <span class="math inline">\(Y := x + (X_s - X_r)\)</span> and <span class="math inline">\(\Delta_2 := X_t - X_s\)</span>; by Step 1 applied to <span class="math inline">\((r,s)\)</span>, <span class="math inline">\(Y\)</span> has law <span class="math inline">\(q_{r,s}(x,\cdot)\)</span>. Since <span class="math inline">\(X\)</span> is adapted and <span class="math inline">\(\mathcal{F}_r \subseteq \mathcal{F}_s\)</span>, both <span class="math inline">\(X_r\)</span> and <span class="math inline">\(X_s\)</span> (hence <span class="math inline">\(X_s - X_r\)</span>, and hence <span class="math inline">\(Y\)</span>) are <span class="math inline">\(\mathcal{F}_s\)</span>-measurable; and <span class="math inline">\(\Delta_2\)</span> is independent of <span class="math inline">\(\mathcal{F}_s\)</span> (trivially if <span class="math inline">\(s=t\)</span>, as in Step 2; by definition of independent increments if <span class="math inline">\(s &lt; t\)</span>). By Step 1 applied to <span class="math inline">\((s,t)\)</span>, <span class="math inline">\(y \mapsto q_{s,t}(y,B)\)</span> is bounded and measurable, so by the change-of-variables formula (law of the unconscious statistician) applied to the law <span class="math inline">\(q_{r,s}(x,\cdot)\)</span> of <span class="math inline">\(Y\)</span>, <span class="math display">\[
+\int_{\mathbb{R}^d} q_{r,s}(x,dy)\, q_{s,t}(y,B) = \mathbb{E}[q_{s,t}(Y,B)].
+\]</span> Now apply Step 0, in its total-expectation form, with <span class="math inline">\(\mathcal{G} = \mathcal{F}_s\)</span>, <span class="math inline">\(Z = Y\)</span>, <span class="math inline">\(W = \Delta_2\)</span>, <span class="math inline">\(\phi(y,w) = \mathbf{1}_B(y+w)\)</span>: since <span class="math inline">\(q_{s,t}(Y,B) = \psi(Y)\)</span> with <span class="math inline">\(\psi(y) = \mathbb{E}[\mathbf{1}_B(y+\Delta_2)]\)</span>, <span class="math display">\[
+\mathbb{E}[q_{s,t}(Y,B)] = \mathbb{E}[\psi(Y)] = \mathbb{E}[\mathbf{1}_B(Y + \Delta_2)] = \mathbb{P}(Y + \Delta_2 \in B).
+\]</span> Since <span class="math inline">\(Y + \Delta_2 = x + (X_s - X_r) + (X_t - X_s) = x + (X_t - X_r)\)</span>, this equals <span class="math inline">\(\mathbb{P}(x + (X_t-X_r) \in B) = q_{r,t}(x,B)\)</span>. Hence <span class="math display">\[
+\int_{\mathbb{R}^d} q_{r,s}(x,dy)\, q_{s,t}(y,B) = q_{r,t}(x,B)
+\]</span> for <em>every</em> <span class="math inline">\(x \in \mathbb{R}^d\)</span> and every <span class="math inline">\(B \in \mathcal{B}(\mathbb{R}^d)\)</span> — i.e. <a href="#eq-ck-kernel" class="quarto-xref">Equation&nbsp;<span>80.8</span></a> holds pointwise, not merely <span class="math inline">\(\mu_{X_r}\)</span>-almost everywhere as in the general setting of <a href="#prp-ck-almost-everywhere" class="quarto-xref">Proposition&nbsp;<span>80.1</span></a>.</p></li>
+</ul>
+</div>
+<hr>
+</section>
+<section id="discrete-time-parameterization-and-discrete-state-spaces" class="level2" data-number="80.5">
+<h2 data-number="80.5" class="anchored" data-anchor-id="discrete-time-parameterization-and-discrete-state-spaces"><span class="header-section-number">80.5</span> Discrete-Time Parameterization and Discrete State Spaces</h2>
+<p>Let us now focus on discrete time <span class="math inline">\(T = \mathbb{N} = \{0, 1, 2, \dots\}\)</span>. The family of transition operators is <span class="math inline">\(\{Q_{m,n} : 0 \le m \le n &lt; \infty\}\)</span>.</p>
+<p>By the (pointwise) Chapman–Kolmogorov equations and induction on <span class="math inline">\(n - m\)</span>: <span id="eq-discrete-ck-decomposition"><span class="math display">\[
+Q_{m,n} = Q_{m,m+1} Q_{m+1,m+2} \cdots Q_{n-1,n}.
+\tag{80.10}\]</span></span></p>
+<p>Hence, in discrete time, a transition family is determined by the one-step operators <span class="math inline">\(\{Q_{m,m+1} : m \in \mathbb{N}\}\)</span>. Conversely, any sequence of probability kernels <span class="math inline">\(\{q_{m,m+1}\}_{m \in \mathbb{N}}\)</span>, together with <span class="math inline">\(q_{m,m} = \delta_x\)</span> and <span class="math inline">\(q_{m,n}\)</span> defined by composition, satisfies <a href="#def-transition-kernel" class="quarto-xref">Definition&nbsp;<span>80.3</span></a>. In particular, in discrete time the pointwise requirement of <a href="#def-transition-kernel" class="quarto-xref">Definition&nbsp;<span>80.3</span></a> is automatic once the one-step kernels are chosen (for <span class="math inline">\(S\)</span> standard Borel, with one-step kernels taken as regular conditional distributions).</p>
+</section>
+<section id="discrete-state-space" class="level2" data-number="80.6">
+<h2 data-number="80.6" class="anchored" data-anchor-id="discrete-state-space"><span class="header-section-number">80.6</span> Discrete State Space</h2>
+<p>If <span class="math inline">\(S\)</span> is countable (equipped with the discrete <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{B} = 2^S\)</span>), write <span class="math inline">\(q_{m,n}(x, y) := q_{m,n}(x, \{y\})\)</span>, so that <span id="eq-discrete-kernel-sum"><span class="math display">\[
+q_{m,m+1}(x, B) = \sum_{y \in B} q_{m,m+1}(x, y),
+\tag{80.11}\]</span></span> where <span class="math inline">\(q_{m,m+1}(x, y)\)</span> is a regular conditional distribution of <span class="math inline">\(X_{m+1}\)</span> given <span class="math inline">\(X_m\)</span>, characterized by <span id="eq-discrete-rcd-conditional-prob"><span class="math display">\[
+\begin{aligned}
+q_{m,m+1}(x, y) &amp;= \mathbb{P}(X_{m+1} = y \mid X_m = x) \\
+&amp;= \frac{\mathbb{P}(X_{m+1} = y, X_m = x)}{\mathbb{P}(X_m = x)},
+\end{aligned}
+\tag{80.12}\]</span></span> whenever <span class="math inline">\(\mathbb{P}(X_m = x) &gt; 0\)</span>. For <span class="math inline">\(x\)</span> with <span class="math inline">\(\mathbb{P}(X_m = x) = 0\)</span> the row <span class="math inline">\(q_{m,m+1}(x, \cdot)\)</span> is not determined by the process; it may be any probability vector, and the pointwise convention of <a href="#def-transition-kernel" class="quarto-xref">Definition&nbsp;<span>80.3</span></a> simply fixes one such choice.</p>
+<p>In this framework, for <span class="math inline">\(n \ge m + 2\)</span> the Chapman–Kolmogorov equation represents a sum over intermediate states (“sum over paths”): <span id="eq-path-integral-ck"><span class="math display">\[
+\begin{aligned}
+&amp;q_{m,n}(x, y) = \sum_{x_{m+1} \in S} \sum_{x_{m+2} \in S} \dots \\
+&amp;\sum_{x_{n-1} \in S} q_{m,m+1}(x, x_{m+1}) q_{m+1,m+2}(x_{m+1}, x_{m+2}) \cdots q_{n-1,n}(x_{n-1}, y).
+\end{aligned}
+\tag{80.13}\]</span></span> (For <span class="math inline">\(n = m+1\)</span> there are no intermediate sums, and for <span class="math inline">\(n = m\)</span> one has <span class="math inline">\(q_{m,m}(x,y) = \mathbf{1}_{\{x = y\}}\)</span>.) The order of the countable sums is immaterial since all terms are nonnegative.</p>
+<hr>
+</section>
+<section id="finite-dimensional-distributions" class="level2" data-number="80.7">
+<h2 data-number="80.7" class="anchored" data-anchor-id="finite-dimensional-distributions"><span class="header-section-number">80.7</span> Finite-Dimensional Distributions</h2>
+<p>Let <span class="math inline">\((X_t)_{t \in T}\)</span> be a Markov process (in the sense of <a href="#def-markov-process" class="quarto-xref">Definition&nbsp;<span>80.4</span></a>) with transition kernels <span class="math inline">\(\{q_{s,t}\}_{s \le t}\)</span>. Fix arbitrary ordered time points <span class="math inline">\(t_0 &lt; t_1 &lt; \dots &lt; t_n\)</span> in <span class="math inline">\(T\)</span>, and let <span class="math inline">\(\nu_0 = \text{Law}(X_{t_0})\)</span> be the initial law. We write <span class="math inline">\(\mathbb{E}_{\nu_0}[h] := \int_S h \, d\nu_0\)</span> for <span class="math inline">\(h \in \mathcal{B}_b(S)\)</span>.</p>
+<p>The measure on the right of <a href="#eq-fdd-law" class="quarto-xref">Equation&nbsp;<span>80.14</span></a> below is the probability measure on <span class="math inline">\((S^{n+1}, \mathcal{B}^{\otimes(n+1)})\)</span> defined by iterated integration of the kernels: <span class="math display">\[
+A \mapsto \int \nu_0(dx_0) \int q_{t_0,t_1}(x_0, dx_1) \cdots \int q_{t_{n-1},t_n}(x_{n-1}, dx_n) \, \mathbf{1}_A(x_0, \dots, x_n).
+\]</span></p>
+<div id="prp-fdds" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 80.3 (Finite-Dimensional Distributions)</strong></span> The joint distribution <span class="math inline">\(\text{Law}(X_{t_0}, X_{t_1}, \dots, X_{t_n})\)</span> on <span class="math inline">\(S^{n+1}\)</span> is given by: <span id="eq-fdd-law"><span class="math display">\[
+\begin{aligned}
+&amp;\text{Law}(X_{t_0}, X_{t_1}, \dots, X_{t_n})(dx_0, dx_1, \dots, dx_n) \\
+&amp;= \nu_0(dx_0) q_{t_0, t_1}(x_0, dx_1) q_{t_1, t_2}(x_1, dx_2) \cdots q_{t_{n-1}, t_n}(x_{n-1}, dx_n).
+\end{aligned}
+\tag{80.14}\]</span></span> Equivalently, for all bounded measurable functions <span class="math inline">\(f_0, f_1, \dots, f_n \in \mathcal{B}_b(S)\)</span>: <span id="eq-fdd-expectation"><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb{E}\left[ \prod_{i=0}^n f_i(X_{t_i}) \right] \\
+&amp;= \mathbb{E}_{\nu_0} \left[ f_0 Q_{t_0, t_1} \left( f_1 Q_{t_1, t_2} \left( \cdots (f_{n-1} Q_{t_{n-1}, t_n} f_n) \cdots \right) \right) \right],
+\end{aligned}
+\tag{80.15}\]</span></span> where for <span class="math inline">\(n = 0\)</span> the right-hand side is read as <span class="math inline">\(\mathbb{E}_{\nu_0}[f_0]\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-fdds" class="quarto-xref">Proposition&nbsp;<span>80.3</span></a>). </span>We prove <a href="#eq-fdd-expectation" class="quarto-xref">Equation&nbsp;<span>80.15</span></a> by induction on <span class="math inline">\(n\)</span>, simultaneously for all time points <span class="math inline">\(t_0 &lt; \dots &lt; t_n\)</span> and all bounded measurable <span class="math inline">\(f_0, \dots, f_n\)</span>.</p>
+<p><strong>Base Case (<span class="math inline">\(n=0\)</span>):</strong> <span class="math inline">\(\mathbb{E}[f_0(X_{t_0})] = \int_S f_0 \, d\nu_0 = \mathbb{E}_{\nu_0}[f_0]\)</span> by definition of <span class="math inline">\(\nu_0\)</span>.</p>
+<p><strong>Inductive Step:</strong> Assume <a href="#eq-fdd-expectation" class="quarto-xref">Equation&nbsp;<span>80.15</span></a> holds for <span class="math inline">\(n\)</span> (all tuples of <span class="math inline">\(n+1\)</span> times and all bounded measurable functions). Consider <span class="math inline">\(n+2\)</span> time points <span class="math inline">\(t_0 &lt; t_1 &lt; \dots &lt; t_n &lt; t_{n+1}\)</span>. Since <span class="math inline">\(X\)</span> is adapted and the filtration is increasing, <span class="math inline">\(\prod_{i=0}^n f_i(X_{t_i})\)</span> is bounded and <span class="math inline">\(\mathcal{F}_{t_n}\)</span>-measurable, so by the tower property and “taking out what is known”: <span class="math display">\[
+\begin{aligned}
+\mathbb{E} \left[ \prod_{i=0}^{n+1} f_i(X_{t_i}) \right] &amp;= \mathbb{E} \left[ \mathbb{E} \left[ \prod_{i=0}^{n+1} f_i(X_{t_i}) \;\middle|\; \mathcal{F}_{t_n} \right] \right] \\
+&amp;= \mathbb{E} \left[ \left( \prod_{i=0}^n f_i(X_{t_i}) \right) \mathbb{E} \left[ f_{n+1}(X_{t_{n+1}}) \;\middle|\; \mathcal{F}_{t_n} \right] \right].
+\end{aligned}
+\]</span></p>
+<p>By the Markov property at <span class="math inline">\((t_n, t_{n+1})\)</span> and <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a>: <span id="eq-proof-step-markov"><span class="math display">\[
+\begin{aligned}
+\mathbb{E}[f_{n+1}(X_{t_{n+1}}) \mid \mathcal{F}_{t_n}] &amp;= \mathbb{E}[f_{n+1}(X_{t_{n+1}}) \mid X_{t_n}] \\
+&amp;= (Q_{t_n, t_{n+1}} f_{n+1})(X_{t_n}) \quad \mathbb{P}\text{-a.s.}
+\end{aligned}
+\tag{80.16}\]</span></span></p>
+<p>Define <span class="math inline">\(g_n \in \mathcal{B}_b(S)\)</span> as: <span id="eq-proof-step-gn"><span class="math display">\[
+g_n(x) := f_n(x) \cdot (Q_{t_n, t_{n+1}} f_{n+1})(x).
+\tag{80.17}\]</span></span></p>
+<p>Substituting <a href="#eq-proof-step-markov" class="quarto-xref">Equation&nbsp;<span>80.16</span></a> and <a href="#eq-proof-step-gn" class="quarto-xref">Equation&nbsp;<span>80.17</span></a> gives: <span id="eq-proof-step-reduced"><span class="math display">\[
+\mathbb{E} \left[ \prod_{i=0}^{n+1} f_i(X_{t_i}) \right] = \mathbb{E} \left[ \left( \prod_{i=0}^{n-1} f_i(X_{t_i}) \right) g_n(X_{t_n}) \right]
+\tag{80.18}\]</span></span> (for <span class="math inline">\(n = 0\)</span> the empty product is <span class="math inline">\(1\)</span>). By the induction hypothesis applied to the <span class="math inline">\(n+1\)</span> times <span class="math inline">\(t_0 &lt; \dots &lt; t_n\)</span> and the functions <span class="math inline">\(f_0, \dots, f_{n-1}, g_n\)</span>, the right-hand side equals <span class="math display">\[
+\mathbb{E}_{\nu_0} \left[ f_0 Q_{t_0, t_1} \left( f_1 Q_{t_1, t_2} \left( \cdots (f_{n-1} Q_{t_{n-1}, t_n} g_n) \cdots \right) \right) \right].
+\]</span> Replacing <span class="math inline">\(g_n\)</span> with <span class="math inline">\(f_n Q_{t_n, t_{n+1}} f_{n+1}\)</span> yields <span class="math display">\[
+\mathbb{E}_{\nu_0} \left[ f_0 Q_{t_0, t_1} \left( f_1 Q_{t_1, t_2} \left( \cdots \Big( f_{n-1} Q_{t_{n-1}, t_n} (f_n Q_{t_n, t_{n+1}} f_{n+1}) \Big) \cdots \right) \right) \right],
+\]</span> which is <a href="#eq-fdd-expectation" class="quarto-xref">Equation&nbsp;<span>80.15</span></a> for <span class="math inline">\(n+1\)</span>.</p>
+<p><strong>From <a href="#eq-fdd-expectation" class="quarto-xref">Equation&nbsp;<span>80.15</span></a> to <a href="#eq-fdd-law" class="quarto-xref">Equation&nbsp;<span>80.14</span></a>:</strong> Unwinding the nested expression by iterated integration of the kernels shows that its right-hand side equals <span class="math inline">\(\int \prod_i f_i \, d\pi\)</span>, where <span class="math inline">\(\pi\)</span> is the iterated-kernel measure defined before the proposition. Taking <span class="math inline">\(f_i = \mathbf{1}_{B_i}\)</span>, the laws <span class="math inline">\(\text{Law}(X_{t_0}, \dots, X_{t_n})\)</span> and <span class="math inline">\(\pi\)</span> agree on measurable rectangles <span class="math inline">\(B_0 \times \dots \times B_n\)</span>. These form a <span class="math inline">\(\pi\)</span>-system generating <span class="math inline">\(\mathcal{B}^{\otimes(n+1)}\)</span>, so the two probability measures coincide by Dynkin’s <span class="math inline">\(\pi\)</span>-<span class="math inline">\(\lambda\)</span> theorem. <span class="math inline">\(\blacksquare\)</span></p>
+</div>
+<p>The proof uses only the Markov property and <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a>; it does not depend on which version of the kernels is used, since different versions differ only on null sets of the relevant marginal laws.</p>
+<hr>
+</section>
+<section id="takeaways" class="level2" data-number="80.8">
+<h2 data-number="80.8" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">80.8</span> Takeaways</h2>
+<ul>
+<li><strong>Markov property.</strong> An adapted process is Markov with respect to <span class="math inline">\(\{\mathcal{F}_t\}\)</span> if conditioning on the whole past <span class="math inline">\(\mathcal{F}_s\)</span> is the same as conditioning on the present <span class="math inline">\(X_s\)</span>, for every bounded measurable test function.</li>
+<li><strong>Transition kernels.</strong> On a standard Borel state space, <span class="math inline">\(\mathbb{E}[f(X_t) \mid X_s] = (Q_{s,t}f)(X_s)\)</span> for a probability kernel <span class="math inline">\(q_{s,t}\)</span> that is unique only <span class="math inline">\(\mu_{X_s}\)</span>-almost everywhere.</li>
+<li><strong>Chapman–Kolmogorov.</strong> The Markov property implies <span class="math inline">\(Q_{r,t} = Q_{r,s}Q_{s,t}\)</span> only almost everywhere with respect to <span class="math inline">\(\mu_{X_r}\)</span>, with exceptional sets depending on <span class="math inline">\((r,s,t)\)</span>. For this reason a Markov process is <em>defined</em> via a transition family satisfying Chapman–Kolmogorov at every point.</li>
+<li><strong>Both clauses are needed.</strong> A Chapman–Kolmogorov family satisfying <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a> does not make a process Markov; <a href="#exm-markov-both-clauses-needed" class="quarto-xref">Example&nbsp;<span>80.1</span></a> (the pairwise independent triple <span class="math inline">\(X_2 = X_0 \oplus X_1\)</span>) shows that the Markov property is a genuinely separate condition on the joint law.</li>
+<li><strong>Independent increments.</strong> An <span class="math inline">\(\mathbb{R}^d\)</span>-valued process whose increments are independent of the past (including the initial value) is Markov with the translation kernel <span class="math inline">\(q_{s,t}(x,B) = \mathbb{P}(x + X_t - X_s \in B)\)</span>. Independence of the increments among themselves is not enough.</li>
+<li><strong>Discrete time.</strong> The one-step kernels determine everything via <span class="math inline">\(Q_{m,n} = Q_{m,m+1} \cdots Q_{n-1,n}\)</span>, and the Chapman–Kolmogorov equation becomes a sum over intermediate states (matrix multiplication for countable <span class="math inline">\(S\)</span>).</li>
+<li><strong>Finite-dimensional distributions.</strong> The law of <span class="math inline">\((X_{t_0}, \dots, X_{t_n})\)</span> is <span class="math inline">\(\nu_0(dx_0)\,q_{t_0,t_1}(x_0,dx_1)\cdots q_{t_{n-1},t_n}(x_{n-1},dx_n)\)</span>. Hence the initial law and the transition kernels determine the law of the process on the product <span class="math inline">\(\sigma\)</span>-algebra.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./36-2-Probability-Kernels-Revisited.html" class="pagination-link" aria-label="Lecture 36.2: Probability Kernels Revisited">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="pagination-link" aria-label="Lecture 37.2: Kolmogorov Extension Theorem">
+        <span class="nav-page-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/37-1-Markov-Processes.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

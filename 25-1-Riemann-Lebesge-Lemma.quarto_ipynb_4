@@ -1,0 +1,266 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Lecture 25.1: The Riemann-Lebesgue Lemma"
+      ],
+      "id": "d200f1cc"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import matplotlib.pyplot as plt\n",
+        "import numpy as np\n",
+        "import seaborn as sns\n",
+        "sns.set_theme(style=\"darkgrid\", palette=\"muted\")"
+      ],
+      "id": "927c84e8",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Overview & Intuition\n",
+        "\n",
+        "We examine characteristic functions (Fourier transforms) of probability measures $\\mu$ on $\\mathbb{R}^d$. \n",
+        "\n",
+        "* If $\\mu$ is an **absolutely continuous** probability measure with respect to the Lebesgue measure $\\lambda$, so that $d\\mu = f \\, d\\lambda$ with $f \\in L^1(\\mathbb{R}^d)$, then its Fourier transform $\\hat{f}(\\xi) \\to 0$ as $\\|\\xi\\| \\to \\infty$.\n",
+        "* By contrast, if $\\mu$ has **discrete components** (pure point measure), the characteristic function does not decay to zero at infinity.\n",
+        "\n",
+        "### Characteristic Functions of Selected Distributions\n",
+        "\n",
+        "Below are four classic characteristic functions representing both continuous and discrete probability distributions:\n",
+        "\n",
+        "1. **Uniform Distribution**: The characteristic function of the uniform distribution on $[-1, 1]$ is given by the sinc function:\n",
+        "$$\n",
+        "\\hat{f}(\\xi) = \\frac{\\sin(\\xi)}{\\xi}\n",
+        "$$"
+      ],
+      "id": "ca99201a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-sinc\n",
+        "#| fig-cap: 'Sinc Function: Uniform Distribution Characteristic Function'\n",
+        "x = np.linspace(-16 * np.pi, 16 * np.pi, 1000)\n",
+        "y = np.sinc(x / np.pi)\n",
+        "\n",
+        "plt.figure(figsize=(5, 4))\n",
+        "plt.plot(x, y, color='#1f77b4', linewidth=1.5)\n",
+        "plt.axhline(0, color='black', linewidth=0.8, linestyle='--')\n",
+        "plt.axvline(0, color='black', linewidth=0.8, linestyle='--')\n",
+        "plt.title(r'Sinc Function: $\\hat{f}(\\xi) = \\frac{\\sin(\\xi)}{\\xi}$', fontsize=11)\n",
+        "plt.xlabel(r'$\\xi$', fontsize=10)\n",
+        "plt.ylabel(r'$\\hat{f}(\\xi)$', fontsize=10)\n",
+        "plt.xticks(\n",
+        "    [-16*np.pi, -12*np.pi, -8*np.pi, -4*np.pi, 0, 4*np.pi, 8*np.pi, 12*np.pi, 16*np.pi],\n",
+        "    [r'$-16\\pi$', r'$-12\\pi$', r'$-8\\pi$', r'$-4\\pi$', r'$0$', r'$4\\pi$', r'$8\\pi$', r'$12\\pi$', r'$16\\pi$']\n",
+        ")\n",
+        "plt.tight_layout()\n",
+        "plt.show()"
+      ],
+      "id": "fig-sinc",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "2. **Cauchy Distribution** (Continuous, non-smooth derivative at 0):\n",
+        "   $$\\hat{f}(\\xi) = e^{-|\\xi|}$$"
+      ],
+      "id": "77713975"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-cauchy\n",
+        "#| fig-cap: Cauchy Characteristic Function\n",
+        "x = np.linspace(-np.pi, np.pi, 1000)\n",
+        "y = np.exp(-np.abs(x))\n",
+        "\n",
+        "plt.figure(figsize=(5, 4))\n",
+        "plt.plot(x, y, color='#2ca02c', linewidth=1.5)\n",
+        "plt.axhline(0, color='black', linewidth=0.8, linestyle='--')\n",
+        "plt.axvline(0, color='black', linewidth=0.8, linestyle='--')\n",
+        "plt.title(r'Cauchy Characteristic Function: $\\hat{f}(\\xi) = e^{-\\vert{}\\xi\\vert{}}$', fontsize=11)\n",
+        "plt.xlabel(r'$\\xi$', fontsize=10)\n",
+        "plt.ylabel(r'$\\hat{f}(\\xi)$', fontsize=10)\n",
+        "plt.xticks(\n",
+        "    [-np.pi, -3*np.pi/4, -np.pi/2, -np.pi/4, 0, np.pi/4, np.pi/2, 3*np.pi/4, np.pi],\n",
+        "    [r'$-\\pi$', r'$-\\frac{3\\pi}{4}$', r'$-\\frac{\\pi}{2}$', r'$-\\frac{\\pi}{4}$', r'$0$', r'$\\frac{\\pi}{4}$', r'$\\frac{\\pi}{2}$', r'$\\frac{3\\pi}{4}$', r'$\\pi$']\n",
+        ")\n",
+        "plt.tight_layout()\n",
+        "plt.show()"
+      ],
+      "id": "fig-cauchy",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "3. **Standard Normal Distribution** $\\mathcal{N}(0, 1)$ (Smooth Gaussian decay):\n",
+        "   $$\\hat{f}(\\xi) = e^{-\\xi^2 / 2}$$\n"
+      ],
+      "id": "4f7b6b83"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-gaussian\n",
+        "#| fig-cap: Gaussian Characteristic Function\n",
+        "x = np.linspace(-2 * np.pi, 2 * np.pi, 1000)\n",
+        "y = np.exp(-x**2 / 2)\n",
+        "\n",
+        "plt.figure(figsize=(5, 4))\n",
+        "plt.plot(x, y, color='#d62728', linewidth=1.5)\n",
+        "plt.axhline(0, color='black', linewidth=0.8, linestyle='--')\n",
+        "plt.axvline(0, color='black', linewidth=0.8, linestyle='--')\n",
+        "plt.title(r'Gaussian Characteristic Function: $\\hat{f}(\\xi) = e^{-\\xi^2 / 2}$', fontsize=11)\n",
+        "plt.xlabel(r'$\\xi$', fontsize=10)\n",
+        "plt.ylabel(r'$\\hat{f}(\\xi)$', fontsize=10)\n",
+        "plt.xticks(\n",
+        "    [-2*np.pi, -3*np.pi/2, -np.pi, -np.pi/2, 0, np.pi/2, np.pi, 3*np.pi/2, 2*np.pi],\n",
+        "    [r'$-2\\pi$', r'$-\\frac{3\\pi}{2}$', r'$-\\pi$', r'$-\\frac{\\pi}{2}$', r'$0$', r'$\\frac{\\pi}{2}$', r'$\\pi$', r'$\\frac{3\\pi}{2}$', r'$2\\pi$']\n",
+        ")\n",
+        "plt.tight_layout()\n",
+        "plt.show()"
+      ],
+      "id": "fig-gaussian",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "4. **Symmetric Discrete Measure** $\\mu = \\frac{1}{2}\\delta_1 + \\frac{1}{2}\\delta_{-1}$ (Purely oscillatory, no decay):\n",
+        "   $$\\phi(\\xi) = \\cos(\\xi)$$"
+      ],
+      "id": "535c060b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-cosine\n",
+        "#| fig-cap: Discrete Measure Characteristic Function\n",
+        "x = np.linspace(-4 * np.pi, 4 * np.pi, 1000)\n",
+        "y = np.cos(x)\n",
+        "\n",
+        "plt.figure(figsize=(5, 4))\n",
+        "plt.plot(x, y, color='#9467bd', linewidth=1.5)\n",
+        "plt.axhline(0, color='black', linewidth=0.8, linestyle='--')\n",
+        "plt.axvline(0, color='black', linewidth=0.8, linestyle='--')\n",
+        "plt.title(r'Discrete Measure Characteristic Function: $\\phi(\\xi) = \\cos(\\xi)$', fontsize=11)\n",
+        "plt.xlabel(r'$\\xi$', fontsize=10)\n",
+        "plt.ylabel(r'$\\phi(\\xi)$', fontsize=10)\n",
+        "plt.xticks(\n",
+        "    [-4*np.pi, -2*np.pi, 0, 2*np.pi, 4*np.pi],\n",
+        "    [r'$-4\\pi$', r'$-2\\pi$', r'$0$', r'$2\\pi$', r'$4\\pi$']\n",
+        ")\n",
+        "plt.tight_layout()\n",
+        "plt.show()"
+      ],
+      "id": "fig-cosine",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "\n",
+        "## The Riemann-Lebesgue Lemma\n",
+        "\n",
+        "::: {#thm-riemann-lebesgue name=\"Riemann-Lebesgue Lemma\"}\n",
+        "If $f \\in L^1(\\mathbb{R}^d, \\mathcal{B}_{\\mathbb{R}^d}, \\lambda)$, then its Fourier transform \n",
+        "$$\\hat{f}(\\xi) = \\int_{\\mathbb{R}^d} f(x) e^{i \\langle x, \\xi \\rangle} d\\lambda(x)$$\n",
+        "belongs to $C_0(\\mathbb{R}^d)$. That is, $\\hat{f}$ is continuous and \n",
+        "$$\\lim_{\\|\\xi\\| \\to \\infty} |\\hat{f}(\\xi)| = 0$$\n",
+        ":::\n",
+        "\n",
+        "---\n",
+        "\n",
+        "## Proof of the Riemann-Lebesgue Lemma\n",
+        "\n",
+        "The proof proceeds in three main steps:\n",
+        "\n",
+        "### Step 1: Smooth Compactly Supported Functions ($f \\in C_c^\\infty(\\mathbb{R}^d)$)\n",
+        "\n",
+        "Assume first that $f \\in C_c^\\infty(\\mathbb{R}^d)$. Fix $1 \\le j \\le d$. By integration by parts along the $j$-th coordinate axis:\n",
+        "\n",
+        "$$\\hat{f}(\\xi) = \\int_{\\mathbb{R}^d} f(x) e^{i \\langle x, \\xi \\rangle} d\\lambda(x) = \\frac{1}{-i \\xi_j} \\int_{\\mathbb{R}^d} \\frac{\\partial f}{\\partial x_j}(x) e^{i \\langle x, \\xi \\rangle} d\\lambda(x)$$\n",
+        "\n",
+        "Taking absolute values yields:\n",
+        "$$|\\hat{f}(\\xi)| \\le \\frac{1}{|\\xi_j|} \\int_{\\mathbb{R}^d} \\left| \\frac{\\partial f}{\\partial x_j}(x) \\right| d\\lambda(x) = \\frac{1}{|\\xi_j|} \\left\\| \\frac{\\partial f}{\\partial x_j} \\right\\|_{L^1}$$\n",
+        "\n",
+        "Since $\\|\\xi\\|_\\infty = \\max_{1 \\le j \\le d} |\\xi_j| \\ge \\frac{1}{\\sqrt{d}} \\|\\xi\\|_2$, we choose index $j$ such that $|\\xi_j| = \\|\\xi\\|_\\infty$. Consequently:\n",
+        "$$|\\hat{f}(\\xi)| \\le \\frac{\\sqrt{d}}{\\|\\xi\\|_2} \\max_{1 \\le j \\le d} \\left\\| \\frac{\\partial f}{\\partial x_j} \\right\\|_{L^1} \\xrightarrow{\\|\\xi\\| \\to \\infty} 0$$\n",
+        "\n",
+        "Thus, $\\hat{f}(\\xi) = O(\\|\\xi\\|^{-1}) \\to 0$ as $\\|\\xi\\| \\to \\infty$ for all $f \\in C_c^\\infty(\\mathbb{R}^d)$.\n",
+        "\n",
+        "---\n",
+        "\n",
+        "### Step 2: Density of $C_c^\\infty(\\mathbb{R}^d)$ in $L^1(\\mathbb{R}^d)$\n",
+        "\n",
+        "We must extend the result to arbitrary functions $f \\in L^1(\\mathbb{R}^d)$ by showing $C_c^\\infty(\\mathbb{R}^d)$ is dense in $L^1(\\mathbb{R}^d)$.\n",
+        "\n",
+        "1. **Magnitude Truncation:** By the Dominated Convergence Theorem (DCT), $f \\cdot \\mathbf{1}_{\\{|f| \\le M\\}} \\to f$ in $L^1$ as $M \\to \\infty$. Thus, we may assume $f$ is bounded.\n",
+        "2. **Support Truncation:** Again by DCT, $f \\cdot \\mathbf{1}_{\\overline{B}_R} \\to f$ in $L^1$ as $R \\to \\infty$. Thus, we may assume $f$ has compact support on $\\overline{B}_R$.\n",
+        "3. **Dynkin Multiplicative System Argument:** Let\n",
+        "   $$\\mathcal{H} = \\left\\{ h \\in B(\\overline{B}_R) : \\exists (\\psi_n) \\subset C_c^\\infty(\\overline{B}_R) \\text{ such that } \\|h - \\psi_n\\|_{L^1} \\to 0 \\right\\}$$\n",
+        "\n",
+        "   * $\\mathcal{H}$ contains all continuous functions $C(\\overline{B}_R)$.\n",
+        "   * $\\mathcal{H}$ is closed under bounded convergence by DCT.\n",
+        "   * By Dynkin's Multiplicative System Theorem, $\\mathcal{H}$ contains all bounded $\\mathcal{B}(\\overline{B}_R)$-measurable functions.\n",
+        "\n",
+        "Therefore, for any $f \\in L^1(\\mathbb{R}^d)$ and any $\\varepsilon > 0$, there exists $\\psi \\in C_c^\\infty(\\mathbb{R}^d)$ such that:\n",
+        "$$\\|f - \\psi\\|_{L^1} < \\varepsilon$$\n",
+        "\n",
+        "---\n",
+        "\n",
+        "### Step 3: Synthesis ($\\varepsilon / 2$ Argument)\n",
+        "\n",
+        "Given $f \\in L^1(\\mathbb{R}^d)$ and $\\varepsilon > 0$:\n",
+        "\n",
+        "1. Choose $\\psi \\in C_c^\\infty(\\mathbb{R}^d)$ such that $\\|f - \\psi\\|_{L^1} < \\frac{\\varepsilon}{2}$.\n",
+        "2. For any $\\xi \\in \\mathbb{R}^d$, estimate:\n",
+        "   $$|\\hat{f}(\\xi)| \\le |\\hat{f}(\\xi) - \\hat{\\psi}(\\xi)| + |\\hat{\\psi}(\\xi)| = |\\widehat{f - \\psi}(\\xi)| + |\\hat{\\psi}(\\xi)|$$\n",
+        "3. Note that $|\\widehat{f - \\psi}(\\xi)| \\le \\|f - \\psi\\|_{L^1} < \\frac{\\varepsilon}{2}$.\n",
+        "4. By Step 1, $\\hat{\\psi} \\in C_0(\\mathbb{R}^d)$, so there exists $R > 0$ such that for all $\\|\\xi\\| \\ge R$, $|\\hat{\\psi}(\\xi)| < \\frac{\\varepsilon}{2}$.\n",
+        "\n",
+        "Combining these inequalities:\n",
+        "$$|\\hat{f}(\\xi)| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon \\quad \\text{for all } \\|\\xi\\| \\ge R$$\n",
+        "\n",
+        "Hence, $\\lim_{\\|\\xi\\| \\to \\infty} \\hat{f}(\\xi) = 0$.\n",
+        "\n",
+        "**Continuity of $\\hat{f}$:** For any $\\xi_0 \\in \\mathbb{R}^d$, we have $|\\hat{f}(\\xi) - \\hat{f}(\\xi_0)| \\le \\int_{\\mathbb{R}^d} |f(x)| \\, |e^{i\\langle x, \\xi\\rangle} - e^{i\\langle x, \\xi_0\\rangle}| \\, d\\lambda(x)$. As $\\xi \\to \\xi_0$, the integrand converges pointwise to $0$ and is dominated by $2|f(x)| \\in L^1$, so DCT gives $\\hat{f}(\\xi) \\to \\hat{f}(\\xi_0)$. Thus $\\hat{f} \\in C_0(\\mathbb{R}^d)$, completing the proof."
+      ],
+      "id": "2067a9ca"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "D:\\Anaconda\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

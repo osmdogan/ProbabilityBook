@@ -1,0 +1,144 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Probability Theory"
+  author: ["[Osman Doğan](https://sites.google.com/view/osmandogan/home)", "[Süleyman Taşpınar](https://sites.google.com/site/gcsuleymantaspinar/)"]
+  date: "today"
+  repo-url: https://github.com/osmdogan/datasets.git
+  repo-actions: [edit, issue]
+  site-url: https://osmdogan.github.io/ProbabilityBook/
+  cover-image: cover3.jfif
+  page-footer:
+    left: |
+      Probability Theory was written by Osman Doğan and Süleyman Taşpınar.
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+ 
+  chapters:
+    - index.qmd
+
+    - part: Probability-Theory-I.qmd
+      chapters:
+        - 0-Banach-Tarski-Banach-Tarski.qmd
+        - 1-1-Probability-Motivation.qmd
+        - 1-2-Sigma-Algebra.qmd
+        - 2-1-Measures-Definition-Examples.qmd
+        - 2-2-Finitely-Additive-Measures.qmd
+        - 3-1-Stieltjes-Premeasures.qmd
+        - 3-2-Outer-Measure.qmd
+        - 4-1-Outer-Pseudo-Metric.qmd
+        - 4-2-Extension-Theorem.qmd
+        - 4-3-Uniqueness-Sigma-Finite Extension.qmd
+        - 5-1-Radon-Measure.qmd
+        - 5-2-Lebesgue-Measure.qmd
+        - 6-1-Random-Variables-Motivation.qmd
+        - 6-2-Measurable-Functions.qmd
+        - 7-1-Robustness-Measurability.qmd
+        - 7-2-Riemann-Stieltjes-Integration.qmd
+        - 8-1-Simple-Integration.qmd
+        - 8-2-Lebesgue-Integral-MCTheorem.qmd
+        - 9-1-Fatou-Borel-Cantelli.qmd
+        - 9-2-L1-DCT.qmd
+        - 10-1-Integrals-Derivatives.qmd
+        - 10-2-Lebesgue-Riemann.qmd
+        - 11-1-Radon-Nikodym.qmd
+        - 11-2-Laws-Revisited.qmd
+        - 12-1-L2-Covariance.qmd
+        - 12-2-WLN.qmd
+        - 13-1-Convergence-in-Measure.qmd
+        - 13-2-Lp-Complete.qmd
+        - 14-1-Dynkin-Multiplicative-Systems-Theorem.qmd
+        - 14-2-Product-Measure.qmd
+        - 14-3-Tonelli-Fubini-Theorems.qmd
+        - 15-1-Independence.qmd
+        - 15-2-Independent-Random-Variables.qmd
+        - 16-1-Kolmogorov-Extension-Theorem1.qmd
+        - 16-2-Kolmogorov-Extension-Theorem2.qmd
+        - 17-1-Kolmogorov- 0-1-Law.qmd
+        - 17-2-Convolution.qmd
+        - 18-1-SLLN1.qmd
+        - 18-2-Kolmogorov-Convergence-Criterion.qmd
+        - 19-1-SLLN2.qmd
+        - 19-2-Renewal-Theory.qmd
+
+    - part: Probability-Theory-II.qmd
+      chapters:
+        - 20-1-Cramer-LDP-Part-1.qmd
+        - 20-2-Cramer-LDP-Part-2.qmd
+        - 21-1-Total-Variation.qmd
+        - 21-2-LRE.qmd
+        - 22-1-Weak-Convergence.qmd
+        - 22-2-Weak-Convergence-Over-Rd.qmd
+        - 23-1-Vague-Convergence.qmd
+        - 23-2-Prokhorov-Compactness-Theorem.qmd
+        - 23-3-Skorohod-Theorem.qmd
+        - 24-1-Complex-Integration-Dynkin-Theorem.qmd
+        - 24-2-Characteristic-Function.qmd
+        - 25-1-Riemann-Lebesge-Lemma.qmd
+        - 25-2-Fourier-Inversion.qmd
+        - 25-3-The-Continuity-Theorem.qmd
+        - 26-1-Central-Limit-Theorem.qmd
+        - 26-2-Infinitely-Divisible-Distributions.qmd
+        - 27-1-Average-Uniformity.qmd
+        - 27-2-Lindberg-Feller-CLT.qmd
+        - 27-3-Random-Permutations.qmd
+        - 28-1-Probability-Metrics.qmd
+        - 28-2-Stein-Method.qmd
+        - 29-1-Berry-Esseen-Theorem.qmd
+        - 29-2-Local-Dependencies.qmd
+        - 30-1-Conditional-Probability.qmd
+        - 30-2-Conditional-Probability-I.qmd
+        - 31-1-Orthogonal-Projections.qmd
+        - 31-2-Conditional-Expecation-II.qmd
+        - 32-1-Conditioning-Partial-Integration.qmd
+        - 32-2-Conditional-MCT-Fatou-DCT-Jensen.qmd
+        - 32-3-Conditioning-on-Random-Variables.qmd
+        - 33-1-Probability-Kernels-Part1.qmd
+        - 33-2-Regular-Conditional-Distributions.qmd
+        - 34-1-Probability-Kernels-Part2.qmd
+        - 34-2-Random-Dynamics.qmd
+        - 35-1-Stochastic-Processes.qmd
+        - 35-2-Poisson-Process.qmd
+        - 36-1-Markov-Property.qmd
+        - 36-2-Probability-Kernels-Revisited.qmd
+        - 37-1-Markov-Processes.qmd
+        - 37-2-Kolmogorov-Extension-Theorem.qmd
+        - 38-1-Path-Space.qmd
+        - 38-2-Time-Homogeneous-Processes.qmd
+        - 39-1-Markov-Matrix.qmd
+        - 39-2-Markov-Generator.qmd
+
+
+    - part: Probability-Theory-III.qmd
+      chapters:
+        - 40-1-Operator-Norm-Continuity.qmd
+        
+
+
+  appendices:
+    - AppendixA.qmd
+    - AppendixB.qmd
+    - references.qmd
+      
+bibliography: references.bib
+
+format:
+  html:
+    theme: 
+     - cosmo
+     - r4ds.scss
+    code-link: true
+    toc: true
+    toc-location: right
+    toc-title: "Table of Contents"
+    toc-depth: 3
+    number-sections: true
+    include-in-header:
+      - file: "macros.jax"
+   
+     
+
+
+  

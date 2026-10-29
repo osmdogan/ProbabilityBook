@@ -1,0 +1,235 @@
+
+# Lecture 40.1: Operator Norm Continuity
+
+## Introduction to Markov Generators and Continuity
+
+Given a family of Markov transition operators $\{Q_t\}_{t \ge 0}$ on the bounded measurable functions $\mathcal{B}(S, \mathcal{B})$ over a state space $S$, the **generator** $A$ (should it exist) is defined as the linear operator:
+$$
+A f := \left.\frac{\mathrm{d}}{\mathrm{d}t} Q_t f \right\vert{}_{t=0} = \lim_{t \to 0^+} \frac{Q_t f - f}{t}.
+$${#eq-generator-def}
+
+If $Q_t$ is differentiable at $t = 0$, it must also be continuous at $t = 0$. There are multiple notions of operator continuity available (e.g., pointwise/strong continuity, operator norm continuity). The strongest notion—**operator norm continuity**—yields the most concrete analytical properties.
+
+---
+
+## Operator Norms and Bounded Operators
+
+::: {#def-operator-norm}
+## Bounded Operator and Operator Norm
+Let $(B, \Vert{}\cdot\Vert{})$ be a normed space (e.g., $B = \mathcal{B}(S, \mathcal{B})$ equipped with the supremum norm $\Vert{}f\Vert{}_\infty := \sup_{x \in S} \vert{}f(x)\vert{}$). For a linear operator $A: B \to B$, its **operator norm** $\Vert{}A\Vert{}_{\mathrm{op}}$ is defined as:
+$$
+\Vert{}A\Vert{}_{\mathrm{op}} := \sup_{f \neq 0} \frac{\Vert{}A f\Vert{}}{\Vert{}f\Vert{}} = \sup_{\Vert{}f\Vert{} \le 1} \Vert{}A f\Vert{}.
+$${#eq-op-norm-def}
+
+$A$ is called a **bounded linear operator** if $\Vert{}A\Vert{}_{\mathrm{op}} < \infty$, which is equivalent to $A$ being Lipschitz continuous:
+$$
+\Vert{}A f\Vert{} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}f\Vert{} \quad \forall f \in B.
+$${#eq-bounded-lipschitz}
+:::
+
+---
+
+## Submultiplicativity of the Operator Norm
+
+::: {#lem-submultiplicative}
+## Composition of Bounded Linear Operators
+If $A, T: B \to B$ are bounded linear operators, then their composition $A T$ is also bounded, and:
+$$
+\Vert{}A T\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}}.
+$$ {#eq-submultiplicative}
+:::
+
+::: {.proof}
+## Proof of @lem-submultiplicative
+Fix $f \in B$, $f \neq 0$. If $T f = 0$, then $\Vert{}A T f\Vert{} = \Vert{}A 0\Vert{} = 0 \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}} \Vert{}f\Vert{}$ trivially. If $T f \neq 0$, then:
+$$
+\frac{\Vert{}A T f\Vert{}}{\Vert{}f\Vert{}} = \frac{\Vert{}A(T f)\Vert{}}{\Vert{}T f\Vert{}} \cdot \frac{\Vert{}T f\Vert{}}{\Vert{}f\Vert{}}.
+$$
+By definition of the operator norm:
+$$
+\frac{\Vert{}A(T f)\Vert{}}{\Vert{}T f\Vert{}} \le \Vert{}A\Vert{}_{\mathrm{op}} \quad \implies \quad \frac{\Vert{}A T f\Vert{}}{\Vert{}f\Vert{}} \le \Vert{}A\Vert{}_{\mathrm{op}} \cdot \frac{\Vert{}T f\Vert{}}{\Vert{}f\Vert{}} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}}.
+$$
+In either case $\Vert{}A T f\Vert{} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}} \Vert{}f\Vert{}$. Taking the supremum over all $f \neq 0$ yields $\Vert{}A T\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}} \Vert{}T\Vert{}_{\mathrm{op}}$.
+:::
+
+---
+
+## Operator Powers and Matrix Exponentials
+
+::: {#cor-operator-exp}
+## Powers and Exponentials of Operators
+If $A$ is a bounded linear operator, then $A^n$ is bounded for every $n \in \mathbb{N}$, with:
+$$
+\Vert{}A^n\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}}^n.
+$${#eq-power-bound}
+
+Furthermore, on a Banach space $B$, the operator exponential defined by the power series:
+$$
+e^{t A} := \sum_{n=0}^\infty \frac{t^n}{n!} A^n,
+$${#eq-op-exp-series}
+converges in operator norm to a bounded linear operator for all $t \in \mathbb{R}$, satisfying:
+$$
+\Vert{}e^{t A}\Vert{}_{\mathrm{op}} \le e^{\vert{}t\vert{} \Vert{}A\Vert{}_{\mathrm{op}}} < \infty.
+$${#eq-exp-norm-bound}
+:::
+
+::: {.proof}
+## Proof of @cor-operator-exp
+1. By induction on @lem-submultiplicative (base case $n=0$: $\Vert{}A^0\Vert{}_{\mathrm{op}} = \Vert{}I\Vert{}_{\mathrm{op}} = 1 = \Vert{}A\Vert{}_{\mathrm{op}}^0$), $\Vert{}A^n\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}}^n$.
+2. Since $(\mathcal{B}(S), \Vert{}\cdot\Vert{}_\infty)$ is a complete normed space (Banach space, as uniform limits of bounded functions are bounded and $\mathbb{R}$ is complete), a standard result in functional analysis guarantees that the operator algebra $(\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})$ of bounded linear operators on a Banach space is itself a Banach space: if $(A_n)$ is $\Vert{}\cdot\Vert{}_{\mathrm{op}}$-Cauchy, then $(A_n f)$ is Cauchy in $B$ for each fixed $f$, hence converges to some $A f$ by completeness of $B$; one checks $A$ is linear, bounded, and $A_n \to A$ in operator norm.
+3. By completeness of $(\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})$, it suffices to show the series of norms converges (absolute convergence implies convergence in a Banach space):
+   $$
+   \sum_{n=0}^\infty \left\Vert{} \frac{t^n}{n!} A^n \right\Vert{}_{\mathrm{op}} \le \sum_{n=0}^\infty \frac{\vert{}t\vert{}^n}{n!} \Vert{}A^n\Vert{}_{\mathrm{op}} \le \sum_{n=0}^\infty \frac{\vert{}t\vert{}^n \Vert{}A\Vert{}_{\mathrm{op}}^n}{n!} = e^{\vert{}t\vert{} \Vert{}A\Vert{}_{\mathrm{op}}} < \infty.
+   $$
+   Hence the partial sums of $e^{t A}$ form a Cauchy sequence in $(\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})$ and converge to a bounded operator, with $\Vert{}e^{tA}\Vert{}_{\mathrm{op}} \le \sum_{n=0}^\infty \Vert{}t^nA^n/n!\Vert{}_{\mathrm{op}} \le e^{\vert{}t\vert{}\Vert{}A\Vert{}_{\mathrm{op}}}$ by the triangle inequality.
+:::
+
+---
+
+## Discrete Matrix Representations of Operators
+
+When $S$ is countable, we can represent linear operators on $\mathcal{B}(S)$ via matrix kernels $q: S \times S \to \mathbb{R}$:
+$$
+(A f)(i) = \sum_{j \in S} q(i, j) f(j).
+$${#eq-matrix-op}
+
+To ensure that $(A f) \in \mathcal{B}(S)$ and $A$ is bounded, we define the norm:
+$$
+\Vert{}q\Vert{}_\infty := \sup_{i \in S} \sum_{j \in S} \vert{}q(i, j)\vert{}.
+$${#eq-matrix-row-norm}
+
+::: {#prp-matrix-operator-norm}
+## Equivalence of Row-Sum Norm and Operator Norm
+Let $S$ be countable and $q: S \times S \to \mathbb{R}$ satisfy $\Vert{}q\Vert{}_\infty < \infty$. Then $(A f)(i) = \sum_{j \in S} q(i, j) f(j)$ defines a bounded linear operator on $\mathcal{B}(S)$, and:
+$$
+\Vert{}A\Vert{}_{\mathrm{op}} = \Vert{}q\Vert{}_\infty = \sup_{i \in S} \sum_{j \in S} \vert{}q(i, j)\vert{}.
+$${#eq-norm-equivalence}
+:::
+
+::: {.proof}
+## Proof of @prp-matrix-operator-norm
+* **Upper Bound ($\Vert{}A\Vert{}_{\mathrm{op}} \le \Vert{}q\Vert{}_\infty$):**
+  For any $f \in \mathcal{B}(S)$ and any $i \in S$:
+  $$
+  \begin{aligned}
+  \vert{}(A f)(i)\vert{} &= \left\vert{} \sum_{j \in S} q(i, j) f(j) \right\vert{}\\
+   & \le \sum_{j \in S} \vert{}q(i, j)\vert{} \vert{}f(j)\vert{} \\
+   &\le \left( \sum_{j \in S} \vert{}q(i, j)\vert{} \right) \Vert{}f\Vert{}_\infty \\
+   &\le \Vert{}q\Vert{}_\infty \Vert{}f\Vert{}_\infty.
+  \end{aligned}
+  $$
+  Taking the supremum over $i \in S$ gives $\Vert{}A f\Vert{}_\infty \le \Vert{}q\Vert{}_\infty \Vert{}f\Vert{}_\infty$, so $\Vert{}A\Vert{}_{\mathrm{op}} \le \Vert{}q\Vert{}_\infty$.
+
+* **Lower Bound ($\Vert{}A\Vert{}_{\mathrm{op}} \ge \Vert{}q\Vert{}_\infty$):**
+  Fix $\varepsilon > 0$ and choose $i \in S$ such that $\sum_{j \in S} \vert{}q(i, j)\vert{} \ge \Vert{}q\Vert{}_\infty - \varepsilon$. Define the function $f_i \in \mathcal{B}(S)$ by setting $f_i(j) = \operatorname{sgn}(q(i, j))$. Notice $\Vert{}f_i\Vert{}_\infty \le 1$.
+  Evaluating $(A f_i)(i)$:
+  $$
+  (A f_i)(i) = \sum_{j \in S} q(i, j) \operatorname{sgn}(q(i, j)) = \sum_{j \in S} \vert{}q(i, j)\vert{} \ge \Vert{}q\Vert{}_\infty - \varepsilon.
+  $$
+  Hence $\Vert{}A f_i\Vert{}_\infty \ge \Vert{}q\Vert{}_\infty - \varepsilon$. Taking $\varepsilon \to 0$ yields $\Vert{}A\Vert{}_{\mathrm{op}} \ge \Vert{}q\Vert{}_\infty$.
+
+Combining both inequalities establishes $\Vert{}A\Vert{}_{\mathrm{op}} = \Vert{}q\Vert{}_\infty$.
+:::
+
+> **Caution:** Even when $S$ is countable, not every bounded linear operator on $\mathcal{B}(S) = \ell^\infty(S)$ can be expressed as such a matrix. This is because the dual space $(\ell^\infty(S))^*$ is strictly larger than $\ell^1(S)$: it contains singular (finitely additive but not countably additive) functionals, such as Banach limits, that cannot be represented by any row $q(i, \cdot) \in \ell^1(S)$. Operators built from such functionals (e.g., rank-one operators $f \mapsto \phi(f) g$ for $g \in \mathcal{B}(S)$ and $\phi$ a singular functional) are bounded but admit no matrix representation @eq-matrix-op.
+
+---
+
+## Uniformly Continuous Markov Semigroups
+
+::: {#thm-uniformly-continuous-semigroup}
+## Uniformly Continuous Markov Semigroups
+Let $B = \mathcal{B}(S, \mathcal{B})$ and let $\{Q_t\}_{t \ge 0} \subset \mathcal{L}(B)$ be a **semigroup** of bounded linear Markov transition operators, i.e.
+$$
+Q_0 = I, \qquad Q_{s+t} = Q_s Q_t \quad \text{for all } s, t \ge 0
+$${#eq-chapman-kolmogorov}
+(the Chapman–Kolmogorov equations). Suppose further that $Q_t$ is **operator norm continuous at $t = 0$**:
+$$
+\lim_{t \to 0^+} \Vert{}Q_t - I\Vert{}_{\mathrm{op}} = 0.
+$${#eq-norm-continuous-zero}
+
+Then $Q_t$ is operator norm continuous for every $t \ge 0$, and operator norm differentiable on all of $[0, \infty)$ (one-sided at $t = 0$).
+Furthermore, defining the generator $A := \left.\frac{\mathrm{d}}{\mathrm{d}t} Q_t\right\vert{}_{t=0} = \lim_{t \to 0^+} \frac{Q_t - I}{t}$, we have:
+
+1. $\Vert{}A\Vert{}_{\mathrm{op}} < \infty$ (the generator is a bounded operator).
+2. $Q_t = e^{t A} = \sum_{n=0}^\infty \frac{t^n}{n!} A^n$ for all $t \ge 0$.
+3. $Q_t$ satisfies the **Kolmogorov Forward and Backward Differential Equations**:
+   $$
+   \frac{\mathrm{d}}{\mathrm{d}t} Q_t = Q_t A = A Q_t, \quad \text{with } Q_0 = I.
+   $$ {#eq-kolmogorov-odes}
+:::
+
+::: {.proof}
+## Proof of @thm-uniformly-continuous-semigroup
+
+**Step 1 (A local uniform bound, and continuity on all of $[0,\infty)$).**
+By @eq-norm-continuous-zero, fix $\delta > 0$ such that $\Vert{}Q_s - I\Vert{}_{\mathrm{op}} \le 1/2$ for all $s \in [0, \delta]$; in particular $M := \sup_{s \in [0,\delta]} \Vert{}Q_s\Vert{}_{\mathrm{op}} \le 3/2$. For any $t \ge 0$, write $t = n\delta + r$ with $n \in \mathbb{N}_0$, $r \in [0, \delta)$; by @eq-chapman-kolmogorov and @lem-submultiplicative, $\Vert{}Q_t\Vert{}_{\mathrm{op}} = \Vert{}Q_\delta^n Q_r\Vert{}_{\mathrm{op}} \le M^{n+1} < \infty$. Hence $\sup_{s \in [0,T]} \Vert{}Q_s\Vert{}_{\mathrm{op}} < \infty$ for every $T < \infty$.
+
+For $t_0 \ge 0$ and $h \to 0^+$, @eq-chapman-kolmogorov gives $Q_{t_0+h} - Q_{t_0} = Q_{t_0}(Q_h - I)$, so by @lem-submultiplicative and @eq-norm-continuous-zero,
+$$
+\Vert{}Q_{t_0+h} - Q_{t_0}\Vert{}_{\mathrm{op}} \le \Vert{}Q_{t_0}\Vert{}_{\mathrm{op}} \Vert{}Q_h - I\Vert{}_{\mathrm{op}} \to 0,
+$$
+which is right continuity at every $t_0 \ge 0$. For $0 < h < t_0$, similarly $Q_{t_0} - Q_{t_0 - h} = Q_{t_0 - h}(Q_h - I)$; since $\Vert{}Q_{t_0-h}\Vert{}_{\mathrm{op}}$ stays bounded as $h \to 0^+$ by the uniform bound on $[0,t_0]$ established above, $\Vert{}Q_{t_0}-Q_{t_0-h}\Vert{}_{\mathrm{op}} \to 0$ as well: left continuity. Hence $t \mapsto Q_t$ is operator norm continuous on all of $[0,\infty)$.
+
+**Step 2 (Construction of a bounded generator).**
+Since $s \mapsto Q_s$ is continuous on $[0,\delta]$ (Step 1), the Riemann integral $S_\delta := \int_0^\delta Q_s \, \mathrm{d}s \in \mathcal{L}(B)$ is well-defined as a limit of Riemann sums in the Banach space $(\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})$ (cf. @cor-operator-exp), and
+$$
+\left\Vert{} \frac{S_\delta}{\delta} - I \right\Vert{}_{\mathrm{op}} = \left\Vert{} \frac{1}{\delta}\int_0^\delta (Q_s - I) \, \mathrm{d}s \right\Vert{}_{\mathrm{op}} \le \frac{1}{\delta}\int_0^\delta \Vert{}Q_s - I\Vert{}_{\mathrm{op}} \, \mathrm{d}s \le \frac{1}{2} < 1.
+$$
+By the convergent Neumann series in the Banach algebra $\mathcal{L}(B)$ (as in @cor-operator-exp), $S_\delta/\delta$, and hence $S_\delta$, is invertible in $\mathcal{L}(B)$. Define the bounded operator
+$$
+A := (Q_\delta - I) S_\delta^{-1}.
+$$
+For $h > 0$, since the bounded linear operator $Q_h$ commutes with the Riemann integral and $Q_h Q_s = Q_{h+s}$, a change of variables $u = h+s$ gives
+$$
+\frac{Q_h - I}{h} S_\delta = \frac{1}{h}\left( \int_0^\delta Q_{h+s}\,\mathrm{d}s - \int_0^\delta Q_s\,\mathrm{d}s \right) = \frac{1}{h}\left( \int_\delta^{\delta+h} Q_u\,\mathrm{d}u - \int_0^h Q_u\,\mathrm{d}u \right).
+$$
+By continuity of $u \mapsto Q_u$ at $u = \delta$ and $u = 0$ (Step 1), each averaged integral converges in operator norm as $h \to 0^+$: $h^{-1}\int_\delta^{\delta+h}Q_u\,\mathrm{d}u \to Q_\delta$ and $h^{-1}\int_0^h Q_u\,\mathrm{d}u \to Q_0 = I$. Hence
+$$
+\frac{Q_h-I}{h}S_\delta \to Q_\delta - I \quad \text{in operator norm as } h \to 0^+.
+$$
+Right-multiplication by the fixed bounded operator $S_\delta^{-1}$ is continuous on $\mathcal{L}(B)$ (@lem-submultiplicative), so
+$$
+\frac{Q_h-I}{h} = \left[\frac{Q_h-I}{h}S_\delta\right]S_\delta^{-1} \longrightarrow (Q_\delta-I)S_\delta^{-1} = A
+$$
+in operator norm as $h \to 0^+$. This shows the limit defining $A$ exists in operator norm, and $A$ is bounded as a product of bounded operators, proving (1).
+
+**Step 3 (Differentiability for all $t \ge 0$ and the Kolmogorov equations).**
+Fix $t_0 \ge 0$. For $h > 0$, @eq-chapman-kolmogorov gives
+$$
+\frac{Q_{t_0+h}-Q_{t_0}}{h} = Q_{t_0}\cdot\frac{Q_h-I}{h} \longrightarrow Q_{t_0}A, \qquad \frac{Q_{t_0+h}-Q_{t_0}}{h} = \frac{Q_h-I}{h}\cdot Q_{t_0} \longrightarrow A Q_{t_0}
+$$
+as $h \to 0^+$, using Step 2 and continuity of left- and right-multiplication by the fixed bounded operator $Q_{t_0}$ (@lem-submultiplicative). Hence the right-derivative of $Q_t$ at $t_0$ equals $Q_{t_0}A = AQ_{t_0}$. For $t_0 > 0$ and $0 < h < t_0$,
+$$
+\frac{Q_{t_0}-Q_{t_0-h}}{h} = Q_{t_0-h}\cdot\frac{Q_h-I}{h}.
+$$
+Since $Q_{t_0-h}\to Q_{t_0}$ (Step 1) and $(Q_h-I)/h \to A$ (Step 2), and $\Vert{}Q_{t_0-h}\Vert{}_{\mathrm{op}}$ is bounded for small $h$ (Step 1), multiplication in $\mathcal{L}(B)$ is jointly continuous there (@lem-submultiplicative), so the left-derivative at $t_0$ also equals $Q_{t_0}A$. Thus $t \mapsto Q_t$ is differentiable in operator norm on $[0,\infty)$ (one-sided at $t=0$), with
+$$
+\frac{\mathrm{d}}{\mathrm{d}t}Q_t = Q_t A = A Q_t, \qquad Q_0 = I,
+$$
+proving (3).
+
+**Step 4 ($Q_t = e^{tA}$).**
+By @cor-operator-exp, $e^{-tA}$ is a well-defined bounded operator for every $t$, and $A$ commutes with $e^{-tA}$ since $A$ commutes with every power of itself. Define $F(t) := Q_t e^{-tA} \in \mathcal{L}(B)$. Differentiating the power series for $e^{-tA}$ term-by-term (justified by the same absolute-convergence argument as in @cor-operator-exp) gives $\frac{\mathrm{d}}{\mathrm{d}t}e^{-tA} = -Ae^{-tA}$, so by the Leibniz rule for operator-norm-differentiable $\mathcal{L}(B)$-valued functions (valid since operator multiplication is bounded bilinear) and Step 3,
+$$
+F'(t) = (Q_tA)e^{-tA} + Q_t(-Ae^{-tA}) = Q_tAe^{-tA} - Q_tAe^{-tA} = 0 \quad \text{for all } t \ge 0.
+$$
+Since $F$ is continuously differentiable with $F' \equiv 0$ on $[0,\infty)$, the fundamental theorem of calculus for Banach-space-valued functions gives $F(t) - F(0) = \int_0^t F'(s)\,\mathrm{d}s = 0$, i.e., $F(t) = F(0) = Q_0 e^0 = I$ for all $t \ge 0$. Hence $Q_t = e^{tA}$ for all $t \ge 0$, proving (2).
+:::
+
+---
+
+## Remarks
+
+1. **Uniqueness:** The argument in Step 4 of the proof above is in fact a general uniqueness argument: for *any* bounded operator $A$, the operator-valued ODE $\frac{\mathrm{d}}{\mathrm{d}t}X_t = AX_t$, $X_0 = I$, has $X_t = e^{tA}$ as its unique solution among operator-norm-differentiable curves $t \mapsto X_t \in \mathcal{L}(B)$ (apply Step 4's computation to $F(t) := X_t e^{-tA}$ to get $F'\equiv0$, hence $X_t = X_0 e^{tA} = e^{tA}$). In particular, $Q_t = e^{tA}$ is the unique such solution to @eq-kolmogorov-odes.
+2. **Unbounded Generators:** Without operator norm continuity (e.g., under the weaker notion of strong/pointwise continuity $\lim_{t \to 0} \Vert{}Q_t f - f\Vert{}_\infty = 0$), the generator $A$ may be unbounded and only densely defined on a proper domain $\mathcal{D}(A) \subset \mathcal{B}(S)$. The key step of the proof above that fails in this setting is Step 2: the Riemann integral $S_\delta$ is still well-defined (its integrand is only strongly, not uniformly, continuous), but $S_\delta/\delta$ need not be close to $I$ in operator norm, so the Neumann-series argument for invertibility of $S_\delta$ breaks down, and the generator can no longer be extracted as a bounded operator via this construction.
+
+---
+
+## Takeaways
+
+* The **operator norm** $\Vert{}A\Vert{}_{\mathrm{op}} = \sup_{\Vert{}f\Vert{}\le1}\Vert{}Af\Vert{}$ turns boundedness of a linear operator into a Lipschitz condition, and it is **submultiplicative**: $\Vert{}AT\Vert{}_{\mathrm{op}} \le \Vert{}A\Vert{}_{\mathrm{op}}\Vert{}T\Vert{}_{\mathrm{op}}$ (@lem-submultiplicative). This single inequality is the engine behind everything else in this lecture: it controls powers $A^n$, the exponential series $e^{tA}$, and products/limits of operators such as $Q_t(Q_h - I)$.
+* On a Banach space $B$, the space of bounded linear operators $(\mathcal{L}(B), \Vert{}\cdot\Vert{}_{\mathrm{op}})$ is itself a Banach space (in fact a Banach algebra), so **absolutely convergent operator series converge**. This is what makes the operator exponential $e^{tA} = \sum_{n\ge0} t^nA^n/n!$ well-defined and bounded whenever $A$ is bounded (@cor-operator-exp).
+* For a countable state space $S$, bounded operators on $\mathcal{B}(S)$ that arise from a matrix kernel $q(i,j)$ are exactly characterized by $\Vert{}A\Vert{}_{\mathrm{op}} = \Vert{}q\Vert{}_\infty$, the supremum of absolute row sums (@prp-matrix-operator-norm)—but not every bounded operator on $\mathcal{B}(S)$ arises this way, because $(\ell^\infty(S))^*$ is strictly larger than $\ell^1(S)$.
+* The central result, @thm-uniformly-continuous-semigroup, shows that **operator norm continuity at a single time $t=0$, together with the semigroup (Chapman–Kolmogorov) property $Q_{s+t}=Q_sQ_t$**, is already enough to force the entire semigroup to collapse to the simplest possible form: $Q_t = e^{tA}$ for a *bounded* generator $A$. This is special to the operator-norm topology—the semigroup property alone does **not** buy differentiability; continuity at one point is essential, and it must hold in operator norm, not merely strongly.
+* This is also a genuine limitation: most interesting continuous-time Markov chains and diffusions (e.g., Brownian motion, birth-death chains on infinite state spaces) have **unbounded** generators, so $Q_t$ is only *strongly* (pointwise) continuous at $t=0$, not operator norm continuous. The uniformly continuous case treated here is the technically simplest instance of the general Hille–Yosida theory of $C_0$-semigroups, in which the generator is replaced by a closed, densely defined operator $A: \mathcal{D}(A) \subset B \to B$, and the exponential series is replaced by a more delicate construction (e.g., via the resolvent $(\lambda I - A)^{-1}$).

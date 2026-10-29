@@ -1,0 +1,241 @@
+# Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen
+
+## Extending Conditional Expectation Beyond $L^1$
+
+::: {#def-cond-exp-ext}
+## Conditional Expectation for Non-Negative Random Variables
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space, and let $\mathcal{G} \subseteq \mathcal{F}$ be a sub-$\sigma$-field. If $X \ge 0$ almost surely (not necessarily in $L^1(\Omega, \mathcal{F}, \mathbb{P})$), there exists a unique (up to $\mathbb{P}$-almost sure equivalence) $\mathcal{G}$-measurable random variable, denoted $\mathbb{E}[X \mid \mathcal{G}]$, such that for every non-negative $\mathcal{G}$-measurable random variable $Y$ (or equivalently, every $B \in \mathcal{G}$),
+$$
+\mathbb{E}[X \mathbb{I}_B] = \mathbb{E}\big[\mathbb{E}[X \mid \mathcal{G}] \mathbb{I}_B\big].
+$$ {#eq-def-cond-exp}
+If $X \in L^1$, $\mathbb{E}[X \mid \mathcal{G}]$ coincides with the standard $L^1$ conditional expectation.
+:::
+
+::: {#prp-extending-eg}
+## Well-Definedness of Conditional Expectation for $X \ge 0$
+If $X \ge 0$ almost surely, and $\mathcal{G} \subseteq \mathcal{F}$ is a sub-$\sigma$-field, then there exists a unique (up to $\mathbb{P}$-null sets) $\mathcal{G}$-measurable random variable $\mathbb{E}[X \mid \mathcal{G}]$ satisfying:
+$$
+\mathbb{E}[\mathbb{E}[X \mid \mathcal{G}] \mathbb{I}_B] = \mathbb{E}[X \mathbb{I}_B], \quad \forall B \in \mathcal{G}.
+$$
+:::
+
+::: {.proof}
+**Existence:**
+
+To define $\mathbb{E}[X \mid \mathcal{G}]$, consider the truncated sequence $X_n = X \wedge n$ for each $n \in \mathbb{N}$. Since $0 \le X_n \le n$, we have $X_n \in L^1(\Omega, \mathcal{F}, \mathbb{P})$, so the standard conditional expectation $\mathbb{E}[X_n \mid \mathcal{G}]$ exists for all $n \in \mathbb{N}$.
+
+By the monotonicity of conditional expectation on $L^1$, the sequence $(\mathbb{E}[X_n \mid \mathcal{G}])_{n=1}^\infty$ is non-decreasing almost surely. Therefore, we may define:
+$$
+\mathbb{E}[X \mid \mathcal{G}] := \lim_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \quad \text{a.s.}
+$$
+
+Now, fix $B \in \mathcal{G}$. Applying the classical Monotone Convergence Theorem (MCT) twice—first for the integrated sequence of non-negative $\mathcal{G}$-measurable functions, and second for $X_n \mathbb{I}_B$:
+$$
+\begin{align*}
+\mathbb{E}\big[\mathbb{E}[X \mid \mathcal{G}] \mathbb{I}_B\big] &= \mathbb{E}\left[\lim_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \mathbb{I}_B\right]\\
+& \stackrel{\text{MCT}}{=} \lim_{n \to \infty} \mathbb{E}\big[\mathbb{E}[X_n \mid \mathcal{G}] \mathbb{I}_B\big] \\
+&= \lim_{n \to \infty} \mathbb{E}[X_n \mathbb{I}_B]\\
+& \stackrel{\text{MCT}}{=} \mathbb{E}[X \mathbb{I}_B].
+\end{align*}
+$$
+This establishes the defining property. 
+
+**Uniqueness:** 
+
+Let $W=\mathbb E[X\mid\mathcal G]$. Suppose $Z\ge0$ is $\mathcal G$-measurable and satisfies $\mathbb E[Z1_B]=\mathbb E[X1_B]$ for all $B\in\mathcal G$. We want to show $Z=W$ a.s.
+
+For the finite-valued part, define $B_m=\{Z>W\}\cap\{Z\le m\}$. On $B_m$, we have
+$$ 
+0\le W<Z\le m, 
+$$
+so both $Z1_{B_m}$ and $W1_{B_m}$ are integrable. Therefore
+$$ 
+\begin{aligned} 
+\mathbb E[(Z-W)1_{B_m}] &=\mathbb E[Z1_{B_m}]-\mathbb E[W1_{B_m}]\\ 
+&=\mathbb E[X1_{B_m}]-\mathbb E[X1_{B_m}]\\ 
+&=0. 
+\end{aligned} 
+$$
+Since $(Z-W)1_{B_m}\ge0$, it follows that $(Z-W)1_{B_m}=0$ a.s. But $Z>W$ on $B_m$, so
+$P(B_m)=0$. Hence $P(Z>W,\;Z<\infty)=0$.
+
+We still need to deal with $Z=\infty$. Define $C_m=\{Z=\infty,\;W\le m\}$. If $P(C_m)>0$, then $\mathbb E[Z1_{C_m}]=\infty$, whereas $\mathbb E[W1_{C_m}]\le mP(C_m)<\infty$.
+But both quantities must equal $\mathbb E[X1_{C_m}]$, a contradiction. Hence
+$P(C_m)=0$ for all $m$. Since $\{Z=\infty,\;W<\infty\} = \bigcup_{m=1}^\infty C_m$,
+we obtain $P(Z=\infty,\;W<\infty)=0$. The same argument with $Z$ and $W$ interchanged gives $P(W>Z)=0$. Thus $Z=W \quad\text{a.s.}$
+
+:::
+
+::: {#rem-monotonicity}
+## Monotonicity of Extended Conditional Expectation
+The extended conditional expectation is monotone: if $0 \le X \le Y$ a.s., then
+$$
+\mathbb{E}[X \mid \mathcal{G}] = \lim_{n \to \infty} \mathbb{E}[X \wedge n \mid \mathcal{G}] \le \lim_{n \to \infty} \mathbb{E}[Y \wedge n \mid \mathcal{G}] = \mathbb{E}[Y \mid \mathcal{G}] \quad \text{a.s.}
+$$
+:::
+
+---
+
+## Integral Convergence Theorems for Conditional Expectation
+
+::: {#thm-conditional-convergence}
+## Conditional Convergence Theorems
+The conditional expectation operator $\mathbb{E}[\,\cdot \mid \mathcal{G}]$ satisfies the standard integral convergence theorems for non-negative random variables:
+
+a. **Conditional Monotone Convergence Theorem (MCT):** If $0 \le X_n \uparrow X$ a.s., then
+   $$
+   \lim_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] = \mathbb{E}\left[\lim_{n \to \infty} X_n \;\middle|\; \mathcal{G}\right] = \mathbb{E}[X \mid \mathcal{G}] \quad \text{a.s.}
+   $$
+b. **Conditional Fatou's Lemma:** If $X_n \ge 0$ a.s. for all $n \in \mathbb{N}$, then
+   $$
+   \mathbb{E}\left[\liminf_{n \to \infty} X_n \;\middle|\; \mathcal{G}\right] \le \liminf_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \quad \text{a.s.}
+   $$
+c. **Conditional Dominated Convergence Theorem (DCT):** If $X_n \to X$ a.s., $|X_n| \le Y$ a.s. for all $n \in \mathbb{N}$, and $Y \in L^1(\Omega, \mathcal{F}, \mathbb{P})$, then
+   $$
+   \mathbb{E}[X_n \mid \mathcal{G}] \to \mathbb{E}[X \mid \mathcal{G}] \quad \text{a.s. and in } L^1.
+   $$
+:::
+
+::: {.proof}
+**Proof of (a) Conditional MCT**
+
+By the monotonicity of $\mathbb{E}[\,\cdot \mid \mathcal{G}]$, the sequence $(\mathbb{E}[X_n \mid \mathcal{G}])_{n=1}^\infty$ is non-decreasing a.s., so its limit exists a.s. Fix $B \in \mathcal{G}$. By the standard Monotone Convergence Theorem:
+$$
+\begin{align*}
+\mathbb{E}\left[ \left(\lim_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}]\right) \mathbb{I}_B \right] &= \lim_{n \to \infty} \mathbb{E}\big[\mathbb{E}[X_n \mid \mathcal{G}] \mathbb{I}_B\big] \\
+&= \lim_{n \to \infty} \mathbb{E}[X_n \mathbb{I}_B] \\
+&= \mathbb{E}\left[\left(\lim_{n \to \infty} X_n\right) \mathbb{I}_B\right] \\
+&= \mathbb{E}[X \mathbb{I}_B].
+\end{align*}
+$$
+By definition of conditional expectation, this implies $\lim_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] = \mathbb{E}[X \mid \mathcal{G}]$ a.s.
+
+**Proof of (b) Conditional Fatou's Lemma**
+
+Let $Y_k = \inf_{n \ge k} X_n$. Then $Y_k \le X_n$ for all $n \ge k$, and $Y_k \uparrow \liminf_{n \to \infty} X_n$ as $k \to \infty$. Monotonicity implies $\mathbb{E}[Y_k \mid \mathcal{G}] \le \mathbb{E}[X_n \mid \mathcal{G}]$ for all $n \ge k$, so taking the infimum over $n \ge k$ gives:
+$$
+\mathbb{E}[Y_k \mid \mathcal{G}] \le \inf_{n \ge k} \mathbb{E}[X_n \mid \mathcal{G}] \quad \text{a.s.}
+$$
+Taking the limit as $k \to \infty$ and applying the Conditional Monotone Convergence Theorem to $Y_k \uparrow \liminf_{n \to \infty} X_n$:
+$$
+\begin{align*}
+\mathbb{E}\left[\liminf_{n \to \infty} X_n \;\middle|\; \mathcal{G}\right]& = \lim_{k \to \infty} \mathbb{E}[Y_k \mid \mathcal{G}] \\
+&\le \lim_{k \to \infty} \inf_{n \ge k} \mathbb{E}[X_n \mid \mathcal{G}]\\
+& = \liminf_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \quad \text{a.s.}
+\end{align*}
+$$
+
+**Proof of (c) Conditional DCT**
+First, by the standard Dominated Convergence Theorem, $X_n \to X$ in $L^1$, i.e., $\mathbb{E}[|X_n - X|] \to 0$. Since $\pm(X_n - X) \le |X_n - X|$, monotonicity of conditional expectation gives $|\mathbb{E}[X_n - X \mid \mathcal{G}]| \le \mathbb{E}[|X_n - X| \mid \mathcal{G}]$ a.s. Taking total expectations:
+$$
+\begin{align*}
+\left\| \mathbb{E}[X_n \mid \mathcal{G}] - \mathbb{E}[X \mid \mathcal{G}] \right\|_1 &= \left\| \mathbb{E}[X_n - X \mid \mathcal{G}] \right\|_1 \\
+&\le \mathbb{E}\big[\mathbb{E}[|X_n - X| \mid \mathcal{G}]\big] = \|X_n - X\|_1 \to 0,
+\end{align*}
+$$
+which proves $\mathbb{E}[X_n \mid \mathcal{G}] \to \mathbb{E}[X \mid \mathcal{G}]$ in $L^1$.
+
+For almost-sure convergence, note that $0 \le Y \pm X_n \text{ a.s.}$ Apply Conditional Fatou's Lemma to both sequences:
+
+1. For $Y + X_n \ge 0$:
+   $$
+   \begin{align*}
+   \mathbb{E}[Y + X \mid \mathcal{G}] &= \mathbb{E}\left[\liminf_{n \to \infty} (Y + X_n) \;\middle|\; \mathcal{G}\right] \\
+   &\le \liminf_{n \to \infty} \mathbb{E}[Y + X_n \mid \mathcal{G}] \\
+   &= \mathbb{E}[Y \mid \mathcal{G}] + \liminf_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \quad \text{a.s.}
+   \end{align*}
+   $$
+   Subtracting $\mathbb{E}[Y \mid \mathcal{G}] < \infty$ a.s. yields $\mathbb{E}[X \mid \mathcal{G}] \le \liminf_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}]$ a.s.
+
+2. For $Y - X_n \ge 0$:
+   $$
+   \begin{align*}
+   \mathbb{E}[Y - X \mid \mathcal{G}] &= \mathbb{E}\left[\liminf_{n \to \infty} (Y - X_n) \;\middle|\; \mathcal{G}\right] \\
+   &\le \liminf_{n \to \infty} \mathbb{E}[Y - X_n \mid \mathcal{G}] \\
+   &= \mathbb{E}[Y \mid \mathcal{G}] - \limsup_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \quad \text{a.s.}
+   \end{align*}
+   $$
+   Subtracting $\mathbb{E}[Y \mid \mathcal{G}] < \infty$ a.s. and multiplying by $-1$ yields $\limsup_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \le \mathbb{E}[X \mid \mathcal{G}]$ a.s.
+
+Combining both inequalities yields:
+$$
+\mathbb{E}[X \mid \mathcal{G}] \le \liminf_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \le \limsup_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] \le \mathbb{E}[X \mid \mathcal{G}] \quad \text{a.s.,}
+$$
+hence $\lim_{n \to \infty} \mathbb{E}[X_n \mid \mathcal{G}] = \mathbb{E}[X \mid \mathcal{G}]$ a.s.
+:::
+
+---
+
+## Conditional Jensen's Inequality and $L^p$ Contractions
+
+::: {#thm-conditional-jensen}
+## Conditional Jensen's Inequality
+Let $X \in L^1(\Omega, \mathcal{F}, \mathbb{P})$ and let $\mathcal{G} \subseteq \mathcal{F}$ be a sub-$\sigma$-field. If $\varphi: \mathbb{R} \to \mathbb{R}$ is convex and $\varphi(X) \in L^1(\Omega, \mathcal{F}, \mathbb{P})$, then
+$$
+\varphi(\mathbb{E}[X \mid \mathcal{G}]) \le \mathbb{E}[\varphi(X) \mid \mathcal{G}] \quad \text{a.s.}
+$$ {#eq-jensen}
+In particular, $\mathbb{E}[\varphi(\mathbb{E}[X \mid \mathcal{G}])] \le \mathbb{E}[\varphi(X)]$.
+:::
+
+::: {.proof}
+To illustrate the underlying mechanism, we first consider the smooth case where $\varphi \in C^2(\mathbb{R})$ with $\varphi'' > 0$. By Taylor's theorem, for any $x, y \in \mathbb{R}$:
+$$
+\varphi(y) = \varphi(x) + \varphi'(x)(y - x) + \int_x^y (y - t) \varphi''(t) \, dt \ge \varphi(x) + \varphi'(x)(y - x).
+$$
+Substituting $y = X$ and $x = \mathbb{E}[X \mid \mathcal{G}]$ (which is $\mathcal{G}$-measurable):
+$$
+\varphi(X) \ge \varphi(\mathbb{E}[X \mid \mathcal{G}]) + \varphi'(\mathbb{E}[X \mid \mathcal{G}]) (X - \mathbb{E}[X \mid \mathcal{G}]) \quad \text{a.s.}
+$$
+Taking conditional expectations with respect to $\mathcal{G}$ on both sides, and noting that $\varphi(\mathbb{E}[X \mid \mathcal{G}])$ and $\varphi'(\mathbb{E}[X \mid \mathcal{G}])$ are $\mathcal{G}$-measurable:
+$$
+\begin{aligned}
+\mathbb{E}[\varphi(X) \mid \mathcal{G}] &\ge \mathbb{E}\left[ \varphi(\mathbb{E}[X \mid \mathcal{G}]) + \varphi'(\mathbb{E}[X \mid \mathcal{G}]) (X - \mathbb{E}[X \mid \mathcal{G}]) \;\middle|\; \mathcal{G} \right] \\
+&= \varphi(\mathbb{E}[X \mid \mathcal{G}]) + \varphi'(\mathbb{E}[X \mid \mathcal{G}]) \underbrace{\mathbb{E}[X - \mathbb{E}[X \mid \mathcal{G}] \mid \mathcal{G}]}_{= 0} \\
+&= \varphi(\mathbb{E}[X \mid \mathcal{G}]) \quad \text{a.s.}
+\end{aligned}
+$$
+
+For a general convex function $\varphi$, recall that $\varphi$ is the supremum of a countable collection of affine lines: $\varphi(t) = \sup_{k \in \mathbb{N}} (a_k t + b_k)$. For each $k \in \mathbb{N}$:
+$$
+\varphi(X) \ge a_k X + b_k \implies \mathbb{E}[\varphi(X) \mid \mathcal{G}] \ge \mathbb{E}[a_k X + b_k \mid \mathcal{G}] = a_k \mathbb{E}[X \mid \mathcal{G}] + b_k \quad \text{a.s.}
+$$
+Taking the supremum over $k \in \mathbb{N}$ yields:
+$$
+\mathbb{E}[\varphi(X) \mid \mathcal{G}] \ge \sup_{k \in \mathbb{N}} \left( a_k \mathbb{E}[X \mid \mathcal{G}] + b_k \right) = \varphi(\mathbb{E}[X \mid \mathcal{G}]) \quad \text{a.s.}
+$$
+Taking total expectations on both sides yields $\mathbb{E}[\varphi(\mathbb{E}[X \mid \mathcal{G}])] \le \mathbb{E}[\varphi(X)]$.
+:::
+
+::: {#cor-lp-contraction}
+## $L^p$ Contraction Property
+For $1 \le p < \infty$, the conditional expectation operator $\mathbb{E}[\,\cdot \mid \mathcal{G}]: L^p(\Omega, \mathcal{F}, \mathbb{P}) \to L^p(\Omega, \mathcal{G}, \mathbb{P})$ is a non-expansive contraction; that is, for all $X \in L^p$:
+$$
+\|\mathbb{E}[X \mid \mathcal{G}]\|_p \le \|X\|_p.
+$$ {#eq-lp-contraction}
+:::
+
+::: {.proof}
+Consider the function $\varphi(x) = |x|^p$. Since $p \ge 1$, $\varphi$ is convex on $\mathbb{R}$. If $X \in L^p$, then $\varphi(X) = |X|^p \in L^1$.
+
+Applying Conditional Jensen's Inequality (@eq-jensen):
+$$
+\left| \mathbb{E}[X \mid \mathcal{G}] \right|^p \le \mathbb{E}\left[ |X|^p \;\middle|\; \mathcal{G} \right] \quad \text{a.s.}
+$$
+Taking total expectations on both sides:
+$$
+\mathbb{E}\left[ \left| \mathbb{E}[X \mid \mathcal{G}] \right|^p \right] \le \mathbb{E}\left[ \mathbb{E}\left[ |X|^p \;\middle|\; \mathcal{G} \right] \right] = \mathbb{E}\left[ |X|^p \right].
+$$
+Taking the $p$-th root gives $\|\mathbb{E}[X \mid \mathcal{G}]\|_p \le \|X\|_p$.
+:::
+
+---
+
+## Takeaways
+
+1. **Extension to $X \ge 0$.** Conditional expectation extends beyond $L^1$ by setting $\mathbb{E}[X \mid \mathcal{G}] := \lim_{n \to \infty} \mathbb{E}[X \wedge n \mid \mathcal{G}]$ a.s. The limit is non-decreasing; MCT applied twice (once to $\mathbb{E}[X_n \mid \mathcal{G}]\mathbb{I}_B$ and once to $X_n \mathbb{I}_B$) verifies the defining identity, and uniqueness follows by truncating to bounded sets in $\mathcal{G}$.
+
+2. **Conditional MCT and Fatou.** If $0 \le X_n \uparrow X$ a.s., then $\mathbb{E}[X_n \mid \mathcal{G}] \uparrow \mathbb{E}[X \mid \mathcal{G}]$ a.s. (Conditional MCT), proved by fixing $B \in \mathcal{G}$ and applying ordinary MCT to pass the limit through the integral on both sides. Conditional Fatou follows by setting $Y_k = \inf_{n \ge k} X_n \uparrow \liminf_n X_n$: monotonicity gives $\mathbb{E}[Y_k \mid \mathcal{G}] \le \inf_{n \ge k} \mathbb{E}[X_n \mid \mathcal{G}]$ a.s. (by a countable intersection of null sets), and Conditional MCT takes the limit on the left.
+
+3. **Conditional DCT.** If $X_n \to X$ a.s. and $|X_n| \le Y \in L^1$, then $\mathbb{E}[X_n \mid \mathcal{G}] \to \mathbb{E}[X \mid \mathcal{G}]$ in $L^1$ and a.s. The $L^1$ part uses $|\mathbb{E}[Z \mid \mathcal{G}]| \le \mathbb{E}[|Z| \mid \mathcal{G}]$ a.s. (from monotonicity applied to $\pm Z \le |Z|$), giving $\|\mathbb{E}[Z \mid \mathcal{G}]\|_1 \le \|Z\|_1$. The a.s. part applies Conditional Fatou to the non-negative sequences $Y \pm X_n$: the two inequalities $\mathbb{E}[X \mid \mathcal{G}] \le \liminf_n \mathbb{E}[X_n \mid \mathcal{G}]$ and $\limsup_n \mathbb{E}[X_n \mid \mathcal{G}] \le \mathbb{E}[X \mid \mathcal{G}]$ are obtained by subtracting $\mathbb{E}[Y \mid \mathcal{G}] < \infty$ a.s. (since $Y \in L^1$).
+
+4. **Conditional Jensen and $L^p$ contraction.** For convex $\varphi$ with $\varphi(X) \in L^1$: $\varphi(\mathbb{E}[X \mid \mathcal{G}]) \le \mathbb{E}[\varphi(X) \mid \mathcal{G}]$ a.s. The proof represents $\varphi = \sup_k (a_k t + b_k)$ as a countable supremum of affine functions; linearity of conditional expectation gives the inequality for each affine minorant, and taking the supremum recovers $\varphi(\mathbb{E}[X \mid \mathcal{G}])$. As a special case with $\varphi(t) = |t|^p$ ($p \ge 1$): $\|\mathbb{E}[X \mid \mathcal{G}]\|_p \le \|X\|_p$.

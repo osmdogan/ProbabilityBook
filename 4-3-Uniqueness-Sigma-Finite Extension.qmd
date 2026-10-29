@@ -1,0 +1,164 @@
+
+# Lecture 4.3: Uniqueness of Sigma-Finite Extension
+
+## Review of Driver's Topological Extension Approach
+
+Let $(\Omega, \mathcal{A}, \mu)$ be a finite premeasure space, where $\mathcal{A} \subseteq 2^\Omega$ is an algebra (field) of sets and $\mu: \mathcal{A} \to [0, \mu(\Omega)]$ is a premeasure.
+
+1. **Carathéodory Outer Measure:**
+   Define $\mu^*: 2^\Omega \to [0, \mu(\Omega)]$ by:
+   $$
+   \mu^*(E) := \inf \left\{ \sum_{j=1}^\infty \mu(A_j) : \{A_j\}_{j=1}^\infty \subseteq \mathcal{A}, \, E \subseteq \bigcup_{j=1}^\infty A_j \right\}.
+   $${#eq-caratheodory-outer-def}
+   * The function $\mu^*$ is monotone and countably subadditive.
+   * If $\nu$ is any measure on a $\sigma$-field $\mathcal{F} \supseteq \mathcal{A}$ extending $\mu$, then $\nu \le \mu^*$ on $\mathcal{F}$.
+   * If $\nu$ is a finitely additive measure, then $\nu^* \le \nu$, and $\nu = \nu^*$ if and only if $\nu$ is countably additive.
+
+2. **Outer Pseudo-Metric:**
+   The set function $d_\mu: 2^\Omega \times 2^\Omega \to [0, \mu(\Omega)]$ given by $d_\mu(E, F) := \mu^*(E \Delta F)$ defines a well-behaved pseudo-metric with respect to unions, intersections, and complements.
+
+3. **Lipschitz Extension:**
+   $\mu: \mathcal{A} \to \mathbb{R}$ is $1$-Lipschitz on $(\mathcal{A}, d_\mu)$, and therefore extends uniquely to a continuous $1$-Lipschitz function $\overline{\mu}: \overline{\mathcal{A}} \to [0, \mu(\Omega)]$.
+
+4. **Invariance of the Closure:**
+   Let $\mathcal{A}_\sigma := \left\{ \bigcup_{n=1}^\infty A_n : \{A_n\}_{n=1}^\infty \subseteq \mathcal{A} \right\}$ denote the collection of countable unions of sets in $\mathcal{A}$. In $(2^\Omega, d_\mu)$, we have $\overline{\mathcal{A}_\sigma} = \overline{\mathcal{A}}$, and $\overline{\mu} = \mu^*$ on $\mathcal{A}_\sigma$.
+
+5. **Structure of $\overline{\mathcal{A}}$:**
+   The closure $\overline{\mathcal{A}}$ in $(2^\Omega, d_\mu)$ is a $\sigma$-field.
+
+6. **Outer Approximation:**
+   For any $B \in \overline{\mathcal{A}}$ and $\epsilon > 0$, there exists $C \in \mathcal{A}_\sigma$ such that $B \subseteq C$ and $\mu^*(C \setminus B) = d_\mu(B, C) < \epsilon$. Using this together with $\overline{\mu} = \mu^*$ on $\mathcal{A}_\sigma$, we deduce $\mu^* = \overline{\mu}$ on $\overline{\mathcal{A}}$.
+
+7. **Countable Additivity:**
+   The extension $\overline{\mu}$ is a countably additive measure on $\overline{\mathcal{A}} \supseteq \sigma(\mathcal{A})$.
+
+---
+
+## Uniqueness Theorem in the Finite Case
+
+::: {#thm-uniqueness-finite}
+## Uniqueness of Extension
+Let $(\Omega, \mathcal{A}, \mu)$ be a finite premeasure space. If $\mathcal{F}$ is a $\sigma$-field satisfying $\mathcal{A} \subseteq \mathcal{F} \subseteq \overline{\mathcal{A}}$, and $\nu$ is a measure on $\mathcal{F}$ extending $\mu$ (i.e., $\nu\vert{}_{\mathcal{A}} = \mu$), then:
+$$
+\nu = \overline{\mu}\big\vert{}_{\mathcal{F}}.
+$${#eq-uniqueness-finite-statement}
+:::
+
+::: {.proof}
+## Proof of @thm-uniqueness-finite
+Let $A, B \in \mathcal{F}$. By finite additivity and monotonicity of $\nu$ on $\mathcal{F}$:
+$$\nu(B) \le \nu(A \cup B) = \nu(A) + \nu(B \setminus A) \le \nu(A) + \nu(A \Delta B),$$
+which implies $\nu(B) - \nu(A) \le \nu(A \Delta B)$. Reversing the roles of $A$ and $B$ yields:
+$$
+\vert{}\nu(B) - \nu(A)\vert{} \le \nu(A \Delta B) \le \mu^*(A \Delta B) = d_\mu(A, B).
+$${#eq-nu-lipschitz-bound}
+Thus, $\nu: \mathcal{F} \to \mathbb{R}$ is $1$-Lipschitz continuous with respect to $d_\mu$.
+
+Now let $E \in \mathcal{F} \subseteq \overline{\mathcal{A}}$. By definition of the closure $\overline{\mathcal{A}}$, there exists a sequence $(A_n)_{n=1}^\infty \subseteq \mathcal{A}$ such that $d_\mu(A_n, E) \to 0$ as $n \to \infty$. By $1$-Lipschitz continuity of both $\nu$ and $\overline{\mu}$:
+$$
+\nu(E) = \lim_{n \to \infty} \nu(A_n) = \lim_{n \to \infty} \mu(A_n) = \overline{\mu}(E).$${#eq-nu-equals-mubar-limit}
+Hence $\nu = \overline{\mu}\big\vert{}_{\mathcal{F}}$. 
+:::
+
+---
+
+## Extension to $\sigma$-Finite Premeasure Spaces
+
+::: {#def-sigma-finite-premeasure}
+## $\sigma$-Finite Premeasure Space
+A premeasure space $(\Omega, \mathcal{A}, \mu)$ is called **$\sigma$-finite** if there exists a sequence $\{A_n\}_{n=1}^\infty \subseteq \mathcal{A}$ such that $\Omega = \bigcup_{n=1}^\infty A_n$ and $\mu(A_n) < \infty$ for all $n \in \mathbb{N}$.
+:::
+
+By defining $\Omega_1 := A_1$ and $\Omega_n := A_n \setminus A_{n-1} \in \mathcal{A}$ for $n \ge 2$, we obtain a pairwise disjoint sequence $\{\Omega_n\}_{n=1}^\infty \subseteq \mathcal{A}$ such that $\Omega = \bigcup_{n=1}^\infty \Omega_n$ and $\mu(\Omega_n) \le \mu(A_n) < \infty$.
+
+For each $n \in \mathbb{N}$, define the localized premeasure $\mu_n: \mathcal{A} \to [0, \infty)$ by:
+$$
+\mu_n(A) := \mu(A \cap \Omega_n).
+$${#eq-localized-premeasure-def}
+Then $(\Omega_n, \mathcal{A}, \mu_n)$ is a finite premeasure space. By the finite extension theorem, each $\mu_n$ extends uniquely to a finite measure $\overline{\mu}_n$ on $\overline{\mathcal{A}}^n \supseteq \sigma(\mathcal{A})$.
+
+::: {#thm-sigma-finite-extension}
+## $\sigma$-Finite Measure Extension Theorem
+The set function $\overline{\mu} := \sum_{n=1}^\infty \overline{\mu}_n$ is the unique measure on $\sigma(\mathcal{A})$ that extends $\mu$.
+:::
+
+::: {.proof}
+## Proof of @thm-sigma-finite-extension 
+
+1. **Countable Additivity of $\overline{\mu}$:**
+   Since each $\overline{\mu}_n$ is a countably additive measure on $\sigma(\mathcal{A})$, the countable sum of measures $\overline{\mu} = \sum_{n=1}^\infty \overline{\mu}_n$ is automatically a countably additive measure on $\sigma(\mathcal{A})$. Moreover, for any $A \in \mathcal{A}$:
+   $$
+   \overline{\mu}(A) = \sum_{n=1}^\infty \overline{\mu}_n(A) = \sum_{n=1}^\infty \mu(A \cap \Omega_n) = \mu\left( \bigcup_{n=1}^\infty (A \cap \Omega_n) \right) = \mu(A),
+   $$
+
+   so $\overline{\mu}$ extends $\mu$ on $\mathcal{A}$.
+
+2. **Uniqueness:**
+   Suppose $\nu$ is any measure on $\sigma(\mathcal{A})$ such that $\nu\vert{}_{\mathcal{A}} = \mu$. For each $n \in \mathbb{N}$, define the localized measure $\nu_n$ on $\sigma(\mathcal{A})$ by:
+   $$
+   \nu_n(E) := \nu(E \cap \Omega_n) \quad \text{for } E \in \sigma(\mathcal{A}).
+   $${#eq-localized-nu-def}
+   For any $A \in \mathcal{A}$, since $A \cap \Omega_n \in \mathcal{A}$, we have:
+   $$
+   \nu_n(A) = \nu(A \cap \Omega_n) = \mu(A \cap \Omega_n) = \mu_n(A).
+   $$
+
+   Thus, $\nu_n$ is a finite measure on $\sigma(\mathcal{A})$ extending the finite premeasure $\mu_n$ on $\mathcal{A}$. By uniqueness in the finite case (@thm-uniqueness-finite), we must have:
+   $$
+   \nu_n = \overline{\mu}_n\big\vert{}_{\sigma(\mathcal{A})} \quad \text{for all } n \in \mathbb{N}.
+   $${#eq-uniqueness-component-wise}
+
+   Finally, for any $E \in \sigma(\mathcal{A})$, since $E = \bigcup_{n=1}^\infty (E \cap \Omega_n)$ as a disjoint union, countable additivity of $\nu$ yields:
+   $$
+   \nu(E) = \sum_{n=1}^\infty \nu(E \cap \Omega_n) = \sum_{n=1}^\infty \nu_n(E) = \sum_{n=1}^\infty \overline{\mu}_n(E) = \overline{\mu}(E).
+   $${#eq-uniqueness-sum-reconstruction}
+
+Hence, $\nu = \overline{\mu}$ on $\sigma(\mathcal{A})$. 
+:::
+
+---
+
+## Approximation Properties on $\sigma(\mathcal{A})$
+
+::: {#prp-approximation-properties-sigma-finite}
+## Outer and Algebra Approximation Characterizations
+Let $(\Omega, \mathcal{A}, \mu)$ be a $\sigma$-finite premeasure space, and let $\overline{\mu}$ denote the extended measure on $\sigma(\mathcal{A})$.
+
+1. **Outer Measure Coincidence:** $\overline{\mu} = \mu^*$ on $\sigma(\mathcal{A})$.
+2. **Outer Approximation by $\mathcal{A}_\sigma$:** If $B \in \sigma(\mathcal{A})$ and $\epsilon > 0$, there exists $C \in \mathcal{A}_\sigma$ such that $B \subseteq C$ and:
+   $$
+   \overline{\mu}(C \setminus B) < \epsilon.
+   $${#eq-outer-approx-sigma-finite}
+3. **Approximation by Algebra Elements:** Moreover, if $\overline{\mu}(B) < \infty$, then for every $\epsilon > 0$, there exists $A \in \mathcal{A}$ such that:
+   $$
+   \overline{\mu}(A \Delta B) < \epsilon.
+   $${#eq-algebra-approx-symmetric-diff}
+:::
+
+::: {.proof}
+*Proof of Part 3.* 
+Fix $\epsilon > 0$ and assume $\overline{\mu}(B) < \infty$. 
+
+By Part 2, choose $C \in \mathcal{A}_\sigma$ such that $B \subseteq C$ and $\overline{\mu}(C \setminus B) < \frac{\epsilon}{2}$. 
+
+Since $C \in \mathcal{A}_\sigma$, there exists an increasing sequence of algebra sets $(A_n)_{n=1}^\infty \subseteq \mathcal{A}$ such that $A_n \uparrow C$. Note that:
+$$
+\overline{\mu}(C) \le \overline{\mu}(C \setminus B) + \overline{\mu}(B) < \frac{\epsilon}{2} + \overline{\mu}(B) < \infty.
+$${#eq-c-finite-measure}
+
+Since $\overline{\mu}(C) < \infty$ and $A_n \uparrow C$, continuity of measure from below implies:
+$$
+\overline{\mu}(C \setminus A_n) = \overline{\mu}(C) - \overline{\mu}(A_n) \xrightarrow{n \to \infty} 0.
+$${#eq-an-c-diff-limit}
+Choose $n \in \mathbb{N}$ large enough such that $\overline{\mu}(C \setminus A_n) < \frac{\epsilon}{2}$.
+
+Set $A := A_n \in \mathcal{A}$. Observing the set inclusion $A \Delta B \subseteq (C \setminus B) \cup (C \setminus A)$:
+$$
+\overline{\mu}(A \Delta B) \le \overline{\mu}(C \setminus B) + \overline{\mu}(C \setminus A) < \frac{\epsilon}{2} + \frac{\epsilon}{2} = \epsilon.
+$${#eq-symmetric-diff-final-bound}
+
+This completes the proof. 
+:::
+
+---
+

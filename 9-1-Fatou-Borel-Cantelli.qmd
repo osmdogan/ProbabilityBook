@@ -1,0 +1,280 @@
+# Lecture 9.1: Fatou and Borel-Cantelli
+
+## Null Sets and Almost Everywhere Properties
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space.
+
+::: {#def-null-set-ae}
+## Null Sets and Almost Everywhere Convergence
+A set $N \in \mathcal{F}$ is called a **null set** (or measure zero set) if $\mu(N) = 0$.
+
+A statement $P(\omega)$ depending on $\omega \in \Omega$ is said to hold **almost everywhere (a.e.)** with respect to $\mu$ (or **almost surely (a.s.)** if $\mu = \mathbb{P}$ is a probability measure) if there exists a null set $N \in \mathcal{F}$ such that:
+$$
+\{\omega \in \Omega \mid P(\omega) \text{ is false}\} \subseteq N
+$$
+:::
+
+::: {#lem-integration-null-sets}
+## Integration over Null Sets
+Let $\varphi \in \mathbb{S}_{\mathcal{F}}^+$ be a non-negative simple function and let $E \in \mathcal{F}$ with $\mu(E) = 0$. Then:
+$$
+\int_E \varphi \, d\mu := \int_{\Omega} \varphi \mathbf{1}_E \, d\mu = 0 \quad \text{and} \quad \int_{\Omega} \varphi \, d\mu = \int_{E^c} \varphi \, d\mu
+$$ {#eq-null-set-integration}
+:::
+
+::: {.proof}
+## Proof of @lem-integration-null-sets
+Let $\varphi = \sum_{j=1}^{n} \alpha_j \mathbf{1}_{A_j}$ with $\alpha_j \ge 0$ and $A_j \in \mathcal{F}$. Then $\varphi \mathbf{1}_E = \sum_{j=1}^{n} \alpha_j \mathbf{1}_{A_j \cap E}$.
+
+By definition of simple integrals:
+$$
+\int_E \varphi \, d\mu = \sum_{j=1}^{n} \alpha_j \mu(A_j \cap E)
+$$
+
+Since $A_j \cap E \subseteq E$ and $\mu(E) = 0$, monotonicity of measure gives $\mu(A_j \cap E) = 0$ for all $j \in \{1, \dots, n\}$. Hence $\int_E \varphi \, d\mu = 0$.
+
+Using the disjoint identity $\mathbf{1}_{\Omega} = \mathbf{1}_E + \mathbf{1}_{E^c}$ and additivity:
+$$
+\int_{\Omega} \varphi \, d\mu = \int_{\Omega} \varphi \mathbf{1}_E \, d\mu + \int_{\Omega} \varphi \mathbf{1}_{E^c} \, d\mu = 0 + \int_{E^c} \varphi \, d\mu = \int_{E^c} \varphi \, d\mu
+$$
+:::
+
+The following proposition summarizes some important properties of $L^+$ integrals that hold almost everywhere.
+
+::: {#prp-ae-integral-properties}
+## Almost Everywhere Properties of $L^+$ Integrals
+Let $f, g \in L^+(\Omega, \mathcal{F})$.
+
+1. **Monotonicity:** If $f \le g$ a.e., then $\int f \, d\mu \le \int g \, d\mu$.
+2. **Equivalence:** If $f = g$ a.e., then $\int f \, d\mu = \int g \, d\mu$.
+3. **Vanishing Integral:** $\int f \, d\mu = 0 \iff f = 0$ a.e.
+:::
+
+::: {.proof}
+## Proof of @prp-ae-integral-properties
+We prove each assertion step-by-step.
+
+### Proof of Part 1
+Let $E = \{\omega \in \Omega \mid f(\omega) > g(\omega)\} \in \mathcal{F}$. By assumption, $\mu(E) = 0$. For any simple function $\varphi \in \mathbb{S}_{\mathcal{F}}$ with $0 \le \varphi \le f$, we have $\mathbf{1}_{E^c} \varphi \le \mathbf{1}_{E^c} f \le \mathbf{1}_{E^c} g \le g$.
+
+By @lem-integration-null-sets and monotonicity on simple functions:
+$$
+\int \varphi \, d\mu = \int_{E^c} \varphi \, d\mu \le \int g \, d\mu
+$$
+Taking the supremum over all simple $0 \le \varphi \le f$ gives $\int f \, d\mu \le \int g \, d\mu$.
+
+### Proof of Part 2
+If $f = g$ a.e., then $f \le g$ a.e. and $g \le f$ a.e.. Applying Part 1 twice yields $\int f \, d\mu \le \int g \, d\mu$ and $\int g \, d\mu \le \int f \, d\mu$, so $\int f \, d\mu = \int g \, d\mu$.
+
+### Proof of Part 3
+$(\Leftarrow)$ If $f = 0$ a.e., then by Part 2, $\int f \, d\mu = \int 0 \, d\mu = 0$.
+
+$(\Rightarrow)$ Assume $\int f \, d\mu = 0$. For each $n \in \mathbb{N}$, the pointwise bound $\frac{1}{n}\mathbf{1}_{\{f \ge 1/n\}} \le f$ together with monotonicity of integration gives:
+$$
+\frac{1}{n}\,\mu\!\left(\left\{f \ge \frac{1}{n}\right\}\right) = \int \frac{1}{n}\mathbf{1}_{\{f \ge 1/n\}} \, d\mu \le \int f \, d\mu = 0 \implies \mu\!\left(\left\{f \ge \frac{1}{n}\right\}\right) = 0
+$$
+
+Notice that $\{f > 0\} = \bigcup_{n=1}^{\infty} \left\{f \ge \frac{1}{n}\right\}$. By countable subadditivity of measure:
+$$
+\mu(\{f > 0\}) \le \sum_{n=1}^{\infty} \mu\left(\left\{f \ge \frac{1}{n}\right\}\right) = 0 \implies f = 0 \text{ a.e.}
+$$
+:::
+
+The following corollary is a version of the Monotone Convergence Theorem that holds almost everywhere.
+
+::: {#cor-mct-ae}
+## Monotone Convergence Theorem (a.e. Version)
+If $(f_n)_{n=1}^\infty \subset L^+$ satisfies $f_n \uparrow f$ a.e. as $n \to \infty$, then:
+$$
+\int f_n \, d\mu \uparrow \int f \, d\mu
+$$ {#eq-mct-ae}
+:::
+
+::: {.proof}
+## Proof of @cor-mct-ae
+Let $E = \{\omega \in \Omega \mid f_n(\omega) \uparrow f(\omega) \text{ fails}\} \in \mathcal{F}$, so $\mu(E) = 0$. Then $f_n \mathbf{1}_{E^c} \uparrow f \mathbf{1}_{E^c}$ pointwise everywhere on $\Omega$. 
+
+Applying the pointwise Monotone Convergence Theorem and @lem-integration-null-sets:
+$$
+\int f_n \, d\mu = \int f_n \mathbf{1}_{E^c} \, d\mu \uparrow \int f \mathbf{1}_{E^c} \, d\mu = \int f \, d\mu
+$$
+:::
+
+---
+
+## Markov's Inequality & Fatou's Lemma
+- Markov's inequality shows that the measure of the set where a non-negative function exceeds a threshold is bounded by the integral of the function. 
+
+- Fatou's lemma provides a lower bound for the integral of the limit inferior of a sequence of non-negative functions.
+
+::: {#thm-markov}
+## Markov's Inequality
+Let $f \in L^+$, $\epsilon > 0$, and $p > 0$. Then:
+$$
+\mu(\{f \ge \epsilon\}) \le \frac{1}{\epsilon^p} \int f^p \, d\mu.
+$$ {#eq-markov-inequality}
+:::
+
+::: {.proof}
+## Proof of @thm-markov
+Observe the indicator pointwise inequality:
+$$
+\mathbf{1}_{\{f \ge \epsilon\}} \le \left( \frac{f}{\epsilon} \right)^p \mathbf{1}_{\{f \ge \epsilon\}} \le \left( \frac{f}{\epsilon} \right)^p.
+$$
+
+Integrating both sides with respect to $\mu$ and using monotonicity:
+$$
+\mu(\{f \ge \epsilon\}) = \int \mathbf{1}_{\{f \ge \epsilon\}} \, d\mu \le \int \left( \frac{f}{\epsilon} \right)^p \, d\mu = \frac{1}{\epsilon^p} \int f^p \, d\mu.
+$$
+:::
+
+::: {#thm-fatou}
+## Fatou's Lemma
+Let $(f_n)_{n=1}^\infty \subset L^+$ be any sequence of non-negative measurable functions. Then:
+$$
+\int \liminf_{n \to \infty} f_n \, d\mu \le \liminf_{n \to \infty} \int f_n \, d\mu.
+$$ {#eq-fatou-lemma}
+:::
+
+::: {.proof}
+## Proof of @thm-fatou
+For each $k \in \mathbb{N}$, define the pointwise infimum sequence $g_k := \inf_{n \ge k} f_n \in L^+$.
+
+1. **Monotonicity:** As $k$ increases, the infimum is taken over smaller sets, so $g_k \le g_{k+1}$ for all $k$.
+2. **Pointwise Limit:** By definition of limit inferior, $g_k \uparrow \liminf_{n \to \infty} f_n$ pointwise as $k \to \infty$.
+
+Applying the Monotone Convergence Theorem to the non-decreasing sequence $(g_k)_{k=1}^\infty$:
+$$
+\int \liminf_{n \to \infty} f_n \, d\mu = \int \lim_{k \to \infty} g_k \, d\mu = \lim_{k \to \infty} \int g_k \, d\mu
+$$ {#eq-fatou-step1}
+
+For any fixed $n \ge k$, $g_k \le f_n$ pointwise. Monotonicity gives $\int g_k \, d\mu \le \int f_n \, d\mu$ for all $n \ge k$. Taking the infimum over $n \ge k$ on the right side yields:
+$$
+\int g_k \, d\mu \le \inf_{n \ge k} \int f_n \, d\mu.
+$$ {#eq-fatou-step2}
+
+Taking the limit as $k \to \infty$ on both sides of @eq-fatou-step2 and combining with @eq-fatou-step1:
+$$
+\int \liminf_{n \to \infty} f_n \, d\mu = \lim_{k \to \infty} \int g_k \, d\mu \le \lim_{k \to \infty} \left( \inf_{n \ge k} \int f_n \, d\mu \right) = \liminf_{n \to \infty} \int f_n \, d\mu.
+$$
+:::
+
+---
+
+## Applications: Almost Disjoint Additivity & First Borel-Cantelli Lemma
+
+## Almost Disjoint Additivity
+
+- The following proposition shows that the additivity property of measures extends to sequences of events that are disjoint almost everywhere.
+
+::: {#prp-almost-disjoint-additivity}
+Let $(A_n)_{n=1}^\infty \subset \mathcal{F}$ be a sequence of events that are **disjoint a.e.**, meaning $\mu(A_n \cap A_m) = 0$ for all $n \ne m$. Then:
+$$
+\mu\left( \bigcup_{n=1}^{\infty} A_n \right) = \sum_{n=1}^{\infty} \mu(A_n)
+$$ {#eq-almost-disjoint-additivity}
+:::
+
+::: {.proof}
+## Proof of @prp-almost-disjoint-additivity
+
+**Step 1: Construct the null set.**
+Define $N = \bigcup_{n \ne m} (A_n \cap A_m) \in \mathcal{F}$. By countable subadditivity:
+$$
+\mu(N) \le \sum_{n \ne m} \mu(A_n \cap A_m) = 0,
+$$
+so $\mu(N) = 0$.
+
+**Step 2: Establish the pointwise identity on $N^c$.**
+The sets $(A_n \cap N^c)_{n \ge 1}$ are pairwise disjoint: if $\omega \in (A_n \cap N^c) \cap (A_m \cap N^c)$ for some $n \ne m$, then $\omega \in A_n \cap A_m \subseteq N$, contradicting $\omega \in N^c$. Therefore each $\omega \in N^c$ belongs to at most one $A_n$, so:
+$$
+\mathbf{1}_{\bigcup_{n=1}^\infty A_n}(\omega) = \sum_{n=1}^\infty \mathbf{1}_{A_n}(\omega) \quad \text{for all } \omega \in N^c.
+$$ {#eq-pointwise-id-Nc}
+
+**Step 3: Reduce the indicator integral to $N^c$.**
+Since $\mathbf{1}_{\bigcup A_n}$ is a simple function and $\mu(N) = 0$, @lem-integration-null-sets gives:
+$$
+\int_\Omega \mathbf{1}_{\bigcup_{n=1}^\infty A_n} \, d\mu = \int_{N^c} \mathbf{1}_{\bigcup_{n=1}^\infty A_n} \, d\mu.
+$$ {#eq-reduce-to-Nc}
+
+**Step 4: Reduce the series integral to $N^c$.**
+For each $n$, monotonicity of measure gives $\mu(A_n \cap N) \le \mu(N) = 0$. Applying @cor-infinite-sums-lplus:
+$$
+\int_N \sum_{n=1}^\infty \mathbf{1}_{A_n} \, d\mu = \sum_{n=1}^\infty \mu(A_n \cap N) = 0,
+$$
+so $\int_\Omega \sum_{n=1}^\infty \mathbf{1}_{A_n} \, d\mu = \int_{N^c} \sum_{n=1}^\infty \mathbf{1}_{A_n} \, d\mu$.
+
+**Step 5: Conclude.**
+Combining @eq-reduce-to-Nc, the pointwise identity @eq-pointwise-id-Nc on $N^c$, @cor-infinite-sums-lplus, and $\mu(A_n \cap N) = 0$:
+$$
+\begin{align*}
+\mu\!\left(\bigcup_{n=1}^{\infty} A_n\right)
+&= \int_{N^c} \mathbf{1}_{\bigcup_{n=1}^\infty A_n} \, d\mu = \int_{N^c} \sum_{n=1}^{\infty} \mathbf{1}_{A_n} \, d\mu \\
+&= \sum_{n=1}^{\infty} \int_{N^c} \mathbf{1}_{A_n} \, d\mu = \sum_{n=1}^{\infty} \mu(A_n \cap N^c)\\
+&= \sum_{n=1}^{\infty} \mu(A_n).
+\end{align*}
+$$
+:::
+
+## The First Borel-Cantelli Lemma
+
+::: {#def-lim-sup-events}
+## Infinitely Often ($i.o.$) / Limit Superior of Events
+For a sequence of events $(A_n)_{n=1}^\infty \subset \mathcal{F}$, we define $\{A_n \text{ i.o.}\}$ (read "$A_n$ infinitely often") as:
+$$
+\begin{align*}
+\{A_n \text{ i.o.}\} &:= \{\omega \in \Omega \mid \omega \in A_n \text{ for infinitely many } n\} \\
+&= \bigcap_{N=1}^{\infty} \bigcup_{n=N}^{\infty} A_n = \limsup_{n \to \infty} A_n
+\end{align*}
+$$ {#eq-lim-sup-events}
+:::
+
+::: {#thm-borel-cantelli-1}
+## First Borel-Cantelli Lemma
+Let $(A_n)_{n=1}^\infty \subset \mathcal{F}$ be a sequence of events. If $\sum_{n=1}^{\infty} \mu(A_n) < \infty$, then:
+$$
+\mu(\{A_n \text{ i.o.}\}) = 0
+$$ {#eq-bc1-conclusion}
+:::
+
+::: {.proof}
+## Proof of @thm-borel-cantelli-1
+
+**Step 1: Reformulate using $Y$.**
+Define $Y := \sum_{n=1}^{\infty} \mathbf{1}_{A_n} \in L^+$. Since each $\mathbf{1}_{A_n}(\omega) \in \{0,1\}$, the value $Y(\omega)$ is exactly the number of sets $A_n$ that contain $\omega$. Therefore:
+$$
+\{A_n \text{ i.o.}\} = \{\omega \in \Omega \mid \omega \in A_n \text{ for infinitely many } n\} = \{Y = \infty\}.
+$$
+
+**Step 2: Compute $\int Y \, d\mu$.**
+By @cor-infinite-sums-lplus:
+$$
+\int_{\Omega} Y \, d\mu = \sum_{n=1}^{\infty} \int_{\Omega} \mathbf{1}_{A_n} \, d\mu = \sum_{n=1}^{\infty} \mu(A_n) < \infty.
+$$ {#eq-bc1-integral}
+
+**Step 3: Bound $\mu(\{A_n \text{ i.o.}\})$ via Markov's inequality.**
+For each $k \in \mathbb{N}$, the inclusion $\{Y = \infty\} \subseteq \{Y \ge k\}$ and monotonicity of measure give:
+$$
+\mu(\{A_n \text{ i.o.}\}) = \mu(\{Y = \infty\}) \le \mu(\{Y \ge k\}).
+$$
+Applying @thm-markov with $\epsilon = k$ and $p = 1$:
+$$
+\mu(\{Y \ge k\}) \le \frac{1}{k} \int_{\Omega} Y \, d\mu = \frac{1}{k} \sum_{n=1}^{\infty} \mu(A_n).
+$$
+
+**Step 4: Conclude.**
+Combining Steps 3 and @eq-bc1-integral:
+$$
+0 \le \mu(\{A_n \text{ i.o.}\}) \le \frac{1}{k} \sum_{n=1}^{\infty} \mu(A_n) \quad \text{for all } k \in \mathbb{N}.
+$$
+Since $\sum_{n=1}^{\infty} \mu(A_n) < \infty$ is a fixed finite constant, taking $k \to \infty$ gives $\mu(\{A_n \text{ i.o.}\}) = 0$.
+:::
+
+::: {#exm-coin-tossing-decay}
+Consider an infinite sequence of independent coin tosses where $X_n = 1$ if the $n$-th toss is heads and $X_n = 0$ otherwise, with $\mathbb{P}(X_n = 1) = p_n$.
+
+* **Case $p_n = \frac{1}{n^2}$:** Since $\sum_{n=1}^{\infty} p_n = \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6} < \infty$, the First Borel-Cantelli Lemma implies $\mathbb{P}(X_n = 1 \text{ i.o.}) = 0$. Thus, with probability 1, only finitely many heads occur (eventually, heads never appear again).
+* **Case $p_n = \frac{1}{n}$:** Here $p_n \to 0$, but $\sum_{n=1}^{\infty} p_n = \infty$. The First Borel-Cantelli Lemma does not apply; determining $\mathbb{P}(X_n = 1 \text{ i.o.})$ requires the Second Borel-Cantelli Lemma (for independent events).
+:::
+
+---
+

@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>48&nbsp; Lecture 23.1: Vague Convergence – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./23-2-Prokhorov-Compactness-Theorem.html" rel="next">
+<link href="./22-2-Weak-Convergence-Over-Rd.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./23-1-Vague-Convergence.html"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#motivation-loss-of-mass-in-the-limit" id="toc-motivation-loss-of-mass-in-the-limit" class="nav-link active" data-scroll-target="#motivation-loss-of-mass-in-the-limit"><span class="header-section-number">48.1</span> Motivation: Loss of Mass in the Limit</a></li>
+  <li><a href="#vague-convergence" id="toc-vague-convergence" class="nav-link" data-scroll-target="#vague-convergence"><span class="header-section-number">48.2</span> Vague Convergence</a></li>
+  <li><a href="#tightness-of-probability-measures" id="toc-tightness-of-probability-measures" class="nav-link" data-scroll-target="#tightness-of-probability-measures"><span class="header-section-number">48.3</span> Tightness of Probability Measures</a></li>
+  <li><a href="#characterization-of-weak-convergence-via-tightness" id="toc-characterization-of-weak-convergence-via-tightness" class="nav-link" data-scroll-target="#characterization-of-weak-convergence-via-tightness"><span class="header-section-number">48.4</span> Characterization of Weak Convergence via Tightness</a></li>
+  <li><a href="#vague-convergence-via-interval-differences-on-mathbbr" id="toc-vague-convergence-via-interval-differences-on-mathbbr" class="nav-link" data-scroll-target="#vague-convergence-via-interval-differences-on-mathbbr"><span class="header-section-number">48.5</span> Vague Convergence via Interval Differences on <span class="math inline">\(\mathbb{R}\)</span></a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">48.6</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/23-1-Vague-Convergence.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./23-1-Vague-Convergence.html"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="motivation-loss-of-mass-in-the-limit" class="level2" data-number="48.1">
+<h2 data-number="48.1" class="anchored" data-anchor-id="motivation-loss-of-mass-in-the-limit"><span class="header-section-number">48.1</span> Motivation: Loss of Mass in the Limit</h2>
+<p>In previous lectures, we established that on <span class="math inline">\(\mathbb{R}^d\)</span>, weak convergence <span class="math inline">\(\mu_n \implies \mu\)</span> is equivalent to testing against functions in <span class="math inline">\(C_c(\mathbb{R}^d)\)</span> provided both <span class="math inline">\(\mu_n\)</span> and <span class="math inline">\(\mu\)</span> are <strong>probability measures</strong>. However, when sequence elements escape to infinity, testing against compactly supported functions <span class="math inline">\(C_c(\mathbb{R}^d)\)</span> can lead to a limit measure <span class="math inline">\(\mu\)</span> that fails to preserve total probability mass <span class="math inline">\(\mu(\mathbb{R}^d) = 1\)</span>.</p>
+<div id="exm-mass-escape" class="theorem example">
+<p><span class="theorem-title"><strong>Example 48.1</strong></span> Fix a unit vector <span class="math inline">\(e_1 \in \mathbb{R}^d\)</span> and let <span class="math inline">\(\mu_n=\frac{1}{2}\delta_0+\frac{1}{2}\delta_{n e_1}\in\mathcal{P}(\mathbb{R}^d,\mathcal{B}(\mathbb{R}^d))\)</span> for <span class="math inline">\(n \in \mathbb{N}\)</span>. Does <span class="math inline">\(\mu_n\)</span> converge weakly to a probability measure <span class="math inline">\(\mu\)</span>? For any test function <span class="math inline">\(f \in C_c(\mathbb{R}^d)\)</span>, there exists a radius <span class="math inline">\(R &lt; \infty\)</span> such that <span class="math inline">\(\text{supp}(f) \subseteq B_R\)</span>. Then for all <span class="math inline">\(n &gt; R\)</span>: <span class="math display">\[
+\int_{\mathbb{R}^d} f \, d\mu_n
+= \frac{1}{2}f(0) + \frac{1}{2}f(n e_1) = \frac{1}{2}f(0).
+\]</span> Thus <span class="math inline">\(\mu_n \xrightarrow{v} \frac{1}{2}\delta_0\)</span>, which is a sub-probability measure with <span class="math inline">\(\mu(\mathbb{R}^d) = 1/2 &lt; 1\)</span>. Note that <span class="math inline">\(\mu_n \not\implies \frac{1}{2}\delta_0\)</span>, because <span class="math display">\[
+\int_{\mathbb{R}^d} 1 \, d\mu_n = 1 \nrightarrow \frac{1}{2} = \int_{\mathbb{R}^d} 1 \, d\mu.
+\]</span> In fact, <span class="math inline">\(\mu_n\)</span> does not possess any weakly convergent subsequence. Indeed, every subsequence is non-tight: for any compact <span class="math inline">\(K \subset \mathbb{R}^d\)</span>, boundedness of <span class="math inline">\(K\)</span> implies <span class="math inline">\(n_k e_1 \notin K\)</span> for all sufficiently large <span class="math inline">\(k\)</span>, and hence <span class="math inline">\(\mu_{n_k}(K) \le 1/2\)</span>. Since every weakly convergent sequence of probability measures on <span class="math inline">\(\mathbb{R}^d\)</span> is tight, no subsequence can converge weakly.</p>
+</div>
+<hr>
+</section>
+<section id="vague-convergence" class="level2" data-number="48.2">
+<h2 data-number="48.2" class="anchored" data-anchor-id="vague-convergence"><span class="header-section-number">48.2</span> Vague Convergence</h2>
+<p>To accommodate limit operations where mass escapes, we introduce the concept of <strong>vague convergence</strong> for general Radon/Borel measures.</p>
+<div id="def-vague-convergence" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 48.1 (Vague Convergence)</strong></span> Let <span class="math inline">\(\mu_n, \mu\)</span> be positive Radon measures on <span class="math inline">\(\mathbb{R}^d\)</span>, meaning locally finite regular Borel measures. (In particular, every finite Borel measure on <span class="math inline">\(\mathbb{R}^d\)</span> is Radon.) We say <span class="math inline">\(\mu_n\)</span> <strong>converges vaguely</strong> to <span class="math inline">\(\mu\)</span>, denoted <span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span>, if: <span class="math display">\[
+\int_{\mathbb{R}^d} f \, d\mu_n \longrightarrow \int_{\mathbb{R}^d} f \, d\mu \quad \forall f \in C_c(\mathbb{R}^d)
+\]</span></p>
+</div>
+<p>It is possible to lose mass, but not gain mass under vague convergence. The following proposition formalizes this property.</p>
+<div id="thm-mass-loss" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 48.1 (One-Sided Conservation of Mass)</strong></span> Let <span class="math inline">\(\{\mu_n\}\)</span> be a sequence of probability measures on <span class="math inline">\(\mathbb{R}^d\)</span>. If <span class="math inline">\(\mu_n\xrightarrow{v}\mu\)</span> for some Radon measure <span class="math inline">\(\mu\)</span>, then <span class="math display">\[
+\mu(\mathbb{R}^d)
+\leq
+\liminf_{n\to\infty}\mu_n(\mathbb{R}^d)
+=1.
+\]</span> Thus, under vague convergence, total mass can be lost in the limit, but it cannot be gained.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-mass-loss" class="quarto-xref">Theorem&nbsp;<span>48.1</span></a>). </span>Suppose for contradiction that <span class="math inline">\(\mu(\mathbb{R}^d) &gt; 1\)</span>. Since <span class="math inline">\(\mu(B_R) \uparrow \mu(\mathbb{R}^d)\)</span> as <span class="math inline">\(R \to \infty\)</span>, there exists some finite radius <span class="math inline">\(R &lt; \infty\)</span> such that <span class="math inline">\(\mu(B_R) &gt; 1\)</span>. Choose a continuous radial cutoff <span class="math inline">\(f \in C_c(\mathbb{R}^d)\)</span> that equals <span class="math inline">\(1\)</span> on <span class="math inline">\(B_R\)</span>, vanishes outside <span class="math inline">\(B_{R+1}\)</span>, and satisfies <span class="math inline">\(0 \le f \le 1\)</span>. Thus <span class="math inline">\(\mathbf{1}_{B_R} \le f \le 1\)</span>. By vague convergence: <span class="math display">\[\lim_{n\to\infty} \int_{\mathbb{R}^d} f \, d\mu_n = \int_{\mathbb{R}^d} f \, d\mu \ge \int_{\mathbb{R}^d} \mathbf{1}_{B_R} \, d\mu = \mu(B_R) &gt; 1\]</span></p>
+<p>However, for all <span class="math inline">\(n\)</span>: <span class="math display">\[\int_{\mathbb{R}^d} f \, d\mu_n \le \int_{\mathbb{R}^d} 1 \, d\mu_n = \mu_n(\mathbb{R}^d) = 1\]</span> This yields the contradiction <span class="math inline">\(\lim_{n\to\infty} \int f d\mu_n &gt; 1\)</span>, showing <span class="math inline">\(\mu(\mathbb{R}^d) \le 1\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="tightness-of-probability-measures" class="level2" data-number="48.3">
+<h2 data-number="48.3" class="anchored" data-anchor-id="tightness-of-probability-measures"><span class="header-section-number">48.3</span> Tightness of Probability Measures</h2>
+<p>To bridge the gap between vague convergence and weak convergence, we need a condition preventing probability mass from fleeing to infinity.</p>
+<div id="def-tightness" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 48.2 (Tightness)</strong></span> A family <span class="math inline">\(\mathcal{A} \subseteq \mathcal{P}(S, \mathcal{B}(S))\)</span> of probability measures on a topological space <span class="math inline">\(S\)</span> is called <strong>tight</strong> if for every <span class="math inline">\(\epsilon &gt; 0\)</span>, there exists a compact set <span class="math inline">\(K_\epsilon \subseteq S\)</span> such that: <span class="math display">\[\mu(K_\epsilon) \ge 1 - \epsilon \quad \forall \mu \in \mathcal{A}\]</span></p>
+<p>Thus, a sequence <span class="math inline">\(\{\mu_n\}\)</span> is tight exactly when, for every <span class="math inline">\(\epsilon &gt; 0\)</span>, there exists a compact set <span class="math inline">\(K_\epsilon\)</span> such that <span class="math inline">\(\inf_n \mu_n(K_\epsilon) \ge 1 - \epsilon\)</span>.</p>
+</div>
+<ul>
+<li>The key word is <strong>uniformity</strong>: the same compact set <span class="math inline">\(K_\epsilon\)</span> must work for all measures in the family <span class="math inline">\(\mathcal{A}\)</span> for a given <span class="math inline">\(\epsilon\)</span>. So the probability mass of every measure in the family is concentrated, up to an arbitrarily small amount, inside a common compact set.</li>
+</ul>
+<div id="exm-tightness" class="theorem example">
+<p><span class="theorem-title"><strong>Example 48.2 (Examples of Tightness)</strong></span> &nbsp;</p>
+<ul>
+<li><strong>Weakly Convergent Sequences</strong>: If <span class="math inline">\(\mu_n \implies \mu\)</span> on <span class="math inline">\(\mathbb{R}^d\)</span>, we proved in <a href="22-2-Weak-Convergence-Over-Rd.html#lem-tightness-balls" class="quarto-xref">Lemma&nbsp;<span>49.1</span></a> that <span class="math inline">\(\lim_{R\to\infty} \inf_n \mu_n(\bar{B}_R) = 1\)</span>. Taking <span class="math inline">\(K_\epsilon = \bar{B}_R\)</span> for large enough <span class="math inline">\(R\)</span> demonstrates that every weakly convergent sequence is tight. Thus, weak convergence implies tightness.</li>
+<li><strong>Fleeing Sequence</strong>: The sequence <span class="math inline">\(\mu_n =\frac{1}{2}\delta_0 + \frac{1}{2}\delta_n\)</span> is <strong>not tight</strong>. For any compact set <span class="math inline">\(K \subset \mathbb{R}\)</span>, there exists <span class="math inline">\(N\)</span> such that <span class="math inline">\(n &gt; N\)</span> implies <span class="math inline">\(n \notin K\)</span>. Then <span class="math inline">\(\mu_n(K) \le 1/2 &lt; 1 - \epsilon\)</span> for <span class="math inline">\(\epsilon &lt; 1/2\)</span>, showing that no compact set can capture at least <span class="math inline">\(1 - \epsilon\)</span> of the mass for all <span class="math inline">\(n\)</span>.</li>
+</ul>
+</div>
+<hr>
+</section>
+<section id="characterization-of-weak-convergence-via-tightness" class="level2" data-number="48.4">
+<h2 data-number="48.4" class="anchored" data-anchor-id="characterization-of-weak-convergence-via-tightness"><span class="header-section-number">48.4</span> Characterization of Weak Convergence via Tightness</h2>
+<div id="thm-tightness-vague-weak" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 48.2 (Equivalence of Weak Convergence and Tight Vague Limits)</strong></span> Let <span class="math inline">\(\mu_n \in \mathcal{P}\left(\mathbb{R}^d,\mathcal{B}(\mathbb{R}^d)\right)\)</span> and let <span class="math inline">\(\mu\)</span> be a positive Radon measure on <span class="math inline">\(\mathbb{R}^d\)</span> such that <span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span>. Then <span class="math inline">\(\mu(\mathbb{R}^d) = 1\)</span> <strong>if and only if</strong> the sequence <span class="math inline">\(\{\mu_n\}\)</span> is tight. In that case, <span class="math inline">\(\mu\)</span> is a probability measure and <span class="math inline">\(\mu_n \implies \mu\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-tightness-vague-weak" class="quarto-xref">Theorem&nbsp;<span>48.2</span></a>). </span></p>
+<ul>
+<li><p><span class="math inline">\((\implies)\)</span>: Suppose <span class="math inline">\(\mu(\mathbb{R}^d) = 1\)</span>, so <span class="math inline">\(\mu\)</span> is a probability measure. Since <span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span> means <span class="math inline">\(\int f \, d\mu_n \to \int f \, d\mu\)</span> for all <span class="math inline">\(f \in C_c(\mathbb{R}^d)\)</span>, and both <span class="math inline">\(\mu_n\)</span> and <span class="math inline">\(\mu\)</span> are probability measures, the <span class="math inline">\(C_c\)</span> characterization of weak convergence (<a href="22-2-Weak-Convergence-Over-Rd.html#thm-cc-convergence" class="quarto-xref">Theorem&nbsp;<span>49.1</span></a>) gives <span class="math inline">\(\mu_n \implies \mu\)</span>. By <a href="22-2-Weak-Convergence-Over-Rd.html#lem-tightness-balls" class="quarto-xref">Lemma&nbsp;<span>49.1</span></a> (proved in the previous lecture), every weakly convergent sequence on <span class="math inline">\(\mathbb{R}^d\)</span> is tight.</p></li>
+<li><p><span class="math inline">\((\impliedby)\)</span>: Assume <span class="math inline">\(\{\mu_n\}\)</span> is tight. Fix <span class="math inline">\(\epsilon &gt; 0\)</span>. By tightness, choose a compact set <span class="math inline">\(K_\epsilon \subset \mathbb{R}^d\)</span> such that <span class="math inline">\(\mu_n(K_\epsilon) \ge 1 - \epsilon\)</span> for all <span class="math inline">\(n\)</span>. Define <span class="math inline">\(f(x)=\max\{1-\operatorname{dist}(x,K_\epsilon),0\}\)</span>. Then <span class="math inline">\(f \in C_c(\mathbb{R}^d)\)</span> because the closed unit neighborhood of the compact set <span class="math inline">\(K_\epsilon\)</span> is compact, and <span class="math inline">\(\mathbf{1}_{K_\epsilon} \le f \le 1\)</span>.</p>
+<p>Since <span class="math inline">\(f \ge \mathbf{1}_{K_\epsilon}\)</span>, we have <span class="math inline">\(\int f \, d\mu_n \ge \mu_n(K_\epsilon) \ge 1 - \epsilon\)</span> for all <span class="math inline">\(n\)</span>. Using <span class="math inline">\(f \in C_c\)</span> and vague convergence: <span class="math display">\[\mu(\mathbb{R}^d) \ge \int_{\mathbb{R}^d} f \, d\mu = \lim_{n\to\infty} \int_{\mathbb{R}^d} f \, d\mu_n \ge \liminf_{n\to\infty} \mu_n(K_\epsilon) \ge 1 - \epsilon.\]</span></p>
+<p>Since <span class="math inline">\(\epsilon &gt; 0\)</span> was arbitrary, <span class="math inline">\(\mu(\mathbb{R}^d) \ge 1\)</span>. Combined with <a href="#thm-mass-loss" class="quarto-xref">Theorem&nbsp;<span>48.1</span></a> (<span class="math inline">\(\mu(\mathbb{R}^d) \le 1\)</span>), we conclude <span class="math inline">\(\mu(\mathbb{R}^d) = 1\)</span>, so <span class="math inline">\(\mu\)</span> is a probability measure. Since <span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span> already gives <span class="math inline">\(\int f \, d\mu_n \to \int f \, d\mu\)</span> for all <span class="math inline">\(f \in C_c(\mathbb{R}^d)\)</span>, and both <span class="math inline">\(\mu_n\)</span> and <span class="math inline">\(\mu\)</span> are probability measures, the <span class="math inline">\(C_c\)</span> characterization (<a href="22-2-Weak-Convergence-Over-Rd.html#thm-cc-convergence" class="quarto-xref">Theorem&nbsp;<span>49.1</span></a>) yields <span class="math inline">\(\mu_n \implies \mu\)</span>.</p></li>
+</ul>
+</div>
+<div id="exm-tightness-vague" class="theorem example">
+<p><span class="theorem-title"><strong>Example 48.3</strong></span> Let <span class="math inline">\(\mu_n=\delta_n\)</span>, where <span class="math inline">\(\delta_n\)</span> is the point mass at <span class="math inline">\(n\in\mathbb R\)</span>: <span class="math inline">\(\delta_n(A)=\mathbf 1\{n\in A\}\)</span>. Consider the sequence <span class="math inline">\(\delta_1,\delta_2,\delta_3,\ldots\)</span>. For any compact set <span class="math inline">\(K\subset\mathbb R\)</span>, there exists <span class="math inline">\(M&lt;\infty\)</span> such that <span class="math inline">\(K\subset[-M,M]\)</span>. For every <span class="math inline">\(n&gt;M\)</span>, <span class="math inline">\(\delta_n(K)=0\)</span>. Thus, for example, if <span class="math inline">\(\epsilon=1/2\)</span>, there is no compact <span class="math inline">\(K\)</span> such that <span class="math display">\[
+\delta_n(K)\geq1-\epsilon=\frac12 \qquad\text{for every }n.
+\]</span> Hence <span class="math inline">\(\{\delta_n\}_{n\ge 1}\)</span> is not tight.</p>
+<p>Take any <span class="math inline">\(f\in C_c(\mathbb R)\)</span>. Because <span class="math inline">\(f\)</span> has compact support, there exists <span class="math inline">\(M&lt;\infty\)</span> such that <span class="math inline">\(f(x)=0\)</span> whenever <span class="math inline">\(|x|&gt;M\)</span>. Therefore, for all <span class="math inline">\(n&gt;M\)</span>, <span class="math display">\[
+\int f\,d\delta_n=f(n)=0.
+\]</span> Consequently, <span class="math inline">\(\int f\,d\delta_n\longrightarrow0\)</span>. Thus <span class="math display">\[
+\delta_n\xrightarrow{v}0,
+\]</span> where <span class="math inline">\(0\)</span> denotes the zero measure. The limiting measure has mass <span class="math inline">\(0(\mathbb R)=0\)</span>. So the mass has completely escaped to infinity.</p>
+<p>The theorem says that if <span class="math inline">\(\mu_n\xrightarrow{v}\mu\)</span> and the sequence <span class="math inline">\(\{\mu_n\}\)</span> is tight, then necessarily <span class="math inline">\(\mu(\mathbb R)=1\)</span> and therefore <span class="math inline">\(\mu_n\implies\mu\)</span>. Here, the sequence is not tight, and indeed the vague limit has mass <span class="math inline">\(0\)</span>, not <span class="math inline">\(1\)</span>. In particular, there cannot be weak convergence: <span class="math inline">\(\delta_n\not\implies0\)</span>, because <span class="math inline">\(0\)</span> is not a probability measure.</p>
+</div>
+<hr>
+</section>
+<section id="vague-convergence-via-interval-differences-on-mathbbr" class="level2" data-number="48.5">
+<h2 data-number="48.5" class="anchored" data-anchor-id="vague-convergence-via-interval-differences-on-mathbbr"><span class="header-section-number">48.5</span> Vague Convergence via Interval Differences on <span class="math inline">\(\mathbb{R}\)</span></h2>
+<div id="thm-vague-cdf" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 48.3 (Characterization by CDF Differences)</strong></span> Let <span class="math inline">\(\mu_n \in \mathcal{P}(\mathbb{R},\mathcal{B}(\mathbb{R}))\)</span> and let <span class="math inline">\(\mu\)</span> be a finite Borel measure on <span class="math inline">\(\mathbb{R}\)</span>. Define the CDFs <span class="math inline">\(F_n(t) = \mu_n((-\infty, t])\)</span> and the cumulative mass function <span class="math inline">\(F(t) = \mu((-\infty, t])\)</span>; unlike a probability CDF, <span class="math inline">\(F\)</span> satisfies <span class="math inline">\(F(+\infty)=\mu(\mathbb{R})\)</span>, which need not equal <span class="math inline">\(1\)</span>. Then <span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span> if and only if <span class="math display">\[
+F_n(b) - F_n(a) \longrightarrow F(b) - F(a) \quad \forall a, b \in \text{Cont}(F) \text{ with } a &lt; b.
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-vague-cdf" class="quarto-xref">Theorem&nbsp;<span>48.3</span></a>). </span>First observe that, for <span class="math inline">\(a&lt;b\)</span>, <span class="math display">\[
+F_n(b)-F_n(a)=\mu_n((a,b])
+\quad\text{and}\quad
+F(b)-F(a)=\mu((a,b]).
+\]</span> Moreover, <span class="math inline">\(t\in\operatorname{Cont}(F)\)</span> if and only if <span class="math inline">\(\mu(\{t\})=0\)</span>. Indeed, <span class="math display">\[
+F(t)-F(t^-)=\mu(\{t\}).
+\]</span></p>
+<ul>
+<li><p><span class="math inline">\((\implies)\)</span>: Suppose that <span class="math inline">\(\mu_n\xrightarrow{v}\mu\)</span>, and fix <span class="math inline">\(a,b\in\operatorname{Cont}(F)\)</span> with <span class="math inline">\(a&lt;b\)</span>. For <span class="math inline">\(0&lt;\delta&lt;(b-a)/2\)</span>, choose functions <span class="math inline">\(\ell_\delta,u_\delta\in C_c(\mathbb R)\)</span> as follows:</p>
+<ul>
+<li><span class="math inline">\(\ell_\delta\)</span> is <span class="math inline">\(0\)</span> outside <span class="math inline">\((a,b)\)</span>, is <span class="math inline">\(1\)</span> on <span class="math inline">\([a+\delta,b-\delta]\)</span>, is linear on the two intervening intervals, and satisfies <span class="math inline">\(0\leq\ell_\delta\leq1\)</span>;</li>
+<li><span class="math inline">\(u_\delta\)</span> is <span class="math inline">\(1\)</span> on <span class="math inline">\([a,b]\)</span>, is <span class="math inline">\(0\)</span> outside <span class="math inline">\((a-\delta,b+\delta)\)</span>, is linear on the two intervening intervals, and satisfies <span class="math inline">\(0\leq u_\delta\leq1\)</span>.</li>
+</ul>
+<p>These functions satisfy <span class="math display">\[
+\ell_\delta\leq\mathbf 1_{(a,b]}\leq u_\delta.
+\]</span> Therefore, <span class="math display">\[
+\int \ell_\delta\,d\mu_n
+\leq \mu_n((a,b])
+\leq \int u_\delta\,d\mu_n.
+\]</span> Vague convergence applies to both cutoff functions, so <span class="math display">\[
+\int \ell_\delta\,d\mu
+\leq \liminf_{n\to\infty}\mu_n((a,b])
+\leq \limsup_{n\to\infty}\mu_n((a,b])
+\leq \int u_\delta\,d\mu.
+\]</span> As <span class="math inline">\(\delta\downarrow0\)</span>, the lower cutoffs converge pointwise to <span class="math inline">\(\mathbf 1_{(a,b)}\)</span>, while the upper cutoffs converge pointwise to <span class="math inline">\(\mathbf 1_{[a,b]}\)</span>. All these functions are bounded by the indicator of a fixed compact interval once <span class="math inline">\(\delta\)</span> is restricted, and <span class="math inline">\(\mu\)</span> is finite on compact sets. Hence dominated convergence gives <span class="math display">\[
+\int \ell_\delta\,d\mu\longrightarrow\mu((a,b)),
+\qquad
+\int u_\delta\,d\mu\longrightarrow\mu([a,b]).
+\]</span> Since <span class="math inline">\(a,b\in\operatorname{Cont}(F)\)</span>, we have <span class="math inline">\(\mu(\{a\})=\mu(\{b\})=0\)</span>, and consequently <span class="math display">\[
+\mu((a,b))=\mu((a,b])=\mu([a,b]).
+\]</span> Letting <span class="math inline">\(\delta\downarrow0\)</span> in the preceding bounds yields <span class="math display">\[
+\mu_n((a,b])\longrightarrow\mu((a,b]),
+\]</span> which is exactly <span class="math display">\[
+F_n(b)-F_n(a)\longrightarrow F(b)-F(a).
+\]</span></p></li>
+<li><p><span class="math inline">\((\impliedby)\)</span>: Conversely, suppose that <span class="math display">\[
+\mu_n((a,b])\longrightarrow\mu((a,b])
+\qquad\text{for every }a,b\in\operatorname{Cont}(F),\ a&lt;b.
+\]</span> Because <span class="math inline">\(F\)</span> is nondecreasing, it has at most countably many discontinuities. Thus <span class="math inline">\(\operatorname{Cont}(F)\)</span> is dense in <span class="math inline">\(\mathbb R\)</span>.</p>
+<p>Let <span class="math inline">\(f\in C_c(\mathbb R)\)</span>. Choose <span class="math inline">\(A&lt;B\)</span> such that <span class="math inline">\(\operatorname{supp}(f)\subseteq[A,B]\)</span>. Given <span class="math inline">\(\eta&gt;0\)</span>, uniform continuity of <span class="math inline">\(f\)</span> gives <span class="math inline">\(\rho&gt;0\)</span> such that <span class="math display">\[
+|x-y|&lt;\rho\quad\Longrightarrow\quad |f(x)-f(y)|&lt;\eta.
+\]</span> Using the density of <span class="math inline">\(\operatorname{Cont}(F)\)</span>, choose a finite partition <span class="math display">\[
+x_0&lt;x_1&lt;\cdots&lt;x_k,
+\]</span> all of whose points belong to <span class="math inline">\(\operatorname{Cont}(F)\)</span>, such that <span class="math inline">\(x_0&lt;A\)</span>, <span class="math inline">\(x_k&gt;B\)</span>, and <span class="math inline">\(x_j-x_{j-1}&lt;\rho\)</span> for every <span class="math inline">\(j\)</span>. Define <span class="math display">\[
+f_\pi(x)=\sum_{j=1}^k f(x_j)\mathbf 1_{(x_{j-1},x_j]}(x).
+\]</span> Since <span class="math inline">\(f\)</span> vanishes outside <span class="math inline">\([A,B]\)</span> and every interval of the partition has length less than <span class="math inline">\(\rho\)</span>, we have <span class="math display">\[
+\lVert f-f_\pi\rVert_\infty\leq\eta.
+\]</span> The assumed interval convergence and finiteness of the sum imply <span class="math display">\[
+\begin{aligned}
+\int f_\pi\,d\mu_n
+&amp;=\sum_{j=1}^k f(x_j)\mu_n((x_{j-1},x_j])\\
+&amp;\longrightarrow
+\sum_{j=1}^k f(x_j)\mu((x_{j-1},x_j])
+=\int f_\pi\,d\mu.
+\end{aligned}
+\]</span> Because each <span class="math inline">\(\mu_n\)</span> is a probability measure and <span class="math inline">\(\mu\)</span> is finite, <span class="math display">\[
+\begin{aligned}
+\left|\int f\,d\mu_n-\int f\,d\mu\right|
+&amp;\leq \left|\int(f-f_\pi)\,d\mu_n\right|
++\left|\int f_\pi\,d\mu_n-\int f_\pi\,d\mu\right|\\
+&amp;\quad+\left|\int(f_\pi-f)\,d\mu\right|\\
+&amp;\leq \eta+\left|\int f_\pi\,d\mu_n-\int f_\pi\,d\mu\right|
++\eta\mu(\mathbb R).
+\end{aligned}
+\]</span> Taking <span class="math inline">\(\limsup_{n\to\infty}\)</span> gives <span class="math display">\[
+\limsup_{n\to\infty}
+\left|\int f\,d\mu_n-\int f\,d\mu\right|
+\leq \eta\bigl(1+\mu(\mathbb R)\bigr).
+\]</span> Since <span class="math inline">\(\eta&gt;0\)</span> is arbitrary, the left-hand side is <span class="math inline">\(0\)</span>. Therefore <span class="math display">\[
+\int f\,d\mu_n\longrightarrow\int f\,d\mu
+\qquad\forall f\in C_c(\mathbb R),
+\]</span> which proves <span class="math inline">\(\mu_n\xrightarrow{v}\mu\)</span>.</p></li>
+</ul>
+</div>
+<div id="exm-split-mass" class="theorem example">
+<p><span class="theorem-title"><strong>Example 48.4 (Symmetric Split Mass)</strong></span> Consider the sequence of measures <span class="math inline">\(\mu_n = \frac{1}{2}(\delta_n + \delta_{-n})\)</span> on <span class="math inline">\(\mathbb{R}\)</span>. For any test function <span class="math inline">\(f \in C_c(\mathbb{R})\)</span> supported on <span class="math inline">\([-R, R]\)</span>: <span class="math display">\[\int_{\mathbb{R}} f \, d\mu_n = \frac{1}{2}(f(n) + f(-n)) = 0 \quad \forall n &gt; R\]</span></p>
+<p>Thus <span class="math inline">\(\mu_n \xrightarrow{v} \mathbf{0}\)</span>, where <span class="math inline">\(\mathbf{0}\)</span> is the zero measure. Evaluating the CDFs of <span class="math inline">\(\mu_n\)</span>: <span class="math display">\[F_n(t) = \begin{cases} 0, &amp; t &lt; -n \\ 1/2, &amp; -n \le t &lt; n \\ 1, &amp; t \ge n \end{cases}\]</span></p>
+<p>For every fixed <span class="math inline">\(t \in \mathbb{R}\)</span>, eventually <span class="math inline">\(-n &lt; t &lt; n\)</span>, so <span class="math inline">\(F_n(t) \to 1/2\)</span> pointwise. However, the vague limit is <span class="math inline">\(\mu = \mathbf{0}\)</span>, whose CDF is <span class="math inline">\(F(t) = \mu((-\infty,t]) = 0\)</span> for all <span class="math inline">\(t\)</span>. The pointwise limit of <span class="math inline">\(F_n\)</span> (which is <span class="math inline">\(1/2\)</span>) is therefore <strong>not</strong> the CDF of the vague limit — this discrepancy is precisely the mass-loss phenomenon.</p>
+<p>To verify the CDF-difference criterion in <a href="#thm-vague-cdf" class="quarto-xref">Theorem&nbsp;<span>48.3</span></a> consistently with the vague convergence already established above, note that for any <span class="math inline">\(a &lt; b\)</span> and all <span class="math inline">\(n &gt; \max(|a|, |b|)\)</span>, <span class="math inline">\(F_n(a) = F_n(b) = 1/2\)</span>, so: <span class="math display">\[F_n(b) - F_n(a) = 0 \longrightarrow 0 = F(b) - F(a),\]</span> confirming vague convergence to the zero measure. Both halves of the probability mass escaped to opposite infinities.</p>
+</div>
+</section>
+<section id="takeaways" class="level2" data-number="48.6">
+<h2 data-number="48.6" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">48.6</span> Takeaways</h2>
+<ol type="1">
+<li><p><strong>Vague convergence is <span class="math inline">\(C_c\)</span>-convergence for general measures.</strong><br>
+<span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span> means <span class="math inline">\(\int f \, d\mu_n \to \int f \, d\mu\)</span> for all <span class="math inline">\(f \in C_c(\mathbb{R}^d)\)</span>. Unlike weak convergence, the limit <span class="math inline">\(\mu\)</span> need not be a probability measure — mass can escape to infinity and be lost. Vague convergence is the natural notion for sequences of measures that may not remain tight.</p></li>
+<li><p><strong>Mass can only be lost, never gained, under vague convergence.</strong><br>
+By <a href="#thm-mass-loss" class="quarto-xref">Theorem&nbsp;<span>48.1</span></a>, if <span class="math inline">\(\mu_n\)</span> are probability measures and <span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span>, then <span class="math inline">\(\mu(\mathbb{R}^d) \le 1\)</span>. The proof constructs a test function <span class="math inline">\(f \in C_c\)</span> with <span class="math inline">\(\mathbf{1}_{B_R} \le f \le 1\)</span> and uses vague convergence to derive a contradiction if <span class="math inline">\(\mu(\mathbb{R}^d) &gt; 1\)</span>. By contrast, mass can strictly decrease: the fleeing example <span class="math inline">\(\mu_n = \frac{1}{2}\delta_0 + \frac{1}{2}\delta_{n e_1}\)</span> gives <span class="math inline">\(\mu_n \xrightarrow{v} \frac{1}{2}\delta_0\)</span> with only half the mass preserved.</p></li>
+<li><p><strong>Tightness bridges vague and weak convergence.</strong><br>
+By <a href="#thm-tightness-vague-weak" class="quarto-xref">Theorem&nbsp;<span>48.2</span></a>, if <span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span> (with <span class="math inline">\(\mu_n\)</span> probability measures), then <span class="math inline">\(\mu_n \implies \mu\)</span> (i.e., <span class="math inline">\(\mu(\mathbb{R}^d) = 1\)</span> and vague convergence upgrades to weak convergence) if and only if <span class="math inline">\(\{\mu_n\}\)</span> is tight. The key directions are:</p>
+<ul>
+<li><em>Tight <span class="math inline">\(\Rightarrow\)</span> weak</em>: tightness gives a cutoff function <span class="math inline">\(f \ge \mathbf{1}_{K_\epsilon}\)</span> that forces <span class="math inline">\(\mu(\mathbb{R}^d) \ge 1 - \epsilon\)</span>; since <span class="math inline">\(\epsilon\)</span> is arbitrary, <span class="math inline">\(\mu(\mathbb{R}^d) = 1\)</span>, and the <span class="math inline">\(C_c\)</span> characterization (Theorem 22.2) then gives <span class="math inline">\(\mu_n \implies \mu\)</span>.</li>
+<li><em>Weak <span class="math inline">\(\Rightarrow\)</span> tight</em>: weak convergence implies <span class="math inline">\(\lim_{R\to\infty} \inf_n \mu_n(\bar{B}_R) = 1\)</span> (Lemma 22.2).</li>
+</ul></li>
+<li><p><strong>Vague convergence on <span class="math inline">\(\mathbb{R}\)</span> is characterized by differences of CDFs.</strong><br>
+By <a href="#thm-vague-cdf" class="quarto-xref">Theorem&nbsp;<span>48.3</span></a>, <span class="math inline">\(\mu_n \xrightarrow{v} \mu\)</span> iff <span class="math inline">\(F_n(b) - F_n(a) \to F(b) - F(a)\)</span> for all continuity points <span class="math inline">\(a &lt; b\)</span> of <span class="math inline">\(F\)</span>, where <span class="math inline">\(F\)</span> is the CDF of <span class="math inline">\(\mu\)</span>. Note that CDF differences (not pointwise CDF values) are the correct quantity: the pointwise limit of <span class="math inline">\(F_n\)</span> need not equal the CDF of the vague limit.</p></li>
+<li><p><strong>The pointwise limit of CDFs need not be the CDF of the vague limit.</strong><br>
+The example <span class="math inline">\(\mu_n = \frac{1}{2}(\delta_n + \delta_{-n}) \xrightarrow{v} \mathbf{0}\)</span> illustrates this: <span class="math inline">\(F_n(t) \to 1/2\)</span> pointwise for every finite <span class="math inline">\(t\)</span>, yet the CDF of <span class="math inline">\(\mathbf{0}\)</span> is <span class="math inline">\(F \equiv 0\)</span>. The CDF differences <span class="math inline">\(F_n(b) - F_n(a) = 0 \to 0 = F(b) - F(a)\)</span> correctly capture vague convergence, even though the pointwise limits of <span class="math inline">\(F_n\)</span> are not meaningful for the limit measure.</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./22-2-Weak-Convergence-Over-Rd.html" class="pagination-link" aria-label="Lecture 22.2: Weak Convergence over $R^d$">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="pagination-link" aria-label="Lecture 23.2: Prokhorov's Compactness Theorem">
+        <span class="nav-page-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/23-1-Vague-Convergence.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

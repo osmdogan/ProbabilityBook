@@ -1,0 +1,245 @@
+# Lecture 20.1: Cramer's LDP-Part I
+
+## Introduction: Rare Events and SLLN
+
+Let $\{X_n\}_{n \ge 1}$ be an independent and identically distributed (i.i.d.) sequence of random variables in $L^1(\Omega, \mathcal{F}, \mathbb{P})$, and define the partial sums:
+$$S_n = \sum_{k=1}^n X_k$$
+
+By the **Strong Law of Large Numbers (SLLN)**, the sample average converges almost surely to the expected value:
+$$\frac{S_n}{n} \xrightarrow{\text{a.s.}} \mathbb{E}[X_1] \quad \text{as } n \to \infty$$
+
+If we further assume $X_1 \in L^2(\Omega, \mathcal{F}, \mathbb{P})$ with $\operatorname{Var}(X_1) = \sigma^2 < \infty$, then, because the $X_k$ are independent and identically distributed, variances add:
+$$\operatorname{Var}\left(\frac{S_n}{n}\right) = \frac{1}{n^2}\sum_{k=1}^n \operatorname{Var}(X_k) = \frac{\sigma^2}{n}.$$
+Since $\mathbb{E}[S_n/n] = \mathbb{E}[X_1]$, Chebyshev's inequality gives, for every fixed $\epsilon > 0$,
+$$\mathbb{P}\left(\left| \frac{S_n}{n} - \mathbb{E}[X_1] \right| > \epsilon \right) \le \frac{\operatorname{Var}(S_n/n)}{\epsilon^2} = \frac{\sigma^2}{n \epsilon^2} = O\left(\frac{1}{n}\right)$$
+
+Thus, the event $\left\{ \left| \frac{S_n}{n} - \mathbb{E}[X_1] \right| > \epsilon \right\}$ is a **rare event** as $n \to \infty$. 
+
+To understand the exact decay rate of such rare events without pathological behavior, we impose a stronger regularity condition on $X_n$.
+
+::: {#def-exp-int}
+## Exponential Integrability
+A random variable $X$ is called **exponentially integrable** if
+$$
+\mathbb{E}\left[e^{t|X|}\right]<\infty
+\quad\text{for every }t>0.
+$$
+:::
+
+:::{#rem-exp-int}
+Exponential integrability implies the existence of moments of all orders. Indeed, fix an integer $p \ge 1$ and any $t > 0$. Since every term of the series $e^{s} = \sum_{j \ge 0} s^j/j!$ is nonnegative for $s = t|X| \ge 0$, retaining only the $j = p$ term gives the pointwise bound
+$$ 
+e^{t|X|} \geq \frac{(t|X|)^p}{p!}. 
+$$
+Both sides are nonnegative, so monotonicity of the expectation applies and yields
+$$ 
+\mathbb{E}[|X|^p] \leq \frac{p!}{t^p}\mathbb{E}\left[e^{t|X|}\right] <\infty. 
+$$
+Therefore $X \in L^p(\Omega, \mathcal{F}, \mathbb{P})$ for every integer $p \ge 1$, and hence for every real $p \ge 1$ by $|X|^p \le 1 + |X|^{\lceil p \rceil}$.
+:::
+
+---
+
+## Moments and Cumulant Generating Functions
+
+When $X$ is exponentially integrable, its moment-generating properties are exceptionally well-behaved.
+
+::: {#def-mgf-cgf}
+## MGF and CGF
+Let $X$ be an exponentially integrable random variable.
+
+1. The **Moment Generating Function (MGF)** of $X$ is defined as:
+   $$M_X(t) := \mathbb{E}\left[e^{tX}\right], \quad t \in \mathbb{R}$$
+
+2. The **Cumulant Generating Function (CGF)** of $X$ is defined as:
+   $$\Psi_X(t) := \log M_X(t) = \log \mathbb{E}\left[e^{tX}\right], \quad t \in \mathbb{R}$$
+   The number $C_k(X) := \Psi_X^{(k)}(0)$ is called the $k$-th **cumulant** of $X$.
+:::
+
+::: {#prp-mgf-analytic}
+## Regularity of the MGF and CGF
+Let $X$ be exponentially integrable. Then:
+
+1. $M_X(t) \in (0, \infty)$ for every $t \in \mathbb{R}$, and $M_X$ is entire (real-analytic on all of $\mathbb{R}$) with the globally convergent power series
+   $$M_X(t) = \sum_{k=0}^{\infty} \mathbb{E}[X^k] \frac{t^k}{k!} = 1 + \mathbb{E}[X]t + \frac{1}{2}\mathbb{E}[X^2]t^2 + \dots$$
+2. $\Psi_X = \log M_X$ is real-analytic on all of $\mathbb{R}$, and it admits a Taylor expansion
+   $$\Psi_X(t) = \sum_{k=1}^{\infty} C_k(X) \frac{t^k}{k!}$$
+   valid on **some** interval $(-r, r)$ with $r > 0$. (The radius $r$ need not be infinite: the Taylor series of $\log M_X$ at $0$ is limited by the complex zeros of $M_X$, even though $\Psi_X$ itself is analytic on all of $\mathbb{R}$.)
+:::
+
+::: {.proof}
+**(1)** Positivity is clear since $e^{tX} > 0$ pointwise. Finiteness: $0 < e^{tX} \le e^{|t||X|}$ pointwise, so $M_X(t) \le \mathbb{E}[e^{|t||X|}] < \infty$ for $t \ne 0$ by @def-exp-int, and $M_X(0) = 1$. For the series, apply Tonelli's theorem to the nonnegative terms $|X|^k|t|^k/k!$:
+$$\sum_{k=0}^\infty \frac{|t|^k}{k!}\mathbb{E}[|X|^k] = \mathbb{E}\left[\sum_{k=0}^\infty \frac{(|t||X|)^k}{k!}\right] = \mathbb{E}\left[e^{|t||X|}\right] < \infty .$$
+This absolute convergence licenses Fubini's theorem for the interchange of $\mathbb{E}$ and $\sum$ applied to $e^{tX} = \sum_k (tX)^k/k!$, giving the stated series for every $t \in \mathbb{R}$. A power series convergent on all of $\mathbb{R}$ defines a real-analytic function there.
+
+**(2)** $\log$ is analytic on $(0,\infty)$ and $M_X > 0$ by part (1), so the composition $\Psi_X = \log \circ M_X$ is real-analytic on $\mathbb{R}$; in particular it is $C^\infty$, so all cumulants $C_k(X) = \Psi_X^{(k)}(0)$ exist, and analyticity at $0$ gives convergence of the Taylor series on some interval $(-r,r)$, $r > 0$. $\blacksquare$
+:::
+
+## Explicit Expressions for the First Two Cumulants
+
+We work on the interval $(-r, r)$ of @prp-mgf-analytic, where all expansions below converge. Using the standard logarithmic Taylor series $\log(1 + u) = u - \frac{u^2}{2} + O(u^3)$ as $u \to 0$ (legitimate because $u := M_X(t) - 1 \to 0$ as $t \to 0$):
+
+$$\begin{aligned}
+\Psi_X(t) &= \log \left( 1 + \mathbb{E}[X]t + \frac{1}{2}\mathbb{E}[X^2]t^2 + O(t^3) \right) \\
+&= \left( \mathbb{E}[X]t + \frac{1}{2}\mathbb{E}[X^2]t^2 \right) - \frac{1}{2}\left( \mathbb{E}[X]t \right)^2 + O(t^3) \\
+&= \mathbb{E}[X]t + \frac{1}{2}\left( \mathbb{E}[X^2] - (\mathbb{E}[X])^2 \right)t^2 + O(t^3)
+\end{aligned}$$
+
+Comparing coefficients or differentiating directly gives:
+
+1. **First Cumulant (Mean):**
+   $$C_1(X) = \Psi_X'(0) = \frac{M_X'(0)}{M_X(0)} = \frac{\mathbb{E}[X]}{1} = \mathbb{E}[X]$$
+
+2. **Second Cumulant (Variance):**
+   $$C_2(X) = \Psi_X''(0) = \frac{M_X''(0)M_X(0) - (M_X'(0))^2}{(M_X(0))^2} = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = \operatorname{Var}(X)$$
+
+---
+
+## Chernoff's Bound for Upper Deviations
+
+Throughout this section, $\{X_n\}_{n\ge1}$ is i.i.d. and $X_1$ is exponentially integrable, and $\epsilon > 0$ is fixed. How rare is it for $\frac{S_n}{n} - \mathbb{E}[X_1] > \epsilon$?
+
+Define the centered random variables:
+$$\dot{X}_k := X_k - \mathbb{E}[X_1], \quad \text{so that } \mathbb{E}[\dot{X}_k] = 0$$
+$$\dot{S}_n := \sum_{k=1}^n \dot{X}_k = S_n - n\mathbb{E}[X_1]$$
+
+Two facts we will use repeatedly, both immediate but worth stating:
+
+* **The $\dot X_k$ are i.i.d.** Each $\dot X_k = f(X_k)$ for the same Borel function $f(x) = x - \mathbb{E}[X_1]$, and measurable functions of independent random variables are independent; identical distribution is preserved likewise.
+* **$\dot X_1$ is exponentially integrable.** Writing $m := \mathbb{E}[X_1]$, the triangle inequality gives $|\dot X_1| \le |X_1| + |m|$, hence for every $t > 0$
+  $$\mathbb{E}\left[e^{t|\dot X_1|}\right] \le e^{t|m|}\,\mathbb{E}\left[e^{t|X_1|}\right] < \infty .$$
+  So @prp-mgf-analytic applies to $\dot X_1$, and $M_{\dot X_1}, \Psi_{\dot X_1}$ are finite on all of $\mathbb{R}$.
+
+The event of interest becomes:
+$$\mathbb{P}\left(\frac{S_n}{n} - \mathbb{E}[X_1] > \epsilon\right) = \mathbb{P}(\dot{S}_n > n\epsilon)$$
+
+Fix $t > 0$. Since $s \mapsto e^{ts}$ is *strictly increasing* for $t > 0$, the events $\{\dot S_n > n\epsilon\}$ and $\{e^{t\dot S_n} > e^{tn\epsilon}\}$ coincide. Applying Markov's inequality to the nonnegative random variable $e^{t\dot S_n}$ (which is integrable by exponential integrability of $\dot X_1$):
+
+$$\begin{aligned}
+\mathbb{P}(\dot{S}_n > n\epsilon) &= \mathbb{P}\left(e^{t\dot{S}_n} > e^{tn\epsilon}\right) \quad \text{(valid because } t > 0) \\
+&\le e^{-tn\epsilon} \, \mathbb{E}\left[e^{t\dot{S}_n}\right] \quad \text{(by Markov's inequality)}
+\end{aligned}$$
+
+By independence of $\dot{X}_1, \dots, \dot{X}_n$ (the factors $e^{t\dot X_k}$ are independent, nonnegative and integrable, so the expectation of the product is the product of the expectations), and by their identical distribution:
+$$\mathbb{E}\left[e^{t\dot{S}_n}\right] = \mathbb{E}\left[\prod_{k=1}^n e^{t\dot{X}_k}\right] = \prod_{k=1}^n \mathbb{E}\left[e^{t\dot{X}_k}\right] = \left(M_{\dot{X}_1}(t)\right)^n$$
+
+Substituting $M_{\dot{X}_1}(t) = e^{\Psi_{\dot{X}_1}(t)}$:
+$$\mathbb{P}(\dot{S}_n > n\epsilon) \le e^{-tn\epsilon} \left(e^{\Psi_{\dot{X}_1}(t)}\right)^n = \exp\left(-n \left( t\epsilon - \Psi_{\dot{X}_1}(t) \right)\right)$$
+
+Since this inequality holds for **every** $t > 0$, we may take the infimum of the right-hand side over $t > 0$:
+$$\mathbb{P}(\dot{S}_n > n\epsilon) \le \inf_{t>0} \exp\left(-n(t\epsilon - \Psi_{\dot X_1}(t))\right) = \exp\left(-n \sup_{t > 0} \{ t\epsilon - \Psi_{\dot{X}_1}(t) \} \right)$$
+where the last equality uses that $u \mapsto e^{-nu}$ is decreasing.
+
+---
+
+## The Legendre Transform and Properties of $\Psi_{\dot{X}}$
+
+::: {#def-legendre}
+## Legendre Transform (Convex Conjugate)
+Let $\psi: \mathbb{R} \to \mathbb{R}$ be a convex function. Its **Legendre transform** (convex conjugate) is the function $\psi^*: \mathbb{R} \to (-\infty, +\infty]$ defined by
+$$\psi^*(\eta) := \sup_{t \in \mathbb{R}} \{ \eta t - \psi(t) \}$$
+The value $+\infty$ is genuinely allowed (take $\psi \equiv 0$), so the codomain must be the extended half-line. The value $-\infty$ never occurs, since $\psi^*(\eta) \ge \eta\cdot 0 - \psi(0) = -\psi(0) > -\infty$. As a pointwise supremum of the affine functions $\eta \mapsto \eta t - \psi(t)$, $\psi^*$ is automatically convex and lower semicontinuous.
+:::
+
+::: {#exm-gaussian-legendre}
+## Example: Gaussian Distribution
+Let $\sigma^2 > 0$ and $Z \sim \mathcal{N}(0, \sigma^2)$. Then $Z$ is exponentially integrable and $\Psi_Z(t) = \frac{1}{2}\sigma^2 t^2$. Fix $\eta \in \mathbb{R}$ and set
+$$h(t) := \eta t - \frac{1}{2}\sigma^2 t^2 .$$
+Since $h''(t) = -\sigma^2 < 0$, $h$ is strictly concave, and $h(t) \to -\infty$ as $|t| \to \infty$; hence the supremum is attained at the unique stationary point. Solving $h'(t) = \eta - \sigma^2 t = 0$ gives $t^* = \eta/\sigma^2$, and substituting back:
+$$\Psi_Z^*(\eta) = h(t^*) = \eta\left(\frac{\eta}{\sigma^2}\right) - \frac{1}{2}\sigma^2\left(\frac{\eta}{\sigma^2}\right)^2 = \frac{\eta^2}{2\sigma^2}$$
+In particular the supremum in @def-legendre is a maximum here, and it is finite for every $\eta$.
+:::
+
+::: {#thm-convexity}
+## Convexity of the Cumulant Generating Function
+For any exponentially integrable random variable $X$, its CGF $\Psi_X(t)$ is convex on $\mathbb{R}$. If additionally $\operatorname{Var}(X) > 0$ (i.e., $X$ is non-degenerate), then $\Psi_X(t)$ is **strictly** convex.
+:::
+
+::: {.proof}
+**Step 1 (differentiation under the expectation).** Fix $t_0 \in \mathbb{R}$ and let $\delta := 1$. For $|t - t_0| \le \delta$ we have the domination
+$$\left|\frac{\partial}{\partial t} e^{tX}\right| = |X| e^{tX} \le |X| e^{(|t_0|+1)|X|} \le e^{(|t_0|+2)|X|},$$
+using $|x| \le e^{|x|}$, and the right-hand side is integrable by @def-exp-int. The same bound with $X^2$ in place of $|X|$ (and $|t_0|+3$ in the exponent) handles the second derivative. Hence $M_X$ is twice differentiable with
+$$M_X'(t) = \mathbb{E}\left[X e^{tX}\right], \qquad M_X''(t) = \mathbb{E}\left[X^2 e^{tX}\right],$$
+both finite for every $t \in \mathbb{R}$. (This also follows from @prp-mgf-analytic.)
+
+**Step 2 (the second derivative of the CGF).** Since $M_X(t) > 0$, the quotient rule applied to $\Psi_X'(t) = M_X'(t)/M_X(t)$ gives, for an arbitrary $t \in \mathbb{R}$,
+$$\Psi_X''(t) = \frac{\mathbb{E}\left[X^2 e^{tX}\right]\mathbb{E}\left[e^{tX}\right] - \left(\mathbb{E}\left[X e^{tX}\right]\right)^2}{\left(\mathbb{E}\left[e^{tX}\right]\right)^2} = \frac{\mathbb{E}\left[X^2 e^{tX}\right]}{M_X(t)} - \left( \frac{\mathbb{E}\left[X e^{tX}\right]}{M_X(t)} \right)^2$$
+
+**Step 3 (the tilted measure).** Introduce the **exponentially tilted probability measure** $\mathbb{P}_t$ via the Radon-Nikodym derivative:
+$$\mathrm{d}\mathbb{P}_t := \frac{e^{tX}}{M_X(t)} \, \mathrm{d}\mathbb{P}$$
+
+The density is nonnegative and $\mathbb{P}$-integrable, and $\mathbb{P}_t(\Omega) = \int d\mathbb{P}_t = M_X(t)/M_X(t) = 1$, so $\mathbb{P}_t$ is indeed a probability measure on $(\Omega,\mathcal{F})$. By the change-of-measure formula, and since $X, X^2$ are $\mathbb{P}_t$-integrable by Step 1,
+$$\mathbb{E}_{\mathbb{P}_t}[X] = \frac{\mathbb{E}\left[X e^{tX}\right]}{M_X(t)}, \qquad \mathbb{E}_{\mathbb{P}_t}[X^2] = \frac{\mathbb{E}\left[X^2 e^{tX}\right]}{M_X(t)}$$
+
+Hence $\Psi_X''(t) = \mathbb{E}_{\mathbb{P}_t}[X^2] - (\mathbb{E}_{\mathbb{P}_t}[X])^2 = \operatorname{Var}_{\mathbb{P}_t}(X) \ge 0$ for every $t \in \mathbb{R}$. A twice-differentiable function with nonnegative second derivative on $\mathbb{R}$ is convex, establishing **convexity**.
+
+**Step 4 (strict convexity).** Since $d\mathbb{P}_t/d\mathbb{P} = e^{tX}/M_X(t) > 0$ everywhere, $\mathbb{P}_t$ and $\mathbb{P}$ are mutually absolutely continuous ($\mathbb{P}_t \sim \mathbb{P}$). They therefore share the same null sets, so $\operatorname{Var}_{\mathbb{P}_t}(X) = 0 \iff X$ is $\mathbb{P}_t$-a.s. constant $\iff X$ is $\mathbb{P}$-a.s. constant $\iff \operatorname{Var}(X) = 0$. When $\operatorname{Var}(X) > 0$, we conclude $\Psi_X''(t) = \operatorname{Var}_{\mathbb{P}_t}(X) > 0$ for every $t \in \mathbb{R}$; a positive second derivative on all of $\mathbb{R}$ gives strict convexity. $\blacksquare$
+:::
+
+## Analysis of the Supremum over $t > 0$
+
+Let $\dot{X}_1$ be centered and exponentially integrable, and fix $\epsilon > 0$. Define
+$$g(t) := \epsilon t - \Psi_{\dot X_1}(t), \qquad t \in \mathbb{R}.$$
+By @prp-mgf-analytic, $g$ is finite and differentiable on all of $\mathbb{R}$, and by @thm-convexity it is **concave** (an affine function minus a convex function). Its values at the origin are:
+
+1. $g(0) = -\Psi_{\dot{X}_1}(0) = -\log M_{\dot X_1}(0) = -\log(1) = 0$.
+2. $g'(0) = \epsilon - \Psi_{\dot{X}_1}'(0) = \epsilon - \mathbb{E}[\dot{X}_1] = \epsilon > 0$, using $C_1(\dot X_1) = \mathbb{E}[\dot X_1] = 0$.
+
+From these two facts:
+
+* **On $t \le 0$ the supremum is $0$.** A differentiable concave function lies below each of its tangent lines, so for every $t \in \mathbb{R}$,
+  $$g(t) \le g(0) + g'(0)(t - 0) = \epsilon t .$$
+  For $t < 0$ this gives $g(t) \le \epsilon t < 0 = g(0)$. Combined with $g(0)=0$, we get $\sup_{t \le 0} g(t) = g(0) = 0$.
+* **On $t > 0$ the supremum is strictly positive.** Since $g(0)=0$ and $g'(0) = \epsilon > 0$, the definition of the derivative gives $g(t)/t \to \epsilon > 0$ as $t \downarrow 0$, so $g(t) > 0$ for all sufficiently small $t > 0$. Hence $\sup_{t > 0} g(t) > 0$.
+* **Consequently the two suprema agree.** Because $\sup_{t>0} g > 0 = \sup_{t \le 0} g$,
+$$\sup_{t > 0} \{ \epsilon t - \Psi_{\dot{X}_1}(t) \} = \sup_{t \in \mathbb{R}} \{ \epsilon t - \Psi_{\dot{X}_1}(t) \} = \Psi_{\dot{X}_1}^*(\epsilon) \in (0, +\infty]$$
+
+Thus, our bound simplifies directly to:
+$$\mathbb{P}(\dot{S}_n > n\epsilon) \le e^{-n \Psi_{\dot{X}_1}^*(\epsilon)}$$
+with the convention $e^{-\infty} = 0$ if $\Psi_{\dot X_1}^*(\epsilon) = +\infty$.
+
+Taking logarithms (monotone), dividing by $n > 0$, and passing to the limit superior gives the upper bound:
+$$\limsup_{n \to \infty} \frac{1}{n} \log \mathbb{P}(\dot{S}_n > n\epsilon) \le -\Psi_{\dot{X}_1}^*(\epsilon)$$
+valid in $[-\infty, \infty)$, with $\log 0 := -\infty$.
+
+---
+
+## Main Result: Cramér's Large Deviation Theorem
+
+::: {#thm-cramer}
+## Cramér's Large Deviation Theorem (Upper Bound & Exact Rate)
+Let $\{X_n\}_{n \ge 1}$ be an i.i.d. sequence of exponentially integrable random variables which are **non-degenerate**, i.e. $\operatorname{Var}(X_1) > 0$. Let $\dot{X}_n := X_n - \mathbb{E}[X_1]$, $\dot{S}_n := \sum_{k=1}^n \dot{X}_k$, and set
+$$b := \operatorname*{ess\,sup} \dot X_1 \in (0, +\infty] .$$
+(Non-degeneracy together with $\mathbb{E}[\dot X_1] = 0$ forces $b > 0$.) Then for every $\epsilon$ with $0 < \epsilon < b$:
+$$\lim_{n \to \infty} \frac{1}{n} \log \mathbb{P}\left( \frac{\dot{S}_n}{n} > \epsilon \right) = -\Psi_{\dot{X}_1}^*(\epsilon)$$
+with the conventions $\log 0 := -\infty$ and $-(+\infty) := -\infty$.
+:::
+
+::: {#rem-cramer-hypotheses}
+The restriction $\epsilon < b$ is needed for the *strict* inequality $\dot S_n/n > \epsilon$ used here. If $b < \infty$ and $\mathbb{P}(\dot X_1 = b) > 0$, then at $\epsilon = b$ the left-hand side equals $-\infty$ (the event is empty), whereas $\Psi_{\dot X_1}^*(b) = -\log \mathbb{P}(\dot X_1 = b)$ is finite, so the identity fails at that single point. For $\epsilon > b$ both sides equal $-\infty$, so the statement remains true there. Only the upper bound
+$$\limsup_{n\to\infty}\frac1n\log\mathbb{P}(\dot S_n > n\epsilon) \le -\Psi^*_{\dot X_1}(\epsilon)$$
+is proved above; it requires no assumption beyond exponential integrability and holds for every $\epsilon > 0$. The matching lower bound is proved in Part 2.
+:::
+
+## Significance and Modern Terminology
+
+This result formalizes how rare the tail event $\left\{ \frac{S_n}{n} - \mathbb{E}[X_1] > \epsilon \right\} = \{\dot{S}_n > n\epsilon\}$ is:
+
+* The probability decays **exponentially fast** in $n$.
+* The exact exponential rate of decay is governed by the Legendre transform value $-\Psi_{\dot{X}_1}^*(\epsilon)$.
+
+Historically, Harald Cramér referred to such rare tail events as **large deviations**. 
+
+In modern terminology, writing $\mu_n$ for the law of $\dot{S}_n / n$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, one says that the sequence $\{\mu_n\}_{n=1}^\infty$ satisfies a **Large Deviations Principle (LDP)** with rate function $I(x) = \Psi_{\dot{X}_1}^*(x)$, $x \in \mathbb{R}$, and speed $n$. The computation above is exactly the upper-bound half of that principle for the half-lines $(\epsilon, \infty)$.
+
+## Takeaways
+
+1. **From polynomial to exponential decay.** The SLLN ($X_1 \in L^1$) gives $S_n/n \to \mathbb{E}[X_1]$ a.s., and Chebyshev ($X_1 \in L^2$) gives polynomial decay $\mathbb{P}(|S_n/n - \mathbb{E}[X_1]| > \epsilon) = O(1/n)$. Exponential integrability enables Chernoff's method, which yields the far sharper exponential bound $\mathbb{P}(\dot{S}_n > n\epsilon) \le e^{-n\Psi_{\dot{X}_1}^*(\epsilon)}$.
+
+2. **Chernoff's bound: Markov $+$ i.i.d. factorization $+$ optimization.** For any $t > 0$, strict monotonicity of $s \mapsto e^{ts}$ lets us rewrite the event, and Markov's inequality applied to $e^{t\dot{S}_n}$ gives $e^{-tn\epsilon}\mathbb{E}[e^{t\dot{S}_n}]$. Independence and identical distribution factor the expectation into $M_{\dot{X}_1}(t)^n = e^{n\Psi_{\dot{X}_1}(t)}$, yielding $e^{-n(t\epsilon - \Psi_{\dot{X}_1}(t))}$. Taking the infimum over all $t > 0$ produces the rate $\sup_{t>0}\{t\epsilon - \Psi_{\dot{X}_1}(t)\}$.
+
+3. **The supremum over $t > 0$ equals the full Legendre transform.** Centering gives $\Psi_{\dot{X}_1}'(0) = 0$, so $g(t) = \epsilon t - \Psi_{\dot{X}_1}(t)$ satisfies $g(0) = 0$ and $g'(0) = \epsilon > 0$. The tangent upper bound for the concave function $g$ gives $g(t) \le \epsilon t < 0$ for $t < 0$, so $\sup_{t \le 0} g = 0$; and $g'(0) > 0$ forces $g > 0$ just to the right of $0$, so $\sup_{t > 0} g > 0$. Hence the restricted supremum over $t > 0$ equals the full Legendre transform $\Psi_{\dot{X}_1}^*(\epsilon) \in (0,+\infty]$.
+
+4. **Convexity of the CGF via the tilted measure.** $\Psi_X''(t) = \operatorname{Var}_{\mathbb{P}_t}(X) \ge 0$ for every $t \in \mathbb{R}$, where $d\mathbb{P}_t = (e^{tX}/M_X(t))\,d\mathbb{P}$ is the exponentially tilted measure; differentiation under the expectation is justified by exponential integrability. Since $\mathbb{P}_t \sim \mathbb{P}$ (mutually absolutely continuous), strict convexity holds whenever $\operatorname{Var}(X) > 0$: the tilted measure cannot degenerate a non-constant $X$.
+
+5. **Cramér's theorem gives the exact exponential rate.** The Chernoff bound establishes the upper bound $\limsup_{n} \frac{1}{n}\log\mathbb{P}(\dot{S}_n > n\epsilon) \le -\Psi_{\dot{X}_1}^*(\epsilon)$ for every $\epsilon > 0$. The matching lower bound, proved in Part 2 for $0 < \epsilon < \operatorname{ess\,sup}\dot X_1$ using the tilted measure $\mathbb{P}_{t_\epsilon}$ (where $t_\epsilon$ is the Legendre maximizer), yields the exact limit $\lim_{n\to\infty}\frac{1}{n}\log\mathbb{P}(\dot{S}_n > n\epsilon) = -\Psi_{\dot{X}_1}^*(\epsilon)$.

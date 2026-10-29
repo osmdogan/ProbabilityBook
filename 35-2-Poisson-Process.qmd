@@ -1,0 +1,421 @@
+
+# Lecture 35.2: Poisson Process
+
+## Review of the Exponential Distribution
+
+The exponential distribution serves as the foundational building block for renewal and Poisson processes.
+
+::: {#def-exponential}
+## Exponential Distribution
+A random variable $\xi$ is said to follow an exponential distribution with rate parameter $\lambda > 0$, denoted $\xi \sim \operatorname{Exp}(\lambda)$, if its tail probability is given by:
+$$
+\mathbb{P}(\xi > t) = e^{-\lambda t}, \quad t \ge 0.
+$${#eq-exp-tail}
+:::
+
+The exponential distribution frequently models waiting times because it is the unique continuous distribution possessing the **memoryless property**. Specifically, for any $t, s \ge 0$:
+$$
+\begin{align*}
+\mathbb{P}(\xi > t + s \mid \xi > s) &= \frac{\mathbb{P}(\xi > t + s)}{\mathbb{P}(\xi > s)}\\
+&= \frac{e^{-\lambda(t+s)}}{e^{-\lambda s}} \\
+&= e^{-\lambda t} \\
+&= \mathbb{P}(\xi > t).
+\end{align*}
+$${#eq-memoryless}
+
+Rearranging @eq-memoryless yields the functional equation:
+$$
+\mathbb{P}(\xi > t + s) = \mathbb{P}(\xi > t) \mathbb{P}(\xi > s).
+$${#eq-functional-exp}
+
+## Characterization via Differential Equations
+
+Let $f(t) := \mathbb{P}(\xi > t)$ for a continuous cumulative distribution function with $f: [0, \infty) \to [0, 1]$. Assuming $f$ is differentiable almost everywhere, we differentiate @eq-functional-exp with respect to $s$ at $s = 0$:
+$$
+\begin{align*}
+&f(t + h) - f(t) = f(t)(f(h) - 1) \\
+&\implies \lim_{h \to 0^+} \frac{f(t+h) - f(t)}{h} \\
+&= f(t) \lim_{h \to 0^+} \frac{f(h) - 1}{h}.
+\end{align*}
+$${#eq-diff-step}
+
+This leads directly to the ordinary differential equation:
+$$
+f'(t) = -\lambda f(t),
+$${#eq-exp-ode}
+where $\lambda = -\lim_{h \to 0^+} \frac{f(h)-1}{h} > 0$. Solving @eq-exp-ode with initial condition $f(0) = 1$ uniquely determines $f(t) = e^{-\lambda t}$.
+
+---
+
+## Construction of the Standard Poisson Process
+
+Let $\{\xi_k\}_{k=1}^\infty$ be a sequence of independent and identically distributed (i.i.d.) $\operatorname{Exp}(\lambda)$ random variables representing inter-arrival times. 
+
+Define the arrival times $\{X_n\}_{n \ge 0}$ by $X_0 = 0$ and:
+$$
+X_n := \sum_{k=1}^n \xi_k, \quad n \ge 1.
+$${#eq-arrival-sum}
+
+The associated **renewal counting process** $\{N_t\}_{t \ge 0}$ is defined by:
+$$
+N_t := \sup \{ n \ge 0 : X_n \le t \} = \sum_{n=1}^{\infty} \mathbb{I}_{\{X_n \le t\}}, \quad t \ge 0.
+$${#eq-counting-def}
+
+The event that $N_t = n$ corresponds precisely to the interval of arrival times:
+$$
+\{ N_t = n \} = \{ X_n \le t < X_{n+1} \}.
+$${#eq-counting-event}
+
+:::{#def-poisson-process}
+## Standard Poisson Process
+This renewal counting process $\{N_t\}_{t \ge 0}$ is called the **standard Poisson process of rate $\lambda$**.
+:::
+
+---
+
+## Finite-Dimensional Distributions of the Poisson Process
+
+To understand the finite-dimensional distributions of $\{N_t\}_{t \ge 0}$, it is first useful to compute the joint distributions of the arrival times $\{X_n\}_{n \ge 1}$. 
+
+Notice that the arrival times satisfy $X_n > X_{n-1} > \dots > X_1 > 0$ almost surely. Consequently, the state space of $(X_1, \dots, X_n)$ is restricted to a simplex rather than the full Euclidean space $\mathbb{R}^n$.
+
+::: {#def-simplex}
+## Arrival Simplex Domains
+For $t > 0$, define the ordered simplex domains:
+
+* $D_n(t) := \{ (x_1, \dots, x_n) \in \mathbb{R}^n : 0 < x_1 < x_2 < \dots < x_n \le t \}$.
+* $\widetilde{D}_n :=\cup_{t>0}D_n(t) = \{ (x_1, \dots, x_n) \in \mathbb{R}^n : 0 < x_1 < x_2 < \dots < x_n \}$.
+:::
+
+::: {#lem-leb-simplex}
+## Lebesgue Measure of the Simplex
+The Lebesgue measure of $D_n(t)$ is given by:
+$$
+\operatorname{Leb}(D_n(t)) = \frac{t^n}{n!}.
+$${#eq-leb-simplex}
+:::
+
+::: {.proof}
+## Proof of @lem-leb-simplex
+Write the measure as the iterated integral over the nested inequalities $0 < x_1 < \cdots < x_n \le t$:
+$$
+\operatorname{Leb}(D_n(t))
+= \int_0^t \int_0^{x_n} \cdots \int_0^{x_2} 1 \, \mathrm{d}x_1 \, \mathrm{d}x_2 \cdots \mathrm{d}x_{n-1} \, \mathrm{d}x_n.
+$$
+Define $I_k(s) := \operatorname{Leb}(D_k(s))$ for $k \ge 1$ and $s \ge 0$. We prove $I_k(s) = s^k / k!$ by induction on $k$.
+
+**Base case** ($k = 1$):
+$$
+I_1(s) = \int_0^s \mathrm{d}x_1 = s = \frac{s^1}{1!}.
+$$
+
+**Inductive step**: Suppose $I_{k-1}(x) = x^{k-1}/(k-1)!$ for all $x \ge 0$. The outermost integral peels off the $x_k$-integration, with the inner $(k-1)$ integrals giving $I_{k-1}(x_k)$:
+$$
+I_k(s)
+= \int_0^s I_{k-1}(x_k) \, \mathrm{d}x_k
+= \int_0^s \frac{x_k^{k-1}}{(k-1)!} \, \mathrm{d}x_k
+= \frac{1}{(k-1)!} \cdot \frac{s^k}{k}
+= \frac{s^k}{k!}.
+$$
+
+Applying the result at $k = n$ and $s = t$ gives $\operatorname{Leb}(D_n(t)) = I_n(t) = t^n / n!$.
+:::
+
+:::{.proof}
+## Alternative proof of @lem-leb-simplex
+The cube $(0,t)^n$ can be partitioned, up to a Lebesgue-null set, into the $n!$ regions corresponding to the possible strict orderings of $x_1,\ldots,x_n$. By symmetry of Lebesgue measure each region has the same measure, so
+$$
+\operatorname{Leb}(D_n(t)) =\frac{\operatorname{Leb}((0,t)^n)}{n!}= \frac{t^n}{n!}.
+$$
+:::
+
+::: {#lem-joint-density}
+## Joint Density of Arrival Times
+If $g\in\mathcal{B}_b\left(\widetilde{D}_n,\mathcal{B}(\widetilde{D}_n)\right)$ is a bounded measurable function, then:
+$$
+\mathbb{E}\left[g(X_1, \dots, X_n)\right] = \int_{\widetilde{D}_n} g(x_1, \dots, x_n) \lambda^n e^{-\lambda x_n} \, \mathrm{d}x_1 \dots \mathrm{d}x_n.
+$${#eq-joint-density}
+:::
+
+::: {.proof}
+## Proof of @lem-joint-density
+The inter-arrival times $\xi_1,\ldots,\xi_n$ are i.i.d. exponential random variables with parameter $\lambda$, so their joint density on $\mathbb{R}_+^n$ is
+$$
+\begin{align*}
+f_{\xi_1,\ldots,\xi_n}(\xi_1,\ldots,\xi_n)&= \prod_{k=1}^n \lambda e^{-\lambda \xi_k}=\lambda^n e^{-\lambda(\xi_1+\cdots+\xi_n)}.
+\end{align*}
+$$
+The arrival times are related to the inter-arrival times by
+$$
+X_k=\sum_{j=1}^k \xi_j,
+\qquad k=1,\ldots,n.
+$$
+Equivalently, the inverse transformation is
+$$
+\xi_1=x_1,\qquad
+\xi_2=x_2-x_1,\qquad
+\ldots,\qquad
+\xi_n=x_n-x_{n-1}.
+$$
+Since $\xi_k>0$ for every $k$, the corresponding $(x_1,\ldots,x_n)$ satisfy
+$$
+0<x_1<x_2<\cdots<x_n,
+$$
+so the transformation maps $\mathbb{R}_+^n$ onto $\widetilde{D}_n$. The Jacobian matrix of the inverse transformation is
+$$
+\frac{\partial(\xi_1,\ldots,\xi_n)}
+{\partial(x_1,\ldots,x_n)}=
+\begin{pmatrix}
+1 & 0 & 0 & \cdots & 0\\
+-1 & 1 & 0 & \cdots & 0\\
+0 & -1 & 1 & \cdots & 0\\
+\vdots & \vdots & \ddots & \ddots & \vdots\\
+0 & 0 & \cdots & -1 & 1
+\end{pmatrix}.
+$$
+This matrix is lower triangular with diagonal entries equal to $1$, and hence
+$$
+\left|\text{det}
+\frac{\partial(\xi_1,\ldots,\xi_n)}
+{\partial(x_1,\ldots,x_n)}\right|=1.
+$$
+Moreover,
+$$
+\xi_1+\cdots+\xi_n=x_n.
+$$
+Therefore, by the change-of-variables formula,
+$$
+\begin{aligned}
+\mathbb{E}\left[g(X_1,\ldots,X_n)\right]
+&=
+\int_{\mathbb{R}_+^n}
+g(\xi_1,\xi_1+\xi_2,\ldots,\xi_1+\cdots+\xi_n)
+\lambda^n e^{-\lambda(\xi_1+\cdots+\xi_n)}
+d\xi_1\cdots d\xi_n\\
+&=
+\int_{\widetilde{D}_n}
+g(x_1,\ldots,x_n)
+\lambda^n e^{-\lambda x_n}
+dx_1\cdots dx_n.
+\end{aligned}
+$$
+This proves the result.
+:::
+
+::: {#cor-poisson-marginal}
+## Poisson Marginal Distribution
+For each $t > 0$ and $n \in \mathbb{N}$, the counting process variable $N_t$ follows a Poisson distribution with parameter $\lambda t$, i.e., $N_t \sim \operatorname{Poisson}(\lambda t)$.
+:::
+
+::: {.proof}
+We compute the probability $\mathbb{P}(N_t = n)$ using the indicator of the event $\{X_n \le t < X_{n+1}\}$:
+$$
+\begin{aligned}
+\mathbb{P}(N_t = n) &= \mathbb{P}(X_n \le t < X_{n+1})=\mathbb{E}\left[\mathbb{I}_{\{X_n \le t < X_{n+1}\}}\right] \\
+&= \int_{\widetilde{D}_{n+1}} \mathbb{I}_{\{x_n\le t\}}\mathbb{I}_{\{x_{n+1} > t\}} \lambda^{n+1} e^{-\lambda x_{n+1}}\mathrm{d}x_1 \dots \mathrm{d}x_{n+1} \\
+&= \int_{D_n(t)} \mathrm{d}x_1 \dots \mathrm{d}x_n\int_t^\infty \lambda^{n+1} e^{-\lambda x_{n+1}} \, \mathrm{d}x_{n+1}.
+\end{aligned}
+$$
+The first integral is the volume of the simplex $D_n(t)$, which is $\frac{t^n}{n!}$. The last integral evaluates to $e^{-\lambda t}\lambda^n$. Multiplying these two factors gives the final result:
+$$
+\mathbb{P}(N_t = n) = e^{-\lambda t} \frac{(\lambda t)^n}{n!}.
+$$
+This confirms that $N_t \sim \operatorname{Poisson}(\lambda t)$.
+:::
+
+---
+
+## Order Statistics Property of Arrival Times
+
+::: {#prp-order-statistics}
+## Uniform Order Statistics Property
+Let $n \in \mathbb{N}$ and $t > 0$. Let $U_1, \dots, U_n$ be independent and identically distributed $\operatorname{Unif}(0, t)$ random variables. Then, conditioned on the event $\{N_t = n\}$, the joint distribution of $(X_1, \dots, X_n)$ is identical to the joint distribution of the **order statistics** of $(U_1, \dots, U_n)$ (i.e., the values sorted in non-decreasing order).
+:::
+
+::: {.proof}
+## Proof of @prp-order-statistics
+First note that if $U_1,\ldots,U_n\sim\text{Unif}(0, t)$, then their joint density is
+$$
+f_{U_1,\ldots,U_n}(u_1,\ldots,u_n)=\frac{1}{t^n}\mathbb{I}_{(0,t)^n}(u_1,\ldots,u_n).
+$$
+Thus the vector $(U_1,\ldots,U_n)$ is uniformly distributed on the cube $(0,t)^n$. The order statistics $(U_{(1)},\ldots,U_{(n)})$ are obtained by sorting the $U_i$'s in non-decreasing order. The joint density of the order statistics is given by
+$$
+f_{U_{(1)},\ldots,U_{(n)}}(u_1,\ldots,u_n)=\frac{n!}{t^n}\mathbb{I}_{D_n(t)}(u_1,\ldots,u_n),
+$$
+where the factor of $n!$ accounts for the $n!$ possible permutations of the $U_i$'s that yield the same order statistics.
+
+For any bounded measurable function $f: D_n(t) \to \mathbb{R}$:
+$$
+\mathbb{E}[f(X_1, \dots, X_n) \mid N_t = n] = \frac{\mathbb{E}[f(X_1, \dots, X_n)\,\mathbb{I}(X_n \le t < X_{n+1})]}{\mathbb{P}(N_t = n)}.
+$$
+For the numerator, apply @lem-joint-density to $(X_1,\dots,X_{n+1})$ and separate the $x_{n+1}$-integration over $(t,\infty)$ (exactly as in the proof of @cor-poisson-marginal):
+$$
+\mathbb{E}[f(X_1,\dots,X_n)\,\mathbb{I}(X_n\le t<X_{n+1})]
+= \lambda^n e^{-\lambda t}\int_{D_n(t)} f(x_1, \dots, x_n) \, \mathrm{d}x_1 \cdots \mathrm{d}x_n.
+$$
+Dividing by $\mathbb{P}(N_t = n) = e^{-\lambda t} \frac{(\lambda t)^n}{n!}$ gives:
+$$
+\mathbb{E}[f(X_1, \dots, X_n) \mid N_t = n]
+= \frac{n!}{t^n} \int_{D_n(t)} f(x_1, \dots, x_n) \, \mathrm{d}x_1 \cdots \mathrm{d}x_n.
+$$
+The right-hand side is exactly $\mathbb{E}[f(U_{(1)}, \dots, U_{(n)})]$, where $U_{(1)} \le \dots \le U_{(n)}$ are the order statistics of $n$ independent $\operatorname{Unif}(0, t)$ variables. Indeed, $(U_{(1)},\dots,U_{(n)})$ has joint density $\frac{n!}{t^n}$ on $D_n(t)$ (the $n!$ comes from symmetry: the $n!$ possible orderings of $(U_1,\dots,U_n)$ each occupy the same Lebesgue measure $t^n/n!$ within $(0,t)^n$). Since the identity holds for every bounded measurable $f$, the conditional distribution of $(X_1,\dots,X_n)$ given $N_t=n$ equals the distribution of the order statistics $(U_{(1)},\dots,U_{(n)})$.
+:::
+
+---
+
+## Stochastic Counting Measure and Independent Increments
+
+To study spatial or temporal distributions more generally, we generalize the counting process to a **stochastic counting measure**.
+
+For any Borel set $B \in \mathcal{B}(\mathbb{R}_+)$, define $N(B)$ as the number of arrival points $X_n$ falling within $B$:
+$$
+N(B) := \sum_{n=1}^\infty \mathbb{I}_B(X_n) = N\left(B \cap [0, t]\right) \quad \text{(for bounded sets $B \subset [0, t]$)}.
+$$
+
+::: {#thm-poisson-measure}
+## Independence and Poisson Increments Theorem
+1. If $B_1, \dots, B_k$ form a disjoint partition of an interval $[0, t]$, then the random variables $N(B_1), \dots, N(B_k)$ are mutually independent.
+2. If $\operatorname{Leb}(B) < \infty$, then $N(B) \sim \operatorname{Poisson}(\lambda \operatorname{Leb}(B))$.
+3. In particular, for any $0 \le s < t$, the increment $N((s, t]) = N_t - N_s$ is independent of $\mathcal{F}_s$ and follows $\operatorname{Poisson}(\lambda(t - s))$.
+:::
+
+::: {.proof}
+## Proof of @thm-poisson-measure
+
+**Parts 1 and 2.**
+
+Write $\ell_j := \operatorname{Leb}(B_j)$ and note $\sum_{j=1}^k \ell_j = t$. For $u_1, \dots, u_k \in \mathbb{R}$, define
+$$
+\tilde{u}(x) := \sum_{j=1}^k e^{i u_j}\,\mathbb{I}_{B_j}(x), \quad x \in [0, t].
+$$
+Since the $B_j$ partition $[0, t]$, exactly one indicator is non-zero for each $x$, so $\tilde{u}$ is well-defined. We compute the joint characteristic function
+$$
+\phi(\mathbf{u}) := \mathbb{E}\!\left[\prod_{j=1}^k e^{i u_j N(B_j)}\right].
+$$
+
+**Step 1: Conditional expectation on $\{N_t = n\}$.**
+
+On the event $\{N_t = n\} = \{X_n \le t < X_{n+1}\}$, the arrivals that fall in $[0,t]$ are exactly $X_1, \dots, X_n$ (since $X_{n+1} > t$). Because $B_1, \dots, B_k$ partition $[0,t]$ and every $X_m \in [0,t]$, the count of arrivals in $B_j$ is:
+$$
+N(B_j) = \sum_{m=1}^n \mathbb{I}_{B_j}(X_m), \quad j = 1, \dots, k.
+$$
+Substituting and rearranging the product:
+$$
+\prod_{j=1}^k e^{i u_j N(B_j)}
+= \prod_{j=1}^k e^{i u_j \sum_{m=1}^n \mathbb{I}_{B_j}(X_m)}
+= \prod_{j=1}^k \prod_{m=1}^n e^{i u_j \mathbb{I}_{B_j}(X_m)}
+= \prod_{m=1}^n \prod_{j=1}^k e^{i u_j \mathbb{I}_{B_j}(X_m)}.
+$$
+For each fixed $m$, the sets $B_j$ partition $[0,t]$, so $X_m$ belongs to exactly one set, say $X_m \in B_{j_0}$. Then $\mathbb{I}_{B_j}(X_m) = \mathbf{1}_{j=j_0}$, and:
+$$
+\prod_{j=1}^k e^{i u_j \mathbb{I}_{B_j}(X_m)}
+= e^{i u_{j_0} \cdot 1} \prod_{j \ne j_0} e^{i u_j \cdot 0}
+= e^{i u_{j_0}}.
+$$
+On the other hand, the definition of $\tilde{u}$ gives:
+$$
+\tilde{u}(X_m) = \sum_{j=1}^k e^{i u_j} \mathbb{I}_{B_j}(X_m) = e^{i u_{j_0}}.
+$$
+Therefore $\prod_{j=1}^k e^{i u_j \mathbb{I}_{B_j}(X_m)} = \tilde{u}(X_m)$ for every $m$, and:
+$$
+\prod_{j=1}^k e^{i u_j N(B_j)} = \prod_{m=1}^n \tilde{u}(X_m) \quad \text{on } \{N_t = n\}.
+$$
+Applying @lem-joint-density to $(X_1, \dots, X_{n+1})$:
+$$
+\mathbb{E}\!\left[\prod_{j=1}^k e^{i u_j N(B_j)}\,\mathbb{I}(N_t = n)\right]
+= \int_{\widetilde{D}_{n+1}} \prod_{m=1}^n \tilde{u}(x_m)\cdot\mathbb{I}(x_n \le t < x_{n+1})
+  \cdot\lambda^{n+1} e^{-\lambda x_{n+1}}\,dx_1\cdots dx_{n+1}.
+$$
+The constraint $x_{n+1} > t$ decouples the $x_{n+1}$-integration from the rest:
+$$
+= \lambda^{n+1}\int_{D_n(t)}\prod_{m=1}^n \tilde{u}(x_m)\,dx_1\cdots dx_n
+  \cdot\int_t^\infty e^{-\lambda x_{n+1}}\,dx_{n+1}.
+$$
+Since $\displaystyle\int_t^\infty e^{-\lambda x}\,dx = \frac{e^{-\lambda t}}{\lambda}$, the $\lambda^{n+1}$ and $1/\lambda$ cancel to give:
+$$
+\mathbb{E}\!\left[\prod_{j=1}^k e^{i u_j N(B_j)}\,\mathbb{I}(N_t = n)\right]
+= \lambda^n e^{-\lambda t}\int_{D_n(t)}\prod_{m=1}^n \tilde{u}(x_m)\,dx_1\cdots dx_n.
+$${#eq-step1-cf}
+
+**Step 2: Evaluating the simplex integral.**
+
+The integrand $\prod_{m=1}^n \tilde{u}(x_m)$ is symmetric in $(x_1, \dots, x_n)$ (each factor depends on a single variable and is unaffected by permuting the others). The simplex $D_n(t) = \{0 < x_1 < \cdots < x_n \le t\}$ is exactly one of the $n!$ equal-measure regions obtained by partitioning $(0,t)^n$ according to the ordering of the coordinates. By symmetry, the integral over each such region is the same, so
+$$
+\int_{D_n(t)}\prod_{m=1}^n \tilde{u}(x_m)\,dx_1\cdots dx_n
+= \frac{1}{n!}\int_{(0,t)^n}\prod_{m=1}^n \tilde{u}(x_m)\,dx_1\cdots dx_n.
+$$
+The integrand factors over coordinates, so Fubini gives
+$$
+\int_{(0,t)^n}\prod_{m=1}^n \tilde{u}(x_m)\,dx_1\cdots dx_n
+= \prod_{m=1}^n\int_0^t \tilde{u}(x)\,dx
+= \left(\int_0^t \tilde{u}(x)\,dx\right)^n.
+$$
+Since the $B_j$ are disjoint,
+$$
+\int_0^t \tilde{u}(x)\,dx = \sum_{j=1}^k e^{i u_j}\int_{B_j}dx = \sum_{j=1}^k e^{i u_j}\ell_j.
+$$
+Substituting back into @eq-step1-cf:
+$$
+\mathbb{E}\!\left[\prod_{j=1}^k e^{i u_j N(B_j)}\,\mathbb{I}(N_t = n)\right]
+= \frac{\lambda^n e^{-\lambda t}}{n!}\left(\sum_{j=1}^k e^{i u_j}\ell_j\right)^n.
+$$
+
+**Step 3: Summing over $n \ge 0$.**
+
+Since $\{N_t = n\}_{n \ge 0}$ are disjoint events whose union is the whole sample space, the total expectation decomposes as:
+$$
+\phi(\mathbf{u})
+= \mathbb{E}\!\left[\prod_{j=1}^k e^{i u_j N(B_j)}\right]
+= \sum_{n=0}^\infty \mathbb{E}\!\left[\prod_{j=1}^k e^{i u_j N(B_j)}\,\mathbb{I}(N_t = n)\right].
+$$
+Substituting the result of Steps 1 and 2:
+$$
+= \sum_{n=0}^\infty \frac{\lambda^n e^{-\lambda t}}{n!}\left(\sum_{j=1}^k e^{i u_j}\ell_j\right)^n.
+$$
+Set $c := \lambda\sum_{j=1}^k e^{i u_j}\ell_j$. Since $|c| \le \lambda\sum_j \ell_j = \lambda t < \infty$, the series converges absolutely and equals $e^c$ by the Taylor expansion of the exponential:
+$$
+\phi(\mathbf{u})
+= e^{-\lambda t}\sum_{n=0}^\infty \frac{c^n}{n!}
+= e^{-\lambda t} e^{c}
+= e^{-\lambda t}\exp\!\left(\lambda\sum_{j=1}^k e^{i u_j}\ell_j\right).
+$$
+Since the $B_j$ partition $[0,t]$, we have $\sum_{j=1}^k \ell_j = t$, so $-\lambda t = -\lambda\sum_{j=1}^k \ell_j$. Combining the exponents:
+$$
+\phi(\mathbf{u})
+= \exp\!\left(-\lambda\sum_{j=1}^k \ell_j + \lambda\sum_{j=1}^k e^{i u_j}\ell_j\right)
+= \exp\!\left(\lambda\sum_{j=1}^k \ell_j(e^{i u_j}-1)\right).
+$$
+The exponent is a sum of $k$ independent terms, so the exponential factors into a product:
+$$
+\phi(\mathbf{u})
+= \prod_{j=1}^k \exp\!\left(\lambda\ell_j(e^{i u_j}-1)\right).
+$${#eq-poisson-cf-product}
+
+**Conclusion for Parts 1 and 2.** The joint characteristic function $\phi(\mathbf{u})$ is the product over $j$ of $\exp(\lambda\ell_j(e^{iu_j}-1))$, which is exactly the characteristic function of a $\operatorname{Poisson}(\lambda\ell_j)$ random variable. By uniqueness of characteristic functions:
+
+- **(Part 1)** $N(B_1), \dots, N(B_k)$ are mutually independent.
+- **(Part 2)** Each marginal satisfies $N(B_j) \sim \operatorname{Poisson}(\lambda\ell_j) = \operatorname{Poisson}(\lambda\operatorname{Leb}(B_j))$.
+
+**Part 3.**
+
+Fix $0 \le s < t$. For any finite partition $0 < r_1 < \cdots < r_{m-1} < s$ of $[0,s]$, apply Part 1 to the partition
+$$
+\bigl\{[0, r_1],\,(r_1, r_2],\,\dots,\,(r_{m-1}, s],\,(s, t]\bigr\}
+$$
+of $[0, t]$. This gives mutual independence of all the increment counts, and in particular shows that $N((s,t])$ is independent of the finite family
+$$
+\bigl\{N([0,r_1]),\,N((r_1,r_2]),\,\dots,\,N((r_{m-1},s])\bigr\}.
+$$
+The $\sigma$-algebra $\mathcal{F}_s = \sigma(N_r : r \le s)$ is generated by all such families (as the partition of $[0,s]$ is refined). By the $\pi$-$\lambda$ theorem, $N((s,t])$ is independent of the entire $\sigma$-algebra $\mathcal{F}_s$. Part 2 applied to $B = (s,t]$ with $\operatorname{Leb}((s,t]) = t-s$ gives $N((s,t]) = N_t - N_s \sim \operatorname{Poisson}(\lambda(t-s))$. $\blacksquare$
+:::
+
+---
+
+## Takeaways
+
+1. The exponential distribution $\operatorname{Exp}(\lambda)$ is the unique continuous distribution satisfying the memoryless property $\mathbb{P}(\xi>t+s\mid\xi>s)=\mathbb{P}(\xi>t)$. The survival function $f(t)=e^{-\lambda t}$ is the unique differentiable solution to the functional equation $f(t+s)=f(t)f(s)$ with $f(0)=1$.
+2. The Poisson process of rate $\lambda$ is constructed as the renewal counting process $N_t=\sup\{n\ge0:X_n\le t\}$ built from i.i.d.\ $\operatorname{Exp}(\lambda)$ inter-arrivals. Arrival times $(X_1,\dots,X_n)$ have joint density $\lambda^n e^{-\lambda x_n}$ on the ordered simplex $\widetilde{D}_n$, derived via a change of variables whose Jacobian is $1$.
+3. The marginal $N_t\sim\operatorname{Poisson}(\lambda t)$ follows by integrating the joint density: the volume of $D_n(t)$ contributes $t^n/n!$ and the exponential tail over $(t,\infty)$ contributes $\lambda^n e^{-\lambda t}$, together yielding $e^{-\lambda t}(\lambda t)^n/n!$.
+4. Conditioned on $N_t=n$, the $n$ arrival times $(X_1,\dots,X_n)$ have joint density $n!/t^n$ on $D_n(t)$, which is the density of the order statistics of $n$ independent $\operatorname{Unif}(0,t)$ random variables.
+5. For disjoint Borel sets $B_1,\dots,B_k$ partitioning $[0,t]$, the counts $N(B_1),\dots,N(B_k)$ are mutually independent with $N(B_j)\sim\operatorname{Poisson}(\lambda\operatorname{Leb}(B_j))$. The proof factorizes the joint characteristic function by symmetrizing the simplex integral and exponentiating the resulting Taylor series.
+6. The increment $N_t-N_s$ is independent of $\mathcal{F}_s=\sigma(N_r:r\le s)$ for all $0\le s<t$, and follows $\operatorname{Poisson}(\lambda(t-s))$. This independence follows from applying the disjoint-partition result to any partition that includes $(s,t]$, then extending to all of $\mathcal{F}_s$ via the $\pi$-$\lambda$ theorem.

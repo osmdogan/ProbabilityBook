@@ -1,0 +1,244 @@
+# Lecture 24.1: Complex Integration and Dynkin's Theorem
+
+# Integration of Complex-Valued Functions
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space. Consider a complex-valued function $f: \Omega \to \mathbb{C}$ that is $\mathcal{F}/\mathcal{B}(\mathbb{C})$-measurable, where $\mathcal{B}(\mathbb{C}) = \mathcal{B}(\mathbb{R}^2)$ under the usual identification $\mathbb{C} \cong \mathbb{R}^2$. Throughout, "measurable" for a $\mathbb{C}$-valued function means $\mathcal{F}/\mathcal{B}(\mathbb{C})$-measurable.
+
+We can write $f$ in terms of its real and imaginary components:
+$$
+f(\omega) = u(\omega) + i v(\omega), \qquad u := \operatorname{Re} f, \quad v := \operatorname{Im} f,
+$$
+where $u, v: \Omega \to \mathbb{R}$. Since $\mathbb{C}$ is a separable metric space, $\mathcal{B}(\mathbb{C}) = \mathcal{B}(\mathbb{R}) \otimes \mathcal{B}(\mathbb{R})$; consequently $f$ is measurable **if and only if** $u$ and $v$ are $\mathcal{F}/\mathcal{B}(\mathbb{R})$-measurable.
+
+::: {#def-complex-l1}
+## Complex $L^1$ Space
+A measurable function $f = u + iv : \Omega \to \mathbb{C}$ belongs to $L_{\mathbb{C}}^1(\Omega, \mathcal{F}, \mu)$ if and only if $u, v \in L_{\mathbb{R}}^1(\Omega, \mathcal{F}, \mu)$.
+In this case, the complex integral is defined componentwise as:
+$$\int_{\Omega} f \, d\mu := \int_{\Omega} u \, d\mu + i \int_{\Omega} v \, d\mu$$
+:::
+
+::: {#prp-conjugation-integral}
+## Conjugation Commutes with Integration
+If $f \in L_{\mathbb{C}}^1(\Omega, \mathcal{F}, \mu)$, then $\bar{f} \in L_{\mathbb{C}}^1(\Omega, \mathcal{F}, \mu)$ and
+$$\overline{\int_{\Omega} f \, d\mu} = \int_{\Omega} \bar{f} \, d\mu$$
+:::
+
+:::{.proof}
+## Proof of @prp-conjugation-integral
+Write $f = u + iv$ with $u, v \in L_{\mathbb{R}}^1(\Omega, \mathcal{F}, \mu)$. The function $\bar{f} = u + i(-v)$ has real part $u$ and imaginary part $-v$, both in $L_{\mathbb{R}}^1$, so $\bar{f} \in L_{\mathbb{C}}^1$ by @def-complex-l1. Using @def-complex-l1 twice and $\mathbb{R}$-linearity of the real integral:
+$$
+\overline{\int_{\Omega} f \, d\mu} = \overline{\int_{\Omega} u \, d\mu + i \int_{\Omega} v \, d\mu} = \int_{\Omega} u \, d\mu - i \int_{\Omega} v \, d\mu = \int_{\Omega} \bar{f} \, d\mu.
+$$
+:::
+
+---
+
+## Norm Equivalence & Triangle Inequality
+
+Let $f = u + iv : \Omega \to \mathbb{C}$ be **measurable**, so that $|f| = \sqrt{u^2 + v^2}$ is measurable as a continuous function of $f$. Using the bounds relating the components to the magnitude:
+$$\max\{|u|, |v|\} \le \sqrt{u^2 + v^2} \le \sqrt{2} \max\{|u|, |v|\}$$
+
+it follows that a measurable $f$ satisfies $f \in L_{\mathbb{C}}^1(\Omega, \mathcal{F}, \mu)$ **if and only if** $|f| \in L_{\mathbb{R}}^1(\Omega, \mathcal{F}, \mu)$, i.e.,:
+$$\|f\|_{L_{\mathbb{C}}^1} := \int_{\Omega} |f| \, d\mu < \infty$$
+
+The measurability hypothesis cannot be omitted: on a probability space one may have $|f| \equiv 1$ integrable while $u$ is non-measurable. As in the real case, $\|\cdot\|_{L_{\mathbb{C}}^1}$ is only a seminorm on functions; it is a norm on $L_{\mathbb{C}}^1(\Omega, \mathcal{F}, \mu)$ once functions agreeing $\mu$-a.e. are identified, and we adopt this identification throughout.
+
+It is routine to verify that $\int_{\Omega} \cdot \, d\mu$ is $\mathbb{C}$-linear on $L_{\mathbb{C}}^1(\Omega, \mathcal{F}, \mu)$. Standard integration theorems transfer to complex-valued functions by applying them separately to real and imaginary parts. For instance, in the Dominated Convergence Theorem, if $f_n \to f$ pointwise with $|f_n| \le g$ for some $g \in L_{\mathbb{R}}^1$, then $|\operatorname{Re} f_n| \le g$ and $|\operatorname{Im} f_n| \le g$, so the real theorem applies componentwise and yields $\int_{\Omega} f_n \, d\mu \to \int_{\Omega} f \, d\mu$.
+
+::: {#thm-triangle-inequality}
+## Triangle Inequality for Complex Integrals
+If $f \in L_{\mathbb{C}}^1(\Omega, \mathcal{F}, \mu)$, then:
+$$\left| \int_{\Omega} f \, d\mu \right| \le \int_{\Omega} |f| \, d\mu$$
+:::
+
+:::{.proof}
+## Proof of @thm-triangle-inequality
+If $\int_{\Omega} f \, d\mu = 0$, the inequality holds trivially.
+
+Suppose $\int_{\Omega} f \, d\mu \ne 0$. Express the complex number $\int_{\Omega} f \, d\mu$ in polar form:
+$$\int_{\Omega} f \, d\mu = r e^{i\theta}, \quad \text{where } r = \left| \int_{\Omega} f \, d\mu \right| > 0 \text{ and } \theta \in [0, 2\pi)$$
+
+Multiplying by $e^{-i\theta}$, we obtain a real non-negative quantity:
+$$r = e^{-i\theta} \int_{\Omega} f \, d\mu = \int_{\Omega} e^{-i\theta} f \, d\mu$$
+
+Since $r \in \mathbb{R}$, taking the real part of both sides yields:
+$$r = \operatorname{Re}\left( \int_{\Omega} e^{-i\theta} f \, d\mu \right) = \int_{\Omega} \operatorname{Re}\left( e^{-i\theta} f \right) d\mu$$
+
+Using the pointwise real part bound $\operatorname{Re}(z) \le |z|$ for any $z \in \mathbb{C}$:
+$$\operatorname{Re}\left( e^{-i\theta} f(\omega) \right) \le \left| e^{-i\theta} f(\omega) \right| = |e^{-i\theta}| \cdot |f(\omega)| = |f(\omega)|$$
+
+Both $\operatorname{Re}(e^{-i\theta} f)$ and $|f|$ lie in $L_{\mathbb{R}}^1(\Omega, \mathcal{F}, \mu)$, so integrating the pointwise bound and using monotonicity of the real integral gives:
+$$
+\left| \int_{\Omega} f \, d\mu \right| = r = \int_{\Omega} \operatorname{Re}\left( e^{-i\theta} f \right) d\mu \le \int_{\Omega} |f| \, d\mu.
+$$
+
+:::
+
+---
+
+# Dynkin's Multiplicative Systems Theorem (Complex Case)
+
+We extend Dynkin's Multiplicative Systems Theorem to spaces of complex-valued bounded functions.
+
+## Notation and Conventions
+
+Throughout this section $\Omega$ is a non-empty set. For a $\sigma$-algebra $\mathcal{G}$ on $\Omega$ and $\mathbb{K} \in \{\mathbb{R}, \mathbb{C}\}$ we write
+$$
+\mathbb{B}_{\mathbb{K}}(\Omega, \mathcal{G}) \triangleq \{ f: \Omega \to \mathbb{K} \mid f \text{ is bounded and } \mathcal{G}/\mathcal{B}(\mathbb{K})\text{-measurable} \}.
+$$
+We set $\mathbb{B}_{\mathbb{K}}(\Omega) \triangleq \mathbb{B}_{\mathbb{K}}(\Omega, 2^\Omega)$ so that $\mathbb{B}_{\mathbb{K}}(\Omega)$ is the set of **all** bounded $\mathbb{K}$-valued functions on $\Omega$. In this notation $\mathbb{B}_{\mathbb{R}}(\Omega, \mathcal{G})$ is the space written $\mathbb{B}(\Omega, \mathcal{G}, \mathbb{R})$ in @thm-dynkin-multiplicative-system. The symbol $\mathcal{B}(\cdot)$ is reserved for Borel $\sigma$-algebras.
+
+::: {#def-complex-bounded-convergence}
+## Bounded Convergence, Complex Case
+A set $\mathcal{H}$ of $\mathbb{C}$-valued functions on $\Omega$ is **closed under bounded convergence** if for every sequence $\{f_n\} \subseteq \mathcal{H}$ satisfying
+
+1. $\sup_{n \in \mathbb{N}} \sup_{\omega \in \Omega} |f_n(\omega)| < \infty$, and
+2. $f_n(\omega) \to f(\omega) \in \mathbb{C}$ for every $\omega \in \Omega$,
+
+the limit $f$ belongs to $\mathcal{H}$. For $\mathbb{R}$-valued families this reduces to @def-bounded-convergence.
+:::
+
+For a family $M$ of $\mathbb{C}$-valued functions on $\Omega$, $\sigma(M)$ denotes the smallest $\sigma$-algebra on $\Omega$ making every $f \in M$ measurable:
+$$
+\sigma(M) \triangleq \sigma\big( f^{-1}(B) : f \in M, \, B \in \mathcal{B}(\mathbb{C}) \big).
+$$
+Since a $\mathbb{C}$-valued $f$ is $\mathcal{G}$-measurable if and only if $\operatorname{Re}(f)$ and $\operatorname{Im}(f)$ are, we also have $\sigma(M) = \sigma\big( \{ \operatorname{Re}(f), \operatorname{Im}(f) : f \in M \} \big)$.
+
+::: {#thm-complex-dynkin}
+## Complex Dynkin's Multiplicative Systems Theorem
+Let $\mathcal{H} \subseteq \mathbb{B}_{\mathbb{C}}(\Omega)$ be a $\mathbb{C}$-vector subspace containing the constant function $1$ and closed under bounded convergence in the sense of @def-complex-bounded-convergence.
+Let $M \subseteq \mathcal{H}$ be a multiplicative system (i.e., $f, g \in M \implies fg \in M$) that is closed under complex conjugation ($\bar{M} \subseteq M$).
+
+Then $\mathcal{H}$ contains all bounded, $\mathbb{C}$-valued, $\sigma(M)$-measurable functions:
+$$\mathbb{B}_{\mathbb{C}}(\Omega, \sigma(M)) \subseteq \mathcal{H}$$
+:::
+
+:::{.proof}
+## Proof of @thm-complex-dynkin
+
+**Step 1 ($M_0$ is a conjugation-closed algebra).** Let $M_0 := \operatorname{span}_{\mathbb{C}}(M \cup \{1\})$. Since $\mathcal{H}$ is a $\mathbb{C}$-vector subspace containing $M$ and $1$, we have $M_0 \subseteq \mathcal{H}$. It is an algebra: for $f_i, g_j \in M \cup \{1\}$ and $a_i, b_j \in \mathbb{C}$,
+$$
+\Big( \sum_i a_i f_i \Big) \Big( \sum_j b_j g_j \Big) = \sum_{i, j} a_i b_j (f_i g_j) \in M_0,
+$$
+because $f_i g_j \in M \cup \{1\}$ ($M$ is multiplicative and $1$ is the multiplicative unit). It is closed under conjugation because $\overline{\sum_i a_i f_i} = \sum_i \bar{a}_i \bar{f}_i$, with $\bar{f}_i \in M \cup \{1\}$ by the hypothesis $\bar{M} \subseteq M$.
+
+**Step 2 (real parts).** Define the sets of real-valued elements
+$$\mathcal{H}^{\mathbb{R}} := \{ f \in \mathcal{H} : \operatorname{Im}(f) = 0 \}, \qquad M_0^{\mathbb{R}} := \{ f \in M_0 : \operatorname{Im}(f) = 0 \}.$$
+
+* $1 \in \mathcal{H}^{\mathbb{R}}$, and $\mathcal{H}^{\mathbb{R}}$ is an $\mathbb{R}$-vector subspace of $\mathbb{B}_{\mathbb{R}}(\Omega)$.
+* $\mathcal{H}^{\mathbb{R}}$ is closed under bounded convergence in the sense of @def-bounded-convergence: if $f_n \in \mathcal{H}^{\mathbb{R}}$ are uniformly bounded and converge pointwise to $f$, then $f \in \mathcal{H}$ since $\mathcal{H}$ is closed under bounded convergence, and $f$ is real-valued as a pointwise limit of real-valued functions.
+* Since $M_0$ is closed under conjugation (Step 1), every $f \in M_0$ decomposes into elements of $M_0^{\mathbb{R}}$:
+$$\operatorname{Re}(f) = \frac{f + \bar{f}}{2} \in M_0^{\mathbb{R}}, \qquad \operatorname{Im}(f) = \frac{f - \bar{f}}{2i} \in M_0^{\mathbb{R}}$$
+* $M_0^{\mathbb{R}} \subseteq M_0 \cap \mathcal{H}^{\mathbb{R}}$, and $M_0^{\mathbb{R}}$ is a real multiplicative system: if $f, g \in M_0^{\mathbb{R}}$ then $fg \in M_0$ because $M_0$ is an algebra, and $fg$ is real-valued, hence $fg \in M_0^{\mathbb{R}}$.
+
+**Step 3 ($\sigma(M) = \sigma(M_0) = \sigma(M_0^{\mathbb{R}})$).** This is the only place where the hypothesis $\bar{M} \subseteq M$ is used.
+
+* ($\sigma(M) \subseteq \sigma(M_0^{\mathbb{R}})$) For $f \in M$ we have $\operatorname{Re}(f), \operatorname{Im}(f) \in M_0^{\mathbb{R}}$ by Step 2, so both are $\sigma(M_0^{\mathbb{R}})$-measurable, and therefore so is $f = \operatorname{Re}(f) + i \operatorname{Im}(f)$.
+* ($\sigma(M_0^{\mathbb{R}}) \subseteq \sigma(M_0) \subseteq \sigma(M)$) Every element of $M_0$ is a finite $\mathbb{C}$-linear combination of elements of $M \cup \{1\}$, hence $\sigma(M)$-measurable.
+
+**Step 4 (conclusion).** By Step 2 the pair $M_0^{\mathbb{R}} \subseteq \mathcal{H}^{\mathbb{R}} \subseteq \mathbb{B}_{\mathbb{R}}(\Omega)$ satisfies all hypotheses of the real Dynkin Multiplicative Systems Theorem (@thm-dynkin-multiplicative-system), so
+$$\mathbb{B}_{\mathbb{R}}(\Omega, \sigma(M_0^{\mathbb{R}})) \subseteq \mathcal{H}^{\mathbb{R}}$$
+
+Now let $g \in \mathbb{B}_{\mathbb{C}}(\Omega, \sigma(M))$ and write $g = u + iv$. Then $u, v$ are $\sigma(M)$-measurable and $|u|, |v| \le |g|$ are bounded, so by Step 3,
+$$u, v \in \mathbb{B}_{\mathbb{R}}(\Omega, \sigma(M_0^{\mathbb{R}})) \subseteq \mathcal{H}^{\mathbb{R}} \subseteq \mathcal{H}.$$
+Since $\mathcal{H}$ is a $\mathbb{C}$-vector subspace, $g = u + iv \in \mathcal{H}$.
+Thus, $\mathbb{B}_{\mathbb{C}}(\Omega, \sigma(M)) \subseteq \mathcal{H}$. 
+:::
+
+---
+
+## Application to Fourier Exponentials on $\mathbb{R}^d$
+
+The following result shows that if a complex vector subspace $\mathcal H$ of all bounded complex Borel functions contains every exponential $e_\xi(x)=e^{i\xi\cdot x}$ and is closed under bounded convergence, then $\mathcal H$ must be the entire space of bounded complex Borel functions.
+
+::: {#cor-exponential-generators}
+## Exponential Generators
+Let $\mathcal{H} \subseteq \mathbb{B}_{\mathbb{C}}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ be a $\mathbb{C}$-vector subspace of bounded complex Borel functions that is closed under bounded convergence.
+For $\xi \in \mathbb{R}^d$, define the character/exponential function $e_\xi(x) := e^{i \xi \cdot x}$.
+
+If $e_\xi \in \mathcal{H}$ for all $\xi \in \mathbb{R}^d$, then $\mathcal{H}$ contains all bounded complex Borel-measurable functions:
+$$
+\mathbb{B}_{\mathbb{C}}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d)) \subseteq \mathcal{H}
+$$
+:::
+
+:::{.proof}
+## Proof of @cor-exponential-generators
+Set $M := \{ e_\xi : \xi \in \mathbb{R}^d \} \subseteq \mathcal{H}$.
+
+1. **Contains 1**: $1 = e_0 \in M \subseteq \mathcal{H}$, so the constant function $1$ belongs to $\mathcal{H}$.
+2. **Closed under conjugation**: $\overline{e_\xi(x)} = \overline{e^{i\xi \cdot x}} = e^{-i\xi \cdot x} = e_{-\xi}(x)$, so $\bar{M} = M$.
+3. **Multiplicative System**: $e_\xi(x) e_\eta(x) = e^{i\xi \cdot x} e^{i\eta \cdot x} = e^{i(\xi + \eta) \cdot x} = e_{\xi + \eta}(x) \in M$.
+
+All hypotheses of @thm-complex-dynkin are met (note that conjugation-closure is required of $M$ only, not of $\mathcal{H}$), so $\mathbb{B}_{\mathbb{C}}(\mathbb{R}^d, \sigma(M)) \subseteq \mathcal{H}$.
+
+**Claim**: $\sigma(M) = \mathcal{B}(\mathbb{R}^d)$.
+
+*$\sigma(M) \subseteq \mathcal{B}(\mathbb{R}^d)$*: Each $e_\xi$ is continuous on $\mathbb{R}^d$, hence $\mathcal{B}(\mathbb{R}^d)/\mathcal{B}(\mathbb{C})$-measurable.
+
+*$\mathcal{B}(\mathbb{R}^d) \subseteq \sigma(M)$*: Fix $j \in \{1, \dots, d\}$ and let $\pi_j(x) := x_j$ be the $j$-th coordinate map. Writing $\mathbf{e}_j$ for the $j$-th standard basis vector, the function $e_{k^{-1} \mathbf{e}_j}(x) = e^{i x_j / k}$ is $\sigma(M)$-measurable for every $k \in \mathbb{N}$, hence so is
+$$
+g_k(x) := k \operatorname{Im}\big( e_{k^{-1} \mathbf{e}_j}(x) \big) = k \sin(x_j / k).
+$$
+Since $\sin(t)/t \to 1$ as $t \to 0$, we have $g_k(x) \to x_j$ for every $x \in \mathbb{R}^d$ (for $x_j = 0$ both sides vanish). A pointwise limit of $\sigma(M)$-measurable real functions is $\sigma(M)$-measurable, so each $\pi_j$ is $\sigma(M)$-measurable, and therefore
+$$\mathcal{B}(\mathbb{R}^d) = \sigma(\pi_1, \dots, \pi_d) \subseteq \sigma(M).$$
+The functions $g_k$ are not uniformly bounded, so this argument establishes measurability only; it is not an appeal to bounded convergence.
+
+Combining, $\mathbb{B}_{\mathbb{C}}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d)) = \mathbb{B}_{\mathbb{C}}(\mathbb{R}^d, \sigma(M)) \subseteq \mathcal{H}$. $\blacksquare$
+:::
+
+::: {#rem-arc-argument}
+## An Alternative Argument for $d = 1$
+Let $d = 1$ and $M = \{ e_\xi : \xi \in \mathbb{R} \}$ as in the proof of @cor-exponential-generators. For $\alpha < \beta$ let $A(\alpha, \beta) := \{ e^{i\theta} : \alpha < \theta < \beta \} \subseteq \mathbb{T}$. Each such set is relatively open in $\mathbb{T}$, hence Borel in $\mathbb{C}$, so its $e_\xi$-preimage lies in $\sigma(M)$. Fix $-\infty < a < b < \infty$. For **every** $\xi > 0$ (no restriction on the arc length is needed), $e^{i \xi x} \in A(\xi a, \xi b)$ if and only if $\xi x \in (\xi a, \xi b) + 2\pi \mathbb{Z}$, so
+$$e_\xi^{-1}\big( A(\xi a, \xi b) \big) = \bigcup_{n \in \mathbb{Z}} \left( (a, b) + \frac{2\pi n}{\xi} \right) \in \sigma(M)$$
+Taking $\xi = 1/k$ for $k \in \mathbb{N}$, so that the period is $2\pi k$, we claim
+$$(a, b) = \bigcap_{k \in \mathbb{N}} e_{1/k}^{-1}\left( A\left( \frac{a}{k}, \frac{b}{k} \right) \right) \in \sigma(M)$$
+The inclusion "$\subseteq$" is the term $n = 0$ of each union. For "$\supseteq$", put $C := \max(|a|, |b|)$ and suppose $x$ lies in the intersection but $x \notin (a, b)$. Then for each $k$ there is $n_k \ne 0$ with $x - 2\pi k n_k \in (a, b)$, whence $2\pi k \le |2\pi k n_k| \le |x| + C$; this fails as soon as $2\pi k > |x| + C$, a contradiction. Since the **bounded** open intervals generate $\mathcal{B}(\mathbb{R})$ (every open subset of $\mathbb{R}$ is a countable union of bounded open intervals), $\mathcal{B}(\mathbb{R}) \subseteq \sigma(M)$.
+:::
+
+---
+
+# Uniqueness of Measures via Characteristic Functions
+
+Using these Dynkin machinery results, we obtain the fundamental uniqueness theorem for probability measures on $\mathbb{R}^d$.
+
+::: {#cor-uniqueness-characteristic-functions}
+## Uniqueness Theorem for Characteristic Functions
+Let $\mu, \nu \in \mathcal{P}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ be two probability measures. 
+Suppose their characteristic functions coincide for all $\xi \in \mathbb{R}^d$:
+$$\int_{\mathbb{R}^d} e^{i \xi \cdot x} \, d\mu(x) = \int_{\mathbb{R}^d} e^{i \xi \cdot x} \, d\nu(x), \quad \forall \xi \in \mathbb{R}^d$$
+
+Then $\mu = \nu$ on $\mathcal{B}(\mathbb{R}^d)$.
+:::
+
+:::{.proof}
+## Proof of @cor-uniqueness-characteristic-functions
+Every $f \in \mathbb{B}_{\mathbb{C}}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ is $\mu$- and $\nu$-integrable, since $\mu$ and $\nu$ are finite; in particular both sides of the hypothesis are well defined. Define the set of bounded Borel functions whose integrals under $\mu$ and $\nu$ agree:
+$$\mathcal{H} := \left\{ f \in \mathbb{B}_{\mathbb{C}}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d)) : \int_{\mathbb{R}^d} f \, d\mu = \int_{\mathbb{R}^d} f \, d\nu \right\}$$
+
+We check the hypotheses of @cor-exponential-generators:
+
+1. **$\mathbb{C}$-vector subspace**: Follows from $\mathbb{C}$-linearity of the integral on $L_{\mathbb{C}}^1$.
+2. **Closed under bounded convergence**: If $f_n \in \mathcal{H}$ with $f_n \to f$ pointwise on $\mathbb{R}^d$ and $|f_n| \le C < \infty$ for all $n$, then $f$ is bounded and Borel, and the constant $C$ is integrable for both $\mu$ and $\nu$ because these measures are **finite**. Hence the Dominated Convergence Theorem applies to both and gives
+   $$\int_{\mathbb{R}^d} f \, d\mu = \lim_{n \to \infty} \int_{\mathbb{R}^d} f_n \, d\mu = \lim_{n \to \infty} \int_{\mathbb{R}^d} f_n \, d\nu = \int_{\mathbb{R}^d} f \, d\nu \implies f \in \mathcal{H}$$
+3. **Contains the characters**: By assumption, $e_\xi \in \mathcal{H}$ for all $\xi \in \mathbb{R}^d$.
+
+(The set $\mathcal{H}$ is also closed under complex conjugation, by @prp-conjugation-integral applied to both measures; this is not needed here, since @cor-exponential-generators requires conjugation-closure only of the multiplicative system $\{e_\xi\}$.)
+
+By @cor-exponential-generators, $\mathcal{H}$ contains all bounded complex Borel-measurable functions:
+$$
+\mathbb{B}_{\mathbb{C}}(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d)) \subseteq \mathcal{H}.
+$$
+
+In particular, for any Borel set $B \in \mathcal{B}(\mathbb{R}^d)$, taking the indicator function $f = \mathbf{1}_B \in \mathcal{H}$ gives:
+$$
+\mu(B) = \int_{\mathbb{R}^d} \mathbf{1}_B \, d\mu = \int_{\mathbb{R}^d} \mathbf{1}_B \, d\nu = \nu(B).
+$$
+
+Therefore, $\mu = \nu$ on $\mathcal{B}(\mathbb{R}^d)$. 
+:::
+
+::: {#rem-finite-measures}
+## Extension to Finite Measures
+The proof used only that $\mu$ and $\nu$ are finite. Consequently, if $\mu, \nu$ are finite Borel measures on $\mathbb{R}^d$ whose Fourier transforms $\hat{\mu}(\xi) = \int e^{i \xi \cdot x} \, d\mu(x)$ and $\hat{\nu}(\xi)$ agree for all $\xi \in \mathbb{R}^d$, then $\mu = \nu$; the case $\xi = 0$ forces the total masses to coincide.
+:::

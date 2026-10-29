@@ -1,0 +1,252 @@
+# Lecture 27.1: Average Uniformity
+
+## Introduction to Triangular Arrays and Uniformity
+
+The Central Limit Theorem (CLT) fundamental to probability theory arises primarily from independence. While identical distribution is not strictly necessary, some notion of **average uniformity** across terms is required.
+
+## Motivating Example: Non-Uniform Variances
+Suppose $X_n \sim \mathcal{N}(0, b_n^2)$ are independent random variables. Define the partial sum $S_n = X_1 + \dots + X_n$. 
+The characteristic function of $X_n$ is:
+$$ \varphi_{X_n}(\xi) = \varphi_{b_n Z}(\xi) = e^{-b_n^2 \xi^2 / 2} $$
+where $Z \sim \mathcal{N}(0, 1)$. The sum $S_n$ has characteristic function:
+$$ \varphi_{S_n}(\xi) = \prod_{k=1}^n e^{-b_k^2 \xi^2 / 2} = e^{-\frac{1}{2} \left( \sum_{k=1}^n b_k^2 \right) \xi^2} $$
+
+* **Standard Case ($b_n = b$):** The sum scales cleanly, yielding $S_n / \sqrt{n} \sim \mathcal{N}(0, b^2)$.
+* **Pathological Case ($b_n = \sqrt{n}$):** The sum of variances grows quadratically:
+  $$ \sum_{k=1}^n b_k^2 = \sum_{k=1}^n k = \frac{1}{2} n(n+1) $$
+  Normalizing by $\sqrt{n}$ gives the characteristic function:
+  $$ 
+  \varphi_{S_n / \sqrt{n}}(\xi) = e^{-\frac{1}{2} \left( \frac{1}{2} n(n+1) \right) \frac{\xi^2}{n}} = e^{-\frac{n+1}{4} \xi^2} \xrightarrow{n \to \infty} 
+  \begin{cases} 1 & \xi = 0 \\ 0 & \xi \neq 0 \end{cases} 
+  $$
+  This shows that when a single variable or a subset dominates the total variance, standard Gaussian limit behavior breaks down unless properly framed in a standardized triangular array setting.
+
+---
+
+## Triangular Array Framework
+
+To study general independent sums, we organize random variables into a **triangular array**:
+
+$$
+\begin{matrix}
+X_{1,1} & & & \\
+X_{2,1} & X_{2,2} & & \\
+X_{3,1} & X_{3,2} & X_{3,3} & \\
+\vdots & \vdots & \vdots & \ddots \\
+X_{n,1} & X_{n,2} & \dots & X_{n,n}
+\end{matrix}
+$$
+Note that the index $n$ does two things simultaneously:
+
+  1. it identifies the row we are considering; and
+  2. it determines the number of terms in that row, namely $n$.
+
+So as $n\to\infty$, we are considering the sequence of rows
+$$ 
+(X_{1,1}),\quad (X_{2,1},X_{2,2}),\quad (X_{3,1},X_{3,2},X_{3,3}),\quad\ldots 
+$$
+and each successive row contains more summands.
+
+For each row $n \in \mathbb{N}$, $\{X_{n,k}\}_{k=1}^n$ are independent, centered $L^2$ random variables:
+
+1. **Centered:** $\mathbb{E}[X_{n,k}] = 0$.
+2. **Variance:** $\mathbb{E}[X_{n,k}^2] = \text{Var}[X_{n,k}] = \sigma_{n,k}^2 < \infty$.
+3. **Normalized Variance:** Total row variance is standardized to $1$:
+$$ 
+\text{Var}[S_n] = \text{Var}\left( \sum_{k=1}^n X_{n,k} \right) = \sum_{k=1}^n \sigma_{n,k}^2 = 1, 
+$$
+where $S_n = \sum_{k=1}^n X_{n,k}$.
+
+
+:::{#exm-standard-iid}
+## Standard i.i.d. Example 
+If $\{X_k\}_{k=1}^\infty$ are i.i.d. with mean $t$ and variance $b^2$, then setting $X_{n,k} = \frac{X_k - t}{b\sqrt{n}}$ forms a standardized triangular array with $\sigma_{n,k}^2 = \frac{1}{n}$ and $\sum_{k=1}^n \sigma_{n,k}^2 = 1$.
+:::
+
+---
+
+## Average Uniformity Conditions
+
+To ensure no single term $X_{n,k}$ dominates the sum $S_n = \sum_{k=1}^n X_{n,k}$, we formalize conditions specifying that all terms are "small and comparable in size". Two conditions are commonly used in the literature:
+
+- Decaying Variance Condition (DV), and 
+- Uniform Asymptotic Negligibility (UAN).
+
+DV concerns the size of the variance of individual terms, while UAN concerns the probability of a large individual realization.
+
+:::{#def-dv-uan}
+## Decaying Variance and Uniform Asymptotic Negligibility
+1. The decaying variance condition (DV) is satisfied if:
+$$ \max_{1 \le k \le n} \sigma_{n,k}^2 \longrightarrow 0 \quad \text{as } n \to \infty $$
+
+2. The uniform asymptotic negligibility (UAN) condition is satisfied if for every $\varepsilon > 0$, we have:
+$$ \lim_{n \to \infty} \max_{1 \le k \le n} P(|X_{n,k}| > \varepsilon) = 0 $$
+:::
+
+**Some Observations**:
+
+  - **Decaying variance (DV):** The variance of the largest-variance summand in each row becomes negligible as the row size increases. In other words, no individual random variable contributes a non-negligible amount of variance to the row sum.
+  - **Uniform asymptotic negligibility (UAN):** The probability that any individual summand in a row has a substantial magnitude becomes negligible as the row size increases. In other words, no individual random variable has a non-negligible chance of making a substantial contribution to the sum.
+
+:::{#exm-dv-uan}
+For example, if $X_{n,k} = \frac{b_n}{\sqrt{n}} Z_{n,k}$ where $Z_{n,k} \sim \mathcal{N}(0, 1)$ are independent, then $\sigma_{n,k}^2 = \frac{b_n^2}{n}$. In this case, the decaying variance condition holds if $b_n = o(\sqrt{n})$ because $\max_{k} \sigma_{n,k}^2 = \frac{b_n^2}{n} \to 0$.
+
+The uniform asymptotic negligibility (UAN) condition, we have:
+$$ P(|X_{n,k}| > \varepsilon) = P\left( |Z_{n,k}| > \frac{\varepsilon \sqrt{n}}{b_n} \right) $$
+If $b_n = o(\sqrt{n})$, then $\frac{\varepsilon \sqrt{n}}{b_n} \to \infty$, and since $P(|Z| > t) \to 0$ as $t \to \infty$, we conclude that $\max_{k} P(|X_{n,k}| > \varepsilon) \to 0$, establishing (UAN). 
+:::
+
+
+:::{#lem-dv-uan}
+## Decaying Variance Implies Uniform Asymptotic Negligibility
+$\text{(DV)} \implies \text{(UAN)}$
+:::
+
+:::{.proof}
+## Proof of @lem-dv-uan
+Fix $\varepsilon > 0$. Applying Chebyshev's Inequality to any term $X_{n,k}$:
+$$ P(|X_{n,k}| > \varepsilon) \le \frac{\text{Var}[X_{n,k}]}{\varepsilon^2} = \frac{\sigma_{n,k}^2}{\varepsilon^2} $$
+Taking the maximum over $1 \le k \le n$:
+$$ \max_{1 \le k \le n} P(|X_{n,k}| > \varepsilon) \le \frac{1}{\varepsilon^2} \max_{1 \le k \le n} \sigma_{n,k}^2 $$
+Under (DV), $\max_{1 \le k \le n} \sigma_{n,k}^2 \to 0$ as $n \to \infty$. Hence, $\max_{1 \le k \le n} P(|X_{n,k}| > \varepsilon) \to 0$, establishing (UAN). $\blacksquare$
+:::
+
+
+---
+
+## The Lindeberg Condition
+
+While (DV) and (UAN) state that terms are individually small, proving a CLT requires a slightly stronger restriction on the tails of the variance distribution.
+
+:::{#def-lindeberg-condition}
+## Lindeberg Condition
+A triangular array satisfies the **Lindeberg Condition** if for every $\varepsilon > 0$:
+$$ 
+\lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}\left[ X_{n,k}^2 : |X_{n,k}| > \varepsilon \right] = \lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}\left[ X_{n,k}^2\mathbf{1}_{\{|X_{n,k}| > \varepsilon\}} \right] = 0, 
+$$
+where $\mathbb{E}[X^2 : A] := \mathbb{E}[X^2 \mathbf{1}_A]$.
+:::
+
+**Some Observations**:
+
+- In words, the Lindeberg condition requires that, as the number of summands in each row increases, the **total contribution to the variance** from unusually large values of the individual summands becomes negligible.
+- Thus, although individual summands may occasionally be large, their squared magnitudes must contribute asymptotically negligible total variance.
+
+:::{#rem-lindeberg-condition}
+
+1. Since $\mathbb{E}[X_{n,k}^2 : |X_{n,k}| > \varepsilon]$, where $\mathbb{E}[X^2 : A] := \mathbb{E}[X^2 \mathbf{1}_A]$, is non-increasing in $\varepsilon > 0$, it suffices for this limit to hold for all arbitrarily small $\varepsilon > 0$. 
+
+2. Note also that since $\sum_{k=1}^n \sigma_{n,k}^2 = 1$, the Lindeberg condition is equivalent to requiring $\sum_{k=1}^n \mathbb{E}[X_{n,k}^2 : |X_{n,k}| \le \varepsilon] \to 1$ as $n \to \infty$. To see this, note that:
+$$ 
+\begin{align*}
+&1=\sum_{k=1}^n \mathbb{E}[X_{n,k}^2] = \sum_{k=1}^n \mathbb{E}[X_{n,k}^2 : |X_{n,k}| \le \varepsilon] + \sum_{k=1}^n \mathbb{E}[X_{n,k}^2 : |X_{n,k}| > \varepsilon] \\
+&\implies  \sum_{k=1}^n \mathbb{E}[X_{n,k}^2 : |X_{n,k}| \le \varepsilon] = 1 - \sum_{k=1}^n \mathbb{E}[X_{n,k}^2 : |X_{n,k}| > \varepsilon].
+\end{align*}
+$$
+Thus, the Lindeberg condition is equivalent to
+$$
+\lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}[X_{n,k}^2 : |X_{n,k}| \le \varepsilon] = 1. 
+$$
+:::
+
+
+:::{#exm-lindeberg-condition}
+Assume that $X_{n,k} = \frac{1}{b\sqrt{n}}\mathring{X}_k$, where $\{X_k\}$ are i.i.d. with $\text{Var}(X_k) = b^2$. 
+Then $\sigma_{n,k}^2 = \frac{1}{n}$ and $\sum_{k=1}^n \sigma_{n,k}^2 = 1$. For any $\varepsilon > 0$:
+$$
+\begin{align*}
+\sum_{k=1}^n \mathbb{E}[X_{n,k}^2 : |X_{n,k}| > \varepsilon] &= n \cdot \mathbb{E}\left[ \frac{1}{b^2 n} \mathring{X}_1^2 : \left| \frac{1}{b\sqrt{n}} \mathring{X}_1 \right| > \varepsilon \right]\\
+& = \frac{1}{b^2} \mathbb{E}\left[ \mathring{X}_1^2 : |\mathring{X}_1| > b\varepsilon\sqrt{n} \right] \xrightarrow{n \to \infty} 0
+\end{align*}
+$$
+by the dominated convergence theorem, since $\mathring{X}_1^2 \mathbf{1}_{\{|\mathring{X}_1| > b\varepsilon\sqrt{n}\}} \to 0$ a.s. and is dominated by $\mathring{X}_1^2 \in L^1$. Hence, the Lindeberg condition holds for this triangular array.
+:::
+
+
+
+:::{#thm-lindeberg-condition-dv}
+## Lindeberg Condition Implies Decaying Variance
+$\text{(Lind)} \implies \text{(DV)}$
+:::
+
+:::{.proof}
+## Proof of @thm-lindeberg-condition-dv
+For any $1 \le k \le n$ and any $\varepsilon > 0$, split the variance $\sigma_{n,k}^2$ into two region integrals:
+$$ \sigma_{n,k}^2 = \mathbb{E}[X_{n,k}^2] = \mathbb{E}\left[ X_{n,k}^2 \mathbf{1}_{\{|X_{n,k}| \le \varepsilon\}} \right] + \mathbb{E}\left[ X_{n,k}^2 \mathbf{1}_{\{|X_{n,k}| > \varepsilon\}} \right] $$
+
+* On $\{|X_{n,k}| \le \varepsilon\}$, we have $X_{n,k}^2 \le \varepsilon^2$, so $\mathbb{E}[X_{n,k}^2 : |X_{n,k}| \le \varepsilon] \le \varepsilon^2$.
+* For the tail part, bound the single term by the total sum: $\mathbb{E}[X_{n,k}^2 : |X_{n,k}| > \varepsilon] \le \sum_{j=1}^n \mathbb{E}[X_{n,j}^2 : |X_{n,j}| > \varepsilon]$.
+
+Thus, for all $1 \le k \le n$:
+$$ \sigma_{n,k}^2 \le \varepsilon^2 + \sum_{j=1}^n \mathbb{E}\left[ X_{n,j}^2 : |X_{n,j}| > \varepsilon \right] $$
+Taking the maximum over $k$ and then the limit superior as $n \to \infty$:
+$$ \limsup_{n \to \infty} \max_{1 \le k \le n} \sigma_{n,k}^2 \le \varepsilon^2 + \lim_{n \to \infty} \sum_{j=1}^n \mathbb{E}\left[ X_{n,j}^2 : |X_{n,j}| > \varepsilon \right] = \varepsilon^2 + 0 $$
+Since $\varepsilon > 0$ was arbitrary, letting $\varepsilon \downarrow 0$ yields $\limsup_{n \to \infty} \max_{1 \le k \le n} \sigma_{n,k}^2 = 0$, proving (DV). 
+
+:::
+
+---
+
+## The Lindeberg-Feller Central Limit Theorem
+
+:::{#thm-lindeberg-feller-clt}
+## Lindeberg-Feller CLT
+Let $\{X_{n,k}\}_{k=1}^n$ be a triangular array of centered, independent $L^2$ random variables with $\mathbb{E}[X_{n,k}] = 0$, $\text{Var}[X_{n,k}] = \sigma_{n,k}^2$, and total variance $\sum_{k=1}^n \sigma_{n,k}^2 = 1$. Define $S_n = \sum_{k=1}^n X_{n,k}$.
+
+1. **Lindeberg (Sufficiency):** If the **Lindeberg condition** holds for $\{X_{n,k}\}$, then:
+   $$
+   S_n \xrightarrow{w} \mathcal{N}(0, 1). 
+   $$
+2. **Feller (Necessity):** Conversely, if $\{X_{n,k}\}$ satisfies the **decaying variance condition (DV)** and $S_n \xrightarrow{w} \mathcal{N}(0, 1)$, then the **Lindeberg condition** holds for $\{X_{n,k}\}$.
+:::
+
+---
+
+## Lyapunov's Condition
+
+Historically, prior to the work of Lindeberg and Feller, Aleksandr Lyapunov established a CLT for triangular arrays under a stronger moment condition that is often easier to verify in practice. 
+
+:::{#def-lyapunov-condition}
+## Lyapunov Condition
+A triangular array satisfies **Lyapunov's Condition** if there exists $\alpha > 2$ (or $\delta > 0$ with $\alpha = 2 + \delta$) such that:
+$$ \lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}\left[ |X_{n,k}|^\alpha \right] = 0 $$
+
+More generally, if $\phi : [0, \infty) \to [0, \infty)$ is a non-decreasing function with $\phi(t) > 0$ for $t > 0$ (e.g., $\phi(t) = t^{\alpha-2}$), Lyapunov's condition states:
+$$ \lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}\left[ X_{n,k}^2 \phi(|X_{n,k}|) \right] = 0 $$
+:::
+
+In words, the Lyapunov condition requires that, as the number of summands in each row increases, the aggregate contribution of higher-than-second moments becomes negligible.
+
+
+
+:::{#lem-liap-lind}
+## Lyapunov Implies Lindeberg
+$\text{(Liap)} \implies \text{(Lind)}$
+:::
+
+:::{.proof}
+## Proof of @lem-liap-lind
+Fix $\varepsilon > 0$. On the set $\{|X_{n,k}| > \varepsilon\}$, the monotonicity of $\phi$ implies $\phi(|X_{n,k}|) \ge \phi(\varepsilon) > 0$, so $\frac{\phi(|X_{n,k}|)}{\phi(\varepsilon)} \ge 1$.
+
+Therefore:
+$$
+\begin{align*}
+\mathbb{E}\left[ X_{n,k}^2 : |X_{n,k}| > \varepsilon \right] &\le \mathbb{E}\left[ X_{n,k}^2 \frac{\phi(|X_{n,k}|)}{\phi(\varepsilon)} : |X_{n,k}| > \varepsilon \right] \\
+&\le \frac{1}{\phi(\varepsilon)} \mathbb{E}\left[ X_{n,k}^2 \phi(|X_{n,k}|) \right]. 
+\end{align*}
+$$
+
+Summing over $k = 1, \dots, n$:
+$$ 
+\sum_{k=1}^n \mathbb{E}\left[ X_{n,k}^2 : |X_{n,k}| > \varepsilon \right] \le \frac{1}{\phi(\varepsilon)} \sum_{k=1}^n \mathbb{E}\left[ X_{n,k}^2 \phi(|X_{n,k}|) \right]. 
+$$
+
+Taking $n \to \infty$, the right-hand side tends to $0$ by Lyapunov's condition. Hence, the Lindeberg condition holds.
+::: 
+
+:::{#rem-lyap-lind-DV-UAN}
+## Lyapunov, Lindeberg, Decaying Variance, and Uniform Asymptotic Negligibility
+The Lyapunov condition implies the Lindeberg condition, which in turn implies the decaying variance condition (DV) and uniform asymptotic negligibility (UAN). This hierarchy of conditions helps in understanding the relationships between different assumptions used in central limit theorems for triangular arrays:
+
+- Lyapunov (Liap) $\implies$ Lindeberg (Lind) $\implies$ Decaying Variance (DV) $\implies$ Uniform Asymptotic Negligibility (UAN)
+:::

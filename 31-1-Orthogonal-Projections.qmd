@@ -1,0 +1,278 @@
+# Lecture 31.1: Orthogonal Projection 
+
+## Introduction: From Finite Dimensions to Hilbert Spaces
+
+In a finite-dimensional inner product space $H$, any linear subspace $K \subseteq H$ admits an orthogonal projection operator $P_K: H \to K$. 
+
+- $P_K$ is called the **orthogonal projection** onto $K$.
+- If $K$ has an orthonormal basis $\{e_n\}$, this projection is given by:
+$$
+P_K(v) = \sum_{n} \langle v, e_n \rangle e_n = \sum_n \left\langle v, \frac{b_n}{\|b_n\|} \right\rangle \frac{b_n}{\|b_n\|}
+$$
+where $P_K(v) = v$ for $v \in K$, and $P_K(w) = 0$ for $w \in K^\perp$, and $K^\perp$ is the orthogonal complement of $K$ in $H$. 
+- If $z=v+w$ with $v \in K$ and $w \in K^\perp$, then $P_K(z) = v$: it extracts the $K$-component of a vector and discards its $K^\perp$-component:
+$$
+\begin{align*}
+P_K(z) &= P_K(v + w) = \sum_{n} \langle v + w, e_n \rangle e_n\\
+& = \sum_n \langle v, e_n \rangle e_n + \sum_n \langle w, e_n \rangle e_n = v + 0 = v. 
+\end{align*}
+$$
+
+We extend this geometric concept to infinite-dimensional Hilbert spaces, specifically the space of square-integrable random variables $H = L^2(\Omega, \mathcal{F}, \mathbb{P})$.
+
+---
+
+## Hilbert Space Geometry
+
+
+:::{#def-hilbert-space}
+## Hilbert Space
+A **Hilbert space** $H$ is a complete inner product space. For random variables $X, Y \in L^2(\Omega, \mathcal{F}, \mathbb{P})$, the inner product and induced norm are defined by:
+
+$$
+\langle X, Y \rangle := \mathbb{E}[XY], \quad \|X\| := \sqrt{\langle X, X \rangle} = \sqrt{\mathbb{E}[X^2]}
+$$
+:::
+
+In any inner product space, we have (i) the Pythagorean Theorem and (ii) the Parallelogram Law. These identities are fundamental to the geometry of Hilbert spaces.
+
+1. **Pythagorean Theorem:** If $X \perp Y$ (i.e., $\langle X, Y \rangle = 0$), then:
+   $$
+   \|X + Y\|^2 = \|X\|^2 + \|Y\|^2
+   $$
+2. **Parallelogram Law:** For all $X, Y \in H$:
+   $$
+   \|X + Y\|^2 + \|X - Y\|^2 = 2\left(\|X\|^2 + \|Y\|^2\right)
+   $$
+
+:::{#lem-closed-subspace}
+## Closed Subspaces
+A linear subspace $K \subseteq H$ is a Hilbert space in its own right under the induced inner product if and only if $K$ is closed in $H$.
+:::
+
+---
+
+## Best Approximation Theorem
+
+The core geometric result underpinning orthogonal projection in Hilbert spaces is the existence and uniqueness of a closest point in any closed subspace.
+
+:::{#thm-closest-point}
+## Best Approximation Theorem
+Let $K \subseteq H$ be a closed subspace of a Hilbert space $H$. For any $X \in H$, there exists a unique element $Y \in K$ that minimizes the distance to $X$:
+
+$$
+\|X - Y\|^2 = d(X, K)^2 := \inf_{Z \in K} \|X - Z\|^2.
+$$
+:::
+
+:::{.proof}
+## Proof of @thm-closest-point
+
+* **Uniqueness:** Suppose $Y, Z \in K$ both satisfy $\|X - Y\|^2 = \|X - Z\|^2 = d(X, K)^2$. Applying the Parallelogram Law to $Y - X$ and $Z - X$:
+
+  $$
+  \begin{align*}
+  \|Y - Z\|^2 + 4 \left\| \frac{Y + Z}{2} - X \right\|^2 = 2 \left( \|Y - X\|^2 + \|Z - X\|^2 \right).
+  \end{align*}
+  $$
+
+  Since $\frac{Y + Z}{2} \in K$, we have $\left\| \frac{Y + Z}{2} - X \right\|^2 \ge d(X, K)^2$. Substituting this inequality yields:
+
+  $$
+  \begin{align*}
+  &\|Y - Z\|^2 + 4 d(X, K)^2 \le 2(d(X, K)^2 + d(X, K)^2) = 4 d(X, K)^2\\
+  &\implies \|Y - Z\|^2 \le 0.
+  \end{align*}
+  $$
+
+  Hence $Y = Z$ almost surely.
+
+* **Existence:** Let $\{Y_n\}_{n=1}^\infty \subset K$ be a minimizing sequence such that $\|X - Y_n\|^2 \le d(X, K)^2 + \frac{1}{n}$. Applying the Parallelogram Law to $Y_n - X$ and $Y_m - X$:
+
+  $$
+  \|Y_n - Y_m\|^2 + 4 \left\| \frac{Y_n + Y_m}{2} - X \right\|^2 \le 2 \left( \|Y_n - X\|^2 + \|Y_m - X\|^2 \right).
+  $$
+
+  Since $\frac{Y_n + Y_m}{2} \in K$, $\left\| \frac{Y_n + Y_m}{2} - X \right\|^2 \ge d(X, K)^2$. Therefore:
+
+  $$
+  \begin{align*}
+  &\|Y_n - Y_m\|^2 + 4 d(X, K)^2 \le 4 d(X, K)^2 + 2\left( \frac{1}{n} + \frac{1}{m} \right)\\
+  &\implies \|Y_n - Y_m\|^2 \le 2\left( \frac{1}{n} + \frac{1}{m} \right).
+  \end{align*}
+  $$
+
+  Thus, $\{Y_n\}$ is a Cauchy sequence in $H$. Since $H$ is complete and $K$ is closed, $Y_n \to Y$ for some $Y \in K$. By continuity of the norm:
+
+  $$
+  \|X - Y\| \le \|X - Y_n\| + \|Y_n - Y\| \to d(X, K) \quad \text{as } n \to \infty.
+  $$
+
+  So $\|X - Y\| = d(X, K)$. 
+:::
+
+---
+
+## Characterization via Orthogonality
+
+:::{#thm-orthogonality-characterization}
+## Orthogonal Error Characterization
+Let $K \subseteq H$ be a closed subspace and $X \in H$. An element $Y \in K$ is the unique closest point to $X$ if and only if:
+
+$$
+X - Y \perp K \quad \text{i.e., } \langle X - Y, Z \rangle = 0 \quad \forall Z \in K.
+$$
+:::
+
+:::{#rem-orthogonal-error-characterization}
+Let $P_K: H \to K$ be the mapping that assigns to each $X \in H$ its unique closest point in $K$. Then $\forall Y \in K$, @thm-orthogonality-characterization gives the orthogonality condition:
+$$
+\begin{aligned}
+X - P_K(X) \perp K &\iff \langle X - P_K(X), Y \rangle = 0 \\
+&\iff \mathbb{E}\left[P_K(X) Y\right] = \mathbb{E}[XY].
+\end{aligned}
+$$
+:::
+
+:::{.proof}
+## Proof of @thm-orthogonality-characterization
+
+* **($\Rightarrow$):** Assume $Y \in K$ minimizes $d(X, K)$. For any fixed $Z \in K$ and $t \in \mathbb{R}$, define the quadratic function:
+
+  $$
+  g(t) := \|X - (Y + t Z)\|^2 = \|X - Y\|^2 - 2t \langle X - Y, Z \rangle + t^2 \|Z\|^2
+  $$
+
+  Since $Y + t Z \in K$, $g(t)$ achieves its global minimum at $t = 0$. Differentiating at $t = 0$ gives:
+
+  $$
+  0 = g'(0) = -2 \langle X - Y, Z \rangle \implies \langle X - Y, Z \rangle = 0
+  $$
+
+* **($\Leftarrow$):** Suppose $X - Y \perp K$. For any other element $Z \in K$, $Y - Z \in K$, so $(X - Y) \perp (Y - Z)$. By the Pythagorean Theorem:
+
+  $$
+  \begin{align*}
+  \|X - Z\|^2 &= \|(X - Y) + (Y - Z)\|^2\\
+  & = \|X - Y\|^2 + \|Y - Z\|^2 \\
+  &\ge \|X - Y\|^2
+  \end{align*}
+  $$
+
+  Equality holds if and only if $\|Y - Z\|^2 = 0 \implies Z = Y$. 
+:::
+
+---
+
+## Properties of the Orthogonal Projection Operator
+Let $P_K: H \to K$ be the mapping that assigns to each $X \in H$ its unique closest point in $K$. By @thm-orthogonality-characterization, this is equivalent to saying that $X - P_K(X) \perp K$, i.e., $\langle X - P_K(X), Y \rangle = 0$ for all $Y \in K$.
+
+:::{#thm-projection-operator}
+## Properties of $P_K$
+Let $K \subseteq H$ be a closed subspace of a Hilbert space $H$. The mapping $P_K: H \to K$ that assigns to each $X \in H$ its unique closest point in $K$ satisfies:
+
+1. **Linearity:** $P_K(\alpha_1 X_1 + \alpha_2 X_2) = \alpha_1 P_K(X_1) + \alpha_2 P_K(X_2)$ for all $\alpha_1, \alpha_2 \in \mathbb{R}$ and $X_1, X_2 \in H$.
+2. **Idempotency (Projection):** $P_K(Y) = Y$ for all $Y \in K$.
+3. **Kernel:** $P_K(Z) = 0$ for all $Z \in K^\perp$.
+4. **1-Lipschitz Continuity:** $\|P_K(X)\| \le \|X\|$ and $\|P_K(X) - P_K(Y)\| \le \|X - Y\|$ for all $X, Y \in H$.
+5. **Self-Adjointness:** $\langle P_K(X), Y \rangle = \langle X, P_K(Y) \rangle$ for all $X, Y \in H$.
+6. **Nested Projections:** If $L \subseteq K \subseteq H$ is another closed subspace, then:
+   $$
+   P_K P_L = P_L P_K = P_L
+   $$
+:::
+
+:::{.proof}
+## Proof of @thm-projection-operator
+
+* **Linearity:** For any $Y \in K$:
+
+  $$
+  \begin{aligned}
+  &\left\langle (\alpha_1 P_K(X_1) + \alpha_2 P_K(X_2)) - (\alpha_1 X_1 + \alpha_2 X_2), Y \right\rangle \\
+  &= \alpha_1 \langle P_K(X_1) - X_1, Y \rangle + \alpha_2 \langle P_K(X_2) - X_2, Y \rangle\\
+  & = \alpha_1 (0) + \alpha_2 (0) = 0
+  \end{aligned}
+  $$
+
+  By @thm-orthogonality-characterization, $P_K(\alpha_1 X_1 + \alpha_2 X_2) = \alpha_1 P_K(X_1) + \alpha_2 P_K(X_2)$.
+
+* **Idempotency (Projection):** For any $Y \in K$, $P_K(Y)$ is the unique closest point in $K$ to $Y$. Since $Y \in K$, the closest point is $Y$ itself, so $P_K(Y) = Y$.
+
+* **Kernel:** Let $Z\in K^\perp$. By definition, $\langle Z,Y\rangle=0 \qquad\text{for every }Y\in K$. For any $Y\in K$, the Pythagorean theorem gives
+$\|Z-Y\|^2 = \|Z\|^2+\|Y\|^2$, because $Z\perp Y$. Hence
+$\|Z-Y\|^2\geq \|Z\|^2=\|Z-0\|^2$. Thus $0\in K$ is the unique element of $K$ closest to $Z$. Since $P_K(Z)$ is defined as this unique closest point, $P_K(Z) = 0$.
+
+
+
+* **1-Lipschitz Continuity:** For $X \in H$, decompose $X = (X - P_K(X)) + P_K(X)$ where $(X - P_K(X)) \in K^\perp$ and $P_K(X) \in K$. By the Pythagorean Theorem:
+
+  $$
+  \begin{align*}
+  &\|X\|^2 = \|X - P_K(X)\|^2 + \|P_K(X)\|^2 \ge \|P_K(X)\|^2 \\
+  &\implies \|P_K(X)\| \le \|X\|
+  \end{align*}
+  $$
+
+  By linearity, $\|P_K(X) - P_K(Y)\| = \|P_K(X - Y)\| \le \|X - Y\|$.
+
+* **Self-Adjointness:** Using $X = (X - P_K(X)) + P_K(X)$ and $Y = (Y - P_K(Y)) + P_K(Y)$:
+
+  $$
+  \begin{align*}
+  \langle P_K(X), Y \rangle &= \langle P_K(X), P_K(Y) \rangle + \langle P_K(X), Y - P_K(Y) \rangle \\
+  &= \langle P_K(X), P_K(Y) \rangle
+  \end{align*}
+  $$
+
+  Symmetrically, $\langle X, P_K(Y) \rangle = \langle P_K(X), P_K(Y) \rangle$, so $\langle P_K(X), Y \rangle = \langle X, P_K(Y) \rangle$.
+
+* **Nested Projections:** If $L \subseteq K$, then $P_L(X) \in L \subseteq K$. Since $P_K$ acts as the identity on $K$, $P_K(P_L(X)) = P_L(X)$. 
+
+  For the reverse, $P_L P_K = P_L$ follows from self-adjointness: for any $X, Y \in H$,
+
+  $$
+  \begin{align*}
+  \langle P_L P_K(X), Y \rangle &= \langle P_K(X), P_L(Y) \rangle\\
+  & = \langle X, P_K P_L(Y) \rangle \\
+  &= \langle X, P_L(Y) \rangle \\
+  &= \langle P_L(X), Y \rangle
+  \end{align*}
+  $$
+
+  Thus $P_L P_K(X) = P_L(X)$. 
+:::
+
+---
+
+## Takeaways
+
+**1. Hilbert spaces generalize finite-dimensional geometry.**  
+$L^2(\Omega, \mathcal{F}, \mathbb{P})$ is a Hilbert space with inner product $\langle X, Y \rangle = \mathbb{E}[XY]$. The fundamental identities of Euclidean geometry—the Pythagorean Theorem and the Parallelogram Law—hold in full generality, and they are the key tools in every proof of this lecture.
+
+**2. Closedness is the infinite-dimensional replacement for finite-dimensionality.**  
+In finite dimensions every subspace is automatically closed. In infinite-dimensional spaces one must assume $K$ is closed; only then does $K$ itself become a complete (hence Hilbert) space in which limit arguments can be completed.
+
+**3. Best Approximation Theorem: existence and uniqueness via the Parallelogram Law.**  
+For any closed subspace $K \subseteq H$ and any $X \in H$, there is a unique $Y \in K$ achieving
+$$
+\|X - Y\| = d(X, K) := \inf_{Z \in K} \|X - Z\|.
+$$
+Uniqueness uses the Parallelogram Law to show two minimizers must coincide. Existence builds a Cauchy minimizing sequence from the same identity, then invokes completeness and closedness.
+
+**4. Orthogonality characterizes the best approximation.**  
+$Y \in K$ is the closest point to $X$ if and only if $X - Y \perp K$, i.e.
+$$
+\langle X - Y, Z \rangle = 0 \quad \forall Z \in K.
+$$
+The forward direction follows by differentiating $g(t) = \|X - (Y + tZ)\|^2$ at $t = 0$; the backward direction is an immediate application of the Pythagorean Theorem.
+
+**5. The projection operator $P_K$ is linear, bounded, and self-adjoint.**  
+Assigning each $X$ its unique closest point defines a map $P_K : H \to K$ satisfying:
+
+- **Idempotency:** $P_K^2 = P_K$ (projection onto its own range).
+- **1-Lipschitz:** $\|P_K(X)\| \le \|X\|$ and $\|P_K(X) - P_K(Y)\| \le \|X - Y\|$, proved via the Pythagorean decomposition $\|X\|^2 = \|P_K(X)\|^2 + \|X - P_K(X)\|^2$.
+- **Self-adjointness:** $\langle P_K(X), Y \rangle = \langle X, P_K(Y) \rangle$, proved by expanding both sides using the orthogonal decomposition.
+
+**6. Nested projections satisfy $P_K P_L = P_L P_K = P_L$ when $L \subseteq K$.**  
+$P_K P_L = P_L$ because $P_L(X) \in L \subseteq K$ and $P_K$ is the identity on $K$. The reverse order $P_L P_K = P_L$ follows from self-adjointness: it suffices to check $\langle P_L P_K(X), Y \rangle = \langle P_L(X), Y \rangle$ for all $Y$, which reduces to the already-established $P_K P_L = P_L$.

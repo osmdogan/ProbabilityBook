@@ -1,0 +1,291 @@
+# Lecture 23.1: Vague Convergence 
+
+## Motivation: Loss of Mass in the Limit
+
+In previous lectures, we established that on $\mathbb{R}^d$, weak convergence $\mu_n \implies \mu$ is equivalent to testing against functions in $C_c(\mathbb{R}^d)$ provided both $\mu_n$ and $\mu$ are **probability measures**. However, when sequence elements escape to infinity, testing against compactly supported functions $C_c(\mathbb{R}^d)$ can lead to a limit measure $\mu$ that fails to preserve total probability mass $\mu(\mathbb{R}^d) = 1$.
+
+:::{#exm-mass-escape}
+Fix a unit vector $e_1 \in \mathbb{R}^d$ and let $\mu_n=\frac{1}{2}\delta_0+\frac{1}{2}\delta_{n e_1}\in\mathcal{P}(\mathbb{R}^d,\mathcal{B}(\mathbb{R}^d))$ for $n \in \mathbb{N}$. Does $\mu_n$ converge weakly to a probability measure $\mu$? For any test function $f \in C_c(\mathbb{R}^d)$, there exists a radius $R < \infty$ such that $\text{supp}(f) \subseteq B_R$. Then for all $n > R$:
+$$
+\int_{\mathbb{R}^d} f \, d\mu_n
+= \frac{1}{2}f(0) + \frac{1}{2}f(n e_1) = \frac{1}{2}f(0).
+$$
+Thus $\mu_n \xrightarrow{v} \frac{1}{2}\delta_0$, which is a sub-probability measure with $\mu(\mathbb{R}^d) = 1/2 < 1$. Note that $\mu_n \not\implies \frac{1}{2}\delta_0$, because 
+$$
+\int_{\mathbb{R}^d} 1 \, d\mu_n = 1 \nrightarrow \frac{1}{2} = \int_{\mathbb{R}^d} 1 \, d\mu.
+$$
+In fact, $\mu_n$ does not possess any weakly convergent subsequence. Indeed, every subsequence is non-tight: for any compact $K \subset \mathbb{R}^d$, boundedness of $K$ implies $n_k e_1 \notin K$ for all sufficiently large $k$, and hence $\mu_{n_k}(K) \le 1/2$. Since every weakly convergent sequence of probability measures on $\mathbb{R}^d$ is tight, no subsequence can converge weakly.
+:::
+
+---
+
+## Vague Convergence
+
+To accommodate limit operations where mass escapes, we introduce the concept of **vague convergence** for general Radon/Borel measures.
+
+:::{#def-vague-convergence}
+## Vague Convergence
+Let $\mu_n, \mu$ be positive Radon measures on $\mathbb{R}^d$, meaning locally finite regular Borel measures. (In particular, every finite Borel measure on $\mathbb{R}^d$ is Radon.) We say $\mu_n$ **converges vaguely** to $\mu$, denoted $\mu_n \xrightarrow{v} \mu$, if:
+$$
+\int_{\mathbb{R}^d} f \, d\mu_n \longrightarrow \int_{\mathbb{R}^d} f \, d\mu \quad \forall f \in C_c(\mathbb{R}^d)
+$$
+:::
+
+It is possible to lose mass, but not gain mass under vague convergence. The following proposition formalizes this property.
+
+:::{#thm-mass-loss}
+## One-Sided Conservation of Mass
+Let $\{\mu_n\}$ be a sequence of probability measures on $\mathbb{R}^d$.
+If $\mu_n\xrightarrow{v}\mu$ for some Radon measure $\mu$, then
+$$
+\mu(\mathbb{R}^d)
+\leq
+\liminf_{n\to\infty}\mu_n(\mathbb{R}^d)
+=1.
+$$
+Thus, under vague convergence, total mass can be lost in the limit,
+but it cannot be gained.
+:::
+
+:::{.proof}
+## Proof of @thm-mass-loss
+Suppose for contradiction that $\mu(\mathbb{R}^d) > 1$. Since $\mu(B_R) \uparrow \mu(\mathbb{R}^d)$ as $R \to \infty$, there exists some finite radius $R < \infty$ such that $\mu(B_R) > 1$.
+Choose a continuous radial cutoff $f \in C_c(\mathbb{R}^d)$ that equals $1$ on $B_R$, vanishes outside $B_{R+1}$, and satisfies $0 \le f \le 1$. Thus $\mathbf{1}_{B_R} \le f \le 1$.
+By vague convergence:
+$$\lim_{n\to\infty} \int_{\mathbb{R}^d} f \, d\mu_n = \int_{\mathbb{R}^d} f \, d\mu \ge \int_{\mathbb{R}^d} \mathbf{1}_{B_R} \, d\mu = \mu(B_R) > 1$$
+
+However, for all $n$:
+$$\int_{\mathbb{R}^d} f \, d\mu_n \le \int_{\mathbb{R}^d} 1 \, d\mu_n = \mu_n(\mathbb{R}^d) = 1$$
+This yields the contradiction $\lim_{n\to\infty} \int f d\mu_n > 1$, showing $\mu(\mathbb{R}^d) \le 1$. 
+:::
+
+---
+
+## Tightness of Probability Measures
+
+To bridge the gap between vague convergence and weak convergence, we need a condition preventing probability mass from fleeing to infinity.
+
+:::{#def-tightness}
+## Tightness
+A family $\mathcal{A} \subseteq \mathcal{P}(S, \mathcal{B}(S))$ of probability measures on a topological space $S$ is called **tight** if for every $\epsilon > 0$, there exists a compact set $K_\epsilon \subseteq S$ such that:
+$$\mu(K_\epsilon) \ge 1 - \epsilon \quad \forall \mu \in \mathcal{A}$$
+
+Thus, a sequence $\{\mu_n\}$ is tight exactly when, for every $\epsilon > 0$, there exists a compact set $K_\epsilon$ such that $\inf_n \mu_n(K_\epsilon) \ge 1 - \epsilon$.
+:::
+
+- The key word is **uniformity**: the same compact set $K_\epsilon$ must work for all measures in the family $\mathcal{A}$ for a given $\epsilon$. So the probability mass of every measure in the family is concentrated, up to an arbitrarily small amount, inside a common compact set.
+
+:::{#exm-tightness}
+## Examples of Tightness
+- **Weakly Convergent Sequences**: If $\mu_n \implies \mu$ on $\mathbb{R}^d$, we proved in @lem-tightness-balls that $\lim_{R\to\infty} \inf_n \mu_n(\bar{B}_R) = 1$. Taking $K_\epsilon = \bar{B}_R$ for large enough $R$ demonstrates that every weakly convergent sequence is tight. Thus, weak convergence implies tightness.
+- **Fleeing Sequence**: The sequence $\mu_n =\frac{1}{2}\delta_0 + \frac{1}{2}\delta_n$ is **not tight**. For any compact set $K \subset \mathbb{R}$, there exists $N$ such that $n > N$ implies $n \notin K$. Then $\mu_n(K) \le 1/2 < 1 - \epsilon$ for $\epsilon < 1/2$, showing that no compact set can capture at least $1 - \epsilon$ of the mass for all $n$.
+:::
+
+---
+
+## Characterization of Weak Convergence via Tightness
+
+:::{#thm-tightness-vague-weak}
+## Equivalence of Weak Convergence and Tight Vague Limits
+Let $\mu_n \in \mathcal{P}\left(\mathbb{R}^d,\mathcal{B}(\mathbb{R}^d)\right)$ and let $\mu$ be a positive Radon measure on $\mathbb{R}^d$ such that $\mu_n \xrightarrow{v} \mu$.
+Then $\mu(\mathbb{R}^d) = 1$ **if and only if** the sequence $\{\mu_n\}$ is tight. In that case, $\mu$ is a probability measure and $\mu_n \implies \mu$.
+:::
+
+:::{.proof}
+## Proof of @thm-tightness-vague-weak
+- $(\implies)$: Suppose $\mu(\mathbb{R}^d) = 1$, so $\mu$ is a probability measure. Since $\mu_n \xrightarrow{v} \mu$ means $\int f \, d\mu_n \to \int f \, d\mu$ for all $f \in C_c(\mathbb{R}^d)$, and both $\mu_n$ and $\mu$ are probability measures, the $C_c$ characterization of weak convergence (@thm-cc-convergence) gives $\mu_n \implies \mu$. By @lem-tightness-balls (proved in the previous lecture), every weakly convergent sequence on $\mathbb{R}^d$ is tight.
+
+- $(\impliedby)$: Assume $\{\mu_n\}$ is tight. Fix $\epsilon > 0$.
+  By tightness, choose a compact set $K_\epsilon \subset \mathbb{R}^d$ such that $\mu_n(K_\epsilon) \ge 1 - \epsilon$ for all $n$.
+   Define $f(x)=\max\{1-\operatorname{dist}(x,K_\epsilon),0\}$. Then $f \in C_c(\mathbb{R}^d)$ because the closed unit neighborhood of the compact set $K_\epsilon$ is compact, and $\mathbf{1}_{K_\epsilon} \le f \le 1$.
+  
+  Since $f \ge \mathbf{1}_{K_\epsilon}$, we have $\int f \, d\mu_n \ge \mu_n(K_\epsilon) \ge 1 - \epsilon$ for all $n$. Using $f \in C_c$ and vague convergence:
+  $$\mu(\mathbb{R}^d) \ge \int_{\mathbb{R}^d} f \, d\mu = \lim_{n\to\infty} \int_{\mathbb{R}^d} f \, d\mu_n \ge \liminf_{n\to\infty} \mu_n(K_\epsilon) \ge 1 - \epsilon.$$
+
+  Since $\epsilon > 0$ was arbitrary, $\mu(\mathbb{R}^d) \ge 1$.
+  Combined with @thm-mass-loss ($\mu(\mathbb{R}^d) \le 1$), we conclude $\mu(\mathbb{R}^d) = 1$, so $\mu$ is a probability measure. Since $\mu_n \xrightarrow{v} \mu$ already gives $\int f \, d\mu_n \to \int f \, d\mu$ for all $f \in C_c(\mathbb{R}^d)$, and both $\mu_n$ and $\mu$ are probability measures, the $C_c$ characterization (@thm-cc-convergence) yields $\mu_n \implies \mu$. 
+:::
+
+
+:::{#exm-tightness-vague}
+Let $\mu_n=\delta_n$, where $\delta_n$ is the point mass at $n\in\mathbb R$: $\delta_n(A)=\mathbf 1\{n\in A\}$. Consider the sequence $\delta_1,\delta_2,\delta_3,\ldots$. For any compact set $K\subset\mathbb R$, there exists $M<\infty$ such that $K\subset[-M,M]$.
+For every $n>M$, $\delta_n(K)=0$. Thus, for example, if $\epsilon=1/2$, there is no compact $K$ such that
+$$ 
+\delta_n(K)\geq1-\epsilon=\frac12 \qquad\text{for every }n. 
+$$
+Hence $\{\delta_n\}_{n\ge 1}$ is not tight.
+
+Take any $f\in C_c(\mathbb R)$. Because $f$ has compact support, there exists $M<\infty$ such that $f(x)=0$ whenever $|x|>M$. Therefore, for all $n>M$,
+$$ 
+\int f\,d\delta_n=f(n)=0. 
+$$
+Consequently, $\int f\,d\delta_n\longrightarrow0$. Thus
+$$ 
+\delta_n\xrightarrow{v}0,
+$$
+where $0$ denotes the zero measure. The limiting measure has mass $0(\mathbb R)=0$. So the mass has completely escaped to infinity.
+
+The theorem says that if $\mu_n\xrightarrow{v}\mu$ and the sequence $\{\mu_n\}$ is tight, then necessarily $\mu(\mathbb R)=1$ and therefore $\mu_n\implies\mu$. Here, the sequence is not tight, and indeed the vague limit has mass $0$, not $1$. In particular, there cannot be weak convergence: $\delta_n\not\implies0$, because $0$ is not a probability measure.
+:::
+
+---
+
+## Vague Convergence via Interval Differences on $\mathbb{R}$
+
+:::{#thm-vague-cdf}
+## Characterization by CDF Differences
+Let $\mu_n \in \mathcal{P}(\mathbb{R},\mathcal{B}(\mathbb{R}))$ and let $\mu$ be a finite Borel measure on $\mathbb{R}$.
+Define the CDFs $F_n(t) = \mu_n((-\infty, t])$ and the cumulative mass function $F(t) = \mu((-\infty, t])$; unlike a probability CDF, $F$ satisfies $F(+\infty)=\mu(\mathbb{R})$, which need not equal $1$.
+Then $\mu_n \xrightarrow{v} \mu$ if and only if
+$$
+F_n(b) - F_n(a) \longrightarrow F(b) - F(a) \quad \forall a, b \in \text{Cont}(F) \text{ with } a < b.
+$$
+:::
+
+:::{.proof}
+## Proof of @thm-vague-cdf
+
+First observe that, for $a<b$,
+$$
+F_n(b)-F_n(a)=\mu_n((a,b])
+\quad\text{and}\quad
+F(b)-F(a)=\mu((a,b]).
+$$
+Moreover, $t\in\operatorname{Cont}(F)$ if and only if $\mu(\{t\})=0$. Indeed,
+$$
+F(t)-F(t^-)=\mu(\{t\}).
+$$
+
+- $(\implies)$: Suppose that $\mu_n\xrightarrow{v}\mu$, and fix $a,b\in\operatorname{Cont}(F)$ with $a<b$. For $0<\delta<(b-a)/2$, choose functions $\ell_\delta,u_\delta\in C_c(\mathbb R)$ as follows:
+   - $\ell_\delta$ is $0$ outside $(a,b)$, is $1$ on $[a+\delta,b-\delta]$, is linear on the two intervening intervals, and satisfies $0\leq\ell_\delta\leq1$;
+   - $u_\delta$ is $1$ on $[a,b]$, is $0$ outside $(a-\delta,b+\delta)$, is linear on the two intervening intervals, and satisfies $0\leq u_\delta\leq1$.
+
+   These functions satisfy
+   $$
+   \ell_\delta\leq\mathbf 1_{(a,b]}\leq u_\delta.
+   $$
+   Therefore,
+   $$
+   \int \ell_\delta\,d\mu_n
+   \leq \mu_n((a,b])
+   \leq \int u_\delta\,d\mu_n.
+   $$
+   Vague convergence applies to both cutoff functions, so
+   $$
+   \int \ell_\delta\,d\mu
+   \leq \liminf_{n\to\infty}\mu_n((a,b])
+   \leq \limsup_{n\to\infty}\mu_n((a,b])
+   \leq \int u_\delta\,d\mu.
+   $$
+   As $\delta\downarrow0$, the lower cutoffs converge pointwise to $\mathbf 1_{(a,b)}$, while the upper cutoffs converge pointwise to $\mathbf 1_{[a,b]}$. All these functions are bounded by the indicator of a fixed compact interval once $\delta$ is restricted, and $\mu$ is finite on compact sets. Hence dominated convergence gives
+   $$
+   \int \ell_\delta\,d\mu\longrightarrow\mu((a,b)),
+   \qquad
+   \int u_\delta\,d\mu\longrightarrow\mu([a,b]).
+   $$
+   Since $a,b\in\operatorname{Cont}(F)$, we have $\mu(\{a\})=\mu(\{b\})=0$, and consequently
+   $$
+   \mu((a,b))=\mu((a,b])=\mu([a,b]).
+   $$
+   Letting $\delta\downarrow0$ in the preceding bounds yields
+   $$
+   \mu_n((a,b])\longrightarrow\mu((a,b]),
+   $$
+   which is exactly
+   $$
+   F_n(b)-F_n(a)\longrightarrow F(b)-F(a).
+   $$
+
+- $(\impliedby)$: Conversely, suppose that
+   $$
+   \mu_n((a,b])\longrightarrow\mu((a,b])
+   \qquad\text{for every }a,b\in\operatorname{Cont}(F),\ a<b.
+   $$
+   Because $F$ is nondecreasing, it has at most countably many discontinuities. Thus $\operatorname{Cont}(F)$ is dense in $\mathbb R$.
+
+   Let $f\in C_c(\mathbb R)$. Choose $A<B$ such that $\operatorname{supp}(f)\subseteq[A,B]$. Given $\eta>0$, uniform continuity of $f$ gives $\rho>0$ such that
+   $$
+   |x-y|<\rho\quad\Longrightarrow\quad |f(x)-f(y)|<\eta.
+   $$
+   Using the density of $\operatorname{Cont}(F)$, choose a finite partition
+   $$
+   x_0<x_1<\cdots<x_k,
+   $$
+   all of whose points belong to $\operatorname{Cont}(F)$, such that $x_0<A$, $x_k>B$, and $x_j-x_{j-1}<\rho$ for every $j$. Define
+   $$
+   f_\pi(x)=\sum_{j=1}^k f(x_j)\mathbf 1_{(x_{j-1},x_j]}(x).
+   $$
+   Since $f$ vanishes outside $[A,B]$ and every interval of the partition has length less than $\rho$, we have
+   $$
+   \lVert f-f_\pi\rVert_\infty\leq\eta.
+   $$
+   The assumed interval convergence and finiteness of the sum imply
+   $$
+   \begin{aligned}
+   \int f_\pi\,d\mu_n
+   &=\sum_{j=1}^k f(x_j)\mu_n((x_{j-1},x_j])\\
+   &\longrightarrow
+   \sum_{j=1}^k f(x_j)\mu((x_{j-1},x_j])
+   =\int f_\pi\,d\mu.
+   \end{aligned}
+   $$
+   Because each $\mu_n$ is a probability measure and $\mu$ is finite,
+   $$
+   \begin{aligned}
+   \left|\int f\,d\mu_n-\int f\,d\mu\right|
+   &\leq \left|\int(f-f_\pi)\,d\mu_n\right|
+   +\left|\int f_\pi\,d\mu_n-\int f_\pi\,d\mu\right|\\
+   &\quad+\left|\int(f_\pi-f)\,d\mu\right|\\
+   &\leq \eta+\left|\int f_\pi\,d\mu_n-\int f_\pi\,d\mu\right|
+   +\eta\mu(\mathbb R).
+   \end{aligned}
+   $$
+   Taking $\limsup_{n\to\infty}$ gives
+   $$
+   \limsup_{n\to\infty}
+   \left|\int f\,d\mu_n-\int f\,d\mu\right|
+   \leq \eta\bigl(1+\mu(\mathbb R)\bigr).
+   $$
+   Since $\eta>0$ is arbitrary, the left-hand side is $0$. Therefore
+   $$
+   \int f\,d\mu_n\longrightarrow\int f\,d\mu
+   \qquad\forall f\in C_c(\mathbb R),
+   $$
+   which proves $\mu_n\xrightarrow{v}\mu$.
+:::
+
+:::{#exm-split-mass}
+## Symmetric Split Mass
+Consider the sequence of measures $\mu_n = \frac{1}{2}(\delta_n + \delta_{-n})$ on $\mathbb{R}$.
+For any test function $f \in C_c(\mathbb{R})$ supported on $[-R, R]$:
+$$\int_{\mathbb{R}} f \, d\mu_n = \frac{1}{2}(f(n) + f(-n)) = 0 \quad \forall n > R$$
+
+Thus $\mu_n \xrightarrow{v} \mathbf{0}$, where $\mathbf{0}$ is the zero measure.
+Evaluating the CDFs of $\mu_n$:
+$$F_n(t) = \begin{cases} 0, & t < -n \\ 1/2, & -n \le t < n \\ 1, & t \ge n \end{cases}$$
+
+For every fixed $t \in \mathbb{R}$, eventually $-n < t < n$, so $F_n(t) \to 1/2$ pointwise. However, the vague limit is $\mu = \mathbf{0}$, whose CDF is $F(t) = \mu((-\infty,t]) = 0$ for all $t$. The pointwise limit of $F_n$ (which is $1/2$) is therefore **not** the CDF of the vague limit — this discrepancy is precisely the mass-loss phenomenon.
+
+To verify the CDF-difference criterion in @thm-vague-cdf consistently with the vague convergence already established above, note that for any $a < b$ and all $n > \max(|a|, |b|)$, $F_n(a) = F_n(b) = 1/2$, so:
+$$F_n(b) - F_n(a) = 0 \longrightarrow 0 = F(b) - F(a),$$
+confirming vague convergence to the zero measure. Both halves of the probability mass escaped to opposite infinities.
+:::
+
+## Takeaways
+
+1. **Vague convergence is $C_c$-convergence for general measures.**  
+   $\mu_n \xrightarrow{v} \mu$ means $\int f \, d\mu_n \to \int f \, d\mu$ for all $f \in C_c(\mathbb{R}^d)$. Unlike weak convergence, the limit $\mu$ need not be a probability measure — mass can escape to infinity and be lost. Vague convergence is the natural notion for sequences of measures that may not remain tight.
+
+2. **Mass can only be lost, never gained, under vague convergence.**  
+   By @thm-mass-loss, if $\mu_n$ are probability measures and $\mu_n \xrightarrow{v} \mu$, then $\mu(\mathbb{R}^d) \le 1$. The proof constructs a test function $f \in C_c$ with $\mathbf{1}_{B_R} \le f \le 1$ and uses vague convergence to derive a contradiction if $\mu(\mathbb{R}^d) > 1$. By contrast, mass can strictly decrease: the fleeing example $\mu_n = \frac{1}{2}\delta_0 + \frac{1}{2}\delta_{n e_1}$ gives $\mu_n \xrightarrow{v} \frac{1}{2}\delta_0$ with only half the mass preserved.
+
+3. **Tightness bridges vague and weak convergence.**  
+   By @thm-tightness-vague-weak, if $\mu_n \xrightarrow{v} \mu$ (with $\mu_n$ probability measures), then $\mu_n \implies \mu$ (i.e., $\mu(\mathbb{R}^d) = 1$ and vague convergence upgrades to weak convergence) if and only if $\{\mu_n\}$ is tight. The key directions are:
+   - *Tight $\Rightarrow$ weak*: tightness gives a cutoff function $f \ge \mathbf{1}_{K_\epsilon}$ that forces $\mu(\mathbb{R}^d) \ge 1 - \epsilon$; since $\epsilon$ is arbitrary, $\mu(\mathbb{R}^d) = 1$, and the $C_c$ characterization (Theorem 22.2) then gives $\mu_n \implies \mu$.
+   - *Weak $\Rightarrow$ tight*: weak convergence implies $\lim_{R\to\infty} \inf_n \mu_n(\bar{B}_R) = 1$ (Lemma 22.2).
+
+4. **Vague convergence on $\mathbb{R}$ is characterized by differences of CDFs.**  
+   By @thm-vague-cdf, $\mu_n \xrightarrow{v} \mu$ iff $F_n(b) - F_n(a) \to F(b) - F(a)$ for all continuity points $a < b$ of $F$, where $F$ is the CDF of $\mu$. Note that CDF differences (not pointwise CDF values) are the correct quantity: the pointwise limit of $F_n$ need not equal the CDF of the vague limit.
+
+5. **The pointwise limit of CDFs need not be the CDF of the vague limit.**  
+   The example $\mu_n = \frac{1}{2}(\delta_n + \delta_{-n}) \xrightarrow{v} \mathbf{0}$ illustrates this: $F_n(t) \to 1/2$ pointwise for every finite $t$, yet the CDF of $\mathbf{0}$ is $F \equiv 0$. The CDF differences $F_n(b) - F_n(a) = 0 \to 0 = F(b) - F(a)$ correctly capture vague convergence, even though the pointwise limits of $F_n$ are not meaningful for the limit measure.

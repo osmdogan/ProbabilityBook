@@ -1,0 +1,207 @@
+
+# Lecture 1.2: Sigma Algebra
+
+## Fields and $\sigma$-Fields ($\sigma$-Algebras)
+
+Let $\Omega$ be a non-empty sample space (any set). We aim to define structured collections of subsets of $\Omega$ that behave predictably under standard set-theoretic operations.
+
+::: {#def-field}
+## Field (Algebra of Sets)
+A collection $\mathcal{F} \subseteq 2^\Omega$ of subsets of $\Omega$ is called a **field** (or an **algebra**) over $\Omega$ if it satisfies the following three conditions:
+
+1. **Entire Space Inclusion:**
+   $$
+   \Omega \in \mathcal{F}.
+   $${#eq-field-omega}
+
+2. **Closure under Complement:**
+   $$
+   \text{If } E \in \mathcal{F}, \quad \text{then } E^c \in \mathcal{F},
+   $${#eq-field-comp}
+   where $E^c := \Omega \setminus E$.
+
+3. **Closure under Finite Unions:**
+   $$
+   \text{If } E_1, E_2, \dots, E_n \in \mathcal{F}, \quad \text{then } \bigcup_{j=1}^n E_j \in \mathcal{F}.
+   $${#eq-field-union}
+:::
+
+::: {#def-sigma-field}
+## $\sigma$-Field ($\sigma$-Algebra)
+If, instead of condition (3) in @def-field, $\mathcal{F}$ satisfies the stronger property of closure under **countable unions**, then $\mathcal{F}$ is called a **$\sigma$-field** (or a **$\sigma$-algebra**) over $\Omega$:
+
+3. **Closure under Countable Unions:**
+   $$
+   \text{If } \{E_j\}_{j=1}^\infty \subseteq \mathcal{F}, \quad \text{then } \bigcup_{j=1}^\infty E_j \in \mathcal{F}.
+   $${#eq-sigma-union}
+:::
+
+> **De Morgan's Laws:**
+> By De Morgan's laws, closure under complements and unions implies closure under intersections for both fields and $\sigma$-fields:
+> $$
+> \left( \bigcup_{j} E_j \right)^c = \bigcap_{j} E_j^c.
+> $${#eq-demorgan}
+
+---
+
+## Canonical Examples of $\sigma$-Fields
+
+1. **Power Set $\sigma$-Field:**
+   For any sample space $\Omega$, the full power set $2^\Omega$ is the largest possible $\sigma$-field over $\Omega$.
+
+2. **Trivial $\sigma$-Field:**
+   The collection $\mathcal{F} = \{\emptyset, \Omega\}$ is the smallest possible $\sigma$-field over $\Omega$.
+
+3. **Finite Discrete Example:**
+   Let $\Omega = \{1, 2, 3\}$. Then $\mathcal{F} = \{\emptyset, \{1\}, \{2, 3\}, \Omega\}$ is a valid $\sigma$-field over $\Omega$.
+
+4. **Cofinite / Countable-Cocountable $\sigma$-Field:**
+   Let $\Omega$ be an uncountable set. Define:
+   $$
+   \mathcal{F} = \{ B \subseteq \Omega : B \text{ is countable or } B^c \text{ is countable} \}.
+   $${#eq-cocountable}
+   Then $\mathcal{F}$ is a valid $\sigma$-field over $\Omega$.
+
+::: {.proof}
+## Proof of Countable-Cocountable $\sigma$-Field
+We verify the three conditions of @def-sigma-field.
+
+**1. $\Omega \in \mathcal{F}$:**
+$\Omega^c = \emptyset$ is finite, hence countable. Therefore $\Omega \in \mathcal{F}$.
+
+**2. Closure under complements:**
+Let $B \in \mathcal{F}$. By definition, either $B$ is countable or $B^c$ is countable.
+
+- If $B$ is countable: then $(B^c)^c = B$ is countable, so $B^c \in \mathcal{F}$.
+- If $B^c$ is countable: then $B^c$ is directly countable, so $B^c \in \mathcal{F}$.
+
+In both cases $B^c \in \mathcal{F}$.
+
+**3. Closure under countable unions:**
+Let $\{B_j\}_{j=1}^\infty \subseteq \mathcal{F}$ and set $B := \bigcup_{j=1}^\infty B_j$. There are two exhaustive cases.
+
+- **Case 1 — all $B_j$ are countable.** A countable union of countable sets is countable, so $B$ is countable, hence $B \in \mathcal{F}$.
+
+- **Case 2 — some $B_{j_0}$ has $B_{j_0}^c$ countable.** By De Morgan's law:
+$$
+B^c = \left(\bigcup_{j=1}^\infty B_j\right)^{\!c} = \bigcap_{j=1}^\infty B_j^c \;\subseteq\; B_{j_0}^c.
+$$
+Since $B_{j_0}^c$ is countable and $B^c \subseteq B_{j_0}^c$, the set $B^c$ is countable, so $B \in \mathcal{F}$.
+
+Since every sequence in $\mathcal{F}$ falls into Case 1 or Case 2 (or both), the union $B \in \mathcal{F}$ in all cases. $\square$
+:::
+
+---
+
+## Properties and Generation of $\sigma$-Fields
+
+::: {#lem-intersection-sigma}
+## Arbitrary Intersection of $\sigma$-Fields
+Let $I$ be an arbitrary (possibly uncountable) index set, and let $\{\mathcal{F}_i\}_{i \in I}$ be a collection of $\sigma$-fields over $\Omega$. Then their intersection:
+$$
+\mathcal{F} := \bigcap_{i \in I} \mathcal{F}_i
+$${#eq-intersection-def}
+is also a $\sigma$-field over $\Omega$.
+:::
+
+::: {.proof}
+We verify the three conditions of @def-sigma-field:
+
+1. Since $\mathcal{F}_i$ is a $\sigma$-field for every $i \in I$, $\Omega \in \mathcal{F}_i$ for all $i \in I$. Thus, $\Omega \in \bigcap_{i \in I} \mathcal{F}_i = \mathcal{F}$.
+2. Let $E \in \mathcal{F}$. Then $E \in \mathcal{F}_i$ for every $i \in I$. Since each $\mathcal{F}_i$ is closed under complements, $E^c \in \mathcal{F}_i$ for all $i \in I$. Therefore, $E^c \in \bigcap_{i \in I} \mathcal{F}_i = \mathcal{F}$.
+3. Let $\{E_j\}_{j=1}^\infty \subseteq \mathcal{F}$. Then for each fixed $i \in I$, $\{E_j\}_{j=1}^\infty \subseteq \mathcal{F}_i$. Since $\mathcal{F}_i$ is closed under countable unions, $\bigcup_{j=1}^\infty E_j \in \mathcal{F}_i$ for all $i \in I$. Hence, $\bigcup_{j=1}^\infty E_j \in \bigcap_{i \in I} \mathcal{F}_i = \mathcal{F}$.
+:::
+
+---
+
+## The $\sigma$-Field Generated by a Collection
+
+::: {#prp-generated-sigma}
+## Generated $\sigma$-Field
+Let $\mathcal{E} \subseteq 2^\Omega$ be any collection of subsets of $\Omega$. There exists a unique, smallest $\sigma$-field containing $\mathcal{E}$, denoted by $\sigma(\mathcal{E})$. It is called the **$\sigma$-field generated by $\mathcal{E}$**.
+:::
+
+::: {.proof}
+Define $\sigma(\mathcal{E})$ as the intersection of all $\sigma$-fields over $\Omega$ that contain $\mathcal{E}$:
+$$
+\sigma(\mathcal{E}) := \bigcap \left\{ \mathcal{F} \subseteq 2^\Omega : \mathcal{F} \text{ is a } \sigma\text{-field over } \Omega \text{ and } \mathcal{E} \subseteq \mathcal{F} \right\}.
+$${#eq-gen-sigma-def}
+
+* **Non-emptiness of Index Set:** The family of $\sigma$-fields containing $\mathcal{E}$ is non-empty because $2^\Omega$ is a valid $\sigma$-field containing $\mathcal{E}$.
+* **Validity:** By @lem-intersection-sigma, $\sigma(\mathcal{E})$ is a valid $\sigma$-field.
+* **Minimal Property:** By construction, any $\sigma$-field $\mathcal{G}$ containing $\mathcal{E}$ is part of the intersection, so $\sigma(\mathcal{E}) \subseteq \mathcal{G}$.
+:::
+
+### Concrete Example
+
+Let $\Omega = \{1, 2, 3\}$ and let $\mathcal{E} = \{\{1\}\}$. The generated $\sigma$-field is:
+$$
+\sigma(\mathcal{E}) = \{\emptyset, \, \{1\}, \, \{2, 3\}, \, \{1, 2, 3\}\}.
+$${#eq-concrete-example}
+
+---
+
+::: {#exr-equivalence-generated}
+## Exercise: Equivalence of Generated $\sigma$-Fields
+Let $\mathcal{E}_1, \mathcal{E}_2 \subseteq 2^\Omega$ be two collections of subsets. Prove that $\sigma(\mathcal{E}_1) = \sigma(\mathcal{E}_2)$ if and only if $\mathcal{E}_1 \subseteq \sigma(\mathcal{E}_2)$ and $\mathcal{E}_2 \subseteq \sigma(\mathcal{E}_1)$.
+:::
+
+::: {.proof}
+* ($\Rightarrow$) If $\sigma(\mathcal{E}_1) = \sigma(\mathcal{E}_2)$, then since $\mathcal{E}_1 \subseteq \sigma(\mathcal{E}_1)$, we have $\mathcal{E}_1 \subseteq \sigma(\mathcal{E}_2)$. Similarly, $\mathcal{E}_2 \subseteq \sigma(\mathcal{E}_1)$.
+* ($\Leftarrow$) If $\mathcal{E}_1 \subseteq \sigma(\mathcal{E}_2)$, then since $\sigma(\mathcal{E}_2)$ is a valid $\sigma$-field containing $\mathcal{E}_1$, by minimality of $\sigma(\mathcal{E}_1)$, we must have $\sigma(\mathcal{E}_1) \subseteq \sigma(\mathcal{E}_2)$. Reversing the roles for $\mathcal{E}_2 \subseteq \sigma(\mathcal{E}_1)$ gives $\sigma(\mathcal{E}_2) \subseteq \sigma(\mathcal{E}_1)$. Combining both inclusions yields $\sigma(\mathcal{E}_1) = \sigma(\mathcal{E}_2)$.
+:::
+
+---
+
+## Topological Spaces and the Borel $\sigma$-Field
+
+::: {#def-borel-sigma}
+## Borel $\sigma$-Field
+Let $X$ be a topological space (e.g., Euclidean space $\mathbb{R}^d$ equipped with the standard metric topology). The **Borel $\sigma$-field** on $X$, denoted by $\mathcal{B}(X)$, is the $\sigma$-field generated by all open subsets of $X$:
+$$
+\mathcal{B}(X) := \sigma(\{ U \subseteq X : U \text{ is open in } X \}).
+$${#eq-borel-def}
+Elements of $\mathcal{B}(X)$ are called **Borel sets**.
+:::
+
+::: {#prp-borel-generators}
+## Countable Generators of $\mathcal{B}(\mathbb{R}^d)$
+In Euclidean space $X = \mathbb{R}^d$, every open set $U \subseteq \mathbb{R}^d$ can be expressed as a countable union of open balls with rational centers and rational radii:
+$$
+U = \bigcup_{i=1}^\infty B(x_i, r_i), \quad x_i \in \mathbb{Q}^d, \, r_i \in \mathbb{Q}_{>0}.
+$${#eq-rational-balls-union}
+
+Consequently, $\mathcal{B}(\mathbb{R}^d)$ is generated by the countable collection of open balls:
+$$
+\mathcal{B}(\mathbb{R}^d) = \sigma\left( \{ B(x, r) : x \in \mathbb{Q}^d, r \in \mathbb{Q}_{>0} \} \right).
+$${#eq-borel-balls}
+
+For the real line $d = 1$, the Borel $\sigma$-field $\mathcal{B}(\mathbb{R})$ can be equivalently generated by open intervals, half-open intervals, or rays:
+$$
+\begin{aligned}
+\mathcal{B}(\mathbb{R}) &= \sigma(\{ (a, b) : a < b \}) \\
+&= \sigma(\{ (a, b] : a < b \}) \\
+&= \sigma(\{ (-\infty, a] : a \in \mathbb{R} \}).
+\end{aligned}
+$${#eq-borel-intervals}
+:::
+
+---
+
+## Takeaways
+
+:::{.callout-note icon=false}
+## Summary
+
+**1. Fields vs. $\sigma$-Fields.** A field requires closure under finite unions; a $\sigma$-field strengthens this to countable unions. The difference matters in measure theory: probability can only be assigned consistently to countably many events at once, making $\sigma$-fields the right domain.
+
+**2. Closure under intersections is free.** Neither definition explicitly requires closure under intersections, but it follows immediately from closure under complements and unions via De Morgan's law. The same holds for countable intersections in a $\sigma$-field.
+
+**3. The countable-cocountable $\sigma$-field.** On an uncountable $\Omega$, the collection of sets that are either countable or have countable complement is a $\sigma$-field. The key to the union closure proof is the two-case split: if every set is countable the union is countable; if any one set has countable complement then De Morgan forces the complement of the union to be even smaller, hence countable.
+
+**4. $\sigma$-Fields are closed under arbitrary intersections.** This is what makes the generated $\sigma$-field $\sigma(\mathcal{E})$ well-defined: take the intersection of all $\sigma$-fields containing $\mathcal{E}$. The resulting object is itself a $\sigma$-field (by the intersection lemma) and is the smallest one containing $\mathcal{E}$.
+
+**5. Comparing generated $\sigma$-fields.** $\sigma(\mathcal{E}_1) = \sigma(\mathcal{E}_2)$ if and only if each generating class is contained in the $\sigma$-field generated by the other. This is the standard two-sided inclusion argument and is the main tool for showing two different descriptions generate the same $\sigma$-field.
+
+**6. The Borel $\sigma$-field $\mathcal{B}(\mathbb{R})$.** Generated by the open sets of $\mathbb{R}$, it can equivalently be generated by open intervals, half-open intervals, or rays $(-\infty, a]$. The equivalence follows from the exercise above: each class generates the other because every open set is a countable union of such intervals. The ray generator $\sigma(\{(-\infty,a]: a\in\mathbb{R}\})$ is especially convenient in probability since CDFs are defined pointwise on these sets. In $\mathbb{R}^d$, separability (density of $\mathbb{Q}^d$) reduces the generator to a countable collection of rational balls.
+:::

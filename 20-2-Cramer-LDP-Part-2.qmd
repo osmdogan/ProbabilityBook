@@ -1,0 +1,299 @@
+# Lecture 20.2: Cramer's LDP-Part II
+
+
+## Theorem Statement & Context
+
+Let $\{X_n\}_{n=1}^{\infty}$ be a sequence of independent and identically distributed (i.i.d.), exponentially integrable random variables defined on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$. We assume throughout that $X_1$ is **non-degenerate**, i.e. $\operatorname{Var}(X_1) > 0$.
+
+Define the centered random variables and their sample sum:
+$$
+\dot{X}_n := X_n - \mathbb{E}[X_1], \quad \text{and} \quad \dot{S}_n := \sum_{i=1}^n \dot{X}_i .
+$$
+As shown in Part I, each $\dot X_n$ is again exponentially integrable, the $\dot X_n$ are i.i.d., and $\mathbb{E}[\dot X_1] = 0$.
+
+Also recall that the **moment generating function (MGF)** and **cumulant generating function (CGF)** of $\dot{X}_1$ are defined as:
+$$
+M_{\dot{X}_1}(t) := \mathbb{E}\left[e^{t\dot{X}_1}\right], \quad \text{and} \quad \Psi_{\dot{X}_1}(t) := \log M_{\dot{X}_1}(t),
+$$
+both finite for every $t \in \mathbb{R}$.
+
+The **Legendre-Fenchel transform** of the CGF is given by:
+$$
+\Psi_{\dot{X}_1}^*(\epsilon) := \sup_{t \in \mathbb{R}} \left\{\epsilon t - \Psi_{\dot{X}_1}(t)\right\} = \sup_{t \ge 0} \left\{\epsilon t - \Psi_{\dot{X}_1}(t)\right\},
+$$
+where the second equality holds for every $\epsilon > 0$ and was proved in Part I (the concave function $t \mapsto \epsilon t - \Psi_{\dot X_1}(t)$ vanishes at $t=0$, has positive derivative there, and lies below the line $t \mapsto \epsilon t$, so nothing is lost by restricting to $t \ge 0$).
+
+Finally, set
+$$
+b := \operatorname*{ess\,sup} \dot X_1 \in (0, +\infty] ,
+$$
+which is strictly positive because $\mathbb{E}[\dot X_1] = 0$ and $\dot X_1$ is not a.s. constant, so $\mathbb{P}(\dot X_1 > 0) > 0$.
+
+Then, Cramér's Large Deviation Principle (LDP) states that the tail probability of the sample sum $\dot{S}_n$ decays exponentially with rate $\Psi_{\dot{X}_1}^*(\epsilon)$:
+
+:::{#thm-cramer-ldp}
+### Cramér's Large Deviation Theorem
+For every threshold $\epsilon$ with $0 < \epsilon < b$, the exponential decay rate of the tail probability is given by:
+$$
+\lim_{n \to \infty} \frac{1}{n} \log \mathbb{P}\left(\dot{S}_n > n\epsilon\right) = -\Psi_{\dot{X}_1}^*(\epsilon) < 0 .
+$$
+:::
+
+:::{#rem-range-of-epsilon}
+The restriction $\epsilon < b$ is genuinely needed. If $b < \infty$ and $\mathbb{P}(\dot X_1 = b) > 0$, then at $\epsilon = b$ the event $\{\dot S_n > nb\}$ is null, so the left-hand side is $-\infty$, while $\Psi^*_{\dot X_1}(b) = -\log\mathbb{P}(\dot X_1 = b) < \infty$. For $\epsilon > b$ both sides equal $-\infty$ and the identity survives. Strict negativity of the right-hand side is the statement $\Psi^*_{\dot X_1}(\epsilon) > 0$ proved in Part I.
+:::
+
+From Part I, we have already established the **upper bound**:
+$$
+\limsup_{n \to \infty} \frac{1}{n} \log \mathbb{P}\left(\dot{S}_n > n\epsilon\right) \le -\Psi_{\dot{X}_1}^*(\epsilon).
+$$
+
+Thus, to complete the proof of Cramér's Theorem, it suffices to prove the matching **lower bound**:
+$$
+\liminf_{n \to \infty} \frac{1}{n} \log \mathbb{P}\left(\dot{S}_n > n\epsilon\right) \ge -\Psi_{\dot{X}_1}^*(\epsilon).
+$$
+
+---
+
+## Analytical Setup & Preliminary Notation
+
+For readability, we adopt the following standard shorthand notation:
+
+* **Moment Generating Function (MGF):** $M(t) := M_{\dot{X}_1}(t) = \mathbb{E}\left[e^{t\dot{X}_1}\right]$
+* **Cumulant Generating Function (CGF):** $\Psi(t) := \Psi_{\dot{X}_1}(t) = \log M(t)$
+* **Legendre-Fenchel Transform (Rate Function):** $\Psi^*(\epsilon) := \Psi_{\dot{X}_1}^*(\epsilon) = \sup_{t \ge 0} \{\epsilon t - \Psi(t)\}$
+
+---
+
+## Existence and Uniqueness of the Maximizer $t_\epsilon$
+
+The whole proof hinges on the existence of a point at which the supremum defining $\Psi^*(\epsilon)$ is attained. This is **not** automatic — it is exactly where the hypothesis $\epsilon < b$ enters — so we prove it.
+
+:::{#lem-maximizer}
+## Attainment of the Legendre Supremum
+Assume $\dot X_1$ is exponentially integrable, non-degenerate, and $\mathbb{E}[\dot X_1] = 0$. For every $\epsilon$ with $0 < \epsilon < b = \operatorname*{ess\,sup}\dot X_1$ there exists a **unique** $t_\epsilon \in \mathbb{R}$ with
+$$
+\Psi'(t_\epsilon) = \epsilon ,
+$$
+it satisfies $t_\epsilon > 0$, and the supremum is attained there:
+$$
+\Psi^*(\epsilon) = \sup_{t \ge 0}\{\epsilon t - \Psi(t)\} = \epsilon t_\epsilon - \Psi(t_\epsilon) < \infty .
+$$
+:::
+
+:::{.proof}
+By Part I, $\Psi$ is real-analytic on $\mathbb{R}$ and, by non-degeneracy, **strictly** convex; hence $\Psi'$ is continuous and strictly increasing. Moreover $\Psi(0) = 0$ and $\Psi'(0) = \mathbb{E}[\dot X_1] = 0$.
+
+**Claim: $\Psi'(t) \uparrow b$ as $t \to +\infty$.**
+
+*Upper bound.* If $b < \infty$ then $\dot X_1 \le b$ a.s., so $\dot X_1 e^{t\dot X_1} \le b\,e^{t\dot X_1}$ pointwise a.s. and
+$$
+\Psi'(t) = \frac{\mathbb{E}\left[\dot X_1 e^{t\dot X_1}\right]}{M(t)} \le \frac{b\,M(t)}{M(t)} = b .
+$$
+If $b = \infty$ the bound is vacuous.
+
+*Lower bound.* First, $\frac{1}{t}\Psi(t) \to b$ as $t \to +\infty$. Indeed, for any $c < b$ we have $p_c := \mathbb{P}(\dot X_1 > c) > 0$ by definition of the essential supremum, so
+$$
+M(t) \ge \mathbb{E}\left[e^{t\dot X_1}\mathbb{I}_{\{\dot X_1 > c\}}\right] \ge e^{tc} p_c
+\quad\Longrightarrow\quad
+\frac{\Psi(t)}{t} \ge c + \frac{\log p_c}{t} \xrightarrow[t\to\infty]{} c ,
+$$
+and letting $c \uparrow b$ gives $\liminf_{t\to\infty}\Psi(t)/t \ge b$; conversely $M(t) \le e^{tb}$ when $b<\infty$, so $\Psi(t)/t \le b$. Second, convexity of $\Psi$ together with $\Psi(0)=0$ gives the tangent-line inequality $0 = \Psi(0) \ge \Psi(t) + \Psi'(t)(0-t)$, i.e.
+$$
+\Psi'(t) \ge \frac{\Psi(t)}{t}\qquad (t > 0).
+$$
+Combining, $\liminf_{t\to\infty}\Psi'(t) \ge b$, which with the upper bound proves the claim.
+
+**Conclusion.** $\Psi'$ is a continuous, strictly increasing map with $\Psi'(0) = 0$ and $\sup_{t>0}\Psi'(t) = b$. Since $0 < \epsilon < b$, the intermediate value theorem supplies a point $t_\epsilon > 0$ with $\Psi'(t_\epsilon) = \epsilon$, and strict monotonicity makes it unique. Finally, $g(t) := \epsilon t - \Psi(t)$ is concave and differentiable with $g'(t_\epsilon) = \epsilon - \Psi'(t_\epsilon) = 0$; a stationary point of a concave function is a global maximum, so $\Psi^*(\epsilon) = g(t_\epsilon) = \epsilon t_\epsilon - \Psi(t_\epsilon)$, which is finite. $\blacksquare$
+:::
+
+---
+
+## Essential Construct: Exponential Tilting (Esscher Transform)
+
+Given an exponentially integrable random variable $Y$ on $(\Omega, \mathcal{F}, \mathbb{P})$, we construct a family of exponentially tilted probability measures $\mathbb{P}_t$ on $(\Omega, \mathcal{F})$ parameterized by $t \in \mathbb{R}$:
+
+$$
+d\mathbb{P}_t := \frac{e^{tY}}{M_Y(t)} \, d\mathbb{P}.
+$$
+
+:::{.callout-note}
+## Verification of Probability Measure
+The density $e^{tY}/M_Y(t)$ is nonnegative, $\mathbb{P}$-integrable, and in fact **strictly positive** everywhere. Integrating over the entire sample space $\Omega$:
+$$
+\int_{\Omega} d\mathbb{P}_t = \int_{\Omega} \frac{e^{tY}}{M_Y(t)} \, d\mathbb{P} = \frac{1}{M_Y(t)} \int_{\Omega} e^{tY} \, d\mathbb{P} = \frac{M_Y(t)}{M_Y(t)} = 1.
+$$
+This confirms that $\mathbb{P}_t$ is a valid probability measure for any $t$ with $M_Y(t) < \infty$, which by exponential integrability means every $t \in \mathbb{R}$. Strict positivity of the density further gives $\mathbb{P}_t \sim \mathbb{P}$ (mutual absolute continuity), so $\mathbb{P}$-a.s. statements and $\mathbb{P}_t$-a.s. statements are interchangeable.
+:::
+
+---
+
+## Main Proposition: The Lower Bound
+
+:::{#thm-lower-bound}
+## Lower Bound Estimate
+Under the standing assumptions (i.i.d., exponentially integrable, non-degenerate), for every $\epsilon$ with $0 < \epsilon < b$,
+$$
+\liminf_{n \to \infty} \frac{1}{n} \log \mathbb{P}\left(\dot{S}_n > n\epsilon\right) \ge -\Psi^*(\epsilon) = \Psi(t_\epsilon) - \epsilon t_\epsilon
+$$
+where $t_\epsilon$ is the maximizer supplied by @lem-maximizer.
+:::
+
+---
+
+## Detailed Proof
+
+**Throughout the proof $\epsilon \in (0,b)$ is fixed, and we freeze the tilting parameter at the maximizer $t_\epsilon$ once and for all.** This matters: the auxiliary variables constructed below depend on $t_\epsilon$, so the parameter cannot be left free and optimized afterwards.
+
+### Step 1: Characterization of the Tilted Measure
+
+By @lem-maximizer the maximizer $t_\epsilon > 0$ satisfies the first-order condition $\Psi'(t_\epsilon) = \epsilon$. Unpacking the derivative of the CGF (differentiation under the expectation being justified in Part I by exponential integrability):
+$$
+\begin{align*}
+\Psi'(t) &= \frac{d}{dt} \log M(t) = \frac{M'(t)}{M(t)} = \frac{\mathbb{E}\left[\dot{X}_1 e^{t\dot{X}_1}\right]}{M(t)} \\
+&= \int_{\Omega} \dot{X}_1 \frac{e^{t\dot{X}_1}}{M(t)} \, d\mathbb{P} = \mathbb{E}_{\mathbb{P}_t}[\dot{X}_1].
+\end{align*}
+$$
+
+Therefore, setting $t = t_\epsilon$ explicitly forces the expectation under the tilted measure to equal $\epsilon$:
+$$
+\mathbb{E}_{\mathbb{P}_{t_\epsilon}}[\dot{X}_1] = \epsilon.
+$$
+
+Denote by $\mu := \mu_{\dot X_1}$ the law of $\dot X_1$ under $\mathbb{P}$ and define the **tilted law** on $(\mathbb{R},\mathcal{B}(\mathbb{R}))$:
+$$
+\nu(dx) := \frac{e^{t_\epsilon x}}{M(t_\epsilon)}\, \mu(dx) .
+$$
+This is the law of $\dot X_1$ under $\mathbb{P}_{t_\epsilon}$, and it is a probability measure by the callout above. Since its density is strictly positive, the relation inverts:
+$$
+\mu(dx) = M(t_\epsilon)\, e^{-t_\epsilon x}\, \nu(dx) .
+$$
+
+Let $\{W_n\}_{n=1}^{\infty}$ be an i.i.d. sequence with common law $\nu$, realised on an auxiliary probability space $(\tilde\Omega, \tilde{\mathcal{F}}, \tilde{\mathbb{P}})$ (take the product space $(\mathbb{R}^{\mathbb{N}}, \mathcal{B}(\mathbb{R})^{\otimes\mathbb{N}}, \nu^{\otimes\mathbb{N}})$ with the coordinate maps); expectations on this space are written $\tilde{\mathbb{E}}$. Keeping the two spaces distinct is what makes the change-of-measure identity of Step 2 an honest statement rather than a notational coincidence.
+
+The $W_n$ inherit the following three properties, all of which are used later:
+
+1. **Mean.** $\tilde{\mathbb{E}}[W_n] = \mathbb{E}_{\mathbb{P}_{t_\epsilon}}[\dot X_1] = \Psi'(t_\epsilon) = \epsilon$. *This is the point of tilting: the rare event $\{\dot S_n > n\epsilon\}$ becomes the typical event $\{T_n > n\epsilon\}$.*
+2. **Finite variance.** $\tilde{\mathbb{E}}[W_1^2] = \mathbb{E}[\dot X_1^2 e^{t_\epsilon \dot X_1}]/M(t_\epsilon) < \infty$, since $\dot X_1^2 e^{t_\epsilon\dot X_1} \le e^{(2 + t_\epsilon)|\dot X_1|}$ is integrable by exponential integrability.
+3. **Non-degeneracy.** $\sigma_W^2 := \operatorname{Var}_{\tilde{\mathbb{P}}}(W_1) = \operatorname{Var}_{\mathbb{P}_{t_\epsilon}}(\dot X_1) = \Psi''(t_\epsilon) > 0$, by the strict convexity of $\Psi$ established in Part I. Hence $\sigma_W^2 \in (0,\infty)$ and the CLT of Step 5 applies.
+
+---
+
+### Step 2: Change of Measure for $n$-dimensional Product Space
+
+Let $f: \mathbb{R}^n \to [0, \infty]$ be Borel measurable and non-negative (so that every integral below is defined in $[0,\infty]$ and Tonelli's theorem licenses the factorisation). Because $\dot X_1,\dots,\dot X_n$ are i.i.d. with law $\mu$, their joint law is the product measure $\mu^{\otimes n}$; likewise $W_1,\dots,W_n$ are i.i.d. with joint law $\nu^{\otimes n}$. Substituting $\mu(dx) = M(t_\epsilon)e^{-t_\epsilon x}\nu(dx)$ coordinatewise:
+
+$$
+\begin{aligned}
+\mathbb{E}\left[f(\dot{X}_1, \dots, \dot{X}_n)\right] &= \int_{\mathbb{R}^n} f(x_1, \dots, x_n) \, \mu(dx_1) \cdots \mu(dx_n) \\
+&= \int_{\mathbb{R}^n} f(x_1, \dots, x_n) \prod_{i=1}^n \left( M(t_\epsilon) e^{-t_\epsilon x_i} \nu(dx_i) \right) \\
+&= M(t_\epsilon)^n \int_{\mathbb{R}^n} f(x_1, \dots, x_n) e^{-t_\epsilon \sum_{i=1}^n x_i} \, \nu(dx_1) \cdots \nu(dx_n) \\
+&= M(t_\epsilon)^n \, \tilde{\mathbb{E}}\left[f(W_1, \dots, W_n) e^{-t_\epsilon T_n}\right],
+\end{aligned}
+$$
+
+where $T_n := \sum_{i=1}^n W_i$. Note that the identity relates an expectation on $(\Omega,\mathcal F,\mathbb{P})$ to one on the auxiliary space $(\tilde\Omega,\tilde{\mathcal F},\tilde{\mathbb{P}})$.
+
+---
+
+### Step 3: Bounding the Indicator Function
+
+Apply the identity to the (non-negative, Borel) indicator $f(x_1, \dots, x_n) = \mathbb{I}_{\{\sum_{i=1}^n x_i > n\epsilon\}}$:
+
+$$
+\mathbb{P}\left(\dot{S}_n > n\epsilon\right) = M(t_\epsilon)^n \, \tilde{\mathbb{E}}\left[ e^{-t_\epsilon T_n} \mathbb{I}_{\{T_n > n\epsilon\}} \right].
+$$
+
+Now fix $\delta > 0$ and shrink the domain of integration to the slice $\{n\epsilon < T_n \le n(\epsilon+\delta)\}$. The **strict** lower endpoint is essential: this slice is a subset of $\{T_n > n\epsilon\}$, whereas the closed slice $\{n\epsilon \le T_n \le \cdots\}$ need not be, since the law of $T_n$ may carry an atom at $n\epsilon$. On the slice $e^{-t_\epsilon T_n} \ge e^{-t_\epsilon n(\epsilon+\delta)}$, because $t_\epsilon > 0$. Hence
+
+$$
+\begin{aligned}
+\mathbb{P}\left(\dot{S}_n > n\epsilon\right) &\ge M(t_\epsilon)^n \, \tilde{\mathbb{E}}\left[ e^{-t_\epsilon T_n} \mathbb{I}_{\{n\epsilon < T_n \le n(\epsilon + \delta)\}} \right] \\
+&\ge M(t_\epsilon)^n e^{-t_\epsilon n(\epsilon + \delta)} \, \tilde{\mathbb{P}}\left(n\epsilon < T_n \le n(\epsilon + \delta)\right) \\
+&= e^{n(\Psi(t_\epsilon) - t_\epsilon\epsilon)} e^{-n t_\epsilon \delta} \, \tilde{\mathbb{P}}\left(n\epsilon < T_n \le n(\epsilon + \delta)\right),
+\end{aligned}
+$$
+
+using $M(t_\epsilon)^n = e^{n\Psi(t_\epsilon)}$ in the last line. Since $\Psi(t_\epsilon) - t_\epsilon \epsilon = -\Psi^*(\epsilon)$ by @lem-maximizer,
+
+$$
+\mathbb{P}\left(\dot{S}_n > n\epsilon\right) \ge e^{-n \Psi^*(\epsilon)} e^{-n t_\epsilon \delta} \, \tilde{\mathbb{P}}\left(n\epsilon < T_n \le n(\epsilon + \delta)\right).
+$$
+
+---
+
+### Step 4: Taking the Logarithmic Limit
+
+Step 5 shows the last factor is eventually positive, so the right-hand side is eventually strictly positive and we may apply the increasing map $\frac{1}{n}\log(\cdot)$ to both sides. This turns the product into a sum, and taking $\liminf_{n\to\infty}$ (using superadditivity of $\liminf$) gives:
+
+$$
+\begin{align*}
+\liminf_{n \to \infty} \frac{1}{n} \log \mathbb{P}\left(\dot{S}_n > n\epsilon\right) &\ge -\Psi^*(\epsilon) - t_\epsilon \delta \\
+&+ \liminf_{n \to \infty} \frac{1}{n} \log \tilde{\mathbb{P}}\left(n\epsilon < T_n \le n(\epsilon + \delta)\right) \quad (\star)
+\end{align*}
+$$
+
+---
+
+### Step 5: Asymptotic Analysis of the Probability Term via CLT
+
+To complete the proof, we show that the last probability term in $(\star)$ vanishes on the log scale as $n \to \infty$; equivalently, that it stays bounded away from $0$.
+
+By Step 1, $\tilde{\mathbb{E}}[T_n] = \sum_{i=1}^n \tilde{\mathbb{E}}[W_i] = n\epsilon$ and $\sigma_W^2 = \operatorname{Var}(W_1) \in (0,\infty)$. Write the normalised sum
+$$
+Z_n := \frac{T_n - n\epsilon}{\sigma_W\sqrt{n}} ,
+$$
+so that, splitting the slice into two half-lines,
+$$
+\tilde{\mathbb{P}}\left(n\epsilon < T_n \le n(\epsilon + \delta)\right)
+= \tilde{\mathbb{P}}\!\left(Z_n \le \frac{\delta\sqrt{n}}{\sigma_W}\right) - \tilde{\mathbb{P}}\left(Z_n \le 0\right).
+$$
+
+The two terms are handled by different theorems.
+
+* **Second term (CLT).** The $W_i$ are i.i.d. with finite, non-zero variance, so the Lindeberg-Lévy CLT gives $Z_n \Rightarrow \mathcal{N}(0,1)$. The limit distribution function $\Phi$ is continuous, so $0$ is a continuity point and
+  $$
+  \tilde{\mathbb{P}}(Z_n \le 0) \xrightarrow[n\to\infty]{} \Phi(0) = \frac{1}{2}.
+  $$
+* **First term (WLLN).** Here the threshold $\delta\sqrt{n}/\sigma_W \to \infty$, so the CLT cannot be invoked at a fixed point; use instead the weak law of large numbers, $T_n/n \to \epsilon$ in $\tilde{\mathbb{P}}$-probability:
+  $$
+  \tilde{\mathbb{P}}\!\left(Z_n > \frac{\delta\sqrt n}{\sigma_W}\right) = \tilde{\mathbb{P}}\!\left(\frac{T_n}{n} - \epsilon > \delta\right) \xrightarrow[n\to\infty]{} 0,
+  $$
+  so the first term tends to $1$.
+
+Combining,
+$$
+\lim_{n \to \infty}\tilde{\mathbb{P}}\left(n\epsilon < T_n \le n(\epsilon + \delta)\right) = 1 - \frac{1}{2} = \frac{1}{2} > 0 ,
+$$
+which is the rigorous form of the heuristic $\int_{0}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-x^2 / 2} \, dx = \frac{1}{2}$. In particular the probability exceeds $\tfrac14$ for all large $n$, so the sandwich
+
+$$
+0 \ge \frac{1}{n} \log \tilde{\mathbb{P}}\left(n\epsilon < T_n \le n(\epsilon + \delta)\right) \ge \frac{\log(1/4)}{n} \xrightarrow[n\to\infty]{} 0
+$$
+
+gives
+$$
+\lim_{n \to \infty} \frac{1}{n} \log \tilde{\mathbb{P}}\left(n\epsilon < T_n \le n(\epsilon + \delta)\right) = 0 .
+$$
+
+Substituting back into $(\star)$:
+
+$$
+\liminf_{n \to \infty} \frac{1}{n} \log \mathbb{P}\left(\dot{S}_n > n\epsilon\right) \ge -\Psi^*(\epsilon) - t_\epsilon \delta
+$$
+
+The left-hand side does not depend on $\delta$, and $t_\epsilon$ is a fixed finite number, so letting $\delta \downarrow 0$ yields the desired lower bound:
+
+$$
+\liminf_{n \to \infty} \frac{1}{n} \log \mathbb{P}\left(\dot{S}_n > n\epsilon\right) \ge -\Psi^*(\epsilon) \quad \blacksquare
+$$
+
+Together with the upper bound from Part I, this proves @thm-cramer-ldp for every $\epsilon \in (0,b)$.
+
+## Takeaways
+1. The proof of the lower bound in Cramér's LDP relies on **exponential tilting** (the Esscher transform) to construct a new probability measure under which the rare event becomes typical: the tilting parameter is chosen to be the Legendre maximizer $t_\epsilon$, precisely so that $\mathbb{E}_{\mathbb{P}_{t_\epsilon}}[\dot X_1] = \Psi'(t_\epsilon) = \epsilon$. The parameter must be frozen at $t_\epsilon$ *before* the auxiliary variables $W_n$ are defined, since their law depends on it.
+2. **Existence of $t_\epsilon$ is a theorem, not a formality.** It holds exactly when $0 < \epsilon < \operatorname{ess\,sup}\dot X_1$, because $\Psi'$ increases strictly from $\Psi'(0) = 0$ up to $\operatorname{ess\,sup}\dot X_1$. Outside this range the supremum is not attained and the argument breaks down.
+3. The **Central Limit Theorem** (lower endpoint of the slice) and the **weak law of large numbers** (upper endpoint) together show that the tilted sum lands in the slice with probability tending to $\tfrac12$, hence with no exponential decay; this is what isolates the exponential rate in the original measure.
+4. The slice must have a **strict** lower endpoint, $\{n\epsilon < T_n \le n(\epsilon+\delta)\}$: the law of $T_n$ may have an atom at $n\epsilon$, so the closed slice need not be contained in $\{T_n > n\epsilon\}$.
+5. The error factor $e^{-n t_\epsilon \delta}$ is removed at the very end by letting $\delta \downarrow 0$, which is legitimate because the left-hand side of the bound does not depend on $\delta$.
+6. The combination of these techniques establishes the matching lower bound, completing the proof of Cramér's Large Deviation Principle.

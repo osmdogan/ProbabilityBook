@@ -1,0 +1,138 @@
+# Lecture 29.1: Berry-Esseen Theorem
+
+## Setup and Overview
+
+Recall from previous analysis that for any random variable $W$ and $Z \sim \mathcal{N}(0,1)$, the Wasserstein-1 distance is bounded by:
+$$
+d_{W_1}(W, Z) \le \sup_{f \in \mathcal{F}} \left| \mathbb{E}[f'(W) - W f(W)] \right|.
+$$
+where $\mathcal{F} = \left\{ f: \mathbb{R} \to \mathbb{R} \;\middle|\; \sup |f| \le 2, \, \sup |f'| \le \sqrt{\frac{2}{\pi}}, \, \sup |f''| \le 2 \right\}$.
+
+We apply this framework to:
+$$
+W = \frac{S_n}{\sqrt{n}} = \frac{1}{\sqrt{n}} \sum_{j=1}^n X_j,
+$$
+where $\{X_n\}_{n=1}^{\infty}$ are independent, identically distributed (i.i.d.) random variables satisfying:
+$$
+\mathbb{E}[X_j] = 0, \quad \mathbb{E}[X_j^2] = 1, \quad \text{and} \quad \mathbb{E}[|X_j|^3] < \infty.
+$$
+
+---
+
+## Decomposition of the Stein Operator
+
+Using linearity of expectation:
+$$
+\mathbb{E}[W f(W)] = \frac{1}{\sqrt{n}} \sum_{j=1}^{n} \mathbb{E}[X_j f(W)].
+$$
+
+### Leave-One-Out Decomposition
+Define the leave-one-out sum omitting the $j$-th component:
+$$
+W_j := W - \frac{1}{\sqrt{n}} X_j = \frac{1}{\sqrt{n}} \sum_{i \neq j} X_i.
+$$
+Notice that $W_j$ and $X_j$ are independent. Therefore:
+$$
+\mathbb{E}[X_j f(W_j)] = \mathbb{E}[X_j] \mathbb{E}[f(W_j)] = 0.
+$$
+
+Consequently, we can re-express the term:
+$$
+\mathbb{E}[X_j f(W)] = \mathbb{E}\left[ X_j \left( f(W) - f(W_j) \right) \right]
+$$
+
+### Second-Order Taylor Expansion
+Applying Taylor's expansion with remainder around $W_j$:
+$$
+f(W) - f(W_j) = (W - W_j) f'(W_j) + \frac{1}{2} (W - W_j)^2 f''(\xi_j)
+$$
+for some random variable $\xi_j$ lying between $W_j$ and $W$.
+
+Substituting $W - W_j = \frac{1}{\sqrt{n}} X_j$:
+$$
+\begin{aligned}
+\mathbb{E}[X_j f(W)] &= \mathbb{E}\left[ X_j \left( (W - W_j) f'(W_j) + \frac{1}{2} (W - W_j)^2 f''(\xi_j) \right) \right] \\
+&= \mathbb{E}\left[ X_j \cdot \frac{1}{\sqrt{n}} X_j f'(W_j) \right] + \mathbb{E}\left[ X_j \cdot \frac{1}{2} \left( \frac{1}{\sqrt{n}} X_j \right)^2 f''(\xi_j) \right] \\
+&= \frac{1}{\sqrt{n}} \mathbb{E}[X_j^2 f'(W_j)] + \frac{1}{2 n^{3/2}} \mathbb{E}[X_j^3 f''(\xi_j)]
+\end{aligned}
+$$
+
+Since $X_j$ and $W_j$ are independent and $\mathbb{E}[X_j^2] = 1$:
+$$
+\mathbb{E}[X_j^2 f'(W_j)] = \mathbb{E}[X_j^2] \mathbb{E}[f'(W_j)] = \mathbb{E}[f'(W_j)]
+$$
+
+Summing over $j = 1, \dots, n$ yields @eq-identity-1:
+$$
+\mathbb{E}[W f(W)] = \frac{1}{n} \sum_{j=1}^n \mathbb{E}[f'(W_j)] + \frac{1}{2 n^{3/2}} \sum_{j=1}^n \mathbb{E}[X_j^3 f''(\xi_j)]
+$$ {#eq-identity-1}
+
+---
+
+### First-Order Taylor Expansion for $f'(W)$
+
+To relate $\frac{1}{n} \sum_{j=1}^n \mathbb{E}[f'(W_j)]$ back to $\mathbb{E}[f'(W)]$, apply Taylor's theorem to $f'$:
+$$
+f'(W_j) - f'(W) = f''(\eta_j) (W_j - W) = f''(\eta_j) \left( -\frac{1}{\sqrt{n}} X_j \right)
+$$
+where $\eta_j$ lies between $W_j$ and $W$.
+
+Taking expectations and averaging over $j$:
+$$
+\left( \frac{1}{n} \sum_{j=1}^n \mathbb{E}[f'(W_j)] \right) - \mathbb{E}[f'(W)] = \frac{1}{n} \sum_{j=1}^n \mathbb{E}\left[ f''(\eta_j) \left( -\frac{1}{\sqrt{n}} X_j \right) \right]
+$$
+
+Rearranging gives @eq-identity-2:
+$$
+\mathbb{E}[f'(W)] = \frac{1}{n} \sum_{j=1}^n \mathbb{E}[f'(W_j)] + \frac{1}{n^{3/2}} \sum_{j=1}^n \mathbb{E}[f''(\eta_j) X_j^2]
+$$ {#eq-identity-2}
+
+---
+
+### Bounding the Distance
+
+Subtracting @eq-identity-2 from @eq-identity-1:
+$$
+\mathbb{E}[W f(W)] - \mathbb{E}[f'(W)] = \frac{1}{2 n^{3/2}} \sum_{j=1}^n \mathbb{E}[X_j^3 f''(\xi_j)] - \frac{1}{n^{3/2}} \sum_{j=1}^n \mathbb{E}[f''(\eta_j) X_j^2]
+$$
+
+Applying the triangle inequality:
+$$
+\left| \mathbb{E}[W f(W) - f'(W)] \right| \le \frac{1}{2 n^{3/2}} \sup |f''| \sum_{j=1}^n \mathbb{E}[|X_j|^3] + \frac{1}{n^{3/2}} \sup |f''| \sum_{j=1}^n \mathbb{E}[X_j^2]
+$$
+
+Using the i.i.d. assumption, $\sum_{j=1}^n \mathbb{E}[|X_j|^3] = n \mathbb{E}[|X_1|^3]$ and $\sum_{j=1}^n \mathbb{E}[X_j^2] = n \mathbb{E}[X_1^2] = n$:
+$$
+\left| \mathbb{E}[W f(W) - f'(W)] \right| \le \frac{\sup |f''|}{2 \sqrt{n}} \mathbb{E}[|X_1|^3] + \frac{\sup |f''|}{\sqrt{n}} \mathbb{E}[X_1^2]
+$$
+
+For $f \in \mathcal{F}$, we have $\sup |f''| \le 2$. Since $\mathbb{E}[X_1^2] = 1$:
+$$
+\left| \mathbb{E}[W f(W) - f'(W)] \right| \le \frac{\mathbb{E}[|X_1|^3] + 2}{\sqrt{n}}
+$$
+
+Applying Hölder's Inequality ($\mathbb{E}[|X_1|^2] \le \mathbb{E}[|X_1|^3]^{2/3}$ implies $1 \le \mathbb{E}[|X_1|^3]$), we obtain:
+$$
+\frac{\mathbb{E}[|X_1|^3] + 2 \mathbb{E}[X_1^2]}{\sqrt{n}} \le \frac{3 \mathbb{E}[|X_1|^3]}{\sqrt{n}}
+$$
+
+---
+
+## Main Results
+
+::: {#thm-quantitative-clt-wasserstein}
+## Quantitative CLT in Wasserstein Distance
+If $\{X_n\}_{n=1}^{\infty}$ are i.i.d. random variables with $\mathbb{E}[X_1] = 0$, $\mathbb{E}[X_1^2] = 1$, and $\mathbb{E}[|X_1|^3] < \infty$, then for $S_n = \sum_{j=1}^n X_j$ and $Z \sim \mathcal{N}(0,1)$:
+$$
+d_{W_1}\left( \frac{S_n}{\sqrt{n}}, Z \right) \le \frac{\mathbb{E}[|X_1|^3] + 2 \mathbb{E}[X_1^2]}{\sqrt{n}} \le \frac{3 \mathbb{E}[|X_1|^3]}{\sqrt{n}}
+$$
+:::
+
+::: {#cor-kolmogorov-bound}
+## Kolmogorov Distance Bound via Smoothing
+By a standard smoothing argument, the bound in Wasserstein distance implies a bound in Kolmogorov distance:
+$$
+d_{\text{Kol}}\left( \frac{S_n}{\sqrt{n}}, Z \right) \le \frac{C}{n^{1/4}}
+$$
+for a constant $C > 0$.
+:::

@@ -1,0 +1,208 @@
+# Lecture 23.2: Prokhorov's Compactness Theorem
+
+## Motivation & Counterexample
+
+Some sequences of probability measures have **no** weakly convergent subsequences.
+
+:::{.callout-warning icon=false}
+## Counterexample: Mass Escape to Infinity
+Consider the sequence of Dirac measures on $\mathbb{R}$:
+$$
+\mu_n=\delta_n.
+$$
+For any compact set $K\subset\mathbb{R}$, there exists $M>0$ such that
+$K\subset[-M,M]$. Hence, for all sufficiently large $n$,
+$$
+\mu_n(K)=\delta_n(K)=0.
+$$
+Thus, for every compact set $K$,
+$$
+\liminf_{n\to\infty}\mu_n(K)=0.
+$$
+Consequently, $(\mu_n)_{n=1}^\infty$ is not tight, and neither is any subsequence. Since weak convergence of probability measures implies tightness, $(\mu_n)_{n=1}^\infty$ has **no weakly convergent subsequence**.
+
+Intuitively, the entire probability mass moves farther and farther away from every fixed compact set; the mass **escapes to infinity**.
+:::
+---
+
+## Main Statements
+
+::: {#thm-prokhorov}
+## Prokhorov's Compactness Theorem
+Let $S$ be a separable metric space. If $\{\mu_{n}\}_{n=1}^{\infty} \subset \text{Prob}(S, \mathcal{B}(S))$, then there exists a **vaguely convergent subsequence**.
+:::
+
+::: {#cor-tightness}
+## Weak Convergence via Tightness
+If $\{\mu_{n}\}_{n=1}^{\infty}$ is also **tight**, then there exists a **weakly convergent subsequence** $\{\mu_{n_k}\}_{k=1}^\infty$ whose limit $\mu$ is a proper **probability measure** (i.e., $\mu(S) = 1$).
+:::
+
+In these notes, we present the classic proof for the foundational baseline case where **$S = \mathbb{R}$**, using **Helly's Selection Theorem**.
+
+---
+
+## Proof of Helly's Selection Theorem ($S = \mathbb{R}$)
+
+Let $F_n(x) = \mu_n((-\infty, x])$ be the sequence of Cumulative Distribution Functions (CDFs) associated with the probability measures $\mu_n$.
+
+## Step 1: Cantor's Diagonal Method on Rational Numbers
+
+Enumerate the countable set of rational numbers $\mathbb{Q}$:
+$$
+\mathbb{Q} = \{q_1, q_2, q_3, \dots, q_j, \dots\}
+$$
+
+1. **For $q_1$**: The numerical sequence $\{F_n(q_1)\}_{n=1}^\infty$ is bounded in $[0, 1]$. By the Bolzano-Weierstrass theorem, there exists a convergent subsequence:
+   $$
+   \{F_{m_1(k)}(q_1)\}_{k=1}^\infty
+   $$
+2. **For $q_2$**: Extract a sub-subsequence $\{m_2(k)\}_{k=1}^\infty \subset \{m_1(k)\}_{k=1}^\infty$ such that $\{F_{m_2(k)}(q_2)\}_{k=1}^\infty$ converges.
+3. **Inductively**: For each $j \ge 1$, $\{m_j(k)\}_{k=1}^\infty$ is a subsequence of $\{m_{j-1}(k)\}_{k=1}^\infty$ such that $F_{m_j(k)}(q_i)$ converges as $k \to \infty$ for all $1 \le i \le j$.
+
+Define the diagonal sequence $n_k := m_k(k)$. 
+By construction, $\{n_k\}_{k=1}^\infty$ is eventually a subsequence of $\{m_j(k)\}_{k=1}^\infty$ for any fixed $j$. Therefore, the pointwise limit exists on all of $\mathbb{Q}$:
+$$
+F_{n_k}(q) \xrightarrow{k\to\infty} G(q) \in [0, 1], \quad \forall q \in \mathbb{Q}
+$$
+Since each $F_{n_k}$ is non-decreasing on $\mathbb{R}$, the pointwise limit $G$ is non-decreasing on $\mathbb{Q}$.
+
+---
+
+## Step 2: Extension from $\mathbb{Q}$ to $\mathbb{R}$
+
+We wish for the limiting object to define a valid CDF on $\mathbb{R}$. To ensure it is right-continuous, define the function $F: \mathbb{R} \to \mathbb{R}$ by:
+$$
+F(x) := \inf \{G(q) : q \in \mathbb{Q}, q > x\}
+$$
+
+## Verification of CDF Properties for $F(x)$
+
+### Property 1: Non-decreasing
+Let $x < y$. If $q \in \mathbb{Q}$ satisfies $q > y$, then automatically $q > x$. Thus:
+$$
+\{G(q) : q \in \mathbb{Q}, q > y\} \subseteq \{G(q) : q \in \mathbb{Q}, q > x\}
+$$
+Taking the infimum over a larger set yields a smaller or equal value:
+$$
+F(y) = \inf \{G(q) : q \in \mathbb{Q}, q > y\} \ge \inf \{G(q) : q \in \mathbb{Q}, q > x\} = F(x)
+$$
+
+### Property 2: Right-Continuous
+Let $x_n \downarrow x$ as $n \to \infty$. Since $F$ is non-decreasing, the sequence $F(x_n)$ is non-increasing, so $\lim_{n\to\infty} F(x_n) = \inf_n F(x_n)$.
+
+Evaluating the nested infima:
+$$
+\begin{aligned}
+\lim_{n \to \infty} F(x_n) &= \inf_{n} F(x_n) \\
+&= \inf_{n} \left( \inf \{G(q) : q \in \mathbb{Q}, q > x_n\} \right) \\
+&= \inf \{G(q) : q \in \mathbb{Q}, \exists n \text{ s.t. } q > x_n\} \\
+&= \inf \{G(q) : q \in \mathbb{Q}, q > x\} \\
+&= F(x)
+\end{aligned}
+$$
+Thus, $F(x)$ is **right-continuous**, making it a valid generalized CDF of a sub-probability measure $\mu$ on $\mathbb{R}$.
+
+---
+
+## Step 3: Convergence at Continuity Points of $F$
+
+To complete the proof of vague/weak convergence (@thm-vague-cdf and @thm-cdf-convergence), it suffices to show that:
+$$
+F_{n_k}(b) - F_{n_k}(a) \longrightarrow F(b) - F(a), \quad \forall a, b \in \text{Cont}(F)
+$$
+In fact, we prove the stronger claim that:
+$$
+F_{n_k}(x) \longrightarrow F(x), \quad \forall x \in \text{Cont}(F)
+$$
+Fix $x \in \text{Cont}(F)$. Choose rational sequences $q_j, r_j \in \mathbb{Q}$ such that:
+$$
+q_j \uparrow x \quad \text{and} \quad r_j \downarrow x \quad \implies \quad q_j < x < r_j
+$$
+Since each $F_{n_k}$ is non-decreasing:
+$$
+F_{n_k}(q_j) \le F_{n_k}(x) \le F_{n_k}(r_j)
+$$
+Taking the limit superior and limit inferior as $k \to \infty$:
+$$
+G(q_j) = \lim_{k \to \infty} F_{n_k}(q_j) \le \liminf_{k \to \infty} F_{n_k}(x) \le \limsup_{k \to \infty} F_{n_k}(x) \le \lim_{k \to \infty} F_{n_k}(r_j) = G(r_j)
+$$
+
+Since this holds for all $j$:
+
+1. **Upper bound — $G(r_j) \to F(x)$:** Each $G(r_j) \ge F(x)$ because $r_j > x$, so $G(r_j)$ belongs to the infimum set defining $F(x)$. For any rational $r^{*} > x$, since $r_j \downarrow x < r^{*}$, eventually $r_j < r^{*}$; non-decreasingness of $G$ on $\mathbb{Q}$ then gives $G(r_j) \le G(r^{*})$. Hence $\limsup_j G(r_j) \le G(r^{*})$ for every rational $r^{*} > x$, so $\limsup_j G(r_j) \le \inf_{r^{*} > x} G(r^{*}) = F(x)$. Combined with $G(r_j) \ge F(x)$: $G(r_j) \downarrow F(x)$.
+
+2. **Lower bound — $G(q_j) \to F(x)$:** Since $G$ is non-decreasing on $\mathbb{Q}$ and $q_j$ is increasing, $G(q_j)$ is non-decreasing and bounded, so $L := \lim_j G(q_j)$ exists.
+   - *$L \le F(x)$:* For any rational $r > x$, we have $r > q_j$ for all $j$, so $G(r) \ge G(q_j)$ for all $j$, hence $G(r) \ge L$. Taking the infimum over all rational $r > x$ gives $F(x) \ge L$.
+   - *$L \ge F(x)$:* For any $z < x$, choose a rational $r \in (z, x)$. Eventually $q_j > r$, so $G(q_j) \ge G(r)$; and since $r > z$, non-decreasingness places $G(r)$ in the infimum set for $F(z)$, giving $G(r) \ge F(z)$. Thus $L \ge F(z)$ for every $z < x$. Taking $z \uparrow x$ and using continuity of $F$ at $x$ (i.e.~$F(x^-) = F(x)$): $L \ge F(x)$.
+   - Hence $G(q_j) \uparrow F(x)$.
+
+Hence, taking $j \to \infty$:
+$$
+F(x) \le \liminf_{k \to \infty} F_{n_k}(x) \le \limsup_{k \to \infty} F_{n_k}(x) \le F(x).
+$$
+By squeeze theorem:
+$$
+\lim_{k \to \infty} F_{n_k}(x) = F(x), \quad \forall x \in \text{Cont}(F).
+$$
+
+
+:::{#exm-tight-oscillating-mean}
+## A tight sequence with an oscillating mean
+Let
+$$ 
+\mu_n = 
+\begin{cases} N(0,1), & n \text{ even},\\
+ N(1,1), & n \text{ odd}. 
+\end{cases} 
+$$
+Equivalently, if $X_n\sim\mu_n$,
+$$
+X_n\sim 
+\begin{cases} 
+N(0,1), & n \text{ even},\\ 
+N(1,1), & n \text{ odd}. 
+\end{cases} 
+$$
+The full sequence does not converge weakly, because the even and odd subsequences have different limits: $\mu_{2k}=N(0,1)$ and $\mu_{2k+1}=N(1,1)$.
+
+But the sequence is tight. Indeed, given $\varepsilon>0$, choose $M$ sufficiently large. Then $\sup_n \mu_n([-M,M]^c) \leq P(|Z|>M-1)$, where $Z\sim N(0,1)$. Note that the right-hand side tends to zero as $M\to\infty$. Hence $\{\mu_n\}_{n=1}^\infty$ is tight.
+
+Therefore, by @cor-tightness, there must be a weakly convergent subsequence. And we can see exactly what the subsequences are: $\mu_{2k}\xrightarrow{w}N(0,1)$ and $\mu_{2k+1}\xrightarrow{w}N(1,1)$. Both limits are proper probability measures.
+
+This example demonstrates an important distinction: tightness does not imply convergence of the entire sequence. Rather, tightness guarantees the existence of a weakly convergent subsequence. The sequence can oscillate between different probability distributions, but because its mass cannot escape to infinity, some subsequence must settle down to a genuine probability distribution.
+
+For contrast, consider $\mu_n=\delta_n$. Here the mass moves farther and farther to the right: $\delta_1,\delta_2,\delta_3,\ldots$ and the sequence is not tight. It has no weakly convergent subsequence in $\operatorname{Prob}(\mathbb R)$. Its vague limit is instead $\delta_n\xrightarrow{v}0$, where $0$ is the zero measure, not a probability measure.
+
+:::
+
+---
+
+## Takeaways
+
+:::{.callout-note icon=false}
+## Summary
+
+**1. Helly's Selection Theorem (the $S = \mathbb{R}$ engine).** Every sequence of probability measures on $\mathbb{R}$ has a subsequence that converges *vaguely* to a sub-probability measure $\mu$ with $\mu(\mathbb{R}) \le 1$. The proof has three layers:
+
+- **Cantor's diagonal (Step 1):** Bolzano–Weierstrass + diagonal extraction yields a subsequence $\{F_{n_k}\}$ that converges pointwise on $\mathbb{Q}$ to a non-decreasing limit $G$.
+- **Infimum extension (Step 2):** Setting $F(x) = \inf\{G(q): q \in \mathbb{Q},\, q > x\}$ produces a non-decreasing, right-continuous function — a valid sub-CDF — automatically, without any additional extraction.
+- **Continuity-point convergence (Step 3):** A two-sided squeeze argument shows $F_{n_k}(x) \to F(x)$ at every continuity point of $F$: the upper bound uses $G(r_j) \downarrow F(x)$ (non-decreasingness of $G$ plus the infimum definition), and the lower bound uses $G(q_j) \uparrow F(x)$ (which requires continuity of $F$ at $x$ to match the left limit $F(x^-)$ to $F(x)$).
+
+**2. Vague $\neq$ Weak.** The sub-CDF $F$ may satisfy $F(+\infty) < 1$ or $F(-\infty) > 0$ when probability mass escapes to $\pm\infty$ (cf.~the $\delta_n$ counterexample). The associated measure $\mu$ is then a *strict* sub-probability measure, and convergence is only vague, not weak.
+
+**3. Prokhorov's Theorem: tightness upgrades vague to weak.** A family $\{\mu_n\}$ is **tight** if
+$$
+\forall\,\varepsilon > 0,\ \exists\,\text{compact } K:\quad \inf_n \mu_n(K) \ge 1 - \varepsilon.
+$$
+Tightness is exactly what prevents mass escape:
+
+- If $\{\mu_n\}$ is tight, any vaguely convergent subsequence $\mu_{n_k}$ converges **weakly** and its limit is a proper probability measure ($\mu(S) = 1$).
+- Conversely, every weakly convergent sequence of probability measures is tight.
+- On a Polish (separable, completely metrizable) space, tightness $\Leftrightarrow$ relative sequential compactness in the weak topology.
+
+**4. A practical tightness criterion.** For random variables $\{X_n\}$ on $\mathbb{R}$, a sufficient condition for tightness is
+$$
+\sup_n \mathbf{E}[|X_n|^p] < \infty \quad \text{for some } p > 0.
+$$
+By Markov's inequality, $\mu_n([-M,M]^c) \le M^{-p}\,\mathbf{E}[|X_n|^p] \to 0$ uniformly in $n$ as $M \to \infty$, which is precisely the tightness condition.
+:::

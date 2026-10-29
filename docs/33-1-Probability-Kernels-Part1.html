@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>72&nbsp; Lecture 33.1: Probability Kernels-Part 1 – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./33-2-Regular-Conditional-Distributions.html" rel="next">
+<link href="./32-3-Conditioning-on-Random-Variables.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./33-1-Probability-Kernels-Part1.html"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-probability-kernels" id="toc-introduction-to-probability-kernels" class="nav-link active" data-scroll-target="#introduction-to-probability-kernels"><span class="header-section-number">72.1</span> Introduction to Probability Kernels</a></li>
+  <li><a href="#formal-definition-of-a-probability-kernel" id="toc-formal-definition-of-a-probability-kernel" class="nav-link" data-scroll-target="#formal-definition-of-a-probability-kernel"><span class="header-section-number">72.2</span> Formal Definition of a Probability Kernel</a></li>
+  <li><a href="#measurability-and-integration-properties" id="toc-measurability-and-integration-properties" class="nav-link" data-scroll-target="#measurability-and-integration-properties"><span class="header-section-number">72.3</span> Measurability and Integration Properties</a></li>
+  <li><a href="#construction-of-the-semi-direct-product-measure-mu-otimes-q" id="toc-construction-of-the-semi-direct-product-measure-mu-otimes-q" class="nav-link" data-scroll-target="#construction-of-the-semi-direct-product-measure-mu-otimes-q"><span class="header-section-number">72.4</span> Construction of the Semi-Direct Product Measure <span class="math inline">\(\mu \otimes Q\)</span></a></li>
+  <li><a href="#generalized-fubinis-theorem-for-probability-kernels" id="toc-generalized-fubinis-theorem-for-probability-kernels" class="nav-link" data-scroll-target="#generalized-fubinis-theorem-for-probability-kernels"><span class="header-section-number">72.5</span> Generalized Fubini’s Theorem for Probability Kernels</a></li>
+  <li><a href="#uniqueness-and-equivalence-of-product-measures" id="toc-uniqueness-and-equivalence-of-product-measures" class="nav-link" data-scroll-target="#uniqueness-and-equivalence-of-product-measures"><span class="header-section-number">72.6</span> Uniqueness and Equivalence of Product Measures</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">72.7</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/33-1-Probability-Kernels-Part1.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./33-1-Probability-Kernels-Part1.html"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this lecture, we study probability kernels, which are a generalization of conditional distributions. We will define probability kernels, discuss their measurability and integration properties, and construct the semi-direct product measure <span class="math inline">\(\mu \otimes Q\)</span> associated with a probability kernel <span class="math inline">\(Q\)</span> and a probability measure <span class="math inline">\(\mu\)</span>. We will also establish a generalized Fubini’s theorem for integration with respect to <span class="math inline">\(\mu \otimes Q\)</span>.</p>
+<section id="introduction-to-probability-kernels" class="level2" data-number="72.1">
+<h2 data-number="72.1" class="anchored" data-anchor-id="introduction-to-probability-kernels"><span class="header-section-number">72.1</span> Introduction to Probability Kernels</h2>
+<p>Recall that if a random vector <span class="math inline">\((X, Y)\)</span> on <span class="math inline">\(\mathbb{R}^d \times \mathbb{R}^k\)</span> possesses a joint probability density <span class="math inline">\(f_{X,Y}(x, y)\)</span>, then for any <span class="math inline">\(f \in \mathcal{B}_b(\mathbb{R}^d \times \mathbb{R}^k)\)</span>, where <span class="math inline">\(\mathcal{B}_b(\mathbb{R}^d \times \mathbb{R}^k)\)</span> is the space of bounded, Borel-measurable functions on <span class="math inline">\(\mathbb{R}^d \times \mathbb{R}^k\)</span>, we have <span class="math display">\[
+\mathbb{E}[f(X, Y) \mid X = x] = \int_{\mathbb{R}^k} f(x, y) f_{Y \mid X}(y \mid x) \, dy,
+\]</span> where the conditional density is given by <span class="math inline">\(f_{Y \mid X}(y \mid x) = \frac{f_{X,Y}(x, y)}{f_X(x)}\)</span> whenever <span class="math inline">\(f_X(x) &gt; 0\)</span>.</p>
+<p>That is, for each fixed <span class="math inline">\(x \in \mathbb{R}^d\)</span>, we can define a <strong>probability measure</strong> <span class="math inline">\(Q_x\)</span> on <span class="math inline">\((\mathbb{R}^k, \mathcal{B}_{\mathbb{R}^k})\)</span> via <span class="math display">\[
+Q_x(B) = \int_B f_{Y \mid X}(y \mid x) \, dy.
+\]</span> Then <span class="math display">\[
+\mathbb{E}[f(X, Y) \mid X = x] = \int_{\mathbb{R}^k} f(x, y) \, Q_x(dy).
+\]</span> The family <span class="math inline">\(\{Q_x\}_{x \in \mathbb{R}^d}\)</span> provides a concrete instance of a <strong>conditional probability distribution</strong> or <strong>probability kernel</strong>.</p>
+<hr>
+</section>
+<section id="formal-definition-of-a-probability-kernel" class="level2" data-number="72.2">
+<h2 data-number="72.2" class="anchored" data-anchor-id="formal-definition-of-a-probability-kernel"><span class="header-section-number">72.2</span> Formal Definition of a Probability Kernel</h2>
+<p>A probability kernel is a function in one variable and a probability measure in another variable. It is a generalization of the conditional distribution of one random variable given another.</p>
+<div id="def-prob-kernel" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 72.1 (Probability Kernel)</strong></span> Let <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> and <span class="math inline">\((S_2, \mathcal{B}_2)\)</span> be two measurable spaces. A function <span class="math inline">\(Q: S_1 \times \mathcal{B}_2 \to [0, 1]\)</span> is called a <strong>probability kernel</strong> (or Markov kernel) from <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> to <span class="math inline">\((S_2, \mathcal{B}_2)\)</span> if it satisfies two conditions:</p>
+<ol type="1">
+<li><strong>Measure Property:</strong> For every fixed <span class="math inline">\(x \in S_1\)</span>, the mapping <span class="math display">\[
+Q(x, \cdot): \mathcal{B}_2 \to [0, 1], \quad B \mapsto Q(x, B),
+\]</span> is a probability measure on <span class="math inline">\((S_2, \mathcal{B}_2)\)</span>.</li>
+<li><strong>Measurability Property:</strong> For every fixed <span class="math inline">\(B \in \mathcal{B}_2\)</span>, the mapping <span class="math display">\[
+Q(\cdot, B): S_1 \to [0, 1], \quad x \mapsto Q(x, B),
+\]</span> is <span class="math inline">\(\mathcal{B}_1 / \mathcal{B}([0, 1])\)</span>-measurable.</li>
+</ol>
+</div>
+<p><strong>Some remarks on the definition:</strong></p>
+<ol type="1">
+<li><p>Note that the domain of <span class="math inline">\(Q\)</span> is <span class="math inline">\(S_1 \times \mathcal{B}_2\)</span>, where the first argument is a point in <span class="math inline">\(S_1\)</span> and the second argument is a measurable set in <span class="math inline">\(\mathcal{B}_2\)</span>. The range of <span class="math inline">\(Q\)</span> is the interval <span class="math inline">\([0, 1]\)</span>, representing probabilities.</p></li>
+<li><p>If we think of <span class="math inline">\(Q\)</span> as measure of <span class="math inline">\(y\)</span> for a fixed <span class="math inline">\(x\)</span>, the notation we used when integrating with respect to <span class="math inline">\(Q\)</span> is <span class="math display">\[
+\int_{S_2} f(x, y) \, Q(x, dy),
+\]</span> where</p>
+<ul>
+<li><span class="math inline">\(x\)</span> is fixed,</li>
+<li><span class="math inline">\(y\)</span> is the variable of integration, and</li>
+<li><span class="math inline">\(Q(x, \cdot)\)</span> is the probability measure on <span class="math inline">\((S_2, \mathcal{B}_2)\)</span> for each fixed <span class="math inline">\(x \in S_1\)</span>.</li>
+</ul></li>
+<li><p>This is consistent with the notation for integrating with respect to a measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\((S, \mathcal{B})\)</span>, where we write <span class="math inline">\(\int_S f(y) \, \mu(dy)\)</span> rather than <span class="math inline">\(\int_S f(y) \, d\mu(y)\)</span>.</p></li>
+<li><p>Since <span class="math inline">\(Q(x, \cdot): \mathcal{B}_2 \to [0, 1]\)</span> is probability measure is on <span class="math inline">\((S_2,\mathcal B_2)\)</span> for each fixed <span class="math inline">\(x \in S_1\)</span>, it satisfies the usual properties of a probability measure:</p>
+<ul>
+<li><strong>Non-negativity:</strong> <span class="math inline">\(Q(x, B) \ge 0\)</span> for all <span class="math inline">\(B \in \mathcal{B}_2\)</span>.</li>
+<li><strong>Normalization:</strong> <span class="math inline">\(Q(x, S_2) = 1\)</span>.</li>
+<li><strong>Countable Additivity:</strong> For any countable collection <span class="math inline">\(\{B_i\}_{i \in \mathbb{N}}\)</span> of disjoint sets in <span class="math inline">\(\mathcal{B}_2\)</span>, <span class="math display">\[
+Q\Big(x, \bigcup_{i \in \mathbb{N}} B_i\Big) = \sum_{i \in \mathbb{N}} Q(x, B_i).
+\]</span></li>
+</ul></li>
+<li><p>The mapping <span class="math inline">\(x \mapsto Q(x, B)\)</span> is <span class="math inline">\(\mathcal{B}_1 / \mathcal{B}([0, 1])\)</span>-measurable:<br>
+<span class="math display">\[
+\{x \in S_1 : Q(x, B) \in A\} \in \mathcal{B}_1,
+\]</span> for all <span class="math inline">\(A \in \mathcal{B}([0, 1])\)</span>.</p></li>
+</ol>
+<div id="exm-kernel-examples" class="theorem example">
+<p><span class="theorem-title"><strong>Example 72.1 (Standard Examples of Probability Kernels)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Constant / Product Measure Kernel:</strong> If <span class="math inline">\(\nu \in \mathcal{P}(S_2, \mathcal{B}_2)\)</span> is a fixed probability measure, then <span class="math display">\[
+Q(x, B) := \nu(B) \quad \forall x \in S_1, \; B \in \mathcal{B}_2
+\]</span> is a probability kernel. This is called a <strong>constant kernel</strong> or <strong>product measure kernel</strong>. Note that this defines a probability kernel from <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> to <span class="math inline">\((S_2, \mathcal{B}_2)\)</span> for any measurable space <span class="math inline">\((S_1, \mathcal{B}_1)\)</span>.</p></li>
+<li><p><strong>Conditional Density Kernel:</strong> If <span class="math inline">\((X, Y)\)</span> has joint density <span class="math inline">\(f_{X,Y}(x, y)\)</span> on <span class="math inline">\(\mathbb{R}^d \times \mathbb{R}^k\)</span>, then <span class="math display">\[
+\begin{align*}
+Q(x, B) &amp;:= \int_B f_{Y \mid X}(y \mid x) \, dy \\
+&amp;=
+\begin{cases}
+\frac{\int_B f_{X,Y}(x, y) \, dy}{\int_{\mathbb{R}^k} f_{X,Y}(x, y) \, dy} &amp; \text{if } f_X(x) &gt; 0, \\
+\nu_0(B) &amp; \text{if } f_X(x) = 0,
+\end{cases}
+\end{align*}
+\]</span> where <span class="math inline">\(\nu_0 \in \mathcal{P}(\mathbb{R}^k, \mathcal{B}_{\mathbb{R}^k})\)</span> is an arbitrary probability measure. This defines a probability kernel from <span class="math inline">\((\mathbb{R}^d, \mathcal{B}_{\mathbb{R}^d})\)</span> to <span class="math inline">\((\mathbb{R}^k, \mathcal{B}_{\mathbb{R}^k})\)</span>.</p></li>
+</ol>
+</div>
+<div id="exm-bernoulli-kernel" class="theorem example">
+<p><span class="theorem-title"><strong>Example 72.2 (A Bernoulli probability kernel)</strong></span> A very simple example is a kernel describing a Bernoulli random variable whose success probability depends on the value of <span class="math inline">\(x\)</span>. Let <span class="math inline">\(S_1=S_2=\mathbb R\)</span>, and <span class="math inline">\(\mathcal B_1=\mathcal B_2=\mathcal B(\mathbb R)\)</span>. Define <span class="math display">\[
+Q(x,B) = (1-p(x))\mathbf 1_B(0)+p(x)\mathbf 1_B(1), \qquad B\in\mathcal B(\mathbb R),
+\]</span> where, for example, <span class="math inline">\(p(x)=\frac{e^x}{1+e^x}\)</span>. Thus, for each <span class="math inline">\(x\)</span>, <span class="math inline">\(Q(x,\cdot)\)</span> is the probability distribution of a Bernoulli random variable with success probability <span class="math inline">\(p(x)\)</span>: <span class="math display">\[
+Y\mid X=x \sim \operatorname{Bernoulli}\left(\frac{e^x}{1+e^x}\right).
+\]</span></p>
+<ol type="1">
+<li><p>Measure property: Fix <span class="math inline">\(x\in\mathbb R\)</span>. Then <span class="math display">\[
+Q(x,B) = (1-p(x))\mathbf 1_B(0)+p(x)\mathbf 1_B(1).
+\]</span> This is the probability measure that assigns <span class="math inline">\(Q(x,\{0\})=1-p(x)\)</span> and <span class="math inline">\(Q(x,\{1\})=p(x)\)</span>. Since <span class="math inline">\(0\leq p(x)\leq1\)</span>, we have <span class="math inline">\(Q(x,\mathbb R)=1-p(x)+p(x)=1\)</span>. Moreover, because it is a weighted sum of the point-mass probability measures <span class="math inline">\(\delta_0\)</span> and <span class="math inline">\(\delta_1\)</span>, it is a probability measure on <span class="math inline">\((\mathbb R,\mathcal B(\mathbb R))\)</span>.</p></li>
+<li><p>Measurability property: Now fix <span class="math inline">\(B\in\mathcal B(\mathbb R)\)</span>. We need to show that <span class="math inline">\(x\mapsto Q(x,B)\)</span> is measurable. There are only four possibilities concerning whether <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> belong to <span class="math inline">\(B\)</span>. For example, if <span class="math inline">\(0\in B\)</span> and <span class="math inline">\(1\notin B\)</span>, then <span class="math inline">\(Q(x,B)=1-p(x) =\frac{1}{1+e^x}\)</span>, which is a continuous, hence measurable, function of <span class="math inline">\(x\)</span>. If <span class="math inline">\(0\notin B\)</span> and <span class="math inline">\(1\in B\)</span>, then <span class="math inline">\(Q(x,B)=p(x) =\frac{e^x}{1+e^x}\)</span>, which is also continuous. If both <span class="math inline">\(0,1\in B\)</span>, then <span class="math inline">\(Q(x,B)=1\)</span>, and if neither belongs to <span class="math inline">\(B\)</span>, then <span class="math inline">\(Q(x,B)=0\)</span>. Therefore <span class="math inline">\(x\mapsto Q(x,B)\)</span> is measurable for every <span class="math inline">\(B\in\mathcal B(\mathbb R)\)</span>.</p></li>
+</ol>
+<p>The easiest way to visualize the kernel is <span class="math inline">\(x\longmapsto Q(x,\cdot)\)</span>. It takes an input <span class="math inline">\(x\)</span> and returns a probability distribution. For example, <span class="math inline">\(x=0\Rightarrow p(0)=\frac12\)</span>, so <span class="math inline">\(Q(0,\cdot) = \frac12\delta_0+\frac12\delta_1\)</span>. At <span class="math inline">\(x=1\)</span>, <span class="math inline">\(p(1)=\frac{e}{1+e}\approx0.731\)</span>, so <span class="math inline">\(Q(1,\cdot) = 0.269\,\delta_0+0.731\,\delta_1\)</span>. At <span class="math inline">\(x=-1\)</span>, <span class="math inline">\(p(-1)=\frac{1}{1+e}\approx0.269\)</span>, so <span class="math inline">\(Q(-1,\cdot) = 0.731\,\delta_0+0.269\,\delta_1\)</span>. Thus the kernel is essentially a <strong>family of probability distributions indexed by <span class="math inline">\(x\)</span></strong>.</p>
+<p>Suppose <span class="math inline">\(X\)</span> itself is a random variable. We can then use the kernel to define the conditional distribution of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span>: <span class="math inline">\(\mathbb P(Y\in B\mid X) = Q(X,B)\)</span>. For example, <span class="math display">\[
+\mathbb P(Y=1\mid X) = Q(X,\{1\}) = \frac{e^X}{1+e^X}.
+\]</span> The measurability condition guarantees that this is a legitimate random variable: <span class="math inline">\(Q(X,B)\)</span> is measurable whenever <span class="math inline">\(X\)</span> is measurable.</p>
+</div>
+<hr>
+</section>
+<section id="measurability-and-integration-properties" class="level2" data-number="72.3">
+<h2 data-number="72.3" class="anchored" data-anchor-id="measurability-and-integration-properties"><span class="header-section-number">72.3</span> Measurability and Integration Properties</h2>
+<p>The following lemma establishes the measurability of integral functions with respect to a probability kernel. It says that integrating a measurable function with respect to a probability kernel preserves measurability in the remaining variable.</p>
+<div id="lem-kernel-measurability" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 72.1 (Measurability of Integral Functions)</strong></span> Let <span class="math inline">\(Q\)</span> be a probability kernel from <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> to <span class="math inline">\((S_2, \mathcal{B}_2)\)</span>. If <span class="math inline">\(f: S_1 \times S_2 \to \mathbb{R}\)</span> is <span class="math inline">\((\mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>-measurable and is either bounded or non-negative, then the function <span id="eq-kernel-integral-map"><span class="math display">\[
+g(x) := \int_{S_2} f(x, y) \, Q(x, dy)
+\tag{72.1}\]</span></span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We divide the proof into two main stages: bounded functions and non-negative functions (via Monotone Convergence).</p>
+<p><strong>Step 1: Bounded Measurable Functions</strong> Let <span class="math inline">\(\mathbb{H}\)</span> be the vector space of bounded, <span class="math inline">\((\mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>-measurable functions <span class="math inline">\(f: S_1 \times S_2 \to \mathbb{R}\)</span> for which <span class="math inline">\(x \mapsto \int_{S_2} f(x, y) \, Q(x, dy)\)</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable.</p>
+<p>Let <span class="math inline">\(\mathbb{M} = \{ \mathbb{I}_{B_1 \times B_2} : B_1 \in \mathcal{B}_1, B_2 \in \mathcal{B}_2 \}\)</span> be the collection of indicator functions of measurable rectangles. Note that <span class="math inline">\(\mathbb{M}\)</span> is a <strong>multiplicative system</strong> — closed under pointwise products, since <span class="math inline">\(\mathbb{I}_{B_1 \times B_2} \cdot \mathbb{I}_{C_1 \times C_2} = \mathbb{I}_{(B_1 \cap C_1) \times (B_2 \cap C_2)} \in \mathbb{M}\)</span> — and generates <span class="math inline">\(\sigma(\mathbb{M}) = \mathcal{B}_1 \otimes \mathcal{B}_2\)</span>. For any indicator function <span class="math inline">\(f = \mathbb{I}_{B_1 \times B_2}\)</span> where <span class="math inline">\(B_1 \in \mathcal{B}_1\)</span> and <span class="math inline">\(B_2 \in \mathcal{B}_2\)</span>: <span class="math display">\[
+\int_{S_2} \mathbb{I}_{B_1 \times B_2}(x, y) \, Q(x, dy) = \mathbb{I}_{B_1}(x) \int_{S_2} \mathbb{I}_{B_2}(y) \, Q(x, dy) = \mathbb{I}_{B_1}(x) Q(x, B_2).
+\]</span> Since <span class="math inline">\(\mathbb{I}_{B_1}(\cdot)\)</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable and <span class="math inline">\(Q(\cdot, B_2)\)</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable by definition of a probability kernel, their product is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable. Thus, <span class="math inline">\(\mathbb{M} \subseteq \mathbb{H}\)</span>. <span class="math inline">\(\mathbb{H}\)</span> also includes constant functions, so it contains the constant function <span class="math inline">\(1\)</span>.</p>
+<p>Next, we will show that <span class="math inline">\(\mathbb{H}\)</span> is closed under bounded monotone convergence. By linearity of integration, <span class="math inline">\(\mathbb{H}\)</span> is a vector space. Furthermore, if <span class="math inline">\((f_n)_{n=1}^\infty \subseteq \mathbb{H}\)</span> is a sequence of bounded non-negative functions such that <span class="math inline">\(f_n \uparrow f\)</span> with <span class="math inline">\(f\)</span> bounded, then by the Dominated Convergence Theorem (or Monotone Convergence Theorem) applied to the probability measure <span class="math inline">\(Q(x, \cdot)\)</span> for each <span class="math inline">\(x \in S_1\)</span>: <span class="math display">\[
+g_n(x) = \int_{S_2} f_n(x, y) \, Q(x, dy) \longrightarrow \int_{S_2} f(x, y) \, Q(x, dy) = g(x) \quad \forall x \in S_1.
+\]</span> As a pointwise limit of <span class="math inline">\(\mathcal{B}_1\)</span>-measurable functions <span class="math inline">\(g_n\)</span>, <span class="math inline">\(g\)</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable. By Dynkin’s Multiplicative System Theorem, <span class="math inline">\(\mathbb{H}\)</span> contains all bounded <span class="math inline">\(\sigma(\mathbb{M})\)</span>-measurable functions: <span class="math inline">\(\mathbb{B}(\sigma(\mathbb{M}))\subseteq \mathbb{H}\)</span>. But <span class="math inline">\(\sigma(\mathbb{M}) = \mathcal{B}_1 \otimes \mathcal{B}_2\)</span>, so we conclude that <span class="math inline">\(x \mapsto \int_{S_2} f(x, y) \, Q(x, dy)\)</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable for all bounded <span class="math inline">\((\mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>-measurable functions <span class="math inline">\(f\)</span>.</p>
+<p><strong>Step 2: Non-Negative Measurable Functions</strong> If <span class="math inline">\(f \ge 0\)</span> is <span class="math inline">\((\mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>-measurable, define the truncated sequence <span class="math inline">\(f_n(x, y) = f(x, y) \wedge n\)</span>. Each <span class="math inline">\(f_n\)</span> is bounded and measurable, so <span class="math inline">\(x \mapsto \int_{S_2} f_n(x, y) \, Q(x, dy)\)</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable by Step 1. Since <span class="math inline">\(f_n \uparrow f\)</span>, the Monotone Convergence Theorem yields: <span class="math display">\[
+\int_{S_2} f_n(x, y) \, Q(x, dy) \uparrow \int_{S_2} f(x, y) \, Q(x, dy) \quad \text{pointwise for all } x \in S_1.
+\]</span> Being the pointwise limit of a non-decreasing sequence of measurable functions, <span class="math inline">\(x \mapsto \int_{S_2} f(x, y) \, Q(x, dy)\)</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable.</p>
+</div>
+<div id="rem-measurability-of-integral" class="proof remark">
+<p><span class="proof-title"><em>Remark 72.1</em>. </span>The lemma is essentially a <strong>parameterized integration theorem</strong>. The ordinary result says that if <span class="math inline">\(f(x,y)\)</span> is measurable, then integrating out <span class="math inline">\(y\)</span> gives a measurable function of <span class="math inline">\(x\)</span>. Here the measure with respect to which we integrate also depends on <span class="math inline">\(x\)</span>: <span class="math display">\[
+g(x)=\int f(x,y)\,Q(x,dy)
+\]</span> The kernel’s measurability condition is exactly what makes this dependence on <span class="math inline">\(x\)</span> well behaved.</p>
+</div>
+<hr>
+</section>
+<section id="construction-of-the-semi-direct-product-measure-mu-otimes-q" class="level2" data-number="72.4">
+<h2 data-number="72.4" class="anchored" data-anchor-id="construction-of-the-semi-direct-product-measure-mu-otimes-q"><span class="header-section-number">72.4</span> Construction of the Semi-Direct Product Measure <span class="math inline">\(\mu \otimes Q\)</span></h2>
+<p>In the previous section, we defined a probability kernel <span class="math inline">\(Q\)</span> from <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> to <span class="math inline">\((S_2, \mathcal{B}_2)\)</span>. We now show how to construct a probability measure <span class="math inline">\(\mu \otimes Q\)</span> on the product space <span class="math inline">\((S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)\)</span> given a probability measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> and a probability kernel <span class="math inline">\(Q\)</span>.</p>
+<div id="def-product-measure-kernel" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 72.2 (Product Measure <span class="math inline">\(\mu \otimes Q\)</span>)</strong></span> Let <span class="math inline">\(\mu \in \mathcal{P}(S_1, \mathcal{B}_1)\)</span> be a probability measure on <span class="math inline">\((S_1, \mathcal{B}_1)\)</span>, and let <span class="math inline">\(Q\)</span> be a probability kernel from <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> to <span class="math inline">\((S_2, \mathcal{B}_2)\)</span>. We define a set function <span class="math inline">\(\mu \otimes Q\)</span> on measurable rectangles <span class="math inline">\(B_1 \times B_2 \in \mathcal{B}_1 \otimes \mathcal{B}_2\)</span> by: <span class="math display">\[
+\begin{align*}
+(\mu \otimes Q)(B_1 \times B_2) &amp;:= \int_{B_1} Q(x, B_2) \, \mu(dx)\\
+&amp;= \int_{S_1} \mathbb{I}_{B_1}(x) Q(x, B_2) \, \mu(dx).
+\end{align*}
+\]</span> This extends uniquely to a probability measure on <span class="math inline">\((S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>, defined for any <span class="math inline">\(C \in \mathcal{B}_1 \otimes \mathcal{B}_2\)</span> by: <span class="math display">\[
+(\mu \otimes Q)(C) := \int_{S_1} \left( \int_{S_2} \mathbb{I}_C(x, y) \, Q(x, dy) \right) \mu(dx).
+\]</span></p>
+</div>
+<p><strong>Some observations on the definition:</strong></p>
+<ol type="1">
+<li><p>When <span class="math inline">\(Q\)</span> is a constant kernel <span class="math inline">\(Q(x, \cdot) = \nu(\cdot)\)</span> for all <span class="math inline">\(x \in S_1\)</span>, then <span class="math inline">\(\mu \otimes Q\)</span> reduces to the standard product measure <span class="math inline">\(\mu \otimes \nu\)</span> on <span class="math inline">\((S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>: <span class="math display">\[
+\begin{align*}
+(\mu \otimes Q)(B_1 \times B_2) &amp;= \int_{B_1} Q(x, B_2) \, \mu(dx) \\
+&amp;= \int_{B_1} \nu(B_2) \, \mu(dx) \\
+&amp;= \nu(B_2) \mu(B_1) \\
+&amp;= (\mu \otimes \nu)(B_1 \times B_2).
+\end{align*}
+\]</span></p></li>
+<li><p>If we define <span class="math inline">\(C_x := \{ y \in S_2 : (x, y) \in C \}\)</span>, then we can write: <span class="math display">\[
+\begin{align*}
+(\mu \otimes Q)(C) &amp;= \int_{S_1} \left( \int_{S_2} \mathbb{I}_C(x, y) \, Q(x, dy) \right) \mu(dx) \\
+&amp;= \int_{S_1} Q(x, C_x) \, \mu(dx).
+\end{align*}
+\]</span> where <span class="math inline">\(Q(x, C_x)=\int_{S_2}\mathbb{I}_C(x,y)Q(x,dy)\)</span> is the probability of the “slice” <span class="math inline">\(C_x\)</span> under the measure <span class="math inline">\(Q(x, \cdot)\)</span>.</p></li>
+</ol>
+<div id="rem-validity-product-measure" class="proof remark">
+<p><span class="proof-title"><em>Remark 72.2</em> (Well-Definedness as a Probability Measure). </span>To verify that <span class="math display">\[
+\mu\otimes Q\in\mathcal P(S_1\times S_2,\mathcal B_1\otimes\mathcal B_2),
+\]</span> we verify the defining properties of a probability measure.</p>
+<ol type="1">
+<li><p><strong>Non-negativity:</strong> For every <span class="math inline">\(C\in\mathcal B_1\otimes\mathcal B_2\)</span>, <span class="math display">\[
+(\mu\otimes Q)(C)
+=\int_{S_1}\int_{S_2}
+\mathbb I_C(x,y)Q(x,dy)\mu(dx)
+\ge 0,
+\]</span> since <span class="math inline">\(\mathbb I_C\ge0\)</span> and both <span class="math inline">\(Q(x,\cdot)\)</span> and <span class="math inline">\(\mu\)</span> are non-negative measures.</p></li>
+<li><p><strong>Total Mass:</strong> <span class="math display">\[
+\begin{aligned}
+(\mu\otimes Q)(S_1\times S_2)
+&amp;=
+\int_{S_1}\left[\int_{S_2} \mathbb{I}_{S_1 \times S_2}(x, y) \, Q(x, dy) \right] \mu(dx) \\
+&amp;=
+\int_{S_1}\left[\int_{S_2} 1 \cdot Q(x, dy) \right] \mu(dx)\\
+&amp;= \int_{S_1} Q(x, S_2) \, \mu(dx)\\
+&amp;= \int_{S_1} 1 \, \mu(dx)\\
+&amp;= \mu(S_1) = 1.
+\end{aligned}
+\]</span> where the third equality follows because for each fixed <span class="math inline">\(x\)</span>, <span class="math inline">\(Q(x,⋅)\)</span> is a probability measure on <span class="math inline">\(S_2\)</span> and therefore <span class="math inline">\(Q(x,S_2)=1\)</span>.</p></li>
+<li><p><strong>Countable Additivity:</strong> Let <span class="math inline">\(\{C_k\}_{k=1}^\infty\subseteq\mathcal B_1\otimes\mathcal B_2\)</span> be pairwise disjoint. Then, <span class="math inline">\(\mathbb I_{\cup_{k=1}^\infty C_k}(x,y)=\sum_{k=1}^\infty\mathbb{I}_{C_k}(x,y)\)</span>. Since the partial sums on the right-hand side increase monotonically, the Monotone Convergence Theorem gives <span class="math display">\[
+\begin{aligned}
+(\mu\otimes Q)\left(\bigcup_{k=1}^\infty C_k\right)
+&amp;=
+\int_{S_1}\int_{S_2}
+\sum_{k=1}^\infty\mathbb I_{C_k}(x,y)Q(x,dy)\mu(dx)\\
+&amp;=
+\sum_{k=1}^\infty
+\int_{S_1}\int_{S_2}
+\mathbb I_{C_k}(x,y)Q(x,dy)\mu(dx)\\
+&amp;=
+\sum_{k=1}^\infty(\mu\otimes Q)(C_k).
+\end{aligned}
+\]</span> Hence <span class="math inline">\(\mu\otimes Q\)</span> is countably additive.</p></li>
+</ol>
+</div>
+<div id="exm-integration-with-kernel" class="theorem example">
+<p><span class="theorem-title"><strong>Example 72.3</strong></span> The measure <span class="math inline">\(\mu\otimes Q\)</span> describes a two-stage experiment:</p>
+<ol type="1">
+<li>Draw <span class="math inline">\(X\sim\mu\)</span>.</li>
+<li>Given <span class="math inline">\(X=x\)</span>, draw <span class="math inline">\(Y\sim Q(x,\cdot)\)</span>.</li>
+</ol>
+<p>Then <span class="math inline">\(\mu\otimes Q\)</span> is the joint distribution of <span class="math inline">\((X,Y)\)</span>.</p>
+<p>Suppose <span class="math inline">\(S_1=S_2=\mathbb R\)</span>, <span class="math inline">\(X\sim\mu\)</span>, and conditional on <span class="math inline">\(X=x\)</span>, <span class="math inline">\(Y\mid X=x\sim N(x,1)\)</span>. Then define <span class="math display">\[
+Q(x,B) = \int_B \frac{1}{\sqrt{2\pi}} e^{-(y-x)^2/2}\,dy.
+\]</span> The joint distribution of <span class="math inline">\((X,Y)\)</span> is <span class="math inline">\(\mu\otimes Q\)</span>. For example, <span class="math display">\[
+\begin{aligned}
+P(X\in B_1,Y\in B_2) &amp;= (\mu\otimes Q)(B_1\times B_2)\\
+&amp;= \int_{B_1} P(Y\in B_2\mid X=x)\,\mu(dx)\\
+&amp;= \int_{B_1} Q(x, B_2) \, \mu(dx)
+\end{aligned}
+\]</span> This is precisely the familiar formula <span class="math display">\[
+P(X\in B_1,Y\in B_2) = \int_{B_1} P(Y\in B_2\mid X=x)\,P_X(dx).
+\]</span> So the abstract notation <span class="math inline">\(\mu\otimes Q\)</span> is essentially a rigorous measure-theoretic formulation of “first draw <span class="math inline">\(X\)</span>, then draw <span class="math inline">\(Y\)</span> according to a distribution that depends on <span class="math inline">\(X\)</span>.”</p>
+</div>
+</section>
+<section id="generalized-fubinis-theorem-for-probability-kernels" class="level2" data-number="72.5">
+<h2 data-number="72.5" class="anchored" data-anchor-id="generalized-fubinis-theorem-for-probability-kernels"><span class="header-section-number">72.5</span> Generalized Fubini’s Theorem for Probability Kernels</h2>
+<p>The following result gives a generalized version of Fubini’s theorem for the semi-direct product measure <span class="math inline">\(\mu\otimes Q\)</span>. It expresses integration with respect to <span class="math inline">\(\mu\otimes Q\)</span> as an iterated integral: first integrate with respect to the kernel <span class="math inline">\(Q(x,\cdot)\)</span>, and then integrate with respect to <span class="math inline">\(\mu\)</span>.</p>
+<div id="lem-fubini-kernel" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 72.2 (Integration with Respect to <span class="math inline">\(\mu \otimes Q\)</span>)</strong></span> Let <span class="math inline">\(\mu \in \mathcal{P}(S_1, \mathcal{B}_1)\)</span> and let <span class="math inline">\(Q\)</span> be a probability kernel from <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> to <span class="math inline">\((S_2, \mathcal{B}_2)\)</span>. If <span class="math inline">\(f: S_1 \times S_2 \to \mathbb{R}\)</span> is <span class="math inline">\((\mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>-measurable and is either bounded or non-negative (<span class="math inline">\(f \ge 0\)</span>), then: <span id="eq-fubini-kernel"><span class="math display">\[
+\begin{align*}
+&amp;\int_{S_1 \times S_2} f(x, y) \, d(\mu \otimes Q)\\
+&amp;=\int_{S_1 \times S_2} f(x, y) \, (\mu \otimes Q)(d(x,y)) \\
+&amp;= \int_{S_1} \left( \int_{S_2} f(x, y) \, Q(x, dy) \right) \mu(dx).
+\end{align*}
+\tag{72.2}\]</span></span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-fubini-kernel" class="quarto-xref">Lemma&nbsp;<span>72.2</span></a>). </span>The proof proceeds by extending <a href="#eq-fubini-kernel" class="quarto-xref">Equation&nbsp;<span>72.2</span></a> from the simplest functions to the full class via the standard monotone-class machinery.</p>
+<p><strong>Step 1: Indicator Functions</strong>:</p>
+<p>For <span class="math inline">\(f = \mathbb{I}_C\)</span> with <span class="math inline">\(C \in \mathcal{B}_1 \otimes \mathcal{B}_2\)</span>, <a href="#eq-fubini-kernel" class="quarto-xref">Equation&nbsp;<span>72.2</span></a> holds directly from the definition of <span class="math inline">\(\mu \otimes Q\)</span> (<a href="#def-product-measure-kernel" class="quarto-xref">Definition&nbsp;<span>72.2</span></a>): <span class="math display">\[
+\begin{align*}
+&amp;\int_{S_1 \times S_2} \mathbb{I}_C(x, y) \, d(\mu \otimes Q) = (\mu \otimes Q)(C)\\
+&amp;= \int_{S_1} \left( \int_{S_2} \mathbb{I}_C(x, y) \, Q(x, dy) \right) \mu(dx).
+\end{align*}
+\]</span> In the special case <span class="math inline">\(C = B_1 \times B_2\)</span>, the inner integral simplifies as <span class="math inline">\(\int_{S_2} \mathbb{I}_{B_1 \times B_2}(x, y) \, Q(x, dy) = \mathbb{I}_{B_1}(x) Q(x, B_2)\)</span>, recovering <span class="math inline">\((\mu \otimes Q)(B_1 \times B_2) = \int_{B_1} Q(x, B_2) \, \mu(dx)\)</span>.</p>
+<p><strong>Step 2: Non-Negative Simple Functions</strong>:</p>
+<p>Let <span class="math inline">\(f = \sum_{i=1}^n c_i \, \mathbb{I}_{C_i}\)</span> with <span class="math inline">\(c_i \ge 0\)</span> and pairwise disjoint <span class="math inline">\(C_i \in \mathcal{B}_1 \otimes \mathcal{B}_2\)</span>. By linearity of integration on both sides and Step 1 applied to each <span class="math inline">\(\mathbb{I}_{C_i}\)</span>: <span class="math display">\[
+\begin{aligned}
+&amp;\int_{S_1 \times S_2} f \, d(\mu \otimes Q)
+= \sum_{i=1}^n c_i \, (\mu \otimes Q)(C_i) \\
+&amp;= \sum_{i=1}^n c_i \int_{S_1} \left( \int_{S_2} \mathbb{I}_{C_i}(x, y) \, Q(x, dy) \right) \mu(dx) \\
+&amp;= \int_{S_1} \left( \int_{S_2} \sum_{i=1}^n c_i \, \mathbb{I}_{C_i}(x, y) \, Q(x, dy) \right) \mu(dx) \\
+&amp;= \int_{S_1} \left( \int_{S_2} f(x, y) \, Q(x, dy) \right) \mu(dx).
+\end{aligned}
+\]</span> (The interchange of the finite sum with the integrals is justified by linearity.)</p>
+<p><strong>Step 3: Non-Negative Measurable Functions</strong>:</p>
+<p>Let <span class="math inline">\(f \ge 0\)</span> be <span class="math inline">\((\mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>-measurable. By the standard approximation theorem, there exist non-negative simple functions <span class="math inline">\(f_n \uparrow f\)</span> pointwise. Step 2 gives <a href="#eq-fubini-kernel" class="quarto-xref">Equation&nbsp;<span>72.2</span></a> for each <span class="math inline">\(f_n\)</span>: <span class="math display">\[
+\begin{align*}
+\int_{S_1 \times S_2} f_n \, d(\mu \otimes Q) = \int_{S_1} \left( \int_{S_2} f_n(x, y) \, Q(x, dy) \right) \mu(dx).
+\end{align*}
+\]</span></p>
+<ul>
+<li><strong>Left side:</strong> By the Monotone Convergence Theorem applied to <span class="math inline">\(\mu \otimes Q\)</span>, <span class="math display">\[\int_{S_1 \times S_2} f_n \, d(\mu \otimes Q) \uparrow \int_{S_1 \times S_2} f \, d(\mu \otimes Q).\]</span></li>
+<li><strong>Right side:</strong> For each fixed <span class="math inline">\(x\)</span>, MCT applied to <span class="math inline">\(Q(x, \cdot)\)</span> gives <span class="math inline">\(\int_{S_2} f_n(x, y) \, Q(x, dy) \uparrow \int_{S_2} f(x, y) \, Q(x, dy)\)</span>. The resulting pointwise non-decreasing sequence of <span class="math inline">\(\mathcal{B}_1\)</span>-measurable functions (measurable by <a href="#lem-kernel-measurability" class="quarto-xref">Lemma&nbsp;<span>72.1</span></a>) converges, and another application of MCT applied to <span class="math inline">\(\mu\)</span> gives <span class="math display">\[
+\begin{align*}
+&amp;\int_{S_1} \left( \int_{S_2} f_n(x,y) \, Q(x, dy) \right) \mu(dx) \\
+&amp;\uparrow \int_{S_1} \left( \int_{S_2} f(x,y) \, Q(x, dy) \right) \mu(dx).
+\end{align*}
+\]</span></li>
+</ul>
+<p>Passing to the limit in the identity for <span class="math inline">\(f_n\)</span> establishes <a href="#eq-fubini-kernel" class="quarto-xref">Equation&nbsp;<span>72.2</span></a> for <span class="math inline">\(f\)</span>.</p>
+<p><strong>Step 4: Bounded Measurable Functions</strong>:</p>
+<p>Let <span class="math inline">\(f\)</span> be bounded and <span class="math inline">\((\mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>-measurable. Decompose <span class="math inline">\(f = f^+ - f^-\)</span> where <span class="math inline">\(f^+ = \max(f, 0)\)</span> and <span class="math inline">\(f^- = \max(-f, 0)\)</span> are both bounded, non-negative, and jointly measurable. Applying Step 3 to each: <span class="math display">\[
+\begin{aligned}
+&amp;\int_{S_1 \times S_2} f \, d(\mu \otimes Q)
+= \int_{S_1 \times S_2} f^+ \, d(\mu \otimes Q) - \int_{S_1 \times S_2} f^- \, d(\mu \otimes Q) \\
+&amp;= \int_{S_1} \left( \int_{S_2} f^+(x,y) \, Q(x,dy) \right) \mu(dx) - \int_{S_1} \left( \int_{S_2} f^-(x,y) \, Q(x,dy) \right) \mu(dx) \\
+&amp;= \int_{S_1} \left( \int_{S_2} \bigl[f^+(x,y) - f^-(x,y)\bigr] \, Q(x,dy) \right) \mu(dx) \\
+&amp;= \int_{S_1} \left( \int_{S_2} f(x,y) \, Q(x,dy) \right) \mu(dx).
+\end{aligned}
+\]</span> (The subtraction is valid since both <span class="math inline">\(f^+\)</span> and <span class="math inline">\(f^-\)</span> are bounded, so both integrals are finite.)</p>
+</div>
+<div id="rem-fubini-kernel" class="proof remark">
+<p><span class="proof-title"><em>Remark 72.3</em>. </span>The result in <a href="#lem-fubini-kernel" class="quarto-xref">Lemma&nbsp;<span>72.2</span></a> has a very simple probabilistic interpretation. Suppose <span class="math inline">\(X\sim\mu\)</span> and, conditional on <span class="math inline">\(X=x\)</span>, <span class="math inline">\(Y\mid X=x\sim Q(x,\cdot)\)</span>. Then <span class="math inline">\((X,Y)\sim\mu\otimes Q\)</span>. Consequently, <span class="math display">\[
+\mathbb E_{\mu\otimes Q}[f(X,Y)] = \mathbb E_\mu \left[ \mathbb E_{Q(X,\cdot)}[f(X,Y)] \right].
+\]</span> In other words, <span class="math display">\[
+\boxed{ \text{joint expectation} = \text{expectation of the conditional expectation}. } \]</span> This is essentially the law of iterated expectations, expressed in measure-theoretic kernel notation. One particularly useful consequence is <span class="math display">\[\int_{S_1\times S_2}f(x,y)\,(\mu\otimes Q)(d(x,y)) = \int_{S_1} \mathbb E_Q[f(x,Y)\mid X=x]\,\mu(dx),
+\]</span> which makes the connection with conditional distributions very transparent.</p>
+</div>
+<div id="exm-fubini-kernel" class="theorem example">
+<p><span class="theorem-title"><strong>Example 72.4</strong></span> Let <span class="math inline">\(S_1=S_2=\mathbb R\)</span>, <span class="math inline">\(\mathcal{B}_1=\mathcal{B}_2=\mathcal{B}(\mathbb R)\)</span>, and let <span class="math inline">\(\mu\)</span> be the distribution of <span class="math inline">\(X\)</span>. Define the probability kernel <span class="math inline">\(Q(x,dy) = \frac{1}{\sqrt{2\pi}} e^{-(y-x)^2/2}\,dy\)</span>. Thus, for each fixed <span class="math inline">\(x\)</span>, <span class="math inline">\(Y\mid X=x\sim N(x,1)\)</span>. The semi-direct product measure <span class="math inline">\(\mu\otimes Q\)</span> is therefore the joint distribution of <span class="math inline">\((X,Y)\)</span>.</p>
+<p>Take <span class="math inline">\(f(x,y)=y\)</span>. The kernel Fubini lemma says <span class="math display">\[
+\int_{\mathbb R^2}y\,(\mu\otimes Q)(d(x,y)) = \int_{\mathbb R} \left[ \int_{\mathbb R}y\,Q(x,dy) \right]\mu(dx).
+\]</span> Now consider the inner integral. Since <span class="math inline">\(Y\mid X=x\sim N(x,1)\)</span>, <span class="math inline">\(\int_{\mathbb R}y\,Q(x,dy) = \mathbb E[Y\mid X=x] = x\)</span>. Therefore, <span class="math inline">\(\int_{\mathbb R^2}y\,(\mu\otimes Q)(d(x,y)) = \mathbb E[X]\)</span>. Hence <span class="math inline">\(\mathbb E[Y]=\mathbb E[X]\)</span>. This is exactly what we would expect because <span class="math inline">\(\mathbb E[Y\mid X]=X\)</span>.</p>
+<p>Take instead <span class="math inline">\(f(x,y)=xy\)</span>. Then the kernel Fubini formula gives <span class="math display">\[
+\int_{\mathbb R^2}xy\,(\mu\otimes Q)(d(x,y)) = \int_{\mathbb R} \left[ \int_{\mathbb R}xy\,Q(x,dy) \right]\mu(dx).
+\]</span> Since <span class="math inline">\(x\)</span> is fixed in the inner integral, <span class="math display">\[
+\int_{\mathbb R}xy\,Q(x,dy) = x\int_{\mathbb R}y\,Q(x,dy) = x^2.
+\]</span> Consequently, <span class="math display">\[
+\int_{\mathbb R^2}xy\,(\mu\otimes Q)(d(x,y)) = \int_{\mathbb R}x^2\,\mu(dx)
+\]</span> or, in probabilistic notation, <span class="math inline">\(\mathbb E[XY]=\mathbb E[X^2]\)</span>. Again, this follows from <span class="math inline">\(\mathbb E[XY\mid X] = X\mathbb E[Y\mid X] = X^2\)</span>.</p>
+</div>
+<p>The following corollary gives the integrability criterion needed to extend the preceding kernel Fubini formula from bounded or non-negative functions to arbitrary integrable functions.</p>
+<div id="cor-integrability-kernel" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 72.1 (Integrability Criterion for <span class="math inline">\(\mu \otimes Q\)</span>)</strong></span> Suppose <span class="math inline">\(f \in L^1(S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2, \mu \otimes Q)\)</span>. Then:</p>
+<ol type="1">
+<li>The integral <span class="math inline">\(\int_{S_2} |f(x, y)| \, Q(x, dy) &lt; \infty\)</span> for <span class="math inline">\(\mu\)</span>-almost every <span class="math inline">\(x \in S_1\)</span>.</li>
+<li>The partial integral mapping <span class="math display">\[
+g(x) =
+\begin{cases}
+\int_{S_2} f(x, y) \, Q(x, dy) &amp; \text{if } \int_{S_2} |f(x, y)| \, Q(x, dy) &lt; \infty,
+\\ 0 &amp; \text{otherwise}
+\end{cases}
+\]</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable and belongs to <span class="math inline">\(L^1(S_1, \mathcal{B}_1, \mu)\)</span>.</li>
+<li>The identity <a href="#eq-fubini-kernel" class="quarto-xref">Equation&nbsp;<span>72.2</span></a> continues to hold.</li>
+</ol>
+</div>
+<div id="rem-integrability-kernel" class="proof remark">
+<p><span class="proof-title"><em>Remark 72.4</em> (Conceptual Point). </span>This corollary is the exact analogue of the standard Fubini theorem: <span class="math display">\[
+f\in L^1(\mu\otimes\nu) \quad\Longrightarrow
+\begin{cases}
+f(x,\cdot)\in L^1(\nu)\text{ for a.e. }x \\
+x\mapsto\int f(x,y)\,\nu(dy)\in L^1(\mu).
+\end{cases}
+\]</span> The only difference is that here the measure in the inner integral is allowed to depend on <span class="math inline">\(x\)</span>: <span class="math display">\[
+\nu(dy) \longrightarrow Q(x,dy).
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#cor-integrability-kernel" class="quarto-xref">Corollary&nbsp;<span>72.1</span></a>). </span>Since <span class="math inline">\(f \in L^1(\mu \otimes Q)\)</span>, we have <span class="math inline">\(\|f\|_{L^1} = \int_{S_1 \times S_2} |f(x, y)| \, (\mu \otimes Q)(dx \, dy) &lt; \infty\)</span>. By <a href="#lem-fubini-kernel" class="quarto-xref">Lemma&nbsp;<span>72.2</span></a> applied to <span class="math inline">\(|f| \ge 0\)</span>: <span class="math display">\[
+\int_{S_1} \left( \int_{S_2} |f(x, y)| \, Q(x, dy) \right) \mu(dx) = \|f\|_{L^1} &lt; \infty.
+\]</span> Because the outer integral is finite, the non-negative integrand <span class="math inline">\(\int_{S_2} |f(x, y)| \, Q(x, dy)\)</span> must be finite <span class="math inline">\(\mu\)</span>-a.e. Thus <span class="math inline">\(\mu(\{ x \in S_1 : \int_{S_2} |f(x, y)| \, Q(x, dy) = \infty \}) = 0\)</span>.</p>
+<p>Decomposing <span class="math inline">\(f = f^+ - f^-\)</span>, both <span class="math inline">\(f^+, f^- \in L^1(\mu \otimes Q)\)</span>. Applying linearity to the set where the integrals are finite gives: <span class="math display">\[
+\begin{aligned}
+\int_{S_1} g(x) \, \mu(dx) &amp;= \int_{S_1} \left( \int_{S_2} f^+(x, y) \, Q(x, dy) \right) \mu(dx) - \int_{S_1} \left( \int_{S_2} f^-(x, y) \, Q(x, dy) \right) \mu(dx) \\
+&amp;= \int_{S_1 \times S_2} f^+(x, y) \, (\mu \otimes Q)(dx \, dy) - \int_{S_1 \times S_2} f^-(x, y) \, (\mu \otimes Q)(dx \, dy) \\
+&amp;= \int_{S_1 \times S_2} f(x, y) \, (\mu \otimes Q)(dx \, dy).
+\end{aligned}
+\]</span></p>
+</div>
+<hr>
+</section>
+<section id="uniqueness-and-equivalence-of-product-measures" class="level2" data-number="72.6">
+<h2 data-number="72.6" class="anchored" data-anchor-id="uniqueness-and-equivalence-of-product-measures"><span class="header-section-number">72.6</span> Uniqueness and Equivalence of Product Measures</h2>
+<p>The following result characterizes when two probability kernels induce the same semi-direct product measure. The forward implication always holds, while the reverse implication requires a countability condition on the target measurable space.</p>
+<div id="lem-kernel-uniqueness" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 72.3 (Almost-Sure Equality of Kernels and Product Measures)</strong></span> Let <span class="math inline">\(Q\)</span> and <span class="math inline">\(\widetilde{Q}\)</span> be probability kernels from <span class="math inline">\((S_1, \mathcal{B}_1)\)</span> to <span class="math inline">\((S_2, \mathcal{B}_2)\)</span>, and let <span class="math inline">\(\mu \in \mathcal{P}(S_1, \mathcal{B}_1)\)</span>.</p>
+<ol type="1">
+<li><strong>Forward Implication:</strong> If <span class="math inline">\(Q(x, \cdot) = \widetilde{Q}(x, \cdot)\)</span> for <span class="math inline">\(\mu\)</span>-almost every <span class="math inline">\(x \in S_1\)</span>, then <span class="math inline">\(\mu \otimes Q = \mu \otimes \widetilde{Q}\)</span> on <span class="math inline">\(\mathcal{B}_1 \otimes \mathcal{B}_2\)</span>.</li>
+<li><strong>Reverse Implication:</strong> If <span class="math inline">\((S_2, \mathcal{B}_2)\)</span> is <strong>countably generated</strong> (i.e., its <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{B}_2\)</span> possesses a countable generator), then <span class="math inline">\(\mu \otimes Q = \mu \otimes \widetilde{Q}\)</span> implies: <span class="math display">\[
+Q(x, \cdot) = \widetilde{Q}(x, \cdot) \quad \text{for } \mu\text{-almost every } x \in S_1.
+\]</span></li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-kernel-uniqueness" class="quarto-xref">Lemma&nbsp;<span>72.3</span></a>). </span><strong>Proof of Forward Implication (<span class="math inline">\(\Longrightarrow\)</span>)</strong> Assume <span class="math inline">\(Q(x, \cdot) = \widetilde{Q}(x, \cdot)\)</span> for <span class="math inline">\(\mu\)</span>-a.e. <span class="math inline">\(x \in S_1\)</span>. By Dynkin’s <span class="math inline">\(\pi\)</span>-<span class="math inline">\(\lambda\)</span> Theorem, it suffices to verify equality on measurable rectangles <span class="math inline">\(B_1 \times B_2 \in \mathcal{B}_1 \otimes \mathcal{B}_2\)</span>: <span class="math display">\[
+\begin{align*}
+(\mu \otimes Q)(B_1 \times B_2) &amp;= \int_{B_1} Q(x, B_2) \, \mu(dx) \\
+&amp;= \int_{B_1} \widetilde{Q}(x, B_2) \, \mu(dx) \\
+&amp;= (\mu \otimes \widetilde{Q})(B_1 \times B_2).
+\end{align*}
+\]</span> Hence <span class="math inline">\(\mu \otimes Q = \mu \otimes \widetilde{Q}\)</span>.</p>
+<p><strong>Proof of Reverse Implication (<span class="math inline">\(\Longleftarrow\)</span>)</strong> Assume <span class="math inline">\(\mu \otimes Q = \mu \otimes \widetilde{Q}\)</span>. Testing on rectangles <span class="math inline">\(B_1 \times B_2 \in \mathcal{B}_1 \otimes \mathcal{B}_2\)</span>: <span class="math display">\[
+\int_{B_1} Q(x, B_2) \, \mu(dx) = \int_{B_1} \widetilde{Q}(x, B_2) \, \mu(dx) \quad \forall B_1 \in \mathcal{B}_1, \, B_2 \in \mathcal{B}_2.
+\]</span> Rearranging terms: <span class="math display">\[
+\int_{B_1} \left( Q(x, B_2) - \widetilde{Q}(x, B_2) \right) \mu(dx) = 0 \quad \forall B_1 \in \mathcal{B}_1.
+\]</span> Setting <span class="math inline">\(B_1 = \{ x \in S_1 : Q(x, B_2) - \widetilde{Q}(x, B_2) &gt; 0 \} \in \mathcal{B}_1\)</span>: the integrand is non-negative on <span class="math inline">\(B_1\)</span> and the integral equals zero, so <span class="math inline">\(\mu\{Q(\cdot, B_2) &gt; \widetilde{Q}(\cdot, B_2)\} = 0\)</span>. Setting <span class="math inline">\(B_1 = \{ x \in S_1 : Q(x, B_2) - \widetilde{Q}(x, B_2) &lt; 0 \} \in \mathcal{B}_1\)</span>: the integrand is non-positive on <span class="math inline">\(B_1\)</span> and the integral equals zero, so <span class="math inline">\(\mu\{Q(\cdot, B_2) &lt; \widetilde{Q}(\cdot, B_2)\} = 0\)</span>. Together, <span class="math inline">\(Q(x, B_2) = \widetilde{Q}(x, B_2)\)</span> for <span class="math inline">\(\mu\)</span>-a.e. <span class="math inline">\(x \in S_1\)</span>. Let <span class="math inline">\(N_{B_2} = \{ x \in S_1 : Q(x, B_2) \neq \widetilde{Q}(x, B_2) \}\)</span>, so <span class="math inline">\(\mu(N_{B_2}) = 0\)</span>.</p>
+<p>Since <span class="math inline">\(\mathcal{B}_2\)</span> is countably generated, there exists a countable algebra <span class="math inline">\(\mathcal{A}_2 \subseteq \mathcal{B}_2\)</span> generating <span class="math inline">\(\mathcal{B}_2\)</span>. Define the exceptional set: <span class="math display">\[
+N := \bigcup_{B \in \mathcal{A}_2} N_B.
+\]</span> As a countable union of <span class="math inline">\(\mu\)</span>-null sets, <span class="math inline">\(\mu(N) = 0\)</span>. For any fixed <span class="math inline">\(x \notin N\)</span>, <span class="math inline">\(Q(x, B) = \widetilde{Q}(x, B)\)</span> for all <span class="math inline">\(B \in \mathcal{A}_2\)</span>. By the uniqueness of extension in Carathéodory’s / Dynkin’s Theorem, two probability measures agreeing on a generating algebra <span class="math inline">\(\mathcal{A}_2\)</span> must coincide on all of <span class="math inline">\(\mathcal{B}_2\)</span>. Thus, <span class="math inline">\(Q(x, \cdot) = \widetilde{Q}(x, \cdot)\)</span> for all <span class="math inline">\(x \notin N\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="takeaways" class="level2" data-number="72.7">
+<h2 data-number="72.7" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">72.7</span> Takeaways</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Key Takeaways
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>1. Probability Kernels Generalize Conditional Distributions.</strong> A probability kernel <span class="math inline">\(Q: S_1 \times \mathcal{B}_2 \to [0,1]\)</span> is simultaneously a probability measure in its second argument (for each fixed <span class="math inline">\(x\)</span>) and a measurable function in its first argument (for each fixed <span class="math inline">\(B\)</span>). This two-in-one structure is the rigorous formalization of a family of conditional distributions <span class="math inline">\(\{Q_x\}_{x \in S_1}\)</span>, as illustrated by <span class="math inline">\(Q_x(B) = \int_B f_{Y|X}(y|x)\,dy\)</span> in the density setting. Any fixed probability measure <span class="math inline">\(\nu\)</span> defines a constant (trivial) kernel <span class="math inline">\(Q(x,\cdot) = \nu\)</span>.</p>
+<p><strong>2. Integration Against a Kernel Preserves Measurability.</strong> For a jointly measurable <span class="math inline">\(f: S_1 \times S_2 \to \mathbb{R}\)</span> that is bounded or non-negative, the partial integral <span class="math display">\[x \mapsto \int_{S_2} f(x,y)\,Q(x,dy)\]</span> is <span class="math inline">\(\mathcal{B}_1\)</span>-measurable. The proof uses the <strong>Multiplicative System Theorem</strong>: indicator functions of measurable rectangles form a multiplicative system inside <span class="math inline">\(\mathcal{B}_1 \otimes \mathcal{B}_2\)</span>, and the class <span class="math inline">\(\mathbb{H}\)</span> of functions for which the conclusion holds is a vector space closed under bounded monotone limits. Since <span class="math inline">\(\mathbb{M} \subseteq \mathbb{H}\)</span>, the theorem forces all bounded jointly measurable functions into <span class="math inline">\(\mathbb{H}\)</span>; non-negative functions are then handled by truncation and MCT.</p>
+<p><strong>3. The Semi-Direct Product Measure <span class="math inline">\(\mu \otimes Q\)</span>.</strong> Given <span class="math inline">\(\mu \in \mathcal{P}(S_1)\)</span> and a kernel <span class="math inline">\(Q\)</span>, the formula <span class="math display">\[
+(\mu \otimes Q)(C) = \int_{S_1} Q(x, C_x)\,\mu(dx), \qquad C_x := \{y \in S_2 : (x,y) \in C\},
+\]</span> defines a probability measure on <span class="math inline">\((S_1 \times S_2, \mathcal{B}_1 \otimes \mathcal{B}_2)\)</span>, verified via non-negativity, total mass <span class="math inline">\(= 1\)</span> (since <span class="math inline">\(Q(x, S_2) = 1\)</span> for each <span class="math inline">\(x\)</span>), and countable additivity (via MCT for the indicator sum). When <span class="math inline">\(Q(x,\cdot) = \nu\)</span> (constant kernel), <span class="math inline">\(\mu \otimes Q\)</span> reduces to the ordinary product measure <span class="math inline">\(\mu \otimes \nu\)</span>.</p>
+<p><strong>4. Generalized Fubini–Tonelli Theorem.</strong> For any <span class="math inline">\(f\)</span> that is jointly measurable and bounded, non-negative, or <span class="math inline">\(L^1(\mu \otimes Q)\)</span>: <span class="math display">\[
+\int_{S_1 \times S_2} f(x,y)\,d(\mu \otimes Q) = \int_{S_1}\!\left(\int_{S_2} f(x,y)\,Q(x,dy)\right)\mu(dx).
+\]</span> This reduces to classical Fubini–Tonelli when <span class="math inline">\(Q\)</span> is constant. For <span class="math inline">\(f \in L^1(\mu \otimes Q)\)</span>: applying this identity to <span class="math inline">\(|f|\)</span> shows the inner integral is finite <span class="math inline">\(\mu\)</span>-a.e., and the full identity then follows by splitting <span class="math inline">\(f = f^+ - f^-\)</span>.</p>
+<p><strong>5. Uniqueness: Kernels Are Determined <span class="math inline">\(\mu\)</span>-Almost Everywhere.</strong> Two kernels <span class="math inline">\(Q\)</span> and <span class="math inline">\(\widetilde{Q}\)</span> satisfy <span class="math inline">\(\mu \otimes Q = \mu \otimes \widetilde{Q}\)</span> if and only if <span class="math inline">\(Q(x,\cdot) = \widetilde{Q}(x,\cdot)\)</span> for <span class="math inline">\(\mu\)</span>-almost every <span class="math inline">\(x\)</span> (the reverse direction requires <span class="math inline">\(\mathcal{B}_2\)</span> to be countably generated).</p>
+<ul>
+<li><strong>Forward:</strong> Agreement <span class="math inline">\(\mu\)</span>-a.s. implies equal integrals over every <span class="math inline">\(B_1\)</span> for every <span class="math inline">\(B_2\)</span>, so the two product measures agree on all rectangles, hence on all of <span class="math inline">\(\mathcal{B}_1 \otimes \mathcal{B}_2\)</span> by Dynkin’s theorem.</li>
+<li><strong>Reverse:</strong> Testing against <span class="math inline">\(B_1 = \{Q(\cdot, B_2) &gt; \widetilde{Q}(\cdot, B_2)\}\)</span> and <span class="math inline">\(B_1 = \{Q(\cdot, B_2) &lt; \widetilde{Q}(\cdot, B_2)\}\)</span> separately gives <span class="math inline">\(\mu\)</span>-a.s. equality for each fixed <span class="math inline">\(B_2\)</span>. Countable generation of <span class="math inline">\(\mathcal{B}_2\)</span> yields a single <span class="math inline">\(\mu\)</span>-null exceptional set <span class="math inline">\(N\)</span> (a countable union of null sets) outside of which <span class="math inline">\(Q(x,\cdot) = \widetilde{Q}(x,\cdot)\)</span> on a generating algebra, and hence on all of <span class="math inline">\(\mathcal{B}_2\)</span> by Carathéodory’s uniqueness theorem.</li>
+</ul>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./32-3-Conditioning-on-Random-Variables.html" class="pagination-link" aria-label="Lecture 32.3:  Conditioning on Random Variables">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./33-2-Regular-Conditional-Distributions.html" class="pagination-link" aria-label="Lecture 33.2: Regular Conditional Distributions">
+        <span class="nav-page-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/33-1-Probability-Kernels-Part1.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

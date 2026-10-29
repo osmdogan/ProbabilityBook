@@ -1,0 +1,142 @@
+
+# Lecture 1.1: Probability Motivation
+
+
+## Experiments, Sample Spaces, and Events
+
+Probability theory provides a mathematically rigorous language for modeling non-deterministic phenomena or "experiments".
+
+::: {#def-sample-space}
+## Outcome, Sample Space, and Event
+1. An **outcome** $\omega$ is a single possible result of a random experiment.
+2. The **sample space** $\Omega$ (or $\mathcal{S}$) is the set of all possible outcomes of the experiment.
+3. An **event** $E$ is a measurable subset of the sample space, i.e., $E \subseteq \Omega$ ($E \in \mathcal{F}$ for a given $\sigma$-algebra $\mathcal{F}$ on $\Omega$).
+:::
+
+---
+
+## Motivating Examples
+
+### Example 1: Discrete Finite Sample Space (Coin Tossing)
+
+Consider tossing a fair coin $N = 4$ times. The sample space $\Omega = \{H, T\}^4$ contains $2^4 = 16$ equally likely outcomes. 
+
+Consider the event $E \subset \Omega$: *"Obtaining exactly 3 heads and 1 tail."*
+$$
+E = \{ HHHT, \, HHTH, \, HTHH, \, THHH \}.
+$${#eq-coin-event}
+
+Since all $16$ elementary outcomes are equiprobable, the probability of the event $E$ is:
+$$
+\mathbb{P}(E) = \frac{\vert{}E\vert{}}{\vert{}\Omega\vert{}} = \frac{4}{16} = \frac{1}{4}.
+$$
+
+---
+
+### Example 2: Continuous Sample Space (Geometric Probability)
+
+Throw a dart at a circular target of radius $R > 0$. Modeling the point of impact as a uniform continuous random variable over the target, the sample space is:
+$$\Omega = \{ (x, y) \in \mathbb{R}^2 : x^2 + y^2 \le R^2 \}.$$
+{#eq-dart-space}
+
+For any measurable region $E \subseteq \Omega$, the probability of the dart landing in $E$ is given by the ratio of two-dimensional Lebesgue measures (areas):
+$$
+\mathbb{P}(E) = \frac{\operatorname{Leb}(E)}{\operatorname{Leb}(\Omega)} = \frac{\operatorname{Area}(E)}{\pi R^2}.
+$${#eq-dart-prob}
+
+---
+
+## Finite vs. Countably Infinite Sample Spaces
+
+Consider an experiment that continues indefinitely until a specific condition is met.
+
+::: {#exm-coin-until-tails}
+## Coin Tossing Until First Tail
+Suppose a fair coin is tossed repeatedly until Tails ($T$) appears for the first time. 
+
+What is the probability that the total number of tosses required is **odd**?
+
+### Formalization
+
+Let $\Omega$ be the space of infinite binary sequences $\omega = (\omega_1, \omega_2, \dots) \in \{H, T\}^{\mathbb{N}}$. The countable subset of sequences where $T$ eventually appears can be indexed by $n \ge 1$, where $n$ represents the stopping time:
+$$
+E_j := \{ \omega \in \Omega : \omega_1 = H, \dots, \omega_{2j} = H, \omega_{2j+1} = T \}, \quad j \ge 0.
+$${#eq-odd-event-j}
+$E_j$ represents the outcome where the first Tail occurs on precisely the $(2j+1)$-th toss (an odd index). 
+
+Since the coin is fair and tosses are independent, the probability of $E_j$ is:
+$$\mathbb{P}(E_j) = \left(\frac{1}{2}\right)^{2j+1} = \frac{1}{2^{2j+1}}, \quad j \ge 0.$${#eq-prob-ej}
+
+The event $E$ that the total number of tosses is odd is the countable disjoint union:
+$$
+E = \bigcup_{j=0}^\infty E_j.
+$${#eq-odd-event-union}
+
+### Calculation via Countable Additivity
+
+Applying countable additivity and summing the resulting geometric series:
+$$
+\begin{aligned} \mathbb{P}(E) &= \sum_{j=0}^\infty \mathbb{P}(E_j) = \sum_{j=0}^\infty \left(\frac{1}{2}\right)^{2j+1} \\ &= \frac{1}{2} \sum_{j=0}^\infty \left(\frac{1}{4}\right)^j \\ &= \frac{1}{2} \cdot \frac{1}{1 - 1/4} = \frac{1}{2} \cdot \frac{4}{3} = \frac{2}{3}. \end{aligned}
+$${#eq-geometric-sum}
+Thus, the probability that the total number of tosses is odd is $\frac{2}{3}$.
+:::
+
+---
+
+## Formal Definition of a Probability Measure
+
+::: {#def-probability-measure}
+## Probability Measure (Kolmogorov Axioms)
+Let $\Omega$ be a sample space and $\mathcal{F}$ be a $\sigma$-algebra of subsets of $\Omega$. A set function $\mathbb{P}: \mathcal{F} \to [0, 1]$ is called a **probability measure** if it satisfies:
+
+1. **Normalization:**
+   $$
+   \mathbb{P}(\Omega) = 1.
+   $${#eq-norm-axiom}
+
+2. **Countable Additivity ($\sigma$-Additivity):**
+   For any countable sequence of pairwise disjoint events $\{E_j\}_{j=1}^\infty \subset \mathcal{F}$ (where $E_i \cap E_j = \emptyset$ for all $i \neq j$):
+   $$
+   \mathbb{P}\left( \bigcup_{j=1}^\infty E_j \right) = \sum_{j=1}^\infty \mathbb{P}(E_j).$${#eq-countable-additivity-axiom}
+:::
+
+---
+
+## Elementary Consequences of the Axioms
+
+From the core axioms (@eq-norm-axiom and @eq-countable-additivity-axiom), fundamental rules of probability immediately follow:
+
+::: {#prp-elementary-rules}
+## Basic Rules of Probability
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space.
+
+1. **Finite Additivity:**
+   If $E_1, E_2 \in \mathcal{F}$ are disjoint ($E_1 \cap E_2 = \emptyset$), then:
+   $$
+   \mathbb{P}(E_1 \cup E_2) = \mathbb{P}(E_1) + \mathbb{P}(E_2).
+   $${#eq-finite-additivity-prop}
+
+2. **Complement Rule:**
+   For any event $E \in \mathcal{F}$, let $E^c = \Omega \setminus E$ denote its complement. Then:
+   $$
+   \mathbb{P}(E^c) = 1 - \mathbb{P}(E).
+   $${#eq-complement-rule}
+
+3. **Empty Set Probability:**
+   The probability of the empty set $\emptyset$ is zero:
+   $$
+   \mathbb{P}(\emptyset) = 0.
+   $${#eq-empty-set}
+:::
+
+::: {.proof}
+1. Set $E_3 = E_4 = \dots = \emptyset$ in @eq-countable-additivity-axiom. Countable additivity reduces directly to finite additivity.
+2. For any $E \in \mathcal{F}$, $E$ and $E^c$ are disjoint, and $E \cup E^c = \Omega$. By finite additivity and normalization:
+   $$
+   \mathbb{P}(E) + \mathbb{P}(E^c) = \mathbb{P}(E \cup E^c) = \mathbb{P}(\Omega) = 1 \implies \mathbb{P}(E^c) = 1 - \mathbb{P}(E).
+   $$
+3. Taking $E = \Omega$ in the complement rule gives $\mathbb{P}(\emptyset) = \mathbb{P}(\Omega^c) = 1 - \mathbb{P}(\Omega) = 1 - 1 = 0$.
+:::
+
+---
+

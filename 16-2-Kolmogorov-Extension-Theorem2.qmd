@@ -1,0 +1,408 @@
+# Lecture 16.2: Kolmogorov's Extension Theorem (II)
+
+## Radon Measures on $\mathbb{R}^d$
+
+Let $(X, \tau)$ be a topological space equipped with its Borel $\sigma$-algebra $\mathcal{B}(X)$; recall from @def-borel-radon-measure that a **Borel measure** on $X$ is a measure defined on $\mathcal{B}(X)$. The notions below are best behaved when $X$ is locally compact and Hausdorff, which is the case for the only space we use, $X = \mathbb{R}^d$.
+
+::: {#def-regular-measures}
+A Borel measure $\mu$ on $(X, \mathcal{B}(X))$ is called:
+
+* **Outer-regular:** $\mu(B) = \inf \{ \mu(V) \mid B \subseteq V, \, V \text{ open} \}$ for all $B \in \mathcal{B}(X)$.
+* **Inner-regular:** $\mu(B) = \sup \{ \mu(K) \mid K \subseteq B, \, K \text{ compact} \}$ for all $B \in \mathcal{B}(X)$.
+* **Radon measure:** $\mu$ is **finite on compact sets** ($\mu(K) < \infty$ for all compact $K \subseteq X$; on a locally compact Hausdorff space this is equivalent to being locally finite) and both inner- and outer-regular.
+:::
+
+::: {#rem-radon-terminology}
+## Two Conventions for "Radon"
+Two cautionary remarks about the word *Radon*.
+
+1. **Relation to @def-borel-radon-measure.** In Lecture 5.1 a Radon measure on $\mathbb{R}$ was defined by the purely local condition $\mu((a,b]) < \infty$ for all bounded intervals, with **no** regularity requirement. On $\mathbb{R}^d$ the two notions in fact coincide, but we do not prove this in general: @thm-finite-borel-radon below establishes it for **finite** Borel measures, which is the only case used in this lecture. Whenever regularity is invoked below, it is @thm-finite-borel-radon (or its @cor-radon-on-borel-subset) that is being used, never @def-borel-radon-measure.
+2. **Strong versus weak inner regularity.** Many texts require inner regularity only on **open** sets (together with outer regularity on all Borel sets). The definition above, demanding inner regularity on *all* Borel sets, is the stronger "tight" form. The two are not equivalent on a general locally compact Hausdorff space, but they agree for finite Borel measures on $\mathbb{R}^d$ by @thm-finite-borel-radon, so no ambiguity arises here.
+:::
+
+::: {#thm-finite-borel-radon}
+Every finite Borel measure $\mu$ on $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ (in particular, any probability measure) is a Radon measure.
+:::
+
+::: {.proof}
+## Proof of @thm-finite-borel-radon
+**Finiteness on compact sets** is immediate: $\mu(K) \le \mu(\mathbb{R}^d) < \infty$ for every compact $K \subseteq \mathbb{R}^d$. It remains to prove inner- and outer-regularity.
+
+Write $d(x,C) \triangleq \inf_{y \in C} |x - y|$ for the Euclidean distance from a point to a set (with $d(x,\emptyset) \triangleq +\infty$), and define the family of sets:
+$$
+\begin{aligned}
+\mathcal{F} \triangleq \bigl\{ B \in \mathcal{B}(\mathbb{R}^d) \;\big|\;&
+\forall \epsilon > 0,\ \exists\text{ open }V\text{ and closed }C\text{ such that}\\
+& C \subseteq B \subseteq V
+\text{ and }
+\mu(V\setminus C)<\epsilon
+\bigr\}.
+\end{aligned}
+$$
+
+1. **Closed Sets are in $\mathcal{F}$:** Let $C$ be closed. For $k \in \mathbb{N}$, set $V_k \triangleq \{ x \in \mathbb{R}^d \mid d(x, C) < 1/k \}$ (so $V_k = \emptyset$ if $C = \emptyset$). Then each $V_k$ is open, $C \subseteq V_k$, the sequence $(V_k)$ is decreasing, and $\bigcap_{k} V_k = \overline{C} = C$ because $C$ is closed. Since $\mu(V_1) \le \mu(\mathbb{R}^d) < \infty$, continuity from above gives $\mu(V_k \setminus C) = \mu(V_k) - \mu(C) \to 0$. Given $\epsilon > 0$, choose $k$ with $\mu(V_k \setminus C) < \epsilon$; the pair consisting of the closed set $C$ itself and the open set $V_k$ then witnesses $C \in \mathcal{F}$.
+2. **Algebra Properties:**
+   * $\emptyset \in \mathcal{F}$ and $\mathbb{R}^d \in \mathcal{F}$, both being closed (item 1).
+   * Let $A \in \mathcal{F}$ and $\epsilon > 0$. Choose $C$ closed and $V$ open with $C \subseteq A \subseteq V$ and $\mu(V \setminus C) < \epsilon$. Then $V^c \subseteq A^c \subseteq C^c$ with $V^c$ closed and $C^c$ open. Since $C^c \setminus V^c = C^c \cap V = V \setminus C$, we get $\mu(C^c \setminus V^c) < \epsilon$. As $\epsilon > 0$ was arbitrary, $A^c \in \mathcal{F}$.
+   * Let $A_1, A_2 \in \mathcal{F}$ and $\epsilon > 0$. Choose $C_i \subseteq A_i \subseteq V_i$ with $C_i$ closed, $V_i$ open and $\mu(V_i \setminus C_i) < \epsilon/2$. Then $C_1 \cup C_2$ is closed, $V_1 \cup V_2$ is open, $C_1 \cup C_2 \subseteq A_1 \cup A_2 \subseteq V_1 \cup V_2$, and $(V_1 \cup V_2) \setminus (C_1 \cup C_2) \subseteq (V_1 \setminus C_1) \cup (V_2 \setminus C_2)$, so $\mu((V_1 \cup V_2) \setminus (C_1 \cup C_2)) \le \mu(V_1 \setminus C_1) + \mu(V_2 \setminus C_2) < \epsilon$. As $\epsilon > 0$ was arbitrary, $A_1 \cup A_2 \in \mathcal{F}$.
+
+   Hence $\mathcal{F}$ is an algebra (closure under finite intersections follows from complements and unions).
+3. **Closure under countable disjoint unions:** Let $A_n \in \mathcal{F}$ be pairwise disjoint and fix $\epsilon > 0$. Choose $C_n \subseteq A_n \subseteq V_n$ with $\mu(V_n \setminus C_n) < \epsilon/2^{n+1}$. Set $V = \bigcup_{n=1}^\infty V_n$ (open) and $D_N = \bigcup_{n=1}^N C_n$ (closed), so that $D_N \subseteq A \triangleq \bigcup_n A_n \subseteq V$. Observe that:
+   $$
+   V \setminus D_N \subseteq \bigcup_{n=1}^N (V_n \setminus C_n) \cup \bigcup_{n=N+1}^\infty V_n.
+   $$
+   For $n > N$, since $C_n \subseteq A_n$ we have $\mu(V_n) \le \mu(A_n) + \mu(V_n \setminus C_n)$. By subadditivity:
+   $$
+   \mu(V \setminus D_N) \le \sum_{n=1}^\infty \mu(V_n \setminus C_n) + \sum_{n=N+1}^\infty \mu(A_n) < \frac{\epsilon}{2} + \sum_{n=N+1}^\infty \mu(A_n).
+   $$
+   Since $\mu$ is finite and the $A_n$ are disjoint, $\sum_{n=1}^\infty \mu(A_n) = \mu(A) \le \mu(\mathbb{R}^d) < \infty$, so $\sum_{n=N+1}^\infty \mu(A_n) < \epsilon/2$ for $N$ sufficiently large. Hence $\mu(V \setminus D_N) < \epsilon$ for such $N$, and since $\epsilon > 0$ was arbitrary, $A = \bigcup_n A_n \in \mathcal{F}$.
+   
+   **$\mathcal{F}$ is a $\sigma$-algebra:** Given any (not necessarily disjoint) $A_n \in \mathcal{F}$, apply disjointification: set $B_1 = A_1$ and $B_n = A_n \setminus \bigcup_{k=1}^{n-1} A_k$ for $n \ge 2$. Since $\mathcal{F}$ is an algebra (Step 2), each $B_n \in \mathcal{F}$. The $B_n$ are pairwise disjoint and $\bigcup_n A_n = \bigsqcup_n B_n$, so $\bigcup_n A_n \in \mathcal{F}$ by the disjoint case above. Together with $\mathbb{R}^d \in \mathcal{F}$ and closure under complements, $\mathcal{F}$ is a $\sigma$-algebra.
+   
+   Since $\mathcal{F}$ is a $\sigma$-algebra containing all closed sets, $\mathcal{F} \supseteq \sigma(\text{closed sets}) = \mathcal{B}(\mathbb{R}^d)$. Combined with $\mathcal{F} \subseteq \mathcal{B}(\mathbb{R}^d)$ by definition, $\mathcal{F} = \mathcal{B}(\mathbb{R}^d)$.
+
+For any $B \in \mathcal{B}(\mathbb{R}^d) = \mathcal{F}$, the definition of $\mathcal{F}$ provides, for each $n$, a closed set $C_n \subseteq B$ with $\mu(B \setminus C_n) < 1/n$, establishing inner-regularity with closed sets. Setting $K_n = C_n \cap \bar{B}^d(0, n)$ gives compact $K_n \subseteq B$ with
+$$
+\mu(B \setminus K_n) \le \mu(B \setminus C_n) + \mu(C_n \setminus \bar{B}^d(0,n)) < \frac{1}{n} + \mu(B \setminus \bar{B}^d(0,n)) \to 0
+$$
+as $n \to \infty$ (using $B \setminus \bar{B}^d(0,n) \downarrow \emptyset$ and continuity from above for the finite measure $\mu$). Hence $\mu(K_n) \to \mu(B)$, establishing full inner-regularity. For outer-regularity, given $\epsilon > 0$ take $C \subseteq B \subseteq V$ with $\mu(V \setminus C) < \epsilon$ as in the definition of $\mathcal{F}$; then $V \setminus B \subseteq V \setminus C$, so $\mu(V) = \mu(B) + \mu(V \setminus B) \le \mu(B) + \epsilon$, and since $\epsilon > 0$ was arbitrary the infimum over open $V \supseteq B$ equals $\mu(B)$.
+
+Note where the two hypotheses enter. Everything up to the previous paragraph uses only that $\mathbb{R}^d$ is a **metric** space and that $\mu$ is **finite**, and yields inner regularity by *closed* sets; this part is valid in any metric space. The upgrade from closed to **compact** sets uses the Heine–Borel theorem (a closed bounded subset of $\mathbb{R}^d$ is compact) together with $\sigma$-compactness of $\mathbb{R}^d$, and does fail in general metric spaces.
+:::
+
+The Kolmogorov Extension Theorem is applied below to probability measures on the cube $[0,1]^n$, not on $\mathbb{R}^n$. The following corollary transfers @thm-finite-borel-radon to that setting.
+
+::: {#cor-radon-on-borel-subset}
+## Regularity on Borel Subsets of $\mathbb{R}^d$
+Let $E \in \mathcal{B}(\mathbb{R}^d)$, give $E$ the subspace topology, and let $\mathcal{B}(E)$ be its Borel $\sigma$-algebra. Let $\nu$ be a finite Borel measure on $(E, \mathcal{B}(E))$. Then $\nu$ is inner-regular by compact sets:
+$$
+\nu(B) = \sup\{ \nu(K) \mid K \subseteq B, \ K \text{ compact} \} \qquad \forall B \in \mathcal{B}(E),
+$$
+where "compact" may equivalently be read in $E$ or in $\mathbb{R}^d$, compactness being intrinsic to a subset. In particular every probability measure $\nu_n$ on $([0,1]^n, \mathcal{B}([0,1]^n))$ is inner-regular by compact sets.
+:::
+
+::: {.proof}
+## Proof of @cor-radon-on-borel-subset
+
+**Step 0: identification of $\mathcal{B}(E)$.** The collection $\mathcal{D} \triangleq \{ A \subseteq \mathbb{R}^d \mid A \cap E \in \mathcal{B}(E) \}$ is a $\sigma$-algebra (preimages under the inclusion $E \hookrightarrow \mathbb{R}^d$ commute with complements and countable unions) and contains every open $A \subseteq \mathbb{R}^d$, since $A \cap E$ is open in $E$. Hence $\mathcal{B}(\mathbb{R}^d) \subseteq \mathcal{D}$, i.e. $\{A \cap E \mid A \in \mathcal{B}(\mathbb{R}^d)\} \subseteq \mathcal{B}(E)$. Conversely $\{A \cap E \mid A \in \mathcal{B}(\mathbb{R}^d)\}$ is a $\sigma$-algebra on $E$ containing all sets open in $E$, so it contains $\mathcal{B}(E)$. Therefore
+$$
+\mathcal{B}(E) = \{ A \cap E \mid A \in \mathcal{B}(\mathbb{R}^d) \},
+$$
+and because $E \in \mathcal{B}(\mathbb{R}^d)$ every such $A \cap E$ is itself Borel in $\mathbb{R}^d$, giving
+$$
+\mathcal{B}(E) = \{ A \in \mathcal{B}(\mathbb{R}^d) \mid A \subseteq E \} \subseteq \mathcal{B}(\mathbb{R}^d).
+$$
+
+**Step 1: transfer.** Define $\hat{\nu}(A) \triangleq \nu(A \cap E)$ for $A \in \mathcal{B}(\mathbb{R}^d)$; this is well defined by Step 0, is countably additive because $\nu$ is and $A \mapsto A \cap E$ preserves disjointness and countable unions, and is finite with $\hat\nu(\mathbb{R}^d) = \nu(E) < \infty$. Hence $\hat\nu$ is Radon by @thm-finite-borel-radon. For $B \in \mathcal{B}(E)$ we have $B \subseteq E$, so $\hat\nu(B) = \nu(B)$ and
+$$
+\nu(B) = \hat{\nu}(B) = \sup\{ \hat{\nu}(K) \mid K \subseteq B, \ K \subseteq \mathbb{R}^d \text{ compact} \}.
+$$
+Every such $K$ satisfies $K \subseteq B \subseteq E$, so $K$ is compact in the subspace topology of $E$ as well (compactness of a set depends only on its own subspace topology), and $\hat{\nu}(K) = \nu(K)$. The final claim follows with $E = [0,1]^n$, which is closed, hence Borel, in $\mathbb{R}^n$.
+:::
+
+---
+
+## Proof of the Kolmogorov Extension Theorem
+
+Let $Q = [0, 1]^\mathbb{N}$ equipped with the product topology and its Borel $\sigma$-algebra $\mathcal{B}(Q)$. We prove @thm-kolmogorov-extension-unit-interval, whose hypotheses (a projectively consistent family $\{\nu_n\}_{n=1}^\infty$ of probability measures on $([0,1]^n, \mathcal{B}([0,1]^n))$) and conclusion (existence and uniqueness of $P$ on $(Q, \mathcal{B}(Q))$ with $P \circ \pi_n^{-1} = \nu_n$) are stated there.
+
+::: {.proof}
+## Proof of @thm-kolmogorov-extension-unit-interval
+
+1. **Cylinder Algebra:** For $j \in \mathbb{N}$, let $p_j:Q\to[0,1]$ be the $j$-th coordinate projection, $p_j((x_k)_{k=1}^\infty)=x_j$. Let $\pi_n:Q\to[0,1]^n$ be the projection onto the first $n$ coordinates:
+   $$
+   \pi_n(x)=(p_1(x),\ldots,p_n(x))=(x_1,\ldots,x_n),
+   $$
+   and write $Q_{>n} \triangleq [0,1]^{\{n+1,n+2,\ldots\}}$ for the remaining coordinates. Under the canonical bijection $Q \cong [0,1]^n \times Q_{>n}$ we have $\pi_n^{-1}(B) = B \times Q_{>n}$; we use the unambiguous form $\pi_n^{-1}(B)$ from now on. Define the $\sigma$-algebra of cylinder sets determined by the first $n$ coordinates by
+   $$
+   \mathcal{C}_n
+   \triangleq \{\pi_n^{-1}(B)\mid B\in\mathcal{B}([0,1]^n)\}
+   =\sigma(\pi_n)=\sigma(p_1,\ldots,p_n).
+   $$ {#eq-cylinder-algebra-order-n}
+   The inverse images of Borel sets form the $\sigma$-algebra $\sigma(\pi_n)$. Moreover, each $p_j$ with $j\le n$ is $\sigma(\pi_n)$-measurable because $p_j=\operatorname{pr}_j\circ\pi_n$ with $\operatorname{pr}_j$ continuous, while $\pi_n=(p_1,\ldots,p_n)$ is $\sigma(p_1,\ldots,p_n)/\bigotimes_{k\le n}\mathcal{B}([0,1])$-measurable by @lem-product-measurability, and $\bigotimes_{k \le n}\mathcal{B}([0,1]) = \mathcal{B}([0,1]^n)$ by @lem-borel-cylinder-identity. These two inclusions prove $\sigma(\pi_n)=\sigma(p_1,\ldots,p_n)$.
+
+   The collection $\mathcal{A} \triangleq \bigcup_{n=1}^\infty \mathcal{C}_n$ is exactly the algebra $\mathcal{A}$ of @lem-borel-cylinder-identity, and by that lemma
+   $$
+   \sigma(\mathcal{A})=\sigma(p_j:j\in\mathbb{N})=\mathcal{B}(Q).
+   $$
+   (This last identity is where countability of the index set and second countability of $[0,1]$ are used; for an uncountable product the inclusion $\sigma(\mathcal{A}) \subseteq \mathcal{B}(Q)$ can be strict.) Note also that $\mathcal{C}_m \subseteq \mathcal{C}_n$ for $m \le n$, since $\pi_m^{-1}(B) = \pi_n^{-1}(B \times [0,1]^{n-m})$ and $B \times [0,1]^{n-m} \in \mathcal{B}([0,1]^n)$ by @lem-borel-cylinder-identity; hence any finite collection of elements of $\mathcal{A}$ lies in a common $\mathcal{C}_n$, which is used repeatedly below.
+
+2. **Finitely Additive Set Function:** Define $P_0: \mathcal{A} \to [0, 1]$ by $P_0(\pi_n^{-1}(B)) \triangleq \nu_n(B)$. This is **well-defined**: if $\pi_m^{-1}(B) = \pi_n^{-1}(B')$ with $m \le n$, then applying the surjection $\pi_n$ gives $B' = B \times [0,1]^{n-m}$, so iterating the consistency condition $n-m$ times gives $\nu_n(B') = \nu_m(B)$. **Finite additivity** holds because two disjoint elements of $\mathcal{A}$ may be written at a common order $n$ as $\pi_n^{-1}(B_1)$, $\pi_n^{-1}(B_2)$; disjointness and surjectivity of $\pi_n$ force $B_1 \cap B_2 = \emptyset$, whence
+   $$
+   P_0\bigl(\pi_n^{-1}(B_1) \cup \pi_n^{-1}(B_2)\bigr) = \nu_n(B_1 \cup B_2) = \nu_n(B_1) + \nu_n(B_2).
+   $$
+   In particular, $P_0(Q) = \nu_1([0,1]) = 1$, so $P_0$ is a finitely additive probability set function on the algebra $\mathcal{A}$. Being non-negative and finitely additive on an algebra, $P_0$ is also **monotone** and **finitely subadditive** there; both facts are used below.
+
+3. **Countable Additivity via Compactness:** We show that $P_0$ is a premeasure on $\mathcal{A}$. Since $P_0$ is finitely additive with $P_0(Q) = 1 < \infty$, @prp-premeasure-continuity-equivalences (equivalence of items 1 and 4) reduces this to:
+   $$
+   B_n \in \mathcal{A},\ B_n \downarrow \emptyset \ \Longrightarrow \ P_0(B_n) \to 0 .
+   $$
+   Since $(B_n)$ is decreasing and $P_0$ is monotone, $P_0(B_n)$ is non-increasing and bounded, so the limit exists; suppose towards a contradiction that
+   $$
+   \lim_{n\to\infty} P_0(B_n) = \inf_{n} P_0(B_n) = \epsilon > 0 .
+   $$
+   * **Cylinder representation.** Write $B_n = \pi_{m_n}^{-1}(C_n)$ with $m_n \in \mathbb{N}$ and $C_n \in \mathcal{B}([0,1]^{m_n})$, so that $P_0(B_n) = \nu_{m_n}(C_n)$ by Step 2. (No re-indexing to a common or monotone order is needed: the argument below applies @cor-finite-intersection-property directly to closed sets, rather than building a point of $\bigcap_n B_n$ coordinate by coordinate.)
+   * **Compact inner approximation.** Each $\nu_{m_n}$ is a probability measure on $[0,1]^{m_n}$, hence inner-regular by compact sets by @cor-radon-on-borel-subset. Since $\nu_{m_n}(C_n) < \infty$, we may choose a compact $K_n' \subseteq C_n$ with
+     $$
+     \nu_{m_n}(C_n \setminus K_n') < \frac{\epsilon}{2^{n+1}} .
+     $$
+   * **Cylinders over the compacta.** Put $K_n \triangleq \pi_{m_n}^{-1}(K_n') \subseteq B_n$. Since $\pi_{m_n} : Q \to [0,1]^{m_n}$ is continuous (its components $p_1, \dots, p_{m_n}$ are) and $K_n'$ is compact, hence closed in $[0,1]^{m_n}$, the set $K_n$ is **closed** in $Q$. Also $K_n \in \mathcal{A}$, and $B_n \setminus K_n = \pi_{m_n}^{-1}(C_n \setminus K_n')$, so
+     $$
+     P_0(B_n \setminus K_n) = \nu_{m_n}(C_n \setminus K_n') < \frac{\epsilon}{2^{n+1}} .
+     $$
+   * Set $H_n \triangleq \bigcap_{i=1}^n K_i$. Then $H_n \in \mathcal{A}$ (a finite intersection of cylinders), $H_n$ is closed in $Q$, and $H_n \subseteq K_n \subseteq B_n$.
+   * **Estimate the difference.** Since $H_n \subseteq B_n$ we have $B_n \setminus H_n = \bigcup_{i=1}^n (B_n \setminus K_i)$, and $B_n \subseteq B_i$ for $i \le n$ (because $(B_n)$ is decreasing), so $B_n \setminus K_i \subseteq B_i \setminus K_i$. Using finite subadditivity and monotonicity of $P_0$ from Step 2:
+     $$
+     \begin{aligned}
+     P_0(B_n \setminus H_n) &= P_0\left( \bigcup_{i=1}^n (B_n \setminus K_i) \right) \\
+     &\le \sum_{i=1}^n P_0(B_n \setminus K_i) \\
+     &\le \sum_{i=1}^n P_0(B_i \setminus K_i) \\
+     &< \sum_{i=1}^n \frac{\epsilon}{2^{i+1}} < \frac{\epsilon}{2}
+     \end{aligned}
+     $$ {#eq-compact-diff-bound}
+   * Since $H_n \subseteq B_n$ and $P_0$ is finitely additive, $P_0(B_n) = P_0(H_n) + P_0(B_n \setminus H_n)$, whence, using $P_0(B_n) \ge \epsilon$,
+     $$
+     P_0(H_n) = P_0(B_n) - P_0(B_n \setminus H_n) > \epsilon - \frac{\epsilon}{2} = \frac{\epsilon}{2} > 0 .
+     $$
+   * In particular $H_n = \bigcap_{i=1}^n K_i \neq \emptyset$ for every $n \in \mathbb{N}$. The sets $K_i$ are closed in $Q$ and all their initial finite intersections are non-empty, so @cor-finite-intersection-property applies and gives, using $H_n \subseteq B_n$,
+     $$
+     \bigcap_{n=1}^\infty B_n \supseteq \bigcap_{n=1}^\infty H_n = \bigcap_{i=1}^\infty K_i \neq \emptyset
+     $$ {#eq-non-empty-intersection}
+   * This contradicts $B_n \downarrow \emptyset$. Hence $P_0(B_n) \to 0$ whenever $B_n \downarrow \emptyset$, so $P_0$ is a premeasure on the algebra $\mathcal{A}$.
+
+4. **Extension and uniqueness.** $(Q, \mathcal{A}, P_0)$ is a finite premeasure space, so by the measure extension theorem @thm-main-extension-measure, $P_0$ extends to a measure $P$ on a $\sigma$-algebra containing $\sigma(\mathcal{A}) = \mathcal{B}(Q)$; restricting to $\mathcal{B}(Q)$ gives a measure with $P(Q) = P_0(Q) = 1$ and
+   $$
+   P(\pi_n^{-1}(B)) = P_0(\pi_n^{-1}(B)) = \nu_n(B) \qquad \forall n \in \mathbb{N},\ \forall B \in \mathcal{B}([0,1]^n),
+   $$
+   which is @eq-kolmogorov-target-measure. Uniqueness holds because $\mathcal{A}$ is an algebra, hence a $\pi$-system, generating $\mathcal{B}(Q)$, and @eq-kolmogorov-target-measure determines $P$ on $\mathcal{A}$; apply @lem-pi-system-uniqueness. (This is the same argument already recorded after the statement of @thm-kolmogorov-extension-unit-interval in Lecture 16.1.)
+:::
+
+---
+
+## Extensions to $\mathbb{R}^\mathbb{N}$ and Infinite Independent Sequences
+
+Throughout this section $\mathbb{R}^\mathbb{N}$ carries the product topology, $p_n : \mathbb{R}^\mathbb{N} \to \mathbb{R}$ is the $n$-th coordinate map and $\pi_n : \mathbb{R}^\mathbb{N} \to \mathbb{R}^n$, $\pi_n(x) = (x_1,\dots,x_n)$, is the projection onto the first $n$ coordinates. The function $(a,b) \mapsto |a-b| \wedge 1$ is a metric on $\mathbb{R}$ inducing its usual topology, so
+$$
+\rho_\mathbb{R}(x,y) \triangleq \sum_{n=1}^\infty 2^{-n}\bigl( |x_n - y_n| \wedge 1 \bigr)
+$$
+is a well-defined metric on $\mathbb{R}^\mathbb{N}$ (the truncation $\wedge\,1$ is what makes the series converge), and the argument of @lem-product-topology-metric shows verbatim that $\rho_\mathbb{R}$ induces the product topology, that $\rho_\mathbb{R}$-convergence is coordinatewise convergence, and that the countable family of finite cylinders $\bigcap_{k \le N} p_k^{-1}(I_k)$ with $I_k \subseteq \mathbb{R}$ an open interval with rational endpoints is a base. In particular $\mathbb{R}^\mathbb{N}$ is a separable metrizable space; it is in fact **Polish**, since $\rho_\mathbb{R}$ is complete. Repeating the argument of @lem-borel-cylinder-identity *mutatis mutandis* — it used only countability of the index set and second countability of the factor, not compactness — gives
+$$
+\mathcal{B}(\mathbb{R}^\mathbb{N}) = \sigma(p_n : n \in \mathbb{N}) = \bigotimes_{n=1}^\infty \mathcal{B}(\mathbb{R}) = \sigma\Bigl( \bigcup_{n=1}^\infty \pi_n^{-1}\bigl( \mathcal{B}(\mathbb{R}^n) \bigr) \Bigr),
+$$ {#eq-borel-cylinder-identity-real}
+where the second equality is @def-product-sigma-algebra-general (the product $\sigma$-algebra is by definition generated by the coordinate maps) and the third uses the Borel identity $\mathcal{B}(\mathbb{R}^n) = \bigotimes_{k=1}^n \mathcal{B}(\mathbb{R})$ of Lecture 14.2. Moreover $\bigcup_{n} \pi_n^{-1}(\mathcal{B}(\mathbb{R}^n))$ is an algebra, hence a $\pi$-system, generating $\mathcal{B}(\mathbb{R}^\mathbb{N})$.
+
+::: {#cor-kolmogorov-extension-real}
+## Kolmogorov Extension Theorem on $\mathbb{R}^\mathbb{N}$
+
+Let $\nu_n$ be probability measures on $(\mathbb{R}^n, \mathcal{B}(\mathbb{R}^n))$, $n \in \mathbb{N}$, satisfying projective consistency
+$$
+\nu_{n+1}(B \times \mathbb{R}) = \nu_n(B) \qquad \forall B \in \mathcal{B}(\mathbb{R}^n),\ \forall n \in \mathbb{N} .
+$$ {#eq-kolmogorov-real-consistency}
+Then there exists a unique probability measure $P$ on $(\mathbb{R}^\mathbb{N}, \mathcal{B}(\mathbb{R}^\mathbb{N}))$ such that
+$$
+P\bigl( \pi_n^{-1}(B) \bigr) = \nu_n(B) \qquad \forall B \in \mathcal{B}(\mathbb{R}^n),\ \forall n \in \mathbb{N},
+$$ {#eq-kolmogorov-real-target}
+equivalently $P \circ \pi_n^{-1} = \nu_n$ for every $n$.
+:::
+
+::: {.proof}
+## Proof of @cor-kolmogorov-extension-real
+
+**Uniqueness.** By @eq-borel-cylinder-identity-real the sets $\pi_n^{-1}(B)$ form a $\pi$-system generating $\mathcal{B}(\mathbb{R}^\mathbb{N})$ on which @eq-kolmogorov-real-target prescribes $P$; since $P$ is a probability measure, @lem-pi-system-uniqueness gives uniqueness. It remains to prove existence.
+
+**Transport to the cube.** Fix a homeomorphism $\alpha: \mathbb{R} \to (0, 1)$ (e.g. $\alpha(x) = \int_{-\infty}^x \frac{1}{\pi(1+t^2)} \, dt$, the Cauchy CDF), and let $\beta \triangleq \alpha^{-1} : (0,1) \to \mathbb{R}$. Extend $\beta$ to a Borel map $\bar\beta : [0,1] \to \mathbb{R}$ by setting $\bar\beta(0) = \bar\beta(1) \triangleq 0$. Both $\alpha$ and $\bar\beta$ are Borel measurable, so the coordinatewise maps
+$$
+\alpha^n : \mathbb{R}^n \to (0,1)^n, \qquad \bar\beta^{\,n} : [0,1]^n \to \mathbb{R}^n, \qquad \bar\beta^{\,\infty} : Q \to \mathbb{R}^\mathbb{N}
+$$
+are Borel measurable — for $\bar\beta^{\,\infty}$ this is @lem-product-measurability applied to the components $\bar\beta \circ p_k$, together with @eq-borel-cylinder-identity-real. Note $\bar\beta^{\,n} \circ \alpha^n = \mathrm{id}_{\mathbb{R}^n}$ and $\alpha^n \circ \bar\beta^{\,n} = \mathrm{id}$ on $(0,1)^n$.
+
+Define $\tilde\nu_n$ on $([0,1]^n, \mathcal{B}([0,1]^n))$ as the pushforward of $\nu_n$ under $\alpha^n$:
+$$
+\tilde{\nu}_n(A) \triangleq \nu_n\bigl((\alpha^n)^{-1}(A \cap (0, 1)^n)\bigr), \qquad A \in \mathcal{B}([0,1]^n) .
+$$
+Each $\tilde\nu_n$ is a probability measure with $\tilde\nu_n\bigl((0,1)^n\bigr) = \nu_n(\mathbb{R}^n) = 1$.
+
+**Consistency of $\{\tilde{\nu}_n\}$.** Let $A \in \mathcal{B}([0,1]^n)$ and abbreviate $S \triangleq A \cap (0,1)^n$. Two set identities are used. First,
+$$
+(A \times [0,1]) \cap (0,1)^{n+1} = S \times (0,1),
+$$
+and second, since $\alpha^{n+1}$ acts coordinatewise and $\alpha^{-1}\bigl((0,1)\bigr) = \mathbb{R}$,
+$$
+(\alpha^{n+1})^{-1}\bigl( S \times (0,1) \bigr) = (\alpha^{n})^{-1}(S) \times \alpha^{-1}\bigl((0,1)\bigr) = (\alpha^{n})^{-1}(S) \times \mathbb{R} .
+$$
+Therefore
+$$
+\begin{aligned}
+\tilde{\nu}_{n+1}(A \times [0,1]) &= \nu_{n+1}\Bigl( (\alpha^{n+1})^{-1}\bigl( (A \times [0,1]) \cap (0,1)^{n+1} \bigr) \Bigr) \\
+&= \nu_{n+1}\bigl( (\alpha^n)^{-1}(S) \times \mathbb{R} \bigr) \\
+&= \nu_n\bigl( (\alpha^n)^{-1}(S) \bigr) = \tilde{\nu}_n(A),
+\end{aligned}
+$$
+the third equality being @eq-kolmogorov-real-consistency. Hence $\{\tilde{\nu}_n\}$ is projectively consistent in the sense of @eq-kolmogorov-consistency-cond.
+
+**Existence.** By @thm-kolmogorov-extension-unit-interval there is a probability measure $\tilde{P}$ on $(Q, \mathcal{B}(Q))$ with $\tilde{P} \circ \pi_n^{-1} = \tilde\nu_n$ for every $n$. Define
+$$
+P \triangleq \tilde{P} \circ \bigl( \bar\beta^{\,\infty} \bigr)^{-1},
+$$
+a probability measure on $(\mathbb{R}^\mathbb{N}, \mathcal{B}(\mathbb{R}^\mathbb{N}))$ since $\bar\beta^{\,\infty}$ is measurable. (The values assigned to $\bar\beta$ at the endpoints $0,1$ are irrelevant: $(0,1)^\mathbb{N} = \bigcap_n \pi_n^{-1}\bigl((0,1)^n\bigr) \in \mathcal{B}(Q)$ and $\tilde{P}\bigl(\pi_n^{-1}((0,1)^n)\bigr) = \tilde\nu_n((0,1)^n) = 1$ for every $n$, so $\tilde{P}\bigl((0,1)^\mathbb{N}\bigr) = 1$ and $\bar\beta^{\,\infty}$ agrees $\tilde P$-a.s. with the inverse of the coordinatewise map induced by $\alpha$.)
+
+**Verification of @eq-kolmogorov-real-target.** Fix $n$ and $B \in \mathcal{B}(\mathbb{R}^n)$. Since $\pi_n \circ \bar\beta^{\,\infty} = \bar\beta^{\,n} \circ \pi_n$,
+$$
+P\bigl(\pi_n^{-1}(B)\bigr) = \tilde{P}\Bigl( \bigl(\bar\beta^{\,\infty}\bigr)^{-1}\bigl(\pi_n^{-1}(B)\bigr) \Bigr) = \tilde{P}\Bigl( \pi_n^{-1}\bigl( (\bar\beta^{\,n})^{-1}(B) \bigr) \Bigr) = \tilde{\nu}_n\bigl( (\bar\beta^{\,n})^{-1}(B) \bigr).
+$$
+Writing $A \triangleq (\bar\beta^{\,n})^{-1}(B)$ we have $A \cap (0,1)^n = \{ y \in (0,1)^n \mid \beta^n(y) \in B \} = \alpha^n(B)$, hence $(\alpha^n)^{-1}\bigl(A \cap (0,1)^n\bigr) = B$ and therefore $\tilde\nu_n(A) = \nu_n(B)$. Thus $P(\pi_n^{-1}(B)) = \nu_n(B)$.
+:::
+
+::: {#rem-transport-mechanism}
+## What the Transport Argument Actually Uses
+The specific choice of the Cauchy CDF is irrelevant. The only properties of $\mathbb{R}$ used above are:
+
+1. $\mathbb{R}$ is homeomorphic to a **Borel** subset $(0,1)$ of the compact metrizable space $[0,1]$, so that the finite-dimensional laws transport to $[0,1]^n$ and the transported laws charge $(0,1)^n$ fully;
+2. the inverse homeomorphism extends to a **Borel** map $[0,1] \to \mathbb{R}$ (any extension will do, since the added set is $\tilde P$-null).
+
+By the Borel isomorphism theorem every uncountable Polish space is Borel isomorphic to $[0,1]$, so the same argument yields the Kolmogorov extension theorem with an arbitrary Polish state space in place of $\mathbb{R}$. Some such hypothesis is genuinely needed: the theorem is false for arbitrary measurable state spaces.
+:::
+
+---
+
+## Existence of Infinite Independent Sequences
+
+::: {#thm-existence-iid-sequences}
+## Existence of Infinite Independent Sequences
+Let $\{\mu_n\}_{n=1}^\infty$ be an arbitrary sequence of Borel probability measures on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$. There exists a probability space $(\Omega, \mathcal{F}, P)$ and a sequence of independent random variables $X_n: (\Omega, \mathcal{F}, P) \to (\mathbb{R}, \mathcal{B}(\mathbb{R}))$ such that $\mu_{X_n} = \mu_n$ for all $n \in \mathbb{N}$. In particular, taking $\mu_n = \mu$ for every $n$ produces an i.i.d. sequence with common law $\mu$, so i.i.d. sequences with an arbitrary prescribed marginal law exist.
+:::
+
+::: {.proof}
+## Proof of @thm-existence-iid-sequences
+Set $\Omega \triangleq \mathbb{R}^\mathbb{N}$ and $\mathcal{F} \triangleq \mathcal{B}(\mathbb{R}^\mathbb{N}) = \sigma(p_n : n \in \mathbb{N})$ by @eq-borel-cylinder-identity-real. All the random variables constructed below are defined on this single space $(\Omega, \mathcal{F}, P)$, as @def-indep-rvs requires.
+
+1. Define the finite product measures $\nu_n \triangleq \bigotimes_{k=1}^n \mu_k$ on $\bigl(\mathbb{R}^n, \bigotimes_{k=1}^n \mathcal{B}(\mathbb{R})\bigr) = (\mathbb{R}^n, \mathcal{B}(\mathbb{R}^n))$, the identification of the two $\sigma$-algebras being the Borel identity of Lecture 14.2; these exist and are unique probability measures by @prp-finite-product-measure (for $n = 1$ read $\nu_1 = \mu_1$).
+2. **Projective consistency.** The map $B \mapsto \nu_{n+1}(B \times \mathbb{R})$ is the pushforward of $\nu_{n+1}$ under the projection $\operatorname{pr}_{1:n} : \mathbb{R}^{n+1} \to \mathbb{R}^n$ (measurable by @lem-product-measurability), hence a probability measure on $\mathcal{B}(\mathbb{R}^n)$; so is $B \mapsto \nu_n(B)$. On a rectangle $B = B_1 \times \dots \times B_n$ they agree, since by @eq-n-fold-rectangle-formula
+   $$
+   \begin{aligned}
+   \nu_{n+1}(B_1 \times \dots \times B_n \times \mathbb{R}) &= \Bigl( \prod_{k=1}^n \mu_k(B_k) \Bigr) \mu_{n+1}(\mathbb{R})\\
+   & = \prod_{k=1}^n \mu_k(B_k) = \nu_n(B).
+   \end{aligned}
+   $$
+   Rectangles form a $\pi$-system generating $\mathcal{B}(\mathbb{R}^n)$ by @def-product-sigma-algebra together with $\mathcal{B}(\mathbb{R}^n) = \bigotimes_{k=1}^n \mathcal{B}(\mathbb{R})$, so @lem-pi-system-uniqueness gives $\nu_{n+1}(B \times \mathbb{R}) = \nu_n(B)$ for **all** $B \in \mathcal{B}(\mathbb{R}^n)$, i.e. @eq-kolmogorov-real-consistency holds.
+3. By @cor-kolmogorov-extension-real there is a unique probability measure $P$ on $(\mathbb{R}^\mathbb{N}, \mathcal{B}(\mathbb{R}^\mathbb{N}))$ with $P(\pi_n^{-1}(B)) = \nu_n(B)$ for all $n$ and all $B \in \mathcal{B}(\mathbb{R}^n)$.
+4. Set $X_n \triangleq p_n$, the **$n$-th coordinate** map, which is $\mathcal{F}/\mathcal{B}(\mathbb{R})$-measurable by @lem-canonical-projections-measurable. For any $n$ and any $B_1, \dots, B_n \in \mathcal{B}(\mathbb{R})$ we have $\bigcap_{k=1}^n \{X_k \in B_k\} = \pi_n^{-1}(B_1 \times \dots \times B_n)$, so
+   $$
+   \begin{aligned}
+   P(X_1 \in B_1, \dots, X_n \in B_n) &= P\bigl( \pi_n^{-1}(B_1 \times \dots \times B_n) \bigr) \\
+   &= \nu_n(B_1 \times \dots \times B_n) \\
+   &= \prod_{k=1}^n \mu_k(B_k) .
+   \end{aligned}
+   $$ {#eq-iid-sequence-proof-finish}
+5. **Marginals.** Fixing $k \le n$ and setting $B_j = \mathbb{R}$ for $j \ne k$ in @eq-iid-sequence-proof-finish gives $P(X_k \in B_k) = \mu_k(B_k)$, i.e. $\mu_{X_k} = \mu_k$.
+6. **Independence.** Let $J \subseteq \mathbb{N}$ be finite and non-empty, $n \triangleq \max J$, and $B_j \in \mathcal{B}(\mathbb{R})$ for $j \in J$. Setting $B_j = \mathbb{R}$ for $j \in \{1,\dots,n\} \setminus J$ in @eq-iid-sequence-proof-finish and using step 5,
+   $$
+   P\Bigl( \bigcap_{j \in J} \{X_j \in B_j\} \Bigr) = \prod_{j \in J} \mu_j(B_j) = \prod_{j \in J} P(X_j \in B_j) .
+   $$
+   Since this holds for every finite $J$, the family $\{X_n\}_{n=1}^\infty$ is independent in the sense of @def-indep-rvs.
+:::
+
+
+:::{#exm-iid-bernoulli-sequence}
+Suppose we want random variables $X_1,X_2,X_3,\ldots$ such that
+$$ 
+X_n= 
+\begin{cases} 1,&\text{with probability }p_n,\\ 
+0,&\text{with probability }1-p_n, 
+\end{cases} 
+$$
+where the probabilities can be different for every $n$. For example, let $p_n=\frac{1}{n+1}$. Thus,
+$$ 
+X_1\sim\operatorname{Bernoulli}\left(\frac12\right), \, X_2\sim\operatorname{Bernoulli}\left(\frac13\right), \, X_3\sim\operatorname{Bernoulli}\left(\frac14\right), \,\ldots 
+$$
+and we want all these random variables to be independent. The theorem says that such an infinite sequence exists. Let's construct it explicitly. For each $n$, define
+$$ 
+\mu_n = \frac{n}{n+1}\delta_0 + \frac{1}{n+1}\delta_1, 
+$$
+where $\delta_x$ denotes the point mass at $x$. So $\mu_n(\{1\})=\frac{1}{n+1}$ and $\mu_n(\{0\})=\frac{n}{n+1}$. Our goal is therefore to construct independent $X_n$ satisfying $X_n \sim \mu_n$ for $n=1,2,3,\ldots$. 
+
+Let $\Omega=\{0,1\}^{\mathbb N}$. An element of $\Omega$ is an entire infinite sequence:
+$$
+\omega=(\omega_1,\omega_2,\omega_3,\ldots), \, \omega_n\in\{0,1\}. 
+$$
+For example, $\omega=(0,1,0,0,1,0,1,\ldots)$ is one possible outcome. Think of $\omega$ as describing the outcomes of all infinitely many coin tosses. We equip $\Omega$ with the product $\sigma$-algebra $\mathcal F = \bigotimes_{n=1}^\infty 2^{\{0,1\}}$,
+where $2^{\{0,1\}}$ is the power set of $\{0,1\}$. For each coordinate, define the probability measure
+$$ 
+\mu_n = \frac{n}{n+1}\delta_0+\frac{1}{n+1}\delta_1. 
+$$
+The infinite product probability measure is
+$$ 
+P=\bigotimes_{n=1}^\infty\mu_n. 
+$$
+This is the probability measure that makes the coordinates behave according to their specified distributions and makes them independent. Schematically,
+$$
+(\Omega,\mathcal F,P) = \left( \{0,1\}^{\mathbb N}, \bigotimes_{n=1}^{\infty}2^{\{0,1\}}, \bigotimes_{n=1}^{\infty}\mu_n \right). 
+$$
+Now define the $n$th coordinate map: $X_n(\omega)=\omega_n$. For example, if $\omega=(0,1,0,0,1,0,\ldots)$, then
+$$ 
+X_1(\omega)=0,\, X_2(\omega)=1,\, X_3(\omega)=0,\, X_4(\omega)=0,\,\ldots. 
+$$
+So each $X_n$ simply looks at the $n$th coordinate. The event $\{X_n=1\}$ consists of all sequences whose $n$th coordinate equals $1$: $\{X_n=1\} = \{\omega\in\Omega:\omega_n=1\}$. Therefore, $P(X_n=1) = \mu_n(\{1\}) = \frac{1}{n+1}$. 
+Similarly, $P(X_n=0) = \mu_n(\{0\}) = \frac{n}{n+1}$. Hence, $X_n$ has the desired Bernoulli distribution: $X_n \sim \operatorname{Bernoulli}\left(\frac{1}{n+1}\right)$. Thus, $\mu_{X_n} = \mu_n$.
+
+The entire sample space can be visualized as
+
+$$ 
+\begin{array}{cccccc} 
+\omega &=& (\omega_1,&\omega_2,&\omega_3,&\omega_4,\ldots)\\ 
+&&\downarrow&\downarrow&\downarrow&\downarrow\\ 
+&&X_1(\omega)&X_2(\omega)&X_3(\omega)&X_4(\omega) 
+\end{array} 
+$$
+For example, $\omega=(0,1,0,0,1,0,0,\ldots)$ produces
+$$
+(X_1(\omega),X_2(\omega),X_3(\omega),X_4(\omega),X_5(\omega),\ldots) = (0,1,0,0,1,\ldots). 
+$$
+So an element $\omega$ is itself an infinite realization, while $X_n$ extracts its $n$th component. This is the central idea behind the product-space construction.
+:::
+
+:::{#exm-uniform-random-sequence}
+## Infinitely many independent Uniform$(0,1)$ random variables
+Suppose we want $X_1,X_2,X_3,\ldots$ to satisfy $X_n\sim \operatorname{Uniform}(0,1)$ for every $n$. The theorem tells us that such a sequence exists. Let's construct it.
+
+Let $\lambda$ denote Lebesgue measure on $[0,1]$. The Uniform$(0,1)$ probability measure is $\mu(A)=\lambda(A)$ for all $A\in\mathcal B([0,1])$, because $\lambda([0,1])=1$. Thus, $([0,1],\mathcal B([0,1]),\lambda)$ is the desired probability space for a single Uniform$(0,1)$ random variable.
+
+
+Take $\Omega=[0,1]^{\mathbb N}$. An element of $\Omega$ is an infinite sequence
+$$ 
+\omega=(\omega_1,\omega_2,\omega_3,\ldots), \qquad \omega_n\in[0,1]. 
+$$
+For example, $\omega=(0.374,0.821,0.156,\ldots)$ is one possible outcome. The sample space therefore contains every possible infinite sequence of numbers in $[0,1]$. Equip it with the product $\sigma$-algebra $\mathcal F = \bigotimes_{n=1}^{\infty} \mathcal B([0,1])=\mathcal B([0,1])^{\otimes\mathbb N}$. For every coordinate, we want the Uniform$(0,1)$ distribution. Therefore define
+$P=\bigotimes_{n=1}^{\infty}\lambda=\lambda^{\otimes\mathbb N}$. Thus, the probability space can be written as 
+$$
+(\Omega, \mathcal F, P)=([0,1]^{\mathbb N}, \bigotimes_{n=1}^{\infty} \mathcal B([0,1]), \bigotimes_{n=1}^{\infty}\lambda).
+$$
+
+Define the coordinate maps 
+$$ 
+X_n: \underbrace{([0,1]^{\mathbb N},\mathcal B([0,1])^{\otimes\mathbb N},\lambda^{\otimes\mathbb N})}_{\text{probability space}} \longrightarrow \underbrace{([0,1],\mathcal B([0,1]))}_{\text{measurable codomain space}}, 
+$$
+with $X_n(\omega)=\omega_n$. Why is $X_n$ Uniform$(0,1)$? Consider any Borel set $A\subseteq[0,1]$. We have
+$$ 
+\{X_n\in A\} = \{\omega:\omega_n\in A\}. 
+$$
+This is the cylinder set
+$$ 
+[0,1]\times\cdots\times[0,1] \times A \times[0,1]\times\cdots, 
+$$
+where $A$ occurs in the $n$th position. By the definition of the product measure,
+$$ 
+\begin{aligned} 
+P(X_n\in A) &= P([0,1]\times\cdots\times A\times\cdots)\\ 
+&= \prod_{j\neq n}\lambda([0,1])\cdot\lambda(A)\\ 
+&=\lambda(A). 
+\end{aligned} 
+$$
+Since $\lambda(A)$ is precisely the Uniform$(0,1)$ probability of $A$, we conclude that 
+$X_n \sim \operatorname{Uniform}(0,1)$.
+:::
+
+
+
+
+---

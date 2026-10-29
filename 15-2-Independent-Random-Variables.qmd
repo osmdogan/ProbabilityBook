@@ -1,0 +1,343 @@
+# Lecture 15.2: Independent Random Variables
+
+## Definition and $\pi$-System Criteria for Independence
+
+Let $(\Omega, \mathcal{F}, P)$ be a probability space, and let $X_i: (\Omega, \mathcal{F}, P) \to (S_i, \mathcal{B}_i)$ be random variables taking values in measurable spaces $(S_i, \mathcal{B}_i)$ for $i \in I$.
+
+* **Generated $\sigma$-Algebra:** $\sigma(X_i) \triangleq X_i^{-1}(\mathcal{B}_i) = \{ X_i^{-1}(B_i) \mid B_i \in \mathcal{B}_i \}$.
+
+::: {#def-indep-rvs}
+The random variables $\{ X_i \}_{i \in I}$ are **independent** if the generated $\sigma$-algebras $\{ \sigma(X_i) \}_{i \in I}$ are independent. 
+
+Equivalently, for any finite subset $\{ i_1, \dots, i_n \} \subseteq I$ of *distinct* indices and any sets $B_k \in \mathcal{B}_{i_k}$:
+$$
+P(X_{i_1} \in B_1, X_{i_2} \in B_2, \dots, X_{i_n} \in B_n) = \prod_{k=1}^n P(X_{i_k} \in B_k).
+$$ 
+Note that the condition ranges over *all* finite subsets of $I$, not merely over initial segments; when $I = \{1, \dots, N\}$ or $I = \mathbb{N}$ we abbreviate $\{i_1, \dots, i_n\}$ by $\{1, \dots, n\}$ whenever no confusion arises.
+:::
+
+- Equivalently, $\{ X_i \}_{i \in I}$ are independent if and only if, for every finite collection $\{i_1, \dots, i_n\} \subseteq I$ of distinct indices, we have
+$$
+P\left(\bigcap_{k=1}^n X_{i_k}^{-1}(B_k)\right) = \prod_{k=1}^n P\left(X_{i_k}^{-1}(B_k)\right),
+$$
+for all $B_k \in \mathcal{B}_{i_k}$.
+
+
+---
+
+## The $\pi$-System Criterion for Random Variables
+The following lemma gives a convenient criterion for checking independence of random variables by verifying the independence condition on a $\pi$-system generating the Borel $\sigma$-algebra of each random variable's codomain.
+
+::: {#lem-rv-pi-system}
+For each $i \in I$, let $\mathcal{E}_i \subseteq \mathcal{B}_i$ be a $\pi$-system such that $\sigma(\mathcal{E}_i) = \mathcal{B}_i$. Then $\{ X_i \}_{i \in I}$ are independent if and only if, for every finite collection $\{i_1, \dots, i_n\} \subseteq I$ of distinct indices and all $E_k \in \mathcal{E}_{i_k}$:
+$$
+P(X_{i_1} \in E_1, X_{i_2} \in E_2, \dots, X_{i_n} \in E_n) = \prod_{k=1}^n P(X_{i_k} \in E_k).
+$$ 
+:::
+
+::: {.proof}
+## Proof of @lem-rv-pi-system
+$({\Rightarrow})$ If $\{X_i\}$ are independent, then for every finite collection of distinct indices $i_1,\ldots,i_n$,
+$$
+P(X_{i_1} \in B_1, \ldots, X_{i_n} \in B_n) = \prod_{k=1}^n P(X_{i_k} \in B_k)
+$$
+for all $B_k \in \mathcal{B}_{i_k}$. Since $\mathcal{E}_{i_k} \subseteq \mathcal{B}_{i_k}$, the identity holds in particular for all $E_k \in \mathcal{E}_{i_k}$.
+
+$({\Leftarrow})$ Define $\mathcal{C}_i \triangleq X_i^{-1}(\mathcal{E}_i) = \{ X_i^{-1}(E_i) \mid E_i \in \mathcal{E}_i \}$.
+
+1. $\mathcal{C}_i$ is a $\pi$-system on $\Omega$ because $X_i^{-1}(E_1) \cap X_i^{-1}(E_2) = X_i^{-1}(E_1 \cap E_2) \in \mathcal{C}_i$ for $E_1, E_2 \in \mathcal{E}_i$.
+2. $\sigma(\mathcal{C}_i) = \sigma(X_i^{-1}(\mathcal{E}_i)) = X_i^{-1}(\sigma(\mathcal{E}_i)) = X_i^{-1}(\mathcal{B}_i) = \sigma(X_i)$.
+3. For every finite collection of distinct indices $i_1,\ldots,i_n$, the hypothesis says precisely that the $\pi$-systems $\mathcal{C}_{i_1},\ldots,\mathcal{C}_{i_n}$ are independent. By @thm-indep-pi-systems, their generated $\sigma$-algebras $\sigma(\mathcal{C}_{i_k}) = \sigma(X_{i_k})$ are independent. Since this holds for every finite subfamily, the family $\{\sigma(X_i)\}_{i\in I}$ is independent.
+:::
+
+The following corollary gives a convenient criterion for checking independence of real-valued random variables by verifying the independence condition on their cumulative distribution functions (CDFs).
+
+::: {#cor-cdf-criterion}
+Let $X_1, \dots, X_n$ be $\mathbb{R}$-valued random variables. Taking $\mathcal{E}_i = \{ (-\infty, t] \mid t \in \mathbb{R} \}$, $X_1, \dots, X_n$ are independent if and only if their joint cumulative distribution function (CDF) factorizes into the product of their marginal CDFs:
+$$
+F_{X_1, \dots, X_n}(t_1, \dots, t_n) = \prod_{i=1}^n F_{X_i}(t_i) \quad \forall (t_1, \dots, t_n) \in \mathbb{R}^n
+$$
+:::
+
+::: {.proof}
+The forward implication follows from independence. Conversely, fix a nonempty subset $J \subseteq \{1,\ldots,n\}$ and $t_j \in \mathbb{R}$ for $j\in J$. For $r\in\mathbb{R}$, apply the assumed CDF factorization with threshold $t_j$ in coordinates $j\in J$ and threshold $r$ in the remaining coordinates. As $r\to\infty$, the corresponding events increase to $\bigcap_{j\in J}\{X_j\le t_j\}$, so continuity from below and $F_{X_\ell}(r)\to1$ give
+$$
+P\left(\bigcap_{j\in J}\{X_j\le t_j\}\right) = \prod_{j\in J}F_{X_j}(t_j).
+$$
+Thus the lower-half-line $\pi$-system factorization holds for every finite subfamily. The reverse direction of @lem-rv-pi-system now gives independence.
+:::
+
+---
+
+## Joint Law Factorization and Equivalent Criteria
+
+Given $X = (X_1, \dots, X_n)$ with $X_i: (\Omega, \mathcal{F}, P) \to (S_i, \mathcal{B}_i)$, the **joint law** $\mu_X$ is the pushforward probability measure on $\bigotimes_{i=1}^n \mathcal{B}_i$ defined by $\mu_X \triangleq P \circ X^{-1}$, so that $\mu_X(B) = P(X \in B)$.
+
+::: {#thm-joint-law-factorization}
+The random variables $X_1, \dots, X_n$ are independent if and only if their joint distribution equals the product of their marginal distributions:
+$$
+\mu_{(X_1, \dots, X_n)} = \mu_{X_1} \otimes \mu_{X_2} \otimes \dots \otimes \mu_{X_n}
+$$ {#eq-law-product-identity}
+:::
+
+::: {.proof}
+$(\Leftarrow)$ If $\mu_X = \bigotimes_{i=1}^n \mu_{X_i}$, then for any product rectangle $B_1 \times \dots \times B_n$ with $B_i \in \mathcal{B}_i$:
+$$
+\begin{aligned}
+P(X_1 \in B_1, \dots, X_n \in B_n) &= \mu_X(B_1 \times \dots \times B_n) \\
+&= \prod_{i=1}^n \mu_{X_i}(B_i) = \prod_{i=1}^n P(X_i \in B_i)
+\end{aligned}
+$$
+
+$(\Rightarrow)$ If $X_1, \dots, X_n$ are independent, $\mu_X$ and $\bigotimes_{i=1}^n \mu_{X_i}$ agree on all product rectangles $B_1 \times \dots \times B_n$. Because product rectangles form a $\pi$-system generating $\bigotimes_{i=1}^n \mathcal{B}_i$, uniqueness of extension implies the measures are identical by @lem-pi-system-uniqueness.
+:::
+
+---
+
+## General Equivalent Criteria for Independence
+The following theorem gives several equivalent criteria for independence of random variables, including the factorization of expectations of products of bounded measurable functions.
+
+::: {#thm-equivalent-indep-criteria}
+Let $X_i: (\Omega, \mathcal{F}, P) \to (S_i, \mathcal{B}_i)$ for $i \in \{1, \dots, n\}$. The following conditions are equivalent:
+
+1. $X_1, \dots, X_n$ are independent.
+2. $\mu_{(X_1, \dots, X_n)} = \bigotimes_{i=1}^n \mu_{X_i}$.
+3. For all bounded measurable functions $f_i \in \mathbb{B}(S_i, \mathcal{B}_i)$:
+   $$
+   \mathbb{E}\left[ \prod_{i=1}^n f_i(X_i) \right] = \prod_{i=1}^n \mathbb{E}[f_i(X_i)]
+   $$ {#eq-expectation-factorization}
+
+If $S_i = \mathbb{R}^{d_i}$ with Borel $\sigma$-algebras, the following are also equivalent:
+
+4. Condition @eq-expectation-factorization holds for all compactly supported continuous functions $f_i \in C_c(\mathbb{R}^{d_i})$.
+5. Condition @eq-expectation-factorization holds for all indicator functions of lower unbounded rectangles $f_i = \mathbf{1}_{(-\infty, t_i]}$.
+:::
+
+::: {.proof}
+## Proof of @thm-equivalent-indep-criteria
+
+* $(1 \iff 2)$: Proven in @thm-joint-law-factorization.
+* $(2 \implies 3)$: By the change-of-variables formula $\mathbb{E}[g(X_1,\ldots,X_n)] = \int g\,d\mu_{(X_1,\ldots,X_n)}$ and condition 2:
+  $$
+  \begin{aligned}
+  \mathbb{E}\left[\prod_{i=1}^n f_i(X_i)\right] &= \int_{S_1 \times \dots \times S_n} \prod_{i=1}^n f_i(x_i) \, \mu_{(X_1,\ldots,X_n)}(dx) \\
+  &= \int_{S_1 \times \dots \times S_n} \prod_{i=1}^n f_i(x_i) \, (\mu_{X_1} \otimes \dots \otimes \mu_{X_n})(dx).
+  \end{aligned}
+  $$
+  Since each $f_i$ is bounded measurable and $\mu_{X_i}$ is a probability measure, $\prod_i |f_i|$ is bounded and the product measure is finite, so $\prod_i f_i \in L^1(\bigotimes_i \mu_{X_i})$. Fubini's theorem factors the product-space integral:
+  $$
+  \begin{aligned}
+  &\int_{S_1 \times \dots \times S_n} \prod_{i=1}^n f_i(x_i) \, (\mu_{X_1} \otimes \dots \otimes \mu_{X_n})(dx) \\
+  &= \prod_{i=1}^n \int_{S_i} f_i(x_i) \, \mu_{X_i}(dx_i) = \prod_{i=1}^n \mathbb{E}[f_i(X_i)].
+  \end{aligned}
+  $$
+* $(3 \implies 1)$: For $B_i \in \mathcal{B}_i$, take $f_i = \mathbf{1}_{B_i}$ (bounded measurable). Then $\mathbb{E}[f_i(X_i)] = P(X_i \in B_i)$ and $\mathbb{E}[\prod_i f_i(X_i)] = P(X_1 \in B_1, \dots, X_n \in B_n)$. Condition 3 then gives $P(X_1 \in B_1, \ldots, X_n \in B_n) = \prod_i P(X_i \in B_i)$ for all $B_i \in \mathcal{B}_i$, which is condition 1.
+* $(4 \implies 3)$: Let $\mathbb{M} = \bigl\{(x_1,\ldots,x_n)\mapsto\prod_{i=1}^n f_i(x_i) \mid f_i \in C_c(\mathbb{R}^{d_i})\bigr\}$. This is a multiplicative system on $\prod_i \mathbb{R}^{d_i}$ (the pointwise product of two such functions is again in $\mathbb{M}$). Its members are continuous, separate points, and for every point at least one member is nonzero there; hence $\sigma(\mathbb{M}) = \bigotimes_i \mathcal{B}(\mathbb{R}^{d_i})$. Define
+$$
+\mathbb{H} = \bigl\{g \in \mathbb{B}\bigl(\textstyle\prod_i \mathbb{R}^{d_i},\, \bigotimes_i \mathcal{B}(\mathbb{R}^{d_i})\bigr) : \mathbb{E}[g(X_1,\ldots,X_n)] = \int g\,d(\bigotimes_i \mu_{X_i})\bigr\}.
+$$
+   Then $\mathbb{H}$ is a vector space containing $1$. If $g_m\in\mathbb{H}$, $g_m\to g$ pointwise, and $\sup_m\|g_m\|_\infty<\infty$, DCT under both probability measures shows that $g\in\mathbb{H}$. To verify $\mathbb{M}\subseteq\mathbb{H}$: for $g = \prod_i f_i \in \mathbb{M}$ with $f_i \in C_c(\mathbb{R}^{d_i})$, condition 4 gives $\mathbb{E}[g(X_1,\ldots,X_n)] = \prod_i \mathbb{E}[f_i(X_i)]$, while Fubini applied to the product probability measure gives $\int g\,d(\bigotimes_i \mu_{X_i}) = \prod_i \int_{S_i} f_i\,d\mu_{X_i} = \prod_i \mathbb{E}[f_i(X_i)]$; both sides agree, so $g \in \mathbb{H}$. By Dynkin's MST, $\mathbb{H}$ contains all bounded $\bigotimes_i\mathcal{B}(\mathbb{R}^{d_i})$-measurable functions; taking $g=\prod_i f_i$ with arbitrary bounded measurable $f_i$ gives condition 3.
+* $(5 \implies 3)$: The collection $\mathcal{E}_i = \{(-\infty, t_i] : t_i \in \mathbb{R}^{d_i}\}$ of lower-orthant sets is a $\pi$-system (since $(-\infty,s]\cap(-\infty,t]=(-\infty,s\wedge t]$) that generates $\mathcal{B}(\mathbb{R}^{d_i})$. Condition 5 gives $P(X_1 \in E_1, \ldots, X_n \in E_n) = \prod_i P(X_i \in E_i)$ for all $E_i \in \mathcal{E}_i$. By @lem-rv-pi-system this is equivalent to condition 1, and condition $1 \implies 3$ was established above.
+:::
+
+---
+
+## Properties of Independent Random Variables
+The following proposition gives a useful property of independent random variables: the expectation of their product factorizes into the product of their expectations.
+
+::: {#prp-expectation-product}
+## Expectation Factorization for Independent Random Variables
+If $X_1, \dots, X_n$ are independent real-valued random variables in $L^1$, then $\prod_{i=1}^n X_i \in L^1$ and:
+$$
+\mathbb{E}\left[ \prod_{i=1}^n X_i \right] = \prod_{i=1}^n \mathbb{E}[X_i]
+$$ {#eq-expectation-l1-product}
+:::
+
+::: {.proof}
+Since $X_1, \ldots, X_n$ are independent, @thm-joint-law-factorization gives $\mu_{(X_1,\ldots,X_n)} = \mu_{X_1} \otimes \cdots \otimes \mu_{X_n}$. By the change-of-variables formula ($\mathbb{E}[g(X_1,\ldots,X_n)] = \int g\,d\mu_{(X_1,\ldots,X_n)}$) and Tonelli's theorem applied to the non-negative integrand $\prod |x_i|$:
+$$
+\begin{aligned}
+\mathbb{E}\left[ \left| \prod_{i=1}^n X_i \right| \right] &= \int_{\mathbb{R}^n} \prod_{i=1}^n |x_i| \, (\mu_{X_1} \otimes \dots \otimes \mu_{X_n})(dx) \\
+&= \prod_{i=1}^n \int_{\mathbb{R}} |x_i| \, \mu_{X_i}(dx_i) \\
+&= \prod_{i=1}^n \mathbb{E}[|X_i|] < \infty
+\end{aligned}
+$$
+where the second equality uses Tonelli's theorem to factor the product-space integral into a product of marginal integrals. Since $\prod X_i$ is absolutely integrable, Fubini's theorem applies to the signed function $\prod X_i$ and yields @eq-expectation-l1-product by the same factorization.
+:::
+
+::: {#cor-independence-uncorrelated}
+If $X, Y$ are independent real-valued random variables in $L^2$, then $\text{Cov}(X, Y) = 0$.
+:::
+
+---
+
+**Uncorrelatedness Does Not Imply Independence**:
+
+Let $X \sim \mathcal{N}(0, 1)$ and let $Z$ be a discrete random variable independent of $X$ with $P(Z = 1) = P(Z = -1) = \frac{1}{2}$. Define $Y \triangleq X Z$.
+
+1. **Covariance:**
+   $$
+   \begin{aligned}
+   \text{Cov}(X, Y) &= \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y] \\
+   &= \mathbb{E}[X^2 Z] - \mathbb{E}[X]\mathbb{E}[XZ] \\
+   &= \mathbb{E}[X^2]\mathbb{E}[Z] - \mathbb{E}[X]\mathbb{E}[X]\mathbb{E}[Z] = 0,
+   \end{aligned}
+   $$
+   since $\mathbb{E}[Z] = 0$. Thus, $X$ and $Y$ are uncorrelated.
+2. **Dependence via Higher Moments:**
+   $$
+   \mathbb{E}[X^2 Y^2] = \mathbb{E}[X^2 \cdot X^2 Z^2] = \mathbb{E}[X^4 Z^2] = \mathbb{E}[X^4] = 3,
+   $$
+   where the third equality uses $Z^2 = 1$ a.s. (since $Z \in \{1,-1\}$), and $\mathbb{E}[X^4] = 3$ is the fourth moment of a standard normal. However,
+   $$
+   \mathbb{E}[X^2]\,\mathbb{E}[Y^2] = \mathbb{E}[X^2]\cdot \mathbb{E}[X^2 Z^2] = 1 \cdot \mathbb{E}[X^2]\mathbb{E}[Z^2] = 1 \cdot 1 \cdot 1 = 1,
+   $$
+   where $\mathbb{E}[X^2 Z^2] = \mathbb{E}[X^2]\mathbb{E}[Z^2]$ by independence of $X$ and $Z$, and $\mathbb{E}[Z^2] = 1$ since $Z^2 = 1$ a.s. Since $\mathbb{E}[X^2 Y^2] = 3 \neq 1 = \mathbb{E}[X^2] \mathbb{E}[Y^2]$, $X$ and $Y$ are **not** independent.
+
+---
+
+## Block Groupings and Method of Moments
+The following lemma gives a useful property of independent $\sigma$-algebras: if we group independent $\sigma$-algebras into blocks, the block-generated $\sigma$-algebras are also independent.
+
+::: {#lem-grouping-sigma-fields}
+If $\mathcal{F}_1, \dots, \mathcal{F}_n$ are independent $\sigma$-algebras, $k\in\mathbb{N}$, and $n_1,\ldots,n_k\in\mathbb{N}$ satisfy $n = n_1 + \dots + n_k$, then the block-generated $\sigma$-algebras:
+$$
+\mathcal{G}_1 \triangleq \sigma(\mathcal{F}_1 \cup \dots \cup \mathcal{F}_{n_1}), \quad \mathcal{G}_2 \triangleq \sigma(\mathcal{F}_{n_1+1} \cup \dots \cup \mathcal{F}_{n_1+n_2}), \quad \dots
+$$ 
+are independent.
+:::
+
+:::{.proof}
+## Proof of @lem-grouping-sigma-fields
+
+Let $N_0 = 0$ and $N_j = n_1 + \cdots + n_j$ for $j = 1, \ldots, k$, so block $j$ consists of $\mathcal{F}_{N_{j-1}+1}, \ldots, \mathcal{F}_{N_j}$.
+
+**Step 1: Define a $\pi$-system for each block.** For each $j \in \{1, \ldots, k\}$, define:
+$$
+\mathcal{C}_j \triangleq \left\{ \bigcap_{i=N_{j-1}+1}^{N_j} A_i \;\middle|\; A_i \in \mathcal{F}_i \text{ for each } i \in (N_{j-1}, N_j] \right\}.
+$$
+In words, $\mathcal{C}_j$ consists of all finite intersections of one set chosen from each $\mathcal{F}_i$ in block $j$.
+
+**Step 2: $\mathcal{C}_j$ is a $\pi$-system.** Given $C = \bigcap_i A_i$ and $C' = \bigcap_i A_i'$ in $\mathcal{C}_j$:
+$$
+C \cap C' = \bigcap_{i=N_{j-1}+1}^{N_j} (A_i \cap A_i') \in \mathcal{C}_j,
+$$
+since $A_i \cap A_i' \in \mathcal{F}_i$ for each $i$. In particular $\Omega \in \mathcal{C}_j$ (take every $A_i = \Omega \in \mathcal{F}_i$).
+
+**Step 3: $\sigma(\mathcal{C}_j) = \mathcal{G}_j$.** Since every set in $\mathcal{C}_j$ is a finite intersection of sets in $\bigcup_{i \in \text{block}_j} \mathcal{F}_i \subseteq \mathcal{G}_j$, we have $\mathcal{C}_j \subseteq \mathcal{G}_j$, hence $\sigma(\mathcal{C}_j) \subseteq \mathcal{G}_j$. For the reverse inclusion, fix any $i_0 \in (N_{j-1}, N_j]$ and $A_{i_0} \in \mathcal{F}_{i_0}$. Setting $A_i = \Omega$ for all $i \neq i_0$ in the block shows $A_{i_0} \in \mathcal{C}_j$. Therefore $\mathcal{F}_{i_0} \subseteq \sigma(\mathcal{C}_j)$ for every $i_0$ in block $j$, giving:
+$$
+\mathcal{G}_j = \sigma\!\left(\bigcup_{i=N_{j-1}+1}^{N_j} \mathcal{F}_i\right) \subseteq \sigma(\mathcal{C}_j).
+$$
+
+**Step 4: $\mathcal{C}_1, \ldots, \mathcal{C}_k$ are independent.** Take any $C_j = \bigcap_{i \in \text{block}_j} A_i \in \mathcal{C}_j$ for each $j$, with $A_i \in \mathcal{F}_i$. Then:
+$$
+\bigcap_{j=1}^k C_j = \bigcap_{j=1}^k \bigcap_{i \in \text{block}_j} A_i = \bigcap_{i=1}^n A_i.
+$$
+By independence of $\mathcal{F}_1, \ldots, \mathcal{F}_n$ (applied to the full family $\{A_i\}_{i=1}^n$):
+$$
+P\!\left(\bigcap_{j=1}^k C_j\right) = P\!\left(\bigcap_{i=1}^n A_i\right) = \prod_{i=1}^n P(A_i).
+$$
+For each individual block, independence of $\mathcal{F}_1, \ldots, \mathcal{F}_n$ (restricted to block $j$) gives:
+$$
+P(C_j) = P\!\left(\bigcap_{i \in \text{block}_j} A_i\right) = \prod_{i \in \text{block}_j} P(A_i).
+$$
+Therefore:
+$$
+\prod_{j=1}^k P(C_j) = \prod_{j=1}^k \prod_{i \in \text{block}_j} P(A_i) = \prod_{i=1}^n P(A_i) = P\!\left(\bigcap_{j=1}^k C_j\right).
+$$
+Since $\Omega \in \mathcal{C}_j$ for every $j$, the convenient-notation form of the independence definition (@eq-indep-reduced-notation) shows $\mathcal{C}_1, \ldots, \mathcal{C}_k$ are independent.
+
+**Conclusion.** By @thm-indep-pi-systems, since $\mathcal{C}_1, \ldots, \mathcal{C}_k$ are independent $\pi$-systems with $\sigma(\mathcal{C}_j) = \mathcal{G}_j$, the $\sigma$-algebras $\mathcal{G}_1, \ldots, \mathcal{G}_k$ are independent.
+:::
+
+::: {#cor-function-groupings}
+Let $X_i:(\Omega,\mathcal{F},P)\to(S_i,\mathcal{B}_i)$, $i=1,\ldots,n$, be independent random variables, let $1\le n_1<n$, and let
+$$
+f_1:\prod_{i=1}^{n_1}(S_i,\mathcal{B}_i)\to(T_1,\mathcal{T}_1),\qquad
+f_2:\prod_{i=n_1+1}^{n}(S_i,\mathcal{B}_i)\to(T_2,\mathcal{T}_2)
+$$
+be measurable. Then the random variables $Y_1 = f_1(X_1, \dots, X_{n_1})$ and $Y_2 = f_2(X_{n_1+1}, \dots, X_n)$ are independent.
+:::
+
+:::{.proof}
+## Proof of @cor-function-groupings
+
+Let $n_2 = n - n_1$, so the two blocks are $\{1, \ldots, n_1\}$ and $\{n_1+1, \ldots, n\}$.
+
+**Step 1: Block $\sigma$-algebras are independent.** Since $X_1, \ldots, X_n$ are independent, the generated $\sigma$-algebras $\sigma(X_1), \ldots, \sigma(X_n)$ are independent. By @lem-grouping-sigma-fields with $k = 2$ and block sizes $n_1$ and $n_2$, the block-generated $\sigma$-algebras
+$$
+\mathcal{G}_1 \triangleq \sigma\!\bigl(\sigma(X_1) \cup \cdots \cup \sigma(X_{n_1})\bigr), \qquad \mathcal{G}_2 \triangleq \sigma\!\bigl(\sigma(X_{n_1+1}) \cup \cdots \cup \sigma(X_n)\bigr)
+$$
+are independent.
+
+**Step 2: Each $Y_j$ is $\mathcal{G}_j$-measurable.** Every $X_i$ with $i \le n_1$ is $\sigma(X_i)$-measurable, and $\sigma(X_i) \subseteq \mathcal{G}_1$, so $(X_1, \ldots, X_{n_1})$ is $\mathcal{G}_1$-measurable as a map into $\prod_{i=1}^{n_1} S_i$ (by @lem-product-measurability applied on $\Omega$). Since $f_1$ is measurable, $Y_1 = f_1(X_1, \ldots, X_{n_1})$ is $\mathcal{G}_1$-measurable, i.e., $\sigma(Y_1) \subseteq \mathcal{G}_1$. The same argument gives $\sigma(Y_2) \subseteq \mathcal{G}_2$.
+
+**Conclusion.** For any $A \in \sigma(Y_1) \subseteq \mathcal{G}_1$ and $B \in \sigma(Y_2) \subseteq \mathcal{G}_2$, independence of $\mathcal{G}_1$ and $\mathcal{G}_2$ gives $P(A \cap B) = P(A)P(B)$. Hence $Y_1$ and $Y_2$ are independent. The same argument applied with $k \ge 2$ blocks yields independence of $k$ such block functions.
+:::
+
+* **Example:** If $X_1, X_2, X_3, X_4, X_5$ are independent real-valued random variables, then $X_1 + X_2$, $X_3 X_4$, and $e^{X_5}$ are mutually independent.
+
+---
+
+## Method of Moments for Bounded Random Variables
+
+::: {#prp-method-of-moments-indep}
+Let $X_1, \dots, X_n$ be real-valued random variables such that $|X_i| \le M$ a.s. for all $i$ and some $M\in[0,\infty)$. Then $X_1, \dots, X_n$ are independent if and only if for all non-negative integers $k_1, \dots, k_n \in \mathbb{N}_0$:
+$$
+\mathbb{E}\left[ X_1^{k_1} X_2^{k_2} \dots X_n^{k_n} \right] = \prod_{i=1}^n \mathbb{E}\left[ X_i^{k_i} \right]
+$$ {#eq-moments-factorization}
+:::
+
+::: {.proof}
+## Proof of @prp-method-of-moments-indep
+
+$(\Rightarrow)$ Since $|X_i| \le M$ a.s., define $\tilde{f}_i(x) \triangleq x^{k_i}\mathbf{1}_{|x| \le M}$, which is bounded (by $M^{k_i}$) and measurable, and satisfies $\tilde{f}_i(X_i) = X_i^{k_i}$ a.s. Applying @eq-expectation-factorization to $\tilde{f}_1,\ldots,\tilde{f}_n$ gives $\mathbb{E}[\prod_i X_i^{k_i}] = \mathbb{E}[\prod_i \tilde{f}_i(X_i)] = \prod_i \mathbb{E}[\tilde{f}_i(X_i)] = \prod_i \mathbb{E}[X_i^{k_i}]$.
+
+$(\Leftarrow)$
+
+**Step 1: Polynomial factorization.** For polynomials $p_i(x_i) = \sum_{k_i} a_{k_i}^{(i)} x_i^{k_i}$, expanding by multi-linearity of $\mathbb{E}$ over the finite sum and then applying the hypothesis @eq-moments-factorization:
+$$
+\begin{aligned}
+\mathbb{E}\Bigl[\prod_i p_i(X_i)\Bigr] &= \sum_{k_1,\ldots,k_n}\Bigl(\prod_i a_{k_i}^{(i)}\Bigr) \mathbb{E}\Bigl[\prod_i X_i^{k_i}\Bigr] \\
+&= \sum_{k_1,\ldots,k_n}\Bigl(\prod_i a_{k_i}^{(i)}\Bigr)\prod_i \mathbb{E}\bigl[X_i^{k_i}\bigr] \\
+&= \prod_i \Bigl(\sum_{k_i} a_{k_i}^{(i)} \mathbb{E}\bigl[X_i^{k_i}\bigr]\Bigr) = \prod_i \mathbb{E}[p_i(X_i)].
+\end{aligned}
+$$
+The last refactoring separates the sum over all multi-indices $(k_1,\ldots,k_n)$ into a product of single-index sums.
+
+**Step 2: Extension to $C_c(\mathbb{R})$ by Stone-Weierstrass.** For general $f_i \in C_c(\mathbb{R})$, by the Stone-Weierstrass Theorem choose polynomials $p_m^{(i)}$ such that $\|p_m^{(i)} - f_i\|_{[-M,M],\infty} \to 0$. Since convergent sequences of real numbers are bounded, $C_i \triangleq \sup_{m \ge 1} \|p_m^{(i)}\|_{[-M,M],\infty} < \infty$. Because $|X_i| \le M$ a.s., this gives the uniform bound $\bigl|\prod_i p_m^{(i)}(X_i)\bigr| \le \prod_i C_i < \infty$ for all $m$.
+
+Since uniform convergence on $[-M,M]$ and $|X_i| \le M$ a.s. imply $p_m^{(i)}(X_i) \to f_i(X_i)$ a.s., the Bounded Convergence Theorem gives:
+$$
+\mathbb{E}\!\left[\prod_i p_m^{(i)}(X_i)\right] \xrightarrow{m\to\infty} \mathbb{E}\!\left[\prod_i f_i(X_i)\right].
+$$
+Applying BCT to each factor separately gives $\mathbb{E}[p_m^{(i)}(X_i)] \to \mathbb{E}[f_i(X_i)]$, and hence $\prod_i \mathbb{E}[p_m^{(i)}(X_i)] \to \prod_i \mathbb{E}[f_i(X_i)]$ by continuity of finite products.
+
+Since $\mathbb{E}[\prod_i p_m^{(i)}(X_i)] = \prod_i \mathbb{E}[p_m^{(i)}(X_i)]$ for every $m$ (Step 1), equality holds in the limit: $\mathbb{E}[\prod_i f_i(X_i)] = \prod_i \mathbb{E}[f_i(X_i)]$.
+
+**Conclusion.** This establishes Condition 4 of @thm-equivalent-indep-criteria for all $f_i \in C_c(\mathbb{R})$, from which independence of $X_1, \ldots, X_n$ follows.
+:::
+
+---
+
+## Takeaways
+
+1. **Independence is independence of information.** A family $\{X_i\}_{i\in I}$ is independent precisely when the generated $\sigma$-algebras $\{\sigma(X_i)\}_{i\in I}$ are independent. Equivalently, the probability factorization must hold for every finite collection of distinct indices and measurable sets in their respective state spaces.
+
+2. **It suffices to test generating classes.** To prove independence, one may verify the factorization on a $\pi$-system generating each state-space $\sigma$-algebra, provided the test is made for every finite subfamily. For real-valued random variables, this yields the CDF criterion: independence is equivalent to factorization of the joint CDF into the marginal CDFs.
+
+3. **Independence is product factorization of the joint law.** For a finite family, $X_1,\ldots,X_n$ are independent if and only if
+$$
+\mu_{(X_1,\ldots,X_n)}=\mu_{X_1}\otimes\cdots\otimes\mu_{X_n}.
+$$
+Consequently, independence is also equivalent to factorization of expectations of products of bounded measurable functions.
+
+4. **Products factor when integrability is available.** If independent real-valued random variables $X_1,\ldots,X_n$ belong to $L^1$, then their product is in $L^1$ and
+$$
+\mathbb{E}\left[\prod_{i=1}^n X_i\right]=\prod_{i=1}^n\mathbb{E}[X_i].
+$$
+In particular, independent $L^2$ random variables are uncorrelated, but the converse fails.
+
+5. **Independence survives measurable transformations on disjoint blocks.** Independent $\sigma$-algebras remain independent after grouping them into disjoint blocks. Therefore, measurable functions of disjoint blocks of independent random variables are themselves independent.
+
+6. **For bounded real-valued variables, all mixed moments characterize independence.** If $|X_i|\le M$ a.s. for a common finite $M$, then independence is equivalent to factorization of every mixed moment. The converse uses polynomial approximation on $[-M,M]$, bounded convergence, and the bounded continuous-function criterion.

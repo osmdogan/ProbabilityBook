@@ -1,0 +1,235 @@
+
+# Lecture 6.1: Random Variables Motivation
+
+## Random Variables: Motivation
+
+We begin with informal "experiments" to motivate our formal measure-theoretic framework.
+
+::: {#exm-coin-toss}
+**Coin Tossing.**
+Consider tossing a fair coin $N$ times. The individual outcomes are sequences of heads ($H$) and tails ($T$), such as $HTHH$. We might be interested in a summary numerical measurement, such as $X = \text{\# heads}$. In this specific outcome, $X = 3$. We can then consider events defined by conditions on $X$, such as $\{X \le 3\}$ or $\{X \ge 2\}$.
+:::
+
+::: {#exm-dart-throw}
+**Dart Board.**
+Consider throwing a dart at a circular dartboard of radius $R$. The point where the dart lands can be represented in polar coordinates as $(r, \theta)$. A natural summary quantity is $R$, the distance from the center. An outcome might be $(r, \theta) = \left(0.15, \frac{\pi}{2}\right)$ (or $(0.15, 0)$), yielding $R = 0.15$. We are then interested in events such as $\{R \le 0.25\}$.
+:::
+
+In general, each experiment has an outcome $\omega$, belonging to the set of all possible outcomes called the **sample space**, denoted by $\Omega$. 
+
+Probability is a measure of the likelihood of an **event** $E \subseteq \Omega$, which is a set of outcomes.
+
+
+```{python}
+#| eval: false
+Outcomes                   Measurements
+   ω ∈ Ω      ─────── X ───────>   ℝ
+(Inaccessible)               (Observable)
+```
+
+The underlying sample space $(\Omega, \mathcal{F}, \mathbb{P})$ is often "inaccessible" directly:
+
+* Outcomes are elements $\omega \in \Omega$.
+* Events are measurable subsets of $\Omega$, i.e., elements of $\mathcal{F}$.
+
+A function $X: \Omega \to S$ maps the inaccessible sample space to a manageable "state space" $S$. 
+
+* The state space $S$ could be $\mathbb{C}$.
+* $S$ is usually $\mathbb{R}$.
+* If $S = \mathbb{R}^d$, we usually call $X$ a **random vector**.
+
+:::{#rem-random-variable}
+## Random Variable versus Random Function
+The term "random variable" is a misnomer. A random variable is not a variable in the sense of algebra, but rather a function. It is a function that takes an outcome $\omega \in \Omega$ and returns a real number $X(\omega) \in \mathbb{R}$. The "random" part refers to the fact that the outcome $\omega$ is random, and thus $X(\omega)$ is also random. Historically, we should perhaps call them "random functions," but the very old "variable" terminology has stuck since its usage by Laplace in the early 19th century.
+:::
+
+To perform probability calculations, we need to be able to compute probabilities of sets formed by conditions on $X$, such as:
+$$
+\{X \le 1\} := \{\omega \in \Omega : X(\omega) \le 1\}.
+$$
+
+---
+
+## Formal Definition of a Random Variable
+
+::: {#def-random-variable}
+### Random Variable
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space. A function $X: \Omega \to \mathbb{R}$ is a **random variable** if it is $\mathcal{F}$-measurable; that is, for every $t \in \mathbb{R}$,
+$$
+\{X \le t\} := \{\omega \in \Omega : X(\omega) \le t\} \in \mathcal{F}.
+$$
+:::
+
+- Note that the definition of a random variable depends on the underlying probability space $(\Omega, \mathcal{F}, \mathbb{P})$. A random variable is not just a function from $\Omega$ to $\mathbb{R}$; it must also be measurable with respect to the sigma-algebra $\mathcal{F}$.
+
+- The measurability condition ensures that we can assign probabilities to events defined by the random variable, such as $\{X \le t\}$, using the probability measure $\mathbb{P}$. 
+
+- We can also denote $\{X \le t\}$ as
+$$
+\{X \le t\} = X^{-1}((-\infty, t]) = \{\omega \in \Omega : X(\omega) \in (-\infty, t]\}.
+$$
+
+---
+
+## Cumulative Distribution Functions (CDFs)
+
+::: {#def-cdf}
+### Cumulative Distribution Function
+Let $X: \Omega \to \mathbb{R}$ be a random variable on $(\Omega, \mathcal{F}, \mathbb{P})$. The **cumulative distribution function (CDF)** of $X$ is the function $F_X: \mathbb{R} \to \mathbb{R}$ defined by:
+$$
+F_X(t) := \mathbb{P}(X \le t) = \mathbb{P}\bigl(\{\omega \in \Omega : X(\omega) \le t\}\bigr).
+$$
+:::
+
+::: {#prp-cdf-properties}
+## Properties of the CDF
+The function $F_X: \mathbb{R} \to [0, 1]$ satisfies the following properties:
+
+1. $F_X$ is non-decreasing: if $s \le t$, then $F_X(s) \le F_X(t)$.
+2. $F_X$ is right-continuous: for all $t \in \mathbb{R}$, $\lim_{n \to \infty} F_X(t_n) = F_X(t)$ for any sequence $t_n \downarrow t$.
+3. Limits at infinity:
+   $$
+   \lim_{t \to -\infty} F_X(t) = 0 \quad \text{and} \quad \lim_{t \to +\infty} F_X(t) = 1.
+   $$
+:::
+
+::: {.proof}
+## Proof of @prp-cdf-properties
+We establish each property using continuity of the probability measure $\mathbb{P}$:
+
+1. **Non-decreasing:** Let $s \le t$. Then $\{\omega : X(\omega) \le s\} \subseteq \{\omega : X(\omega) \le t\}$. By monotonicity of measure $\mathbb{P}$:
+   $$
+   F_X(s) = \mathbb{P}(X \le s) \le \mathbb{P}(X \le t) = F_X(t).
+   $$
+
+2. **Right-continuity:** Let $t_n \downarrow t$ (i.e., $t_1 \ge t_2 \ge \dots \to t$). Define $A_n = \{X \le t_n\}$. The sequence of events $\{A_n\}_{n=1}^\infty$ is non-increasing ($A_n \supseteq A_{n+1}$) and satisfies:
+   $$
+   \bigcap_{n=1}^\infty A_n = \{X \le t\}.
+   $$
+   By continuity of measure from above (since $\mathbb{P}(A_1) \le 1 < \infty$):
+   $$
+   F_X(t_n) = \mathbb{P}(X \le t_n) \downarrow \mathbb{P}(X \le t) = F_X(t).
+   $$
+
+3. **Limits at infinity:**
+   * Consider $b_n \downarrow -\infty$. The events $B_n = \{X \le b_n\}$ satisfy $B_n \supseteq B_{n+1}$ and $\bigcap_{n=1}^\infty B_n = \emptyset$. Thus:
+     $$
+     \lim_{n \to \infty} F_X(b_n) = \mathbb{P}(\emptyset) = 0.
+     $$
+   * Consider $c_n \uparrow +\infty$. The events $C_n = \{X \le c_n\}$ satisfy $C_n \subseteq C_{n+1}$ and $\bigcup_{n=1}^\infty C_n = \Omega$. By continuity of measure from below:
+     $$
+     \lim_{n \to \infty} F_X(c_n) = \mathbb{P}(\Omega) = 1.
+     $$
+:::
+
+By the **Carathéodory Extension Theorem**, $F_X$ uniquely determines a Borel probability measure $\mu_X$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, defined on intervals by $\mu_X((a, b]) = F_X(b) - F_X(a)$.
+
+::: {#def-law}
+### Probability Distribution / Law
+The measure $\mu_X$ is called the **probability distribution** (or **law**) of $X$.
+:::
+
+::: {#rem-knowledge-of-law}
+- Note that the probability distribution $\mu_X$ is a measure on the Borel sigma-algebra $\mathcal{B}(\mathbb{R})$, which is generated by intervals of the form $(a, b]$. On the other hand, $\mathbb{P}$ is a measure on the sigma-algebra $\mathcal{F}$ of the sample space $\Omega$. 
+- Consider $\mu_X((a, b])$:
+$$
+\begin{align*}
+\mu_X((a, b]) &= F_X(b) - F_X(a)\\
+&= \mathbb{P}(X \le b) - \mathbb{P}(X \le a)\\
+&= \mathbb{P}(\{\omega : X(\omega) \le b\}) - \mathbb{P}(\{\omega : X(\omega) \le a\})\\
+&= \mathbb{P}(\{\omega : a < X(\omega) \le b\})\\
+&= \mathbb{P}(X^{-1}((a, b]))\\
+&= \mathbb{P}\circ X^{-1}((a, b]).
+\end{align*}
+$$
+- Often $\mu_X$ is all we will really know about $X$. And even more often, we won't even know $\mu_X$, but will only have some limited clues about it.
+:::
+
+---
+
+## (Great) Expectations
+
+## Finite and Countable Sample Spaces
+
+Can we get a "snapshot" number that tells us something about this distribution?
+
+::: {#def-finite-expectation}
+### Expectation on Finite Sample Spaces
+Let $\Omega = \{\omega_1, \omega_2, \dots, \omega_N\}$ be a finite sample space, and set $\mathcal{F} = 2^\Omega$. The probability of any event $E \subseteq \Omega$ is given by:
+$$
+\mathbb{P}(E) = \sum_{\omega \in E} \mathbb{P}(\{\omega\}) = \sum_{\omega \in \Omega} \mathbf{1}_{E}(\omega) \mathbb{P}(\{\omega\}),
+$$
+where $\mathbf{1}_A(\omega)$ is the indicator function:
+$$
+\mathbf{1}_A(\omega) = \begin{cases} 1 & \text{if } \omega \in A, \\ 0 & \text{if } \omega \notin A. \end{cases}
+$$
+
+If $X: \Omega \to \mathbb{R}$ is a random variable, its CDF is:
+$$
+F_X(t) = \mathbb{P}(X \le t) = \sum_{\omega \in \Omega} \mathbf{1}_{\{X(\omega) \le t\}} \mathbb{P}(\{\omega\}).
+$$
+
+We define the **expected value** (or weighted average) of $X$ as:
+$$
+\mathbb{E}(X) := \sum_{\omega \in \Omega} X(\omega) \mathbb{P}(\{\omega\}). \tag{$\star$}
+$$
+:::
+
+::: {#exm-three-coins}
+**Three Coin Tosses.**
+Toss a fair coin 3 times, and let $X = \text{\# Heads}$.
+The sample space is:
+$$
+\Omega = \{HHH, HHT, HTH, THH, HTT, THT, TTH, TTT\},
+$$
+with $\mathbb{P}(\{\omega\}) = \frac{1}{8}$ for all $\omega \in \Omega$.
+
+The values of $X(\omega)$ are:
+
+* $X(HHH) = 3$ (1 outcome)
+* $X(HHT) = X(HTH) = X(THH) = 2$ (3 outcomes)
+* $X(HTT) = X(THT) = X(TTH) = 1$ (3 outcomes)
+* $X(TTT) = 0$ (1 outcome)
+
+Applying formula $(\star)$:
+$$
+\begin{align*}
+\mathbb{E}(X) &= \frac{1}{8} \left( 3 \cdot 1 + 2 \cdot 3 + 1 \cdot 3 + 0 \cdot 1 \right) \\
+&= \frac{1}{8}(3 + 6 + 3 + 0) = \frac{12}{8} = \frac{3}{2} = 1.5.
+\end{align*}
+$$
+:::
+
+---
+
+## Limitations and Generalizations
+
+The definition $(\star)$ makes perfect sense if $\Omega$ is finite. It is also okay if $\Omega$ is countably infinite.
+
+However, formula $(\star)$ **will not help us** if $\mathbb{P}(\{\omega\}) = 0$ for all $\omega \in \Omega$, which is typical for continuous sample spaces (e.g., throwing a dart).
+
+### The Undergraduate Probability Approach
+
+In introductory probability, one grouping transformation is performed:
+$$
+\begin{align*}
+\sum_{\omega \in \Omega} X(\omega) \mathbb{P}(\{\omega\}) &= \sum_{t} \sum_{\omega : X(\omega) = t} X(\omega) \mathbb{P}(\{\omega\}) \\
+&= \sum_{t} t \sum_{\omega : X(\omega) = t} \mathbb{P}(\{\omega\}) \\
+&= \sum_{t} t \, \mathbb{P}(X = t).
+\end{align*}
+$$
+
+One then attempts to find an analogue of this sum in the "continuous" setting by replacing sums with integrals: $\sum_t t \, \mathbb{P}(X=t) \rightsquigarrow \int t f_X(t) \, dt$.
+
+**Problems with this approach:** There are many. For instance, proving fundamental structural properties like linearity $\mathbb{E}(X + Y) = \mathbb{E}(X) + \mathbb{E}(Y)$ becomes cumbersome or requires separating discrete and continuous cases.
+
+### The Measure-Theoretic Solution
+
+We will develop the right generalization of $(\star)$ to work in **any** general probability space $(\Omega, \mathcal{F}, \mathbb{P})$: the **Lebesgue Integral**.
+
+$$
+\mathbb{E}(X) = \int_{\Omega} X \, d\mathbb{P}.
+$$
+
+---
+

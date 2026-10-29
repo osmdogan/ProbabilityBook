@@ -1,0 +1,235 @@
+
+# Lecture 4.2: Extension Theorem
+
+## Introduction and Review
+
+Let $(\Omega, \mathcal{A}, \mu)$ be a finite premeasure space, where $\mu: \mathcal{A} \to [0, \mu(\Omega)]$ is countably additive on the field $\mathcal{A}$. 
+
+Let $\mu^*: 2^\Omega \to [0, \mu(\Omega)]$ denote the induced Carathéodory outer measure:
+$$
+\mu^*(E) := \inf \left\{ \sum_{j=1}^\infty \mu(A_j) : \{A_j\}_{j=1}^\infty \subseteq \mathcal{A}, \, E \subseteq \bigcup_{j=1}^\infty A_j \right\}.
+$${#eq-caratheodory-outer-def}
+
+We equip $2^\Omega$ with the outer pseudo-metric $d_\mu(E, F) := \mu^*(E \Delta F)$ for all $E, F \subseteq \Omega$. As proved in the previous lecture, the closure $\overline{\mathcal{A}}$ of $\mathcal{A}$ in $(2^\Omega, d_\mu)$ is a $\sigma$-algebra.
+
+---
+
+## Lipschitz Continuity of $\mu$ and Extension to $\overline{\mathcal{A}}$
+
+We first show that $\mu$ is 1-Lipschitz continuous on $(\mathcal{A}, d_\mu)$ and therefore extends uniquely to $\overline{\mathcal{A}}$.
+
+::: {#prp-mu-is-lipschitz}
+## 1-Lipschitz Continuity of $\mu$
+For any $A, B \in \mathcal{A}$, we have $\mu^*\vert{}_{ \mathcal{A}} = \mu$. Furthermore, $\mu$ satisfies:
+$$
+\vert{}\mu(A) - \mu(B)\vert{} \le d_\mu(A, B).
+$${#eq-mu-lipschitz-bound}
+:::
+
+::: {.proof}
+## Proof of @prp-mu-is-lipschitz
+For $A, B \in \mathcal{A}$, by finite additivity on $\mathcal{A}$:
+$$
+\mu(A) = \mu(A \setminus B) + \mu(A \cap B) \le \mu(A \Delta B) + \mu(B) = d_\mu(A, B) + \mu(B).
+$$
+Rearranging yields $\mu(A) - \mu(B) \le d_\mu(A, B)$. Reversing the roles of $A$ and $B$ gives $\mu(B) - \mu(A) \le d_\mu(A, B)$. Combining both inequalities yields:
+$$
+\vert{}\mu(A) - \mu(B)\vert{} \le d_\mu(A, B).
+$$
+:::
+
+::: {#prp-unique-lipschitz-extension}
+## Unique Extension $\overline{\mu}$
+Since $\mu$ is 1-Lipschitz on the non-empty set $\mathcal{A}$ in the pseudo-metric space $(2^\Omega, d_\mu)$, it extends uniquely to a continuous 1-Lipschitz function $\overline{\mu}: \overline{\mathcal{A}} \to [0, \mu(\Omega)]$ such that $\overline{\mu}\vert{}_{\mathcal{A}} = \mu$.
+:::
+
+---
+
+## $\sigma$-Invariance and Monotone Sequence Convergence
+
+::: {#def-countable-unions-collection}
+## Countable Unions Collection $\mathcal{E}_\sigma$
+For any collection $\mathcal{E} \subseteq 2^\Omega$, define $\mathcal{E}_\sigma$ as the collection of all countable unions of elements in $\mathcal{E}$:
+$$
+\mathcal{E}_\sigma := \left\{ \bigcup_{n=1}^\infty E_n : \{E_n\}_{n=1}^\infty \subseteq \mathcal{E} \right\}.
+$${#eq-esigma-def}
+
+*Note:* $\mathcal{E}_\sigma$ is automatically closed under countable unions. If $\mathcal{E}$ is closed under finite intersections, then $\mathcal{E}_\sigma$ is also closed under finite intersections:
+$$
+\left(\bigcup_{i=1}^\infty E_i\right) \cap \left(\bigcup_{j=1}^\infty F_j\right) = \bigcup_{i,j=1}^\infty (E_i \cap F_j) \in \mathcal{E}_\sigma.
+$$
+
+:::
+
+::: {#lem-asigma-equals-aclosure}
+## Closure Invariance under Countable Unions
+For a finite premeasure space $(\Omega, \mathcal{A}, \mu)$, we have $\overline{\mathcal{A}}_\sigma = \overline{\mathcal{A}}$. Furthermore, $\overline{\mu} = \mu^*$ on $\mathcal{A}_\sigma$.
+:::
+
+::: {.proof}
+## Proof of @lem-asigma-equals-aclosure 
+Let $A \in \mathcal{A}_\sigma$, so $A = \bigcup_{n=1}^\infty B_n$ with $B_n \in \mathcal{A}$. Define $A_n := \bigcup_{j=1}^n B_j \in \mathcal{A}$. Then $A_n \uparrow A$. 
+
+By the Approximation Lemma (from the previous lecture), $d_\mu(A_n, A) = \mu^*(A) - \mu(A_n) \to 0$ as $n \to \infty$. Thus, $A$ is the sequential limit of $(A_n)_{n=1}^\infty \subseteq \mathcal{A}$, which implies $A \in \overline{\mathcal{A}}$. Hence $\mathcal{A}_\sigma \subseteq \overline{\mathcal{A}}$.
+
+By continuity of the extension $\overline{\mu}$, we have $\mu^*(A) = \lim_{n \to \infty} \mu(A_n) = \overline{\mu}(A)$ for all $A \in \mathcal{A}_\sigma$.
+
+Finally, since $\mathcal{A} \subseteq \overline{\mathcal{A}}$ and $\overline{\mathcal{A}}$ is a $\sigma$-algebra (hence closed under countable unions), we have:
+$$
+\overline{\mathcal{A}} \subseteq \overline{\mathcal{A}}_\sigma \subseteq \overline{\overline{\mathcal{A}}} = \overline{\mathcal{A}},
+$$
+
+which yields $\overline{\mathcal{A}}_\sigma = \overline{\mathcal{A}}$. 
+:::
+
+---
+
+## Characterization of Sets in $\overline{\mathcal{A}}$
+
+::: {#thm-tfae-closure-characterization}
+## Outer Approximation Characterization
+Let $(\Omega, \mathcal{A}, \mu)$ be a finite premeasure space, and let $B \in 2^\Omega$. The following statements are equivalent:
+
+1. $B \in \overline{\mathcal{A}}$.
+2. For every $\epsilon > 0$, there exists a set $C \in \mathcal{A}_\sigma$ such that $B \subseteq C$ and
+   $$
+   \mu^*(C \setminus B) = d_\mu(B, C) < \epsilon.
+   $${#eq-outer-approx-condition}
+:::
+
+::: {.proof}
+## Proof of @thm-tfae-closure-characterization
+
+**(2) $\Rightarrow$ (1):**
+Assume Condition (2) holds. For each $n \in \mathbb{N}$, select $C_n \in \mathcal{A}_\sigma$ such that $B \subseteq C_n$ and $d_\mu(B, C_n) < \frac{1}{n}$. Then $d_\mu(C_n, B) \to 0$ as $n \to \infty$, so $B \in \overline{\mathcal{A}_\sigma}$. Since $\overline{\mathcal{A}_\sigma} = \overline{\mathcal{A}}$, it follows that $B \in \overline{\mathcal{A}}$.
+
+**(1) $\Rightarrow$ (2):**
+Fix $\epsilon > 0$. By (1), $B \in \overline{\mathcal{A}}$, so there exists $G \in \mathcal{A}$ such that:
+$$
+d_\mu(B, G) = \mu^*(B \Delta G) < \frac{\epsilon}{2}.
+$$
+
+
+By definition of outer measure as an infimum, since $\mu^*(B \Delta G) < \frac{\epsilon}{2}$, there exists a sequence $\{A_n\}_{n=1}^\infty \subseteq \mathcal{A}$ covering $B \Delta G$ (i.e., $B \Delta G \subseteq \bigcup_{n=1}^\infty A_n$) such that:
+$$
+\sum_{n=1}^\infty \mu(A_n) < \frac{\epsilon}{2}.
+$$
+
+
+Define $C := G \cup \left(\bigcup_{n=1}^\infty A_n\right) \in \mathcal{A}_\sigma$. 
+
+1. **Containment ($B \subseteq C$):**
+   $$
+   B \subseteq (B \setminus G) \cup G \subseteq (B \Delta G) \cup G \subseteq \left(\bigcup_{n=1}^\infty A_n\right) \cup G = C.
+   $$
+
+2. **Difference Bound ($\mu^*(C \setminus B) < \epsilon$):**
+   $$
+   \begin{align*}
+   C \setminus B &= \left( G \cup \bigcup_{n=1}^\infty A_n \right) \setminus B \\
+   &= (G \setminus B) \cup \left( \bigcup_{n=1}^\infty A_n \setminus B \right) \\
+   &\subseteq (B \Delta G) \cup \bigcup_{n=1}^\infty A_n \\
+   &\subseteq \bigcup_{n=1}^\infty A_n.
+   \end{align*}
+   $$
+
+   By monotonicity and subadditivity of $\mu^*$:
+   $$
+   \mu^*(C \setminus B) \le \mu^*\left(\bigcup_{n=1}^\infty A_n\right) \le \sum_{n=1}^\infty \mu(A_n) < \frac{\epsilon}{2} < \epsilon.
+   $$
+
+
+This establishes Condition (2). 
+:::
+
+---
+
+## Identity of $\mu^*$ and $\overline{\mu}$ on $\overline{\mathcal{A}}$
+
+::: {#cor-mu-star-equals-mu-bar}
+## Coincidence of Outer Measure and Extended Measure
+Let $(\Omega, \mathcal{A}, \mu)$ be a finite premeasure space. Then:
+$$
+\mu^* = \overline{\mu} \quad \text{on } \overline{\mathcal{A}}.
+$${#eq-mu-star-equals-mu-bar}
+:::
+
+::: {.proof}
+## Proof of @cor-mu-star-equals-mu-bar 
+Let $B \in \overline{\mathcal{A}}$.
+
+1. **Upper Bound ($\overline{\mu}(B) \le \mu^*(B)$):**
+   Since $\overline{\mu}$ is 1-Lipschitz and $\overline{\mu}(\emptyset) = 0$:
+   $$
+   \vert{}\overline{\mu}(B)\vert{} = \vert{}\overline{\mu}(B) - \overline{\mu}(\emptyset)\vert{} \le d_\mu(B, \emptyset) = \mu^*(B \Delta \emptyset) = \mu^*(B).
+   $$
+
+   Thus $\overline{\mu}(B) \le \mu^*(B)$.
+
+2. **Lower Bound ($\mu^*(B) \le \overline{\mu}(B)$):**
+   Fix $\epsilon > 0$. By @thm-tfae-closure-characterization, select $C \in \mathcal{A}_\sigma$ such that $B \subseteq C$ and $d_\mu(B, C) = \mu^*(C \setminus B) < \epsilon$. By 1-Lipschitz continuity of $\overline{\mu}$:
+   $$
+   \vert{}\overline{\mu}(B) - \overline{\mu}(C)\vert{} \le d_\mu(B, C) < \epsilon \implies \overline{\mu}(C) \le \overline{\mu}(B) + \epsilon.
+   $$
+
+   Since $C \in \mathcal{A}_\sigma$, @lem-asigma-equals-aclosure implies $\overline{\mu}(C) = \mu^*(C)$. By monotonicity of outer measure ($B \subseteq C \implies \mu^*(B) \le \mu^*(C)$):
+   $$
+   \mu^*(B) \le \mu^*(C) = \overline{\mu}(C) \le \overline{\mu}(B) + \epsilon.
+   $$
+
+   Taking $\epsilon \downarrow 0$ yields $\mu^*(B) \le \overline{\mu}(B)$.
+
+Combining both bounds yields $\overline{\mu}(B) = \mu^*(B)$ for all $B \in \overline{\mathcal{A}}$. 
+:::
+
+---
+
+## Proof that $\overline{\mu}$ is a Measure
+
+::: {#thm-main-extension-measure}
+## Measure Extension Main Theorem
+If $(\Omega, \mathcal{A}, \mu)$ is a finite premeasure space, then the unique extension $\overline{\mu}: \overline{\mathcal{A}} \to [0, \mu(\Omega)]$ is a measure on the $\sigma$-algebra $\overline{\mathcal{A}}$.
+:::
+
+::: {.proof}
+## Proof of @thm-main-extension-measure
+We show that $\overline{\mu}$ is finitely additive on $\overline{\mathcal{A}}$. 
+
+Let $A, B \in \overline{\mathcal{A}}$. By definition of closure, choose sequences $(A_n)_{n=1}^\infty \subseteq \mathcal{A}$ and $(B_n)_{n=1}^\infty \subseteq \mathcal{A}$ such that $d_\mu(A_n, A) \to 0$ and $d_\mu(B_n, B) \to 0$.
+
+By Property 2 of $d_\mu$, we have:
+$$
+d_\mu(A_n \cup B_n, A \cup B) \le d_\mu(A_n, A) + d_\mu(B_n, B) \xrightarrow{n \to \infty} 0,
+$$
+
+and similarly $d_\mu(A_n \cap B_n, A \cap B) \to 0$.
+
+By inclusion-exclusion on the algebra $\mathcal{A}$ for each $n \in \mathbb{N}$:
+$$
+\mu(A_n \cup B_n) + \mu(A_n \cap B_n) = \mu(A_n) + \mu(B_n).
+$${#eq-inclusion-exclusion-algebra}
+
+Taking limits as $n \to \infty$ and using continuity of $\overline{\mu}$:
+$$
+\begin{align*}
+\overline{\mu}(A \cup B) + \overline{\mu}(A \cap B) &= \lim_{n \to \infty} [\mu(A_n \cup B_n) + \mu(A_n \cap B_n)] \\
+&= \lim_{n \to \infty} [\mu(A_n) + \mu(B_n)] \\
+&= \overline{\mu}(A) + \overline{\mu}(B).
+\end{align*}
+$$
+
+
+If $A$ and $B$ are disjoint ($A \cap B = \emptyset$), then $\overline{\mu}(A \cap B) = \overline{\mu}(\emptyset) = 0$, yielding finite additivity:
+$$
+\overline{\mu}(A \cup B) = \overline{\mu}(A) + \overline{\mu}(B).
+$$
+
+
+Thus, $\overline{\mu}$ is a finitely-additive measure on the $\sigma$-algebra $\overline{\mathcal{A}}$, which implies $\overline{\mu}$ is countably superadditive.
+
+On the other hand, @cor-mu-star-equals-mu-bar establishes that $\overline{\mu} = \mu^*$ on $\overline{\mathcal{A}}$. Since the outer measure $\mu^*$ is countably subadditive on $2^\Omega$, $\overline{\mu}$ is countably subadditive on $\overline{\mathcal{A}}$.
+
+Combining countable superadditivity and countable subadditivity proves that $\overline{\mu}$ is countably additive on $\overline{\mathcal{A}}$. Since $\overline{\mu}(\emptyset) = 0$, $\overline{\mu}$ is a measure. 
+:::
+
+---

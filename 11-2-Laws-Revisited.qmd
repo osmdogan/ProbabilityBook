@@ -1,0 +1,437 @@
+# Lecture 11.2: Laws Revisited
+
+## Motivation and Finite Setup
+
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space. If $\Omega$ is a finite sample space and $X: \Omega \to \mathbb{R}$ is a finite-valued random variable, the expectation of $X$ is defined as:
+$$
+\mathbb{E}[X] = \sum_{\omega \in \Omega} X(\omega) \mathbb{P}(\{\omega\}) = \int_{\Omega} X \, d\mathbb{P}.
+$$
+
+If $g: \mathbb{R} \to \mathbb{R}$ is a measurable function, then $g \circ X: \Omega \to \mathbb{R}$ is also a random variable. Assuming $X$ takes finitely many distinct values $\{t_1, t_2, \dots, t_n\} \subset \mathbb{R}$, we can compute the expectation of $g(X)$ by partitioning $\Omega$ according to the level sets $X^{-1}(\{t_j\})$:
+
+$$
+\begin{aligned}
+\mathbb{E}[g(X)] &= \sum_{\omega \in \Omega} g(X(\omega)) \mathbb{P}(\{\omega\}) \\
+&= \sum_{j=1}^{n} \sum_{\omega \in X^{-1}(\{t_j\})} g(X(\omega)) \mathbb{P}(\{\omega\}) \\
+&= \sum_{j=1}^{n} g(t_j) \sum_{\omega \in X^{-1}(\{t_j\})} \mathbb{P}(\{\omega\}) \\
+&= \sum_{j=1}^{n} g(t_j) \mathbb{P}\bigl(\{\omega \in \Omega : X(\omega) = t_j\}\bigr) \\
+&= \sum_{j=1}^{n} g(t_j) \mathbb{P}\bigl(X^{-1}(\{t_j\})\bigr) \\
+&= \sum_{j=1}^{n} g(t_j) \mu_X(\{t_j\}) \\
+&= \int_{\mathbb{R}} g \, d\mu_X,
+\end{aligned}
+$$
+where $\mu_X \triangleq X_{*} \mathbb{P} = \mathbb{P} \circ X^{-1}$ denotes the push-forward measure (law/distribution) of $X$ under $\mathbb{P}$.
+
+---
+
+## Abstract Change of Variables
+
+- The identity above generalizes to arbitrary measure spaces and measurable mappings via the abstract Change of Variables Theorem.
+- The change of variables formula is a special case of the Radon-Nikodym Theorem when the push-forward measure is absolutely continuous with respect to a reference measure. It allows us to compute expectations of functions of random variables in terms of their distribution (law) without reference to the underlying probability space.
+
+::: {#prp-change-of-variables}
+## Abstract Change of Variables
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space, $(S, \mathcal{S})$ be a measurable space, and $X: \Omega \to S$ be an $(\mathcal{F}, \mathcal{S})$-measurable function. Define the push-forward measure $\nu \triangleq X_* \mu$ on $(S, \mathcal{S})$ by $\nu(B) = \mu(X^{-1}(B))$ for all $B \in \mathcal{S}$.
+
+A measurable function $g: S \to \mathbb{R}$ is in $L^1(S, \mathcal{S}, \nu)$ if and only if $g \circ X: \Omega \to \mathbb{R}$ is in $L^1(\Omega, \mathcal{F}, \mu)$. In either case,
+$$
+\int_{S} g \, d(X_* \mu) = \int_{S} g \, d\nu = \int_{\Omega} (g \circ X) \, d\mu.
+$$ {#eq-change-of-variables}
+:::
+
+**Some Remarks**:
+
+- The important conceptual point is that integration with respect to the distribution/push-forward of $X$ is equivalent to integration over the original space after composing with $X$.
+
+- The push-forward measure $\nu=X_*\mu$ simply records how much $\mu$-mass gets transported to each part of $S$: $\nu(B) = \mu\{\omega:X(\omega)\in B\}$. So $\nu$ tells us how much mass $X$ assigns to each set of values in $S$. 
+
+- Now suppose we want to calculate $\int_\Omega g(X(\omega))\,d\mu(\omega)$. Although this integral is formally over $\Omega$, the quantity $g(X(\omega))$ depends on $\omega$ only through the value $X(\omega)$. Therefore, we don't really need to keep track of the individual $\omega$'s. We can instead group together all $\omega$'s that produce the same region of $S$. The push-forward measure $\nu$ does exactly this grouping. Thus,
+$$
+\int_\Omega g(X(\omega))\,d\mu(\omega) = \int_S g(x)\,d\nu(x). 
+$$
+
+::: {.proof}
+## Proof of @eq-change-of-variables
+
+The proof follows the standard measure-theoretic induction: indicators $\to$ simple functions $\to$ non-negative measurables $\to$ general $L^1$.
+
+### Step 1: Indicator functions
+
+Let $g = \mathbf{1}_B$ for $B \in \mathcal{S}$. Using the key identity $\mathbf{1}_B \circ X = \mathbf{1}_{X^{-1}(B)}$ (since $(\mathbf{1}_B \circ X)(\omega) = 1 \iff X(\omega) \in B \iff \omega \in X^{-1}(B)$) and the definition of the push-forward $\nu(B) = \mu(X^{-1}(B))$:
+$$
+\int_S \mathbf{1}_B \, d\nu = \nu(B) = \mu\bigl(X^{-1}(B)\bigr) = \int_{\Omega} \mathbf{1}_{X^{-1}(B)} \, d\mu = \int_{\Omega} (\mathbf{1}_B \circ X) \, d\mu.
+$$
+
+### Step 2: Non-negative simple functions
+
+Let $g = \sum_{i=1}^{n} c_i \mathbf{1}_{B_i}$ with $c_i \ge 0$ and $B_i \in \mathcal{S}$ pairwise disjoint. Then $g \circ X = \sum_{i=1}^n c_i \mathbf{1}_{X^{-1}(B_i)}$. By linearity of the integral and Step 1:
+$$
+\begin{align*}
+\int_S g \, d\nu &= \sum_{i=1}^{n} c_i \, \nu(B_i) \\
+&= \sum_{i=1}^{n} c_i \, \mu\bigl(X^{-1}(B_i)\bigr)\\
+&= \sum_{i=1}^{n} c_i \,\int_{\Omega} (\mathbf{1}_{X^{-1}(B_i)}) \, d\mu\\
+&= \int_{\Omega} \sum_{i=1}^{n} c_i\ \mathbf{1}_{X^{-1}(B_i)} \, d\mu \\
+&= \int_{\Omega} (g \circ X) \, d\mu.
+\end{align*}
+$$
+
+### Step 3: Non-negative measurable functions
+
+Let $g: S \to [0, \infty)$ be measurable. By the simple-function approximation theorem, there exist non-negative simple functions $0 \le s_n \uparrow g$ pointwise on $S$. Then $0 \le s_n \circ X \uparrow g \circ X$ pointwise on $\Omega$. Applying the Monotone Convergence Theorem (@cor-mct-ae) twice and using Step 2:
+$$
+\int_S g \, d\nu = \lim_{n \to \infty} \int_S s_n \, d\nu = \lim_{n \to \infty} \int_{\Omega} (s_n \circ X) \, d\mu = \int_{\Omega} (g \circ X) \, d\mu.
+$$
+
+### Step 4: $L^1$ equivalence and general signed functions
+
+For general measurable $g$, write $g = g^+ - g^-$ where $g^+ = \max(g, 0)$ and $g^- = \max(-g, 0)$. Note that $(g \circ X)^+ = g^+ \circ X$ and $(g \circ X)^- = g^- \circ X$ pointwise. Applying Step 3 to $|g| = g^+ + g^-$:
+$$
+\int_S |g| \, d\nu = \int_{\Omega} (|g| \circ X) \, d\mu = \int_{\Omega} |g \circ X| \, d\mu.
+$$
+This establishes the $L^1$ equivalence: $g \in L^1(S, \mathcal{S}, \nu) \iff g \circ X \in L^1(\Omega, \mathcal{F}, \mu)$. When either (hence both) conditions hold, both $\int_S g^\pm \, d\nu$ and $\int_\Omega (g^\pm \circ X)\,d\mu$ are finite, and:
+$$
+\begin{align*}
+\int_S g \, d\nu &= \int_S g^+ \, d\nu - \int_S g^- \, d\nu \\
+&= \int_{\Omega} (g^+ \circ X) \, d\mu - \int_{\Omega} (g^- \circ X) \, d\mu\\
+&= \int_{\Omega} (g \circ X) \, d\mu.
+\end{align*}
+$$
+:::
+
+Step 3 of the preceding proof is used often enough on its own to be recorded separately. Note that it needs no integrability hypothesis, and that it extends verbatim to integrands taking the value $+\infty$.
+
+::: {#cor-change-of-variables-nonneg}
+## Change of Variables for Non-Negative Integrands
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space, $(S, \mathcal{S})$ a measurable space, $X: \Omega \to S$ an $(\mathcal{F}, \mathcal{S})$-measurable map, and $\nu \triangleq X_* \mu$. Then for **every** $\mathcal{S}/\mathcal{B}([0,\infty])$-measurable $g: S \to [0, \infty]$,
+$$
+\int_S g \, d\nu = \int_\Omega (g \circ X) \, d\mu \qquad \text{in } [0, \infty].
+$$ {#eq-change-of-variables-nonneg}
+:::
+
+::: {.proof}
+## Proof of @cor-change-of-variables-nonneg
+For $g$ with values in $[0, \infty)$ this is Step 3 of the proof of @prp-change-of-variables. For general $g: S \to [0, \infty]$, set $g_n \triangleq \min(g, n)$, so that $g_n: S \to [0, \infty)$ is measurable and $g_n \uparrow g$ pointwise on $S$. Then $g_n \circ X \uparrow g \circ X$ pointwise on $\Omega$, and applying @thm-mct on both spaces together with the finite-valued case gives
+$$
+\int_S g \, d\nu = \lim_{n \to \infty} \int_S g_n \, d\nu = \lim_{n \to \infty} \int_\Omega (g_n \circ X) \, d\mu = \int_\Omega (g \circ X) \, d\mu .
+$$
+:::
+
+## Application to Random Vectors
+
+Let $(S, \mathcal{S}) = (\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ and let $\mathbf{X}: (\Omega, \mathcal{F}, \mathbb{P}) \to \mathbb{R}^d$ be a Borel-measurable random vector.
+
+* **Law of $\mathbf{X}$**: The measure $\mu_{\mathbf{X}} \triangleq \mathbf{X}_* \mathbb{P} = \mathbb{P} \circ \mathbf{X}^{-1}: \mathcal{B}(\mathbb{R}^d) \to [0, 1]$ defines the distribution (law) of $\mathbf{X}$.
+* **Expectation of $g(\mathbf{X})$**: By @eq-change-of-variables, for any integrable or non-negative Borel-measurable $g: \mathbb{R}^d \to \mathbb{R}$:
+$$
+\mathbb{E}[g(\mathbf{X})] = \int_{\Omega} (g \circ \mathbf{X}) \, d\mathbb{P} = \int_{\mathbb{R}^d} g \, d(\mathbf{X}_* \mathbb{P}) = \int_{\mathbb{R}^d} g \, d\mu_{\mathbf{X}}.
+$$ {#eq-exp-pushforward}
+In particular, for a real-valued random variable $X: \Omega \to \mathbb{R}$:
+$$
+\mathbb{E}[g(X)] = \int_{\mathbb{R}} g \, d\mu_X.
+$$
+
+If $F_X(t) \triangleq \mathbb{P}(X \le t)$ denotes the Cumulative Distribution Function (CDF) of $X$, then $\mu_X$ is the Lebesgue-Stieltjes measure $\mu_{F_X}$ associated with $F_X$. When $g$ is Riemann-Stieltjes integrable (e.g., continuous), or when $F_X$ is absolutely continuous with Radon-Nikodym derivative (density) $f_X = F_X'$:
+$$
+\mathbb{E}[g(X)] = \int_{\mathbb{R}} g(t) \, dF_X(t) = \int_{\mathbb{R}} g(t) f_X(t) \, dt.
+$$
+
+**Upshot:** Knowledge of the law $\mu_X$ is sufficient to compute the expectation of any measurable function of $X$.
+
+
+:::{#exm-change-of-variables}
+## Change of Variables via a Push-Forward Probability Measure
+
+Consider the probability space $(\Omega,\mathcal{F},P)=((0,1),\mathcal{B}((0,1)),\lambda)$, where $\lambda$ is Lebesgue measure restricted to $(0,1)$. Define the random variable
+$X:\Omega\to\mathbb{R}$ by
+$$
+X(\omega)
+=
+\begin{cases}
+0, & 0<\omega\leq \frac12,\\
+1, & \frac12<\omega<1.
+\end{cases}
+$$
+Thus, $X$ maps the entire interval $(0,\frac12]$ to $0$ and the entire interval $(\frac12,1)$ to $1$:
+$$
+(0,1)
+\quad\xrightarrow{\quad X\quad}\quad
+\{0,1\}.
+$$
+
+The distribution of $X$ is the push-forward probability measure $P_X = X_* P$. For $B\in\mathcal{B}(\mathbb{R})$,
+$$
+P_X(B)=P(X^{-1}(B)).
+$$
+In particular,
+$$
+P_X(\{0\})=P(X^{-1}(\{0\}))=P\left(\left(0,\frac12\right]\right)=\frac12,
+$$
+and
+$$
+P_X(\{1\})=P(X^{-1}(\{1\}))=P\left(\left(\frac12,1\right)\right)=\frac12.
+$$
+Thus, $X$ has a Bernoulli$(1/2)$ distribution. Now let $g(x)=3x+2$. The change-of-variables proposition gives
+$$
+\int_{\mathbb{R}}g(x)\,dP_X(x)
+=
+\int_{\Omega}g(X(\omega))\,dP(\omega).
+$$
+We can verify this directly. On the original probability space,
+$$
+g(X(\omega))
+=
+\begin{cases}
+2, & 0<\omega\leq \frac12,\\
+5, & \frac12<\omega<1.
+\end{cases}
+$$
+Therefore,
+$$
+\begin{aligned}
+\int_{\Omega}g(X(\omega))\,dP(\omega)
+&=
+2P\left(\left(0,\frac12\right]\right)
++
+5P\left(\left(\frac12,1\right)\right)\\
+&=
+2\left(\frac12\right)
++
+5\left(\frac12\right)\\
+&=
+\frac72.
+\end{aligned}
+$$
+On the other hand, integrating directly with respect to the distribution of $X$ gives
+$$
+\begin{aligned}
+\int_{\mathbb{R}}g(x)\,dP_X(x)
+&=
+g(0)P_X(\{0\})
++
+g(1)P_X(\{1\})\\
+&=
+2\left(\frac12\right)
++
+5\left(\frac12\right)\\
+&=
+\frac72.
+\end{aligned}
+$$
+Hence,
+$$
+\int_{\Omega}g(X)\,dP
+=
+\int_{\mathbb{R}}g(x)\,dP_X(x)
+=
+\frac72.
+$$
+The important point is that the original sample space $\Omega=(0,1)$ is no longer needed once we know the distribution $P_X$. The push-forward measure $P_X$ summarizes how the probability measure $P$ is transported through $X$. In general,
+$$
+\mathbb{E}[g(X)]
+=
+\int_{\Omega}g(X(\omega))\,dP(\omega)
+=
+\int_Sg(x)\,dP_X(x).
+$$
+Thus, to integrate a function of a random variable, we can either integrate over the original sample space or integrate directly over the state space of the random variable using its distribution.
+:::
+
+
+## Moments and Tail Behavior
+
+For $n \in \mathbb{N}$, the $n$-th moment of $X$ is:
+$$
+\mathbb{E}[X^n] = \int_{\mathbb{R}} t^n \, \mu_X(dt).
+$$
+
+::: {#prp-moment-hierarchy}
+## Moment Hierarchy
+
+Let $X$ be a real-valued random variable and $0 \le q < p$. If $\mathbb{E}[|X|^p] < \infty$, then $\mathbb{E}[|X|^q] < \infty$.
+:::
+
+::: {.proof}
+## Proof of @prp-moment-hierarchy
+Split the integral at $|t| = 1$:
+$$
+\mathbb{E}[|X|^q] = \int_{|t| < 1} |t|^q \, \mu_X(dt) + \int_{|t| \ge 1} |t|^q \, \mu_X(dt).
+$$
+
+For the first term, $|t|^q \le 1$ on $\{|t| < 1\}$, so:
+$$
+\int_{|t| < 1} |t|^q \, \mu_X(dt) \le \mu_X(\mathbb{R}) = 1 < \infty.
+$$
+
+For the second term, $|t|^q \le |t|^p$ on $\{|t| \ge 1\}$ (since $p > q$), so:
+$$
+\int_{|t| \ge 1} |t|^q \, \mu_X(dt) \le \int_{|t| \ge 1} |t|^p \, \mu_X(dt) \le \mathbb{E}[|X|^p] < \infty.
+$$
+
+Combining both terms gives $\mathbb{E}[|X|^q] < \infty$.
+:::
+
+Thus, if a random variable has a finite $p$-th absolute moment, then it has finite absolute moments of every order $q\in[0,p)$.
+
+---
+
+## Normal (Gaussian) Distributions
+
+Let $\alpha \in \mathbb{R}$ and $t > 0$. The normal distribution $\mathcal{N}(\alpha, t)$ has probability density function:
+$$
+f(x) = \frac{1}{\sqrt{2\pi t}} e^{-\frac{(x - \alpha)^2}{2t}}, \quad x \in \mathbb{R}.
+$$
+
+::: {#prp-gaussian-linear-transform}
+If $X \sim \mathcal{N}(\alpha, t)$ and $Z \sim \mathcal{N}(0, 1)$, then $X \overset{d}{=} \sqrt{t} Z + \alpha$.
+:::
+
+::: {.proof}
+## Proof of @prp-gaussian-linear-transform
+
+Note that since $Z\sim\mathcal N(0,1)$, its law $\mu_Z$ is absolutely continuous with respect to Lebesgue measure and has density $\phi(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$. Therefore $\mu_Z(dx) = \phi(x) dx$.
+
+For any non-negative measurable function $g: \mathbb{R} \to \mathbb{R}$:
+$$
+\mathbb{E}\bigl[g(\sqrt{t}Z + \alpha)\bigr] = \int_{\mathbb{R}} g(\sqrt{t}x + \alpha) \, \mu_Z(dx) = \int_{\mathbb{R}} g(\sqrt{t}x + \alpha) \frac{1}{\sqrt{2\pi}} e^{-x^2/2} \, dx.
+$$
+
+Applying the substitution $u = \sqrt{t}x + \alpha$, so that $x = \frac{u - \alpha}{\sqrt{t}}$ and $dx = \frac{1}{\sqrt{t}} du$:
+$$
+\mathbb{E}\bigl[g(\sqrt{t}Z + \alpha)\bigr] = \int_{\mathbb{R}} g(u) \frac{1}{\sqrt{2\pi t}} e^{-\frac{(u - \alpha)^2}{2t}} \, du = \mathbb{E}[g(X)].
+$$
+Choosing $g = \mathbf{1}_{(a, b]}$, we obtain:
+$$
+\mathbb{P}(X \in (a, b]) = \mathbb{P}\bigl(\sqrt{t}Z + \alpha \in (a, b]\bigr) \implies \mu_X = \mu_{\sqrt{t}Z + \alpha}.
+$$
+:::
+
+Let $Z \sim \mathcal{N}(0, 1)$.
+
+1. **First Moment:** By symmetry:
+   $$
+   \mathbb{E}[Z] = \int_{\mathbb{R}} x \frac{1}{\sqrt{2\pi}} e^{-x^2/2} \, dx = \lim_{r \to \infty} \frac{1}{\sqrt{2\pi}} \int_{-r}^{r} x e^{-x^2/2} \, dx = 0.
+   $$
+
+2. **Second Moment:** Using integration by parts:
+   $$
+   \begin{align*}
+   \mathbb{E}[Z^2] &= \frac{1}{\sqrt{2\pi}} \lim_{r \to \infty} \int_{-r}^{r} x \cdot \left(x e^{-x^2/2}\right) dx \\
+   &= \frac{1}{\sqrt{2\pi}} \left( \lim_{r \to \infty} \left[ -x e^{-x^2/2} \right]_{-r}^{r} + \int_{-\infty}^{\infty} e^{-x^2/2} \, dx \right) \\
+   &= 0 + 1 = 1.
+   \end{align*}
+   $$
+
+3. **Expectation of $X \sim \mathcal{N}(\alpha, t)$:**
+   $$
+   \mathbb{E}[X] = \mathbb{E}[\sqrt{t}Z + \alpha] = \sqrt{t} \mathbb{E}[Z] + \alpha = \alpha.
+   $$
+
+For higher moments of the standard normal distribution, we can use Gaussian integration by parts. The following proposition formalizes this technique.
+
+::: {#prp-gaussian-ibp}
+Let $Z \sim \mathcal{N}(0, 1)$. For any continuously differentiable function $f: \mathbb{R} \to \mathbb{R}$ such that $\mathbb{E}[|f'(Z)|] < \infty$ and boundary terms vanish at infinity:
+$$
+\mathbb{E}[Z f(Z)] = \mathbb{E}[f'(Z)].
+$$ {#eq-gaussian-ibp}
+:::
+
+Applying @eq-gaussian-ibp with $f(z) = z^{n+1}$ yields the recurrence relation:
+$$
+\mathbb{E}[Z^{n+2}] = \mathbb{E}[Z \cdot Z^{n+1}] = (n + 1) \mathbb{E}[Z^n].
+$$
+
+By induction, for $n \in \mathbb{N}_0$:
+$$
+\mathbb{E}[Z^n] = \begin{cases} 
+0 & \text{if } n \text{ is odd,} \\ 
+(n - 1)!! = (n - 1)(n - 3) \cdots 3 \cdot 1 & \text{if } n \text{ is even.} 
+\end{cases}
+$$
+
+::: {#rem-combinatorial-interpretation}
+For even $n$, $(n-1)!!$ represents the number of distinct pairings (matchings) of $n$ distinct objects.
+:::
+
+---
+
+## Exponential Distributions
+
+::: {#def-exponential-dist}
+A random variable $T$ follows an exponential distribution with parameter $\alpha > 0$, written $T \sim \text{Exp}(\alpha)$, if its CDF is given by:
+$$
+F_T(t) = (1 - e^{-\alpha t}) \mathbf{1}_{\{t \ge 0\}}.
+$$
+:::
+
+Differentiating $F_T$ with respect to $t$ yields the density function:
+$$
+f_T(t) = F_T'(t) = \alpha e^{-\alpha t} \mathbf{1}_{[0, \infty)}(t).
+$$
+
+The exponential distribution frequently models waiting times, with tail probability:
+$$
+\mathbb{P}(T > t) = 1 - F_T(t) = e^{-\alpha t}, \quad t \ge 0.
+$$
+
+Using the density $f_T$, we can calculate the expectation of $T$ as:
+$$
+\mathbb{E}[T] = \int_{0}^{\infty} t \cdot \alpha e^{-\alpha t} \, dt.
+$$
+
+Since $\frac{\partial}{\partial \alpha} e^{-\alpha t} = -t e^{-\alpha t}$, we have $\alpha t e^{-\alpha t} = -\alpha \frac{\partial}{\partial \alpha} e^{-\alpha t}$. The interchange of differentiation and integration is justified by the Dominated Convergence Theorem: for any fixed $\alpha_0 > 0$ and all $\alpha \ge \alpha_0$, the dominating function $t e^{-\alpha_0 t}$ is integrable on $[0, \infty)$. Therefore:
+$$
+\mathbb{E}[T] = -\alpha \frac{d}{d\alpha} \int_{0}^{\infty} e^{-\alpha t} \, dt = -\alpha \frac{d}{d\alpha} \left( \frac{1}{\alpha} \right) = -\alpha \left( -\frac{1}{\alpha^2} \right) = \frac{1}{\alpha}.
+$$
+
+---
+
+## Poisson Distribution
+
+::: {#def-poisson-dist}
+A discrete random variable $N: \Omega \to \mathbb{N}_0$ follows a Poisson distribution with parameter $\alpha > 0$, written $N \sim \text{Pois}(\alpha)$, if:
+$$
+\mathbb{P}(N = k) = e^{-\alpha} \frac{\alpha^k}{k!}, \quad k \in \mathbb{N}_0.
+$$
+:::
+
+The Poisson distribution models the number of events occurring within a fixed time interval. Note that it defines a valid probability distribution since:
+$$
+\sum_{k=0}^{\infty} \mathbb{P}(N = k) = e^{-\alpha} \sum_{k=0}^{\infty} \frac{\alpha^k}{k!} = e^{-\alpha} e^{\alpha} = 1.
+$$
+
+The $k=0$ term contributes nothing, so:
+$$
+\mathbb{E}[N] = \sum_{k=0}^{\infty} k \, e^{-\alpha} \frac{\alpha^k}{k!} = \sum_{k=1}^{\infty} e^{-\alpha} \frac{\alpha^k}{(k-1)!}.
+$$
+
+Substituting $j = k - 1$:
+$$
+\mathbb{E}[N] = \alpha e^{-\alpha} \sum_{j=0}^{\infty} \frac{\alpha^j}{j!} = \alpha e^{-\alpha} e^{\alpha} = \alpha.
+$$
+
+---
+
+## Uniform Random Variables and Vectors
+
+Let $\lambda$ denote $d$-dimensional Lebesgue measure on $\mathbb{R}^d$. Let $B \in \mathcal{B}(\mathbb{R}^d)$ with $0 < \lambda(B) < \infty$.
+
+::: {#def-uniform-vector}
+A random vector $\mathbf{X}$ is uniformly distributed on $B$, written $\mathbf{X} \sim \text{Unif}(B)$, if for any $A \in \mathcal{B}(\mathbb{R}^d)$:
+$$
+\mathbb{P}(\mathbf{X} \in A) = \frac{\lambda(A \cap B)}{\lambda(B)} = \frac{1}{\lambda(B)} \int_{A} \mathbf{1}_B \, d\lambda.
+$$
+:::
+
+The density function of $\mathbf{X}$ with respect to Lebesgue measure is $f_{\mathbf{X}} = \frac{1}{\lambda(B)} \mathbf{1}_B$.
+
+For $U \sim \text{Unif}([a, b])$ with $a < b$, $f_U(x) = \frac{1}{b - a} \mathbf{1}_{[a, b]}(x)$. The expectation is:
+$$
+\begin{align*}
+\mathbb{E}[U] &= \int_{\mathbb{R}} x \frac{1}{b - a} \mathbf{1}_{[a, b]}(x) \, dx \\
+&= \frac{1}{b - a} \int_{a}^{b} x \, dx = \frac{1}{b - a} \left[ \frac{b^2 - a^2}{2} \right] = \frac{a + b}{2}.
+\end{align*}
+$$
+
+---

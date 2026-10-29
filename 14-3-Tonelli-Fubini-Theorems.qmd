@@ -1,0 +1,134 @@
+# Lecture 14.3: Tonelli and Fubini Theorems
+
+## Tonelli's Theorem for Non-Negative Functions
+
+Let $(\Omega_1, \mathcal{F}_1, \mu_1)$ and $(\Omega_2, \mathcal{F}_2, \mu_2)$ be $\sigma$-finite measure spaces, and let $(\Omega_1 \times \Omega_2, \mathcal{F}_1 \otimes \mathcal{F}_2, \mu_1 \otimes \mu_2)$ be the product measure space.
+
+::: {#thm-tonelli}
+## Tonelli's Theorem
+
+Let $f: \Omega_1 \times \Omega_2 \to [0, \infty]$ be a non-negative $(\mathcal{F}_1 \otimes \mathcal{F}_2) \,/\, \mathcal{B}([0, \infty])$-measurable function. Then:
+
+$$
+\begin{aligned}
+\int_{\Omega_1 \times \Omega_2} f \, d(\mu_1 \otimes \mu_2) &= \int_{\Omega_1} \left( \int_{\Omega_2} f(\omega_1, \omega_2) \, \mu_2(d\omega_2) \right) \mu_1(d\omega_1) \\
+&= \int_{\Omega_2} \left( \int_{\Omega_1} f(\omega_1, \omega_2) \, \mu_1(d\omega_1) \right) \mu_2(d\omega_2)
+\end{aligned}
+$${#eq-tonelli-identity}
+:::
+
+::: {.proof}
+## Proof of @thm-tonelli
+1. **Indicator Functions:** For $f = \mathbf{1}_E$ with $E \in \mathcal{F}_1 \otimes \mathcal{F}_2$, @eq-tonelli-identity holds by definition of the product measure $\mu_1 \otimes \mu_2$.
+2. **Simple Functions:** By linearity of integration, @eq-tonelli-identity holds for non-negative simple functions $f = \sum_{j=1}^k c_j \mathbf{1}_{E_j}$.
+3. **General Non-Negative Functions:** For a general non-negative $({\mathcal{F}_1 \otimes \mathcal{F}_2})$-measurable $f$, choose non-negative simple functions $\varphi_n \uparrow f$ pointwise. By Step 2, @eq-tonelli-identity holds for each $\varphi_n$.
+
+   * **Inner MCT:** For each fixed $\omega_1 \in \Omega_1$, $\varphi_n(\omega_1, \cdot) \uparrow f(\omega_1, \cdot)$ pointwise. By MCT on $(\Omega_2, \mathcal{F}_2, \mu_2)$:
+     $$g_n(\omega_1) \triangleq \int_{\Omega_2} \varphi_n(\omega_1, \omega_2) \, \mu_2(d\omega_2) \uparrow \int_{\Omega_2} f(\omega_1, \omega_2) \, \mu_2(d\omega_2) \triangleq g(\omega_1).$$
+     Since each $g_n$ is $\mathcal{F}_1$-measurable (by Step 2), the pointwise limit $g$ is $\mathcal{F}_1$-measurable.
+   * **Outer MCT:** Since $g_n \uparrow g$ pointwise, MCT on $(\Omega_1, \mathcal{F}_1, \mu_1)$ gives $\int_{\Omega_1} g_n \, d\mu_1 \uparrow \int_{\Omega_1} g \, d\mu_1$.
+   * **Product MCT:** Since $\varphi_n \uparrow f$ on $\Omega_1 \times \Omega_2$, MCT on the product space gives $\int_{\Omega_1 \times \Omega_2} \varphi_n \, d(\mu_1 \otimes \mu_2) \uparrow \int_{\Omega_1 \times \Omega_2} f \, d(\mu_1 \otimes \mu_2)$.
+
+   Since the three-way equality holds for each $\varphi_n$, passing to the limit establishes @eq-tonelli-identity. The identity for the reversed integration order follows by symmetry.
+:::
+
+---
+
+## Example: The Normalizing Constant for the Standard Normal Distribution
+
+Consider $f(x) = e^{-x^2/2} \ge 0$ on $\mathbb{R}$. Define $I \triangleq \int_{\mathbb{R}} e^{-x^2/2} \, \lambda(dx)$. We evaluate $I$ using Tonelli's theorem on $\mathbb{R}^2$:
+
+$$
+\begin{aligned}
+I^2 &= \left( \int_{\mathbb{R}} e^{-x^2/2} \, \lambda(dx) \right) \left( \int_{\mathbb{R}} e^{-y^2/2} \, \lambda(dy) \right) \\
+&= \int_{\mathbb{R}^2} e^{-\frac{1}{2}(x^2 + y^2)} \, d(\lambda \otimes \lambda)
+\end{aligned}
+$$ {#eq-gaussian-integral-step1}
+
+* **Exhaustion by Compact Disks:** Define 
+$$
+\bar{D}_R \triangleq \{ (x, y) \in \mathbb{R}^2 \mid x^2 + y^2 \le R^2 \}.
+$$
+Note that as $R \to \infty$, $\mathbf{1}_{\bar{D}_R} \uparrow 1$ $\lambda \otimes \lambda$-a.s.
+* **Monotone Convergence Theorem:**
+  $$
+  I^2 = \lim_{R \to \infty} \int_{\bar{D}_R} e^{-\frac{1}{2}(x^2 + y^2)} \, dx dy
+  $$ {#eq-gaussian-mct}
+
+* **Polar Coordinates Integration:**
+  $$
+  \begin{aligned}
+  \int_{\bar{D}_R} e^{-\frac{1}{2}(x^2 + y^2)} \, dx dy &= \int_{0}^{2\pi} d\theta \int_{0}^{R} r e^{-r^2/2} \, dr\\
+  &= 2\pi \left[ -e^{-r^2/2} \right]_{0}^{R} \\
+  &= 2\pi \left( 1 - e^{-R^2/2} \right)
+  \end{aligned}
+  $$ {#eq-polar-calc}
+
+Taking $R \to \infty$ gives $I^2 = 2\pi \implies I = \sqrt{2\pi}$.
+
+---
+
+## Fubini's Theorem for Integrable Functions
+
+::: {#thm-fubini}
+## Fubini's Theorem
+
+Let $f: \Omega_1 \times \Omega_2 \to \mathbb{R}$ be $(\mathcal{F}_1 \otimes \mathcal{F}_2)$-measurable. The following statements are equivalent:
+
+1. $f \in L^1(\Omega_1 \times \Omega_2, \mathcal{F}_1 \otimes \mathcal{F}_2, \mu_1 \otimes \mu_2)$;
+2. $\int_{\Omega_1} \left( \int_{\Omega_2} |f(\omega_1, \omega_2)| \, \mu_2(d\omega_2) \right) \mu_1(d\omega_1) < \infty$;
+3. $\int_{\Omega_2} \left( \int_{\Omega_1} |f(\omega_1, \omega_2)| \, \mu_1(d\omega_1) \right) \mu_2(d\omega_2) < \infty$.
+
+If any (and hence all) of these conditions hold, then:
+
+* The slice function $\omega_2 \mapsto f(\omega_1, \omega_2)$ is in $L^1(\mu_2)$ for $\mu_1$-almost every $\omega_1 \in \Omega_1$;
+* The slice function $\omega_1 \mapsto f(\omega_1, \omega_2)$ is in $L^1(\mu_1)$ for $\mu_2$-almost every $\omega_2 \in \Omega_2$;
+* The integrated slice function $\omega_1 \mapsto \int_{\Omega_2} f(\omega_1, \omega_2) \, \mu_2(d\omega_2)$ (defined to be $0$ where the slice integral is undefined or infinite) belongs to $L^1(\Omega_1, \mathcal{F}_1, \mu_1)$;
+* The integrated slice function $\omega_2 \mapsto \int_{\Omega_1} f(\omega_1, \omega_2) \, \mu_1(d\omega_1)$ belongs to $L^1(\Omega_2, \mathcal{F}_2, \mu_2)$;
+* The integral with respect to the product measure equals both iterated integrals:
+  $$
+  \begin{aligned}
+  \int_{\Omega_1 \times \Omega_2} f \, d(\mu_1 \otimes \mu_2) &= \int_{\Omega_1} \left( \int_{\Omega_2} f(\omega_1, \omega_2) \, \mu_2(d\omega_2) \right) \mu_1(d\omega_1) \\
+  &= \int_{\Omega_2} \left( \int_{\Omega_1} f(\omega_1, \omega_2) \, \mu_1(d\omega_1) \right) \mu_2(d\omega_2)
+  \end{aligned}
+  $$ {#eq-fubini-identity}
+:::
+
+::: {.proof}
+## Proof of @thm-fubini
+**Step 1: Equivalence of Integrability Conditions.** By Tonelli's theorem applied to the non-negative function $|f|$, the double integral $\int |f| \, d(\mu_1 \otimes \mu_2)$ equals both iterated integrals of $|f|$. Hence (1), (2), and (3) are equivalent.
+
+**Step 2: Null Set Analysis.** Let $E_1 \triangleq \left\{ \omega_1 \in \Omega_1 \;\middle|\; \int_{\Omega_2} |f(\omega_1, \omega_2)| \, \mu_2(d\omega_2) = \infty \right\}$. By Tonelli's theorem:
+$$
+\begin{aligned}
+\int_{\Omega_1} \left( \int_{\Omega_2} |f(\omega_1, \omega_2)| \, \mu_2(d\omega_2) \right) \mu_1(d\omega_1) = \int_{\Omega_1 \times \Omega_2} |f| \, d(\mu_1 \otimes \mu_2) < \infty
+\end{aligned}
+$$
+Since the non-negative integrand $\omega_1 \mapsto \int_{\Omega_2} |f(\omega_1,\omega_2)|\,\mu_2(d\omega_2)$ has a finite $\mu_1$-integral, it is $\mu_1$-a.e. finite. Indeed, for any $n \ge 1$, Markov's inequality gives
+$$
+\mu_1(E_1) \le \mu_1\!\left(\int_{\Omega_2}|f(\omega_1,\cdot)|\,d\mu_2 \ge n\right) \le \frac{1}{n}\int_{\Omega_1 \times \Omega_2}|f|\,d(\mu_1\otimes\mu_2),
+$$
+and since the right side tends to $0$ as $n \to \infty$, we conclude $\mu_1(E_1) = 0$.
+
+**Step 3: Decomposition into Positive and Negative Parts.** Decompose $f = f^+ - f^-$ where $f^+, f^- \ge 0$. For $\omega_1 \in E_1^c$, both $\int f^+(\omega_1, \cdot) \, d\mu_2 < \infty$ and $\int f^-(\omega_1, \cdot) \, d\mu_2 < \infty$. Defining $\int_{\Omega_2} f(\omega_1, \omega_2) \, \mu_2(d\omega_2) = 0$ on $E_1$ gives:
+$$
+\begin{aligned}
+&\int_{\Omega_2} f(\omega_1, \omega_2) \, \mu_2(d\omega_2)\\
+&= \mathbf{1}_{E_1^c}(\omega_1) \left( \int_{\Omega_2} f^+(\omega_1, \omega_2) \, \mu_2(d\omega_2) - \int_{\Omega_2} f^-(\omega_1, \omega_2) \, \mu_2(d\omega_2) \right)
+\end{aligned}
+$$
+
+By Tonelli's theorem applied to $f^+$ and $f^-$ (both non-negative), the functions $\omega_1 \mapsto \int_{\Omega_2} f^\pm(\omega_1,\omega_2)\,\mu_2(d\omega_2)$ are $\mathcal{F}_1$-measurable, and each has finite $\mu_1$-integral since $f^\pm \le |f|$ and $f \in L^1(\mu_1 \otimes \mu_2)$. Integrating over $\Omega_1$ and using $\mu_1(E_1) = 0$ to drop the $\mathbf{1}_{E_1^c}$ indicator:
+$$
+\begin{aligned}
+\int_{\Omega_1} \left( \int_{\Omega_2} f \, d\mu_2 \right) d\mu_1
+&= \int_{\Omega_1} \mathbf{1}_{E_1^c}(\omega_1)\left(\int_{\Omega_2} f^+ \, d\mu_2 - \int_{\Omega_2} f^- \, d\mu_2\right) d\mu_1 \\
+&= \int_{\Omega_1}\int_{\Omega_2} f^+ \, d\mu_2 \, d\mu_1 - \int_{\Omega_1}\int_{\Omega_2} f^- \, d\mu_2 \, d\mu_1 \\
+&= \int_{\Omega_1 \times \Omega_2} f^+ \, d(\mu_1 \otimes \mu_2) - \int_{\Omega_1 \times \Omega_2} f^- \, d(\mu_1 \otimes \mu_2) \\
+&= \int_{\Omega_1 \times \Omega_2} f \, d(\mu_1 \otimes \mu_2)
+\end{aligned}
+$$
+The second line uses linearity of the outer integral (both terms are finite), the third applies Tonelli to $f^+$ and $f^-$ separately, and the last uses linearity of the product integral. Repeating the same argument with $\Omega_1$ and $\Omega_2$ swapped completes the proof.
+:::
+
+---

@@ -1,0 +1,315 @@
+# Lecture 27.2: Lindberg-Feller CLT
+
+## Mathematical Framework & Definitions
+
+Let $\{X_{n,k}\}_{k=1}^n$ be a **standard triangular array** of real-valued, independent, centered $L^2$ random variables defined for each $n \in \mathbb{N}$:
+$$
+\mathbb{E}[X_{n,k}] = 0, \quad \operatorname{Var}(X_{n,k}) = \sigma_{n,k}^2, \quad \text{and} \quad \sum_{k=1}^n \sigma_{n,k}^2 = 1.
+$$
+
+We define the $n$-th row sum $S_n := \sum_{k=1}^n X_{n,k}$, which satisfies $\operatorname{Var}(S_n) = 1$.
+
+---
+
+## Key Conditions
+
+- We stated the **Lindeberg Condition** and the **Lyapunov Condition** in Lecture 27.1. We also introduced the **Decaying Variance (DV)** and **Uniform Asymptotic Negligibility (UAN)** conditions.
+
+:::{#def-lindeberg-condition}
+## Lindeberg Condition (Lind)
+A triangular array satisfies **Lindeberg's Condition** if for every $\epsilon > 0$:
+$$
+\lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}\left[ X_{n,k}^2 : |X_{n,k}| > \epsilon \right] = 0.
+$$
+:::
+
+:::{#def-lyapunov-condition}
+## Lyapunov Condition
+A triangular array satisfies **Lyapunov's Condition** if there exists $\alpha > 2$ (or $\delta > 0$ with $\alpha = 2 + \delta$) such that:
+$$ \lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}\left[ |X_{n,k}|^\alpha \right] = 0 $$
+
+More generally, if $\phi : [0, \infty) \to [0, \infty)$ is a non-decreasing function with $\phi(t) > 0$ for $t > 0$ (e.g., $\phi(t) = t^{\alpha-2}$), Lyapunov's condition states:
+$$ \lim_{n \to \infty} \sum_{k=1}^n \mathbb{E}\left[ X_{n,k}^2 \phi(|X_{n,k}|) \right] = 0 $$
+:::
+
+:::{#def-dv-uan}
+## Decaying Variance and Uniform Asymptotic Negligibility
+1. The decaying variance condition (DV) is satisfied if:
+$$ \max_{1 \le k \le n} \sigma_{n,k}^2 \longrightarrow 0 \quad \text{as } n \to \infty $$
+
+2. The uniform asymptotic negligibility (UAN) condition is satisfied if for every $\varepsilon > 0$, we have:
+$$ \lim_{n \to \infty} \max_{1 \le k \le n} P(|X_{n,k}| > \varepsilon) = 0 $$
+:::
+
+- On the relationship between these conditions, we have the following implications:
+
+  1. DV implies UAN by Chebyshev's inequality.
+  2. Lindeberg's condition implies DV, which in turn implies UAN.
+  3. Lyapunov's condition implies Lindeberg's condition.
+
+---
+
+## Main Theorems
+
+:::{#thm-lindeberg-feller-clt}
+## Lindeberg CLT — Part 1: Sufficiency
+If $\{X_{n,k}\}_{k=1}^n$ is a standard triangular array satisfying **(Lind)**, then $S_n \xrightarrow{w} \mathcal{N}(0, 1)$ as $n \to \infty$.
+:::
+
+:::{#thm-lindeberg-feller-clt-necessity}
+## Lindeberg–Feller CLT — Part 2: Necessity
+If $\{X_{n,k}\}_{k=1}^n$ is a standard triangular array satisfying **(DV)** and $S_n \xrightarrow{w} \mathcal{N}(0, 1)$, then **(Lind)** holds.
+:::
+
+---
+
+## Key Analytical Lemmas
+
+:::{#lem-complex-product-bound}
+## Complex Product Bound
+If $a_j, b_j \in \mathbb{C}$ with $|a_j| \le 1$ and $|b_j| \le 1$ for all $j=1,\dots,n$, then:
+$$
+\left| \prod_{j=1}^n a_j - \prod_{j=1}^n b_j \right| \le \sum_{j=1}^n |a_j - b_j|.
+$$
+:::
+
+:::{.proof}
+## Proof of @lem-complex-product-bound
+Proceed by induction on $n$:
+
+- **Base Case ($n=1$)**: $|a_1 - b_1| \le |a_1 - b_1|$ holds trivially.
+- **Inductive Step**: Let $a = \prod_{j=1}^{n-1} a_j$ and $b = \prod_{j=1}^{n-1} b_j$. By the inductive hypothesis and the fact that $|zw| = |z| |w|$ for $z,w \in \mathbb{C}$, $|a| \le 1$, $|b| \le 1$, and $|a - b| \le \sum_{j=1}^{n-1} |a_j - b_j|$.
+
+Applying the triangle inequality:
+$$
+\begin{aligned}
+|a a_n - b b_n| &= |a a_n - b a_n + b a_n - b b_n| \\
+&\le |a_n| |a - b| + |b| |a_n - b_n| \\
+&\le \sum_{j=1}^{n-1} |a_j - b_j| + |a_n - b_n| = \sum_{j=1}^n |a_j - b_j|. 
+\end{aligned}
+$$
+:::
+
+---
+
+
+:::{#lem-characteristic-function-taylor-bound}
+## Characteristic Function Taylor Expansion Bound
+If $X \in L^2$ with $\mathbb{E}[X] = 0$, then for any $\xi \in \mathbb{R}$:
+$$
+\left| \varphi_X(\xi) - \left( 1 - \frac{1}{2}\mathbb{E}[X^2]\xi^2 \right) \right| \le \xi^2 \mathcal{E}(\xi),
+$$
+where $\mathcal{E}(\xi) := \mathbb{E}\left[ X^2 \wedge \frac{|\xi| |X|^3}{3!} \right] \to 0$ as $\xi \to 0$ by the Dominated Convergence Theorem (DCT).
+:::
+
+:::{.proof}
+## Proof of @lem-characteristic-function-taylor-bound
+By Taylor's theorem for $e^{it}$:
+
+1. $\left| e^{it} - \left(1 + it - \frac{1}{2}t^2\right) \right| \le \frac{|t|^3}{3!}$.
+2. $\left| e^{it} - \left(1 + it - \frac{1}{2}t^2\right) \right| \le \left| e^{it} - (1 + it) \right| + \frac{t^2}{2} \le \frac{t^2}{2} + \frac{t^2}{2} = t^2$.
+
+Estimates (1) and (2) together give the pointwise bound for $t = \xi X$:
+$$
+\begin{align*}
+\left| e^{i\xi X} - \left(1 + i\xi X - \frac{1}{2}\xi^2 X^2\right) \right| &\le \frac{|\xi X|^3}{3!} \wedge (\xi X)^2 \\
+&= \xi^2\left(X^2 \wedge \frac{|\xi|\,|X|^3}{3!}\right).
+\end{align*}
+$$
+
+Taking expectations (using the triangle inequality for expectations):
+$$
+\begin{align*}
+\left| \mathbb{E}\left[ e^{i\xi X} - \left(1 + i\xi X-\frac{1}{2}\xi^2 X^2\right) \right] \right|&\leq  \mathbb{E}\left[ \left|e^{i\xi X} - \left(1 + i\xi X-\frac{1}{2}\xi^2 X^2\right) \right|\right]\\
+& \le \xi^2 \mathbb{E}\left[ X^2 \wedge \frac{|\xi| |X|^3}{3!} \right]. 
+\end{align*}
+$$
+Since $\mathbb{E}[X] = 0$, the $i\xi X$ term vanishes on the left: $\mathbb{E}[e^{i\xi X} - (1 + i\xi X - \frac{1}{2}\xi^2 X^2)] = \varphi_X(\xi) - (1 - \frac{1}{2}\xi^2\mathbb{E}[X^2])$. Thus:
+$$
+\left| \mathbb{E}\left[ e^{i\xi X} - \left(1 - \frac{1}{2}\xi^2 X^2\right) \right] \right| \le \xi^2 \mathbb{E}\left[ X^2 \wedge \frac{|\xi| |X|^3}{3!} \right]. 
+$$
+:::
+
+
+---
+
+## Detailed Proof of Lindeberg CLT (Part 1: Sufficiency)
+
+To prove $S_n \xrightarrow{w} \mathcal{N}(0, 1)$, it suffices to show that for every $\xi \in \mathbb{R}$:
+$$
+\varphi_{S_n}(\xi) = \prod_{k=1}^n \varphi_{X_{n,k}}(\xi) \longrightarrow e^{-\xi^2/2} \quad \text{as } n \to \infty.
+$$
+
+To apply @lem-complex-product-bound, note that $|\varphi_{X_{n,k}}(\xi)| \le 1$ (all characteristic functions are bounded by 1 in modulus) and $\left|e^{-\frac{\xi^2}{2}\sigma_{n,k}^2}\right| = e^{-\frac{\xi^2}{2}\sigma_{n,k}^2} \le 1$. Also, $\prod_{k=1}^n e^{-\frac{\xi^2}{2}\sigma_{n,k}^2} = e^{-\frac{\xi^2}{2}\sum_{k=1}^n\sigma_{n,k}^2} = e^{-\xi^2/2}$. @lem-complex-product-bound therefore gives:
+$$
+\left| \varphi_{S_n}(\xi) - e^{-\xi^2/2} \right| \le \sum_{k=1}^n \left| \varphi_{X_{n,k}}(\xi) - e^{-\frac{\xi^2}{2}\sigma_{n,k}^2} \right|.
+$$
+
+Applying the triangle inequality to each term:
+$$
+\left| \varphi_{X_{n,k}}(\xi) - e^{-\frac{\xi^2}{2}\sigma_{n,k}^2} \right| \le A_{n,k} + B_{n,k},
+$$
+where:
+$$
+\begin{aligned}
+&A_{n,k} := \left| \varphi_{X_{n,k}}(\xi) - \left(1 - \frac{1}{2}\sigma_{n,k}^2 \xi^2\right) \right|,\\ 
+&B_{n,k} := \left| \left(1 - \frac{1}{2}\sigma_{n,k}^2 \xi^2\right) - e^{-\frac{\xi^2}{2}\sigma_{n,k}^2} \right|.
+\end{aligned}
+$$
+
+It suffices to show that $\sum_{k=1}^n A_{n,k} \to 0$ and $\sum_{k=1}^n B_{n,k} \to 0$ as $n \to \infty$.
+
+---
+
+## Step 1: Bounding $\sum_{k=1}^n A_{n,k}$
+By @lem-characteristic-function-taylor-bound, for any truncation parameter $\epsilon > 0$:
+$$
+A_{n,k} \le \xi^2 \mathbb{E}\left[ X_{n,k}^2 \wedge \frac{|\xi|}{3!} |X_{n,k}|^3 \right].
+$$
+
+Splitting into events $\{|X_{n,k}| \le \epsilon\}$ and $\{|X_{n,k}| > \epsilon\}$:
+$$
+\begin{aligned}
+A_{n,k} &\le \xi^2 \mathbb{E}\left[ X_{n,k}^2 \wedge \frac{|\xi|}{3!} |X_{n,k}|^3 : |X_{n,k}| \le \epsilon \right] \\
+&+ \xi^2 \mathbb{E}\left[ X_{n,k}^2 \wedge \frac{|\xi|}{3!} |X_{n,k}|^3 : |X_{n,k}| > \epsilon \right] \\
+&\le \frac{|\xi|^3}{3!} \epsilon \mathbb{E}\left[ |X_{n,k}|^2 : |X_{n,k}| \le \epsilon \right] + \xi^2 \mathbb{E}\left[ X_{n,k}^2 : |X_{n,k}| > \epsilon \right].
+\end{aligned}
+$$
+
+Summing over $k=1, \dots, n$:
+$$
+\sum_{k=1}^n A_{n,k} \le \frac{|\xi|^3}{3!} \epsilon \sum_{k=1}^n \sigma_{n,k}^2 + \xi^2 \sum_{k=1}^n \mathbb{E}\left[ X_{n,k}^2 : |X_{n,k}| > \epsilon \right].
+$$
+
+Since $\sum_{k=1}^n \sigma_{n,k}^2 = 1$ and applying **(Lind)** as $n \to \infty$:
+$$
+\limsup_{n \to \infty} \sum_{k=1}^n A_{n,k} \le \frac{|\xi|^3}{6} \epsilon.
+$$
+Since $\epsilon > 0$ is arbitrary, letting $\epsilon \downarrow 0$ yields $\lim_{n \to \infty} \sum_{k=1}^n A_{n,k} = 0$.
+
+---
+
+## Step 2: Bounding $\sum_{k=1}^n B_{n,k}$
+Using the calculus estimate $|e^{-u} - (1 - u)| \le \frac{u^2}{2}$ for $u \ge 0$, setting $u = \frac{1}{2}\sigma_{n,k}^2 \xi^2$:
+$$
+B_{n,k} \le \frac{1}{2} \left( \frac{1}{2}\sigma_{n,k}^2 \xi^2 \right)^2 = \frac{1}{8} \xi^4 \sigma_{n,k}^4.
+$$
+
+Summing over $k=1, \dots, n$:
+$$
+\sum_{k=1}^n B_{n,k} \le \frac{1}{8} \xi^4 \sum_{k=1}^n \sigma_{n,k}^4 \le \frac{1}{8} \xi^4 \left( \max_{1 \le j \le n} \sigma_{n,j}^2 \right) \sum_{k=1}^n \sigma_{n,k}^2 = \frac{1}{8} \xi^4 \left( \max_{1 \le j \le n} \sigma_{n,j}^2 \right).
+$$
+
+Since **(Lind)** implies **(DV)**, $\max_{1 \le j \le n} \sigma_{n,j}^2 \to 0$ as $n \to \infty$. Thus:
+$$
+\lim_{n \to \infty} \sum_{k=1}^n B_{n,k} = 0.
+$$
+
+Combining both limits proves $\lim_{n \to \infty} |\varphi_{S_n}(\xi) - e^{-\xi^2/2}| = 0$. 
+
+## Examples
+
+:::{#exm-lindberg-feller}
+## A triangular array of many small summands
+
+Let $X_{n,k}=\frac{Z_k}{\sqrt n}$ for $k=1,\ldots,n$, where $Z_1,Z_2,\ldots$ are i.i.d. with $\mathbb E[Z_k]=0$ and $\mathbb E[Z_k^2]=1$. Then
+$$ 
+S_n=\sum_{k=1}^nX_{n,k} = \frac{1}{\sqrt n}\sum_{k=1}^nZ_k. 
+$$
+This is the familiar standardized sum from the classical CLT, but viewed as a triangular array. The variables in each row are independent and centered, and
+$\operatorname{Var}(X_{n,k}) = \frac1n$. Therefore
+$\sum_{k=1}^n\operatorname{Var}(X_{n,k}) = n\frac1n =1$. Moreover,
+$\max_{1\le k\le n}\operatorname{Var}(X_{n,k}) = \frac1n\to0$. Therefore (DV) holds.
+
+For any $\varepsilon>0$,
+$$ 
+\begin{aligned} 
+\sum_{k=1}^n \mathbb E\left[ X_{n,k}^2 \mathbf 1\{|X_{n,k}|>\varepsilon\} \right] &= n\mathbb E\left[ \frac{Z_1^2}{n} \mathbf 1\left\{ \frac{|Z_1|}{\sqrt n}>\varepsilon \right\} \right]\\ &= \mathbb E\left[ Z_1^2 \mathbf 1\{|Z_1|>\varepsilon\sqrt n\} \right]. 
+\end{aligned} 
+$$
+Since $Z_1^2\mathbf 1\{|Z_1|>\varepsilon\sqrt n\} \longrightarrow0$ almost surely and
+$0\le Z_1^2\mathbf 1\{|Z_1|>\varepsilon\sqrt n\} \le Z_1^2$ with $\mathbb E[Z_1^2]<\infty$, the DCT gives
+$$ 
+\mathbb E\left[ Z_1^2 \mathbf 1\{|Z_1|>\varepsilon\sqrt n\} \right]\to0. 
+$$
+Hence (Lind) holds. Therefore, by the sufficiency part,
+$$
+S_n = \sum_{k=1}^n X_{n,k} = \frac{1}{\sqrt n} \sum_{k=1}^n Z_k \overset{w}{\longrightarrow} N(0,1).
+$$
+:::
+
+:::{#exm-lindberg-feller-triangular-array}
+## Why the Feller condition matters
+Now consider a deliberately constructed array: $X_{n,1}=Z$ and $X_{n,k}=0$ for $k=2,\ldots,n$, where $Z\sim\mathcal N(0,1)$. Then
+$$ 
+S_n=\sum_{k=1}^nX_{n,k}=Z 
+$$
+for every $n$. Consequently, $S_n\xrightarrow{w}\mathcal N(0,1)$. So we have convergence to the normal distribution. But
+
+$$
+\max_{1\le k\le n} \operatorname{Var}(X_{n,k}) = \operatorname{Var}(X_{n,1}) = \operatorname{Var}(Z) = 1,
+$$
+So DV fails. And Lindeberg's condition also fails. For, say, $\varepsilon=1/2$,
+$$ 
+\begin{aligned} \sum_{k=1}^n \mathbb E[ X_{n,k}^2 \mathbf 1\{|X_{n,k}|>\varepsilon\} ] &= \mathbb E[ Z^2\mathbf 1\{|Z|>1/2\} ]\\ &>0 
+\end{aligned} 
+$$
+for every $n$. Thus, the classical CLT does not imply (Lind) without (DV). This is exactly why the Feller condition appears in the necessity theorem.
+:::
+
+:::{#exm-two-group-heteroskedastic}
+## A two-group heteroskedastic triangular array
+Let $\{X_{n,k}:1\le k\le n\}$ be independent and centered, with
+$$ 
+X_{n,k} = 
+\begin{cases} 
+\dfrac{Z_k}{\sqrt{n}}, & k=1,\ldots,\lfloor n/2\rfloor,\\[8pt] \dfrac{2Z_k}{\sqrt{3n}}, & k=\lfloor n/2\rfloor+1,\ldots,n, 
+\end{cases} 
+$$
+where $Z_1,Z_2,\ldots$ are i.i.d. with $\mathbb E[Z_k]=0$ and $\mathbb E[Z_k^2]=1$, and to make the Lindeberg calculation nontrivial, suppose $\mathbb E[Z_k^4]<\infty$. The two groups have different variances. For the first group, $\operatorname{Var}(X_{n,k})=\frac1n$. For the second group, $\operatorname{Var}(X_{n,k}) =\frac4{3n}$. Ignoring the immaterial floor-function effect for a moment, the total variance is approximately
+$$ 
+\frac n2\frac1n+ \frac n2\frac4{3n} = \frac12+\frac23 = \frac76. 
+$$
+Thus this array is not yet standardized to variance one. We can simply normalize the entire row by $\sqrt{6/7}$. Define instead
+$$
+X_{n,k} = \begin{cases} \sqrt{\frac67}\dfrac{Z_k}{\sqrt n}, & k\le\lfloor n/2\rfloor,\\[8pt] \sqrt{\frac87}\dfrac{Z_k}{\sqrt n}, & k>\lfloor n/2\rfloor. 
+\end{cases} 
+$$
+For simplicity, suppose $n$ is even. Then
+$$ 
+\operatorname{Var}(X_{n,k}) 
+= 
+\begin{cases} 
+\dfrac{6}{7n},&k\le n/2,\\
+\dfrac{8}{7n},&k>n/2. 
+\end{cases} 
+$$
+Therefore $\sum_{k=1}^n\operatorname{Var}(X_{n,k}) = \frac n2\frac6{7n} + \frac n2\frac8{7n} =1$. So this is a standard triangular array. Fix $\varepsilon>0$. We need to show
+$$ 
+L_n(\varepsilon) := \sum_{k=1}^n \mathbb E\left[ X_{n,k}^2 \mathbf1\{|X_{n,k}|>\varepsilon\} \right] \longrightarrow0. 
+$$
+Consider the first group. For $k\le n/2$, $X_{n,k} = \sqrt{\frac67}\frac{Z_k}{\sqrt n}$. Therefore
+$$ 
+\begin{aligned} 
+&\sum_{k=1}^{n/2} \mathbb E\left[ X_{n,k}^2 \mathbf1\{|X_{n,k}|>\varepsilon\} \right]\\ 
+&\qquad= \frac n2\frac6{7n} \mathbb E\left[ Z^2 \mathbf1\left\{ |Z|>\varepsilon\sqrt{\frac{7n}{6}} \right\} \right]\\ 
+&\qquad= \frac37 \mathbb E\left[ Z^2 \mathbf1\left\{ |Z|>\varepsilon\sqrt{\frac{7n}{6}} \right\} \right]. 
+\end{aligned} 
+$$
+Since $Z^2\mathbf1\{|Z|>c_n\}\to0$ almost surely as $c_n\to\infty$, and $0\le Z^2\mathbf1\{|Z|>c_n\} \le Z^2$, the DCT gives
+$$ 
+\mathbb E\left[ Z^2 \mathbf1\left\{ |Z|>\varepsilon\sqrt{\frac{7n}{6}} \right\} \right]\to0. 
+$$
+Hence the first group's contribution vanishes. Similarly, for the second group, we have
+$$ 
+\begin{aligned} 
+&\sum_{k=n/2+1}^{n} \mathbb E\left[ X_{n,k}^2 \mathbf1\{|X_{n,k}|>\varepsilon\} \right]\\ 
+&\qquad= \frac47 \mathbb E\left[ Z^2 \mathbf1\left\{ |Z|>\varepsilon\sqrt{\frac{7n}{8}} \right\} \right] \longrightarrow0. 
+\end{aligned} 
+$$
+Consequently, $L_n(\varepsilon)\longrightarrow0$ for every $\varepsilon>0$. Since this is a standard triangular array and Lindeberg's condition holds,
+$$
+S_n := \sum_{k=1}^n X_{n,k} \overset{w}{\longrightarrow} N(0,1).
+$$
+
+:::

@@ -1,0 +1,187 @@
+# Lecture 13.2: $L^p$ is Complete
+
+## Definition and Norm Structure of $L^p$ Spaces
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measure space.
+
+::: {#def-lp-space}
+For $1 \le p < \infty$, the space $L^p(\Omega, \mathcal{F}, \mu)$ is defined as the set of equivalence classes of $\mathcal{F}$-measurable functions $f: \Omega \to \mathbb{R}$ under $\mu$-almost sure equality such that $|f|^p$ is integrable:
+$$
+L^p(\Omega, \mathcal{F}, \mu) \triangleq \left\{ f \in L^0(\Omega, \mathcal{F}, \mu) \;\middle|\; \int_{\Omega} |f|^p \, d\mu < \infty \right\} \Bigg/ \sim_{\mu\text{-a.s.}}
+$$ {#eq-lp-def}
+:::
+
+::: {#thm-minkowski-inequality}
+## Minkowski's Inequality and $L^p$ Norm
+
+For $1 \le p < \infty$, the function $\|\cdot\|_{L^p}: L^p(\Omega, \mathcal{F}, \mu) \to [0, \infty)$ defined by:
+$$
+\|f\|_{L^p} \triangleq \left( \int_{\Omega} |f|^p \, d\mu \right)^{1/p}
+$$ {#eq-lp-norm-def}
+
+defines a norm on $L^p(\Omega, \mathcal{F}, \mu)$. In particular, Minkowski's inequality holds for all $f, g \in L^p$:
+$$
+\|f + g\|_{L^p} \le \|f\|_{L^p} + \|g\|_{L^p}
+$$ {#eq-minkowski-ineq}
+
+Thus, $L^p(\Omega, \mathcal{F}, \mu)$ is a normed vector space.
+:::
+
+---
+
+## $L^p$ Convergence vs. Convergence in Measure
+
+::: {#lem-lp-implies-measure}
+Let $1 \le p < \infty$ and $f, f_1, f_2, \dots \in L^p(\Omega, \mathcal{F}, \mu)$. If $\|f_n - f\|_{L^p} \to 0$ as $n \to \infty$, then $f_n \xrightarrow{\mu} f$.
+:::
+
+::: {.proof}
+## Proof of @lem-lp-implies-measure
+By Markov's inequality applied to $|f_n - f|^p$, for any fixed $\epsilon > 0$:
+$$
+\begin{aligned}
+&\mu\left( \{ \omega \in \Omega \mid |f_n(\omega) - f(\omega)| \ge \epsilon \} \right) \\
+&\le \frac{1}{\epsilon^p} \int_{\Omega} |f_n - f|^p \, d\mu = \frac{1}{\epsilon^p} \|f_n - f\|_{L^p}^p \xrightarrow{n \to \infty} 0
+\end{aligned}
+$$ 
+
+Thus, $f_n \xrightarrow{\mu} f$.
+:::
+
+---
+
+## Counterexample: The Converse Is False
+
+Convergence in measure does **not** imply $L^p$ convergence.
+
+::: {#exm-measure-not-lp}
+Consider the Lebesgue measure space $([0, 1], \mathcal{B}([0, 1]), \lambda)$. Define the sequence:
+$$
+f_n \triangleq n \cdot \mathbf{1}_{\left[0, \frac{1}{n}\right]}, \quad n \in \mathbb{N}
+$$ {#eq-counterex-def}
+We can express $f_n$ explicitly as:
+$$
+f_n(x) = 
+\begin{cases} 
+n & \text{if } 0 \le x \le \frac{1}{n}, \\ 
+0 & \text{if } \frac{1}{n} < x \le 1. 
+\end{cases}
+$$
+
+Consider the set $\{x \in [0,1]: |f_n(x)| \ge \epsilon\}$ for any $\epsilon > 0$. On the interval $[0, 1/n]$, $|f_n(x)| = n \ge \epsilon$. On the interval $(1/n, 1]$, $|f_n(x)| = 0 < \epsilon$. Therefore, $\{x \in [0,1]: |f_n(x)| \ge \epsilon\}= [0, 1/n]$.
+
+1. **Convergence in Measure:** For any $\epsilon > 0$, taking $n > \epsilon$ yields:
+   $$
+   \lambda\left( \{ |f_n - 0| \ge \epsilon \} \right) =\lambda\left( \left[0, \frac{1}{n}\right] \right) = \frac{1}{n} \xrightarrow{n \to \infty} 0
+   $$
+   Therefore, $f_n \xrightarrow{\lambda} 0$.
+
+2. **$L^p$ Norm Evaluation:** For $1 \le p < \infty$:
+   $$
+   \|f_n - 0\|_{L^p}^p = \int_{[0, 1]} |f_n|^p \, d\lambda = \int_{0}^{1/n} n^p \, d\lambda = \frac{1}{n} \cdot n^p = n^{p-1}
+   $$
+
+   Taking the $p$-th root:
+   $$
+   \|f_n - 0\|_{L^p} = n^{1 - \frac{1}{p}} = \begin{cases} 
+   1 & \text{if } p = 1, \\ 
+   \to \infty & \text{if } p > 1. 
+   \end{cases}
+   $$
+
+   In either case, $\|f_n - 0\|_{L^p} \not\to 0$ as $n \to \infty$.
+:::
+
+---
+
+## Completeness of $L^p$ Spaces (Riesz-Fischer Theorem)
+
+::: {#thm-lp-completeness}
+## Riesz-Fischer Theorem
+
+For $1 \le p < \infty$, the space $L^p(\Omega, \mathcal{F}, \mu)$ is Cauchy complete (i.e., a Banach space). Namely, if $\{f_n\} \subset L^p$ is an $L^p$-Cauchy sequence ($\|f_n - f_m\|_{L^p} \to 0$ as $n, m \to \infty$), there exists $f \in L^p$ such that $\|f_n - f\|_{L^p} \to 0$.
+:::
+
+::: {.proof}
+## Proof of @thm-lp-completeness
+**Step 1: Extracting an Almost Sure Convergent Subsequence.** By @lem-lp-implies-measure, every $L^p$-Cauchy sequence is $L^0$-Cauchy in measure:
+$$
+\mu(\{|f_n - f_m| \ge \epsilon\}) \le \frac{1}{\epsilon^p} \|f_n - f_m\|_{L^p}^p \xrightarrow{n, m \to \infty} 0
+$$
+
+By $L^0$ completeness, there exists a subsequence $\{f_{n_k}\}$ and a measurable function $f \in L^0$ such that $f_{n_k} \xrightarrow{\text{a.s.}} f$ as $k \to \infty$.
+
+**Step 2: $L^p$ Limit Identification via Fatou's Lemma.** Note that $|f_{n_k} - f_{n_j}|^p \to |f_{n_k} - f|^p$ a.s. as $j \to \infty$. Then, applying Fatou's Lemma to the non-negative sequence $|f_{n_k} - f_{n_j}|^p$ as $j \to \infty$:
+$$
+\begin{aligned}
+\|f_{n_k} - f\|_{L^p}^p &= \int_{\Omega} \lim_{j \to \infty} |f_{n_k} - f_{n_j}|^p \, d\mu \\
+&\le \liminf_{j \to \infty} \int_{\Omega} |f_{n_k} - f_{n_j}|^p \, d\mu \\
+&= \liminf_{j \to \infty} \|f_{n_k} - f_{n_j}\|_{L^p}^p
+\end{aligned}
+$$
+
+Because $\{f_n\}$ is $L^p$-Cauchy, for any $\epsilon > 0$, choosing $k, j$ sufficiently large makes $\|f_{n_k} - f_{n_j}\|_{L^p}^p < \epsilon$. Thus:
+$$
+\|f_{n_k} - f\|_{L^p}^p \le \epsilon \implies \lim_{k \to \infty} \|f_{n_k} - f\|_{L^p} = 0
+$$
+
+By Minkowski's inequality, $\|f\|_{L^p} \le \|f - f_{n_k}\|_{L^p} + \|f_{n_k}\|_{L^p} < \infty$, so $f \in L^p$.
+
+**Step 3: Convergence of Full Sequence.** By triangle inequality:
+$$
+\|f_n - f\|_{L^p} \le \|f_n - f_{n_k}\|_{L^p} + \|f_{n_k} - f\|_{L^p} \xrightarrow{n, k \to \infty} 0
+$$
+:::
+
+---
+
+## Summary of Modes of Convergence and Relationships
+
+The logical connections between the primary modes of convergence are summarized in the following structural map:
+
+* **$L^p$ Convergence ($1 \le p < \infty$):** Implies convergence in measure ($L^0$ convergence) via Markov's inequality.
+* **Almost Sure Convergence:** Implies convergence in measure on finite measure spaces.
+* **Convergence in Measure ($L^0$ Convergence):** Implies almost sure convergence of a suitable subsequence.
+
+![Modes of Convergence](convergence.jfif){#fig-convergence}
+
+---
+
+## General $L^0$-$L^1$ Dominated Convergence Theorem
+
+The following theorem generalizes the classical Dominated Convergence Theorem to the setting where the limit function is only assumed to be in $L^0$ (measurable) rather than $L^1$.
+
+::: {#thm-l0-l1-dct}
+## $L^0$-$L^1$ Generalized Dominated Convergence Theorem
+
+Let $\{f_n\}, \{g_n\} \subset L^1(\Omega, \mathcal{F}, \mu)$, $g \in L^1(\Omega, \mathcal{F}, \mu)$, and $f \in L^0(\Omega, \mathcal{F}, \mu)$. Suppose that:
+
+1. $|f_n| \le g_n$ $\mu$-a.s. for all $n \in \mathbb{N}$;
+2. $f_n \xrightarrow{\mu} f$ and $g_n \xrightarrow{\mu} g$;
+3. $\int_{\Omega} g_n \, d\mu \to \int_{\Omega} g \, d\mu$ as $n \to \infty$.
+
+Then $f \in L^1(\Omega, \mathcal{F}, \mu)$ and $\|f_n - f\|_{L^1} \to 0$ as $n \to \infty$. In particular, $\int_{\Omega} f_n \, d\mu \to \int_{\Omega} f \, d\mu$.
+:::
+
+::: {.proof}
+## Proof of @thm-l0-l1-dct
+
+**Step 1: Dominating Function and Pointwise Subsequences.** Because $f_n \xrightarrow{\mu} f$ and $g_n \xrightarrow{\mu} g$, we can extract a sub-subsequence $\{n_k\}$ along which $f_{n_k} \xrightarrow{\text{a.s.}} f$ and $g_{n_k} \xrightarrow{\text{a.s.}} g$.
+
+Taking pointwise limits on the inequality $|f_{n_k}| \le g_{n_k}$ yields $|f| = \lim_{k \to \infty} |f_{n_k}| \le \lim_{k \to \infty} g_{n_k} = g$ $\mu$-a.s. Since $g \in L^1$, $f \in L^1$.
+
+**Step 2: Subsequence Criterion for $L^1$ Convergence.** Suppose $\|f_n - f\|_{L^1} \not\to 0$. Then there exists $\epsilon > 0$ and a subsequence $\{f_{n_k}\}$ such that $\|f_{n_k} - f\|_{L^1} \ge \epsilon$ for all $k$.
+
+However, passing to a further sub-subsequence $\{n_{k_j}\}$ such that $f_{n_{k_j}} \xrightarrow{\text{a.s.}} f$ and $g_{n_{k_j}} \xrightarrow{\text{a.s.}} g$, the classical Generalized Dominated Convergence Theorem applies to $f_{n_{k_j}}$ dominated by $g_{n_{k_j}}$. This guarantees $\|f_{n_{k_j}} - f\|_{L^1} \to 0$, contradicting $\|f_{n_k} - f\|_{L^1} \ge \epsilon$.
+
+**Step 3: Integral Convergence.** By triangle inequality:
+$$
+\begin{aligned}
+\left| \int_{\Omega} f_n \, d\mu - \int_{\Omega} f \, d\mu \right| &= \left| \int_{\Omega} (f_n - f) \, d\mu \right| \\
+&\le \int_{\Omega} |f_n - f| \, d\mu \\
+&= \|f_n - f\|_{L^1} \xrightarrow{n \to \infty} 0
+\end{aligned}
+$$
+:::
+
+---

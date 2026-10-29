@@ -1,0 +1,507 @@
+# Lecture 17.2: Convolution
+
+## Notation and Standing Conventions
+
+Throughout this lecture, $d \in \mathbb{N}$ is fixed:
+
+* $\lambda$ denotes Lebesgue measure on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ (@def-lebesgue-measure), and $d$-dimensional Lebesgue measure is defined as the $d$-fold product
+$$
+\lambda^d \triangleq \lambda^{\otimes d} \quad \text{on} \quad \textstyle\bigotimes_{j=1}^d \mathcal{B}(\mathbb{R}) = \mathcal{B}(\mathbb{R}^d),
+$$ {#eq-lambda-d-def}
+which exists, is unique, and is $\sigma$-finite by @cor-product-measure-existence; the identification of the product $\sigma$-algebra with $\mathcal{B}(\mathbb{R}^d)$ is the Borel $\sigma$-algebra identity of Lecture 14.2. By associativity of the product construction, $\lambda^{d} \otimes \lambda^{d} = \lambda^{2d}$ and $\mathcal{B}(\mathbb{R}^d) \otimes \mathcal{B}(\mathbb{R}^d) = \mathcal{B}(\mathbb{R}^{2d})$.
+* $s: \mathbb{R}^{2d} \to \mathbb{R}^d$ denotes the **addition map** $s(x, y) \triangleq x + y$. It is continuous, hence Borel measurable.
+* For $B \subseteq \mathbb{R}^d$ and $y \in \mathbb{R}^d$ we write $B - y \triangleq \{x \in \mathbb{R}^d \mid x + y \in B\}$ for the **translate** of $B$ by $-y$. This is not a set difference. If $B \in \mathcal{B}(\mathbb{R}^d)$ then $B - y = \tau_y^{-1}(B) \in \mathcal{B}(\mathbb{R}^d)$, where $\tau_y(x) \triangleq x + y$ is a homeomorphism.
+
+---
+
+## Sums of Independent Random Variables and Convolutions
+
+Let $X, Y$ be random variables defined on a common probability space $(\Omega, \mathcal{F}, P)$ taking values in $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$. Since $\mathcal{B}(\mathbb{R}^{2d}) = \mathcal{B}(\mathbb{R}^d) \otimes \mathcal{B}(\mathbb{R}^d)$, the pair $(X, Y): \Omega \to \mathbb{R}^{2d}$ is $\mathcal{F}/\mathcal{B}(\mathbb{R}^{2d})$-measurable, so its **joint law** $\mu_{X, Y} \triangleq (X, Y)_* P$ is a Borel probability measure on $\mathbb{R}^{2d}$.
+
+In general, the law of $X+Y$ is not determined solely by the marginal laws $\mu_X$ and $\mu_Y$, but requires knowledge of $\mu_{X, Y}$. For instance, in dimension $d=1$, let $X \sim \mathcal{N}(0, 1)$. Taking $Y = X$ gives $X + Y = 2X \sim \mathcal{N}(0, 4)$, whereas taking $Y = -X$ gives $X + Y = 0$ everywhere, so $\mu_{X+Y} = \delta_0$. In both cases $\mu_Y = \mathcal{N}(0,1) = \mu_X$ — for the second by symmetry of the standard normal density — so the marginals are identical, yet the two laws of $X+Y$ differ. (In neither case are $X$ and $Y$ independent; independence is exactly the hypothesis that removes this ambiguity.)
+
+::: {#prp-joint-law-sum}
+For any Borel set $B \in \mathcal{B}(\mathbb{R}^d)$, the law of $X+Y$ is determined by the joint law $\mu_{X, Y}$ via
+$$
+\mu_{X+Y}(B) = P(X+Y \in B) = \int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y) \, \mu_{X, Y}(dx, dy).
+$$ {#eq-joint-law-sum}
+:::
+
+::: {.proof}
+## Proof of @prp-joint-law-sum
+Write $X + Y = s \circ (X, Y)$, a composition of the $\mathcal{F}/\mathcal{B}(\mathbb{R}^{2d})$-measurable map $(X,Y)$ with the Borel map $s$; hence $X+Y$ is a random vector and $\mu_{X+Y}$ is well defined. Pushforward is functorial: for $B \in \mathcal{B}(\mathbb{R}^d)$,
+$$
+\mu_{X+Y}(B) = P\bigl((s \circ (X,Y))^{-1}(B)\bigr) = P\bigl((X,Y)^{-1}(s^{-1}(B))\bigr) = \mu_{X,Y}\bigl(s^{-1}(B)\bigr),
+$$
+that is, $\mu_{X+Y} = s_* \mu_{X, Y}$. Since $s^{-1}(B) \in \mathcal{B}(\mathbb{R}^{2d})$ and $\mathbf{1}_{s^{-1}(B)} = \mathbf{1}_B \circ s$, integrating the indicator gives
+$$
+\begin{aligned}
+\mu_{X+Y}(B) &= \mu_{X,Y}\bigl(s^{-1}(B)\bigr) = \int_{\mathbb{R}^{2d}} \mathbf{1}_{s^{-1}(B)} \, d\mu_{X, Y} \\
+&= \int_{\mathbb{R}^{2d}} (\mathbf{1}_B \circ s)(x, y) \, \mu_{X, Y}(dx, dy) \\
+&= \int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y) \, \mu_{X, Y}(dx, dy).
+\end{aligned}
+$$ {#eq-joint-law-pushforward-proof}
+Equivalently, one may apply @cor-change-of-variables-nonneg to the map $(X,Y)$ with non-negative integrand $\mathbf{1}_B \circ s$, obtaining $\mathbb{E}[\mathbf{1}_B(X+Y)] = \int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y)\,\mu_{X,Y}(dx,dy)$.
+:::
+
+---
+
+## Definition and Properties of Measure Convolution
+
+When $X$ and $Y$ are **independent**, their joint law factorizes as $\mu_{X, Y} = \mu_X \otimes \mu_Y$ (@thm-joint-law-factorization). Convolution is the probability-theoretic rule for **adding** independent random variables.
+
+::: {#def-measure-convolution}
+Let $\mu$ and $\nu$ be Borel probability measures on $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$. Their **convolution**, denoted $\mu * \nu$, is defined by
+$$
+\begin{aligned}
+(\mu * \nu)(B) &\triangleq \int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y) \, (\mu \otimes \nu)(dx, dy) \\
+&= \int_{\mathbb{R}^d} \mu(B-y) \, \nu(dy) \\
+&= \int_{\mathbb{R}^d} \nu(B-x) \, \mu(dx),
+\end{aligned}
+$$ {#eq-convolution-def}
+for $B \in \mathcal{B}(\mathbb{R}^d)$, where $B-y$ is the translate introduced in the conventions above.
+:::
+
+- **$\mu * \nu$ is a Borel probability measure.** Since $\mathbf{1}_B(x+y)  = \mathbf{1}_{s^{-1}(B)}(x,y)$, the defining expression reads $(\mu * \nu)(B)  = (\mu \otimes \nu)(s^{-1}(B))$, i.e.
+$$
+\mu * \nu = s_*(\mu \otimes \nu).
+$$ {#eq-convolution-as-pushforward}
+The product measure $\mu \otimes \nu$ exists and is a probability measure by @cor-product-measure-existence (both factors are probability measures, hence $\sigma$-finite), and $s$ is Borel measurable; a pushforward of a probability measure under a measurable map is again a probability measure. In particular $\mu * \nu$ is countably additive with $(\mu*\nu)(\mathbb{R}^d) = (\mu\otimes\nu)(\mathbb{R}^{2d}) = 1$.
+
+- **Derivation of the two iterated forms.** The integrand $\mathbf{1}_B \circ s$ is non-negative and $\mathcal{B}(\mathbb{R}^d)\otimes\mathcal{B}(\mathbb{R}^d)$-measurable, and $\mu, \nu$ are $\sigma$-finite, so @thm-tonelli applies and gives both iterated integrals. Using $x+y \in B \iff x \in B-y$, i.e. $\mathbf{1}_B(x+y) = \mathbf{1}_{B-y}(x)$:
+$$
+\begin{aligned}
+\int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y) \, (\mu \otimes \nu)(dx, dy)&= \int_{\mathbb{R}^d} \left( \int_{\mathbb{R}^d} \mathbf{1}_B(x+y) \, \mu(dx) \right) \nu(dy)\\
+&= \int_{\mathbb{R}^d} \left( \int_{\mathbb{R}^d} \mathbf{1}_{B-y}(x) \, \mu(dx) \right) \nu(dy)\\
+&= \int_{\mathbb{R}^d} \mu(B-y) \, \nu(dy).
+\end{aligned}
+$$
+	By the measurability clause of @thm-tonelli applied to the non-negative product-measurable integrand $(x,y) \mapsto \mathbf{1}_B(x+y)$, the map
+	$$
+	y \longmapsto \int_{\mathbb{R}^d} \mathbf{1}_B(x+y)\,\mu(dx) = \mu(B-y)
+	$$
+	is Borel measurable, so the outer integral is meaningful. Applying instead the reversed iterated order in @thm-tonelli, and using $x + y \in B \iff y \in B - x$, gives in the same way
+$$
+\int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y) \, (\mu \otimes \nu)(dx, dy) = \int_{\mathbb{R}^d} \nu(B-x) \, \mu(dx),
+$$
+with $x \mapsto \nu(B-x)$ Borel measurable. This proves the third line of @eq-convolution-def.
+
+* **Intuition:** Convolution represents the distribution of the sum of two independent random variables. Precisely, if $X \sim \mu$ and $Y \sim \nu$ are independent, then @thm-joint-law-factorization gives $\mu_{X,Y} = \mu \otimes \nu$, and @prp-joint-law-sum yields $\mu_{X+Y} = \mu * \nu$.
+
+::: {#prp-convolution-algebra}
+## Commutativity and Associativity
+
+Let $\mu, \nu, \rho$ be Borel probability measures on $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$. Then
+$$
+\mu * \nu = \nu * \mu \qquad \text{and} \qquad (\mu * \nu) * \rho = \mu * (\nu * \rho).
+$$ {#eq-convolution-algebra}
+Consequently the $n$-fold convolution $\mu_1 * \cdots * \mu_n$ is unambiguous and independent of the order of the factors.
+:::
+
+::: {.proof}
+## Proof of @prp-convolution-algebra
+
+**Commutativity.** Fix $B \in \mathcal{B}(\mathbb{R}^d)$. Both iterated forms of @thm-tonelli are available for the non-negative product-measurable integrand $\mathbf{1}_B \circ s$, so
+$$
+\begin{aligned}
+(\mu*\nu)(B) &= \int_{\mathbb{R}^d}\!\! \int_{\mathbb{R}^d} \mathbf{1}_B(x+y)\, \mu(dx)\, \nu(dy) \\
+&= \int_{\mathbb{R}^d}\!\! \int_{\mathbb{R}^d} \mathbf{1}_B(y+x)\, \nu(dy)\, \mu(dx) \\
+&= (\nu*\mu)(B),
+\end{aligned}
+$$
+where the middle equality is the interchange of the two iterated orders together with the commutativity $x + y = y + x$ of addition in $\mathbb{R}^d$. (No auxiliary random variables need be constructed.)
+
+**Associativity.** Let $\theta \triangleq \mu \otimes \nu \otimes \rho$ be the product measure on $\mathcal{B}(\mathbb{R}^{3d})$ furnished by @cor-product-measure-existence, and let $s_3(x,y,z) \triangleq x+y+z$, which is continuous hence Borel. Note first that
+$$
+(\mu \otimes \nu) \otimes \rho = \theta = \mu \otimes (\nu \otimes \rho),
+$$ {#eq-product-associativity}
+since all three are measures on $\mathcal{B}(\mathbb{R}^{3d})$ assigning the value $\mu(E_1)\nu(E_2)\rho(E_3)$ to each rectangle $E_1\times E_2\times E_3$, and such a measure is unique by @cor-product-measure-existence (all factors being probability measures, hence $\sigma$-finite).
+
+Fix $B \in \mathcal{B}(\mathbb{R}^d)$. By @def-measure-convolution together with @thm-tonelli applied to the pair $(\mu*\nu, \rho)$,
+$$
+\begin{aligned}
+\bigl((\mu * \nu) * \rho\bigr)(B) &= \int_{\mathbb{R}^d} \left( \int_{\mathbb{R}^d} \mathbf{1}_B(w + z) \, (\mu*\nu)(dw) \right) \rho(dz) \\
+&= \int_{\mathbb{R}^d} \left( \int_{\mathbb{R}^{2d}} \mathbf{1}_B\bigl((x+y) + z\bigr) \, (\mu \otimes \nu)(dx, dy) \right) \rho(dz) \\
+&= \int_{\mathbb{R}^{3d}} \mathbf{1}_B(x+y+z) \, \theta(dx, dy, dz),
+\end{aligned}
+$$
+where the second equality is @cor-change-of-variables-nonneg applied, for each fixed $z$, to the map $s$ with $\mu*\nu = s_*(\mu \otimes \nu)$ and non-negative integrand $w \mapsto \mathbf{1}_B(w+z)$, and the third is @thm-tonelli for the non-negative Borel integrand $\mathbf{1}_B \circ s_3$ on the $\sigma$-finite product $\mathbb{R}^{2d}\times\mathbb{R}^d$, together with the first half of @eq-product-associativity. The identical computation performed in the other grouping, using the second half of @eq-product-associativity, gives
+$$
+\bigl(\mu * (\nu * \rho)\bigr)(B) = \int_{\mathbb{R}^{3d}} \mathbf{1}_B\bigl(x + (y+z)\bigr) \, \theta(dx, dy, dz).
+$$
+Since addition in $\mathbb{R}^d$ is associative, the two integrands coincide pointwise, so the two measures agree on every $B \in \mathcal{B}(\mathbb{R}^d)$.
+
+The final assertion follows by induction from these two identities.
+:::
+
+---
+
+## Absolutely Continuous and Discrete Special Cases
+
+The convolution operation has special forms when the measures involved are either absolutely continuous or purely discrete. 
+
+::: {#prp-density-convolution}
+## Absolutely Continuous Measures (Density Functions)
+
+Let $\mu, \nu$ be Borel probability measures on $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$ with $d\mu = f \, d\lambda^d$ and $d\nu = g \, d\lambda^d$, where $f, g: \mathbb{R}^d \to [0, \infty)$ are Borel measurable with $\int_{\mathbb{R}^d} f \, d\lambda^d = \int_{\mathbb{R}^d} g \, d\lambda^d = 1$. Define the **convolution of the densities**
+$$
+(f * g)(u) \triangleq \int_{\mathbb{R}^d} f(x) g(u-x) \, \lambda^d(dx) \in [0, \infty].
+$$ {#eq-density-convolution-formula}
+Then:
+
+1. $f * g$ is a Borel measurable function of $u$, and $(f*g)(u) < \infty$ for $\lambda^d$-a.e. $u$;
+2. $\int_{\mathbb{R}^d} (f*g) \, d\lambda^d = 1$, so $f * g \in L^1(\mathbb{R}^d, \lambda^d)$;
+3. $\mu * \nu \ll \lambda^d$, with Radon-Nikodym derivative
+$$
+\frac{d(\mu * \nu)}{d\lambda^d} = f * g \qquad \lambda^d\text{-a.e.}
+$$ {#eq-density-convolution-rn}
+:::
+
+::: {.proof}
+## Proof of @prp-density-convolution
+
+Throughout, $\lambda^d$ is $\sigma$-finite and $\mathcal{B}(\mathbb{R}^d) \otimes \mathcal{B}(\mathbb{R}^d) = \mathcal{B}(\mathbb{R}^{2d})$ by @eq-lambda-d-def, so a function on $\mathbb{R}^{2d}$ is product-measurable if and only if it is Borel measurable. All integrands below are non-negative, so every integral is well defined in $[0, \infty]$ and @thm-tonelli applies without integrability hypotheses.
+
+### Step 1: Measures with a density, and integration against them
+
+**Claim.** Let $(E, \mathcal{E}, m)$ be a measure space and let $w: E \to [0, \infty)$ be $\mathcal{E}$-measurable. Then
+$$
+\kappa(A) \triangleq \int_A w \, dm, \qquad A \in \mathcal{E},
+$$
+defines a measure on $\mathcal{E}$, and for every $\mathcal{E}$-measurable $h: E \to [0, \infty]$,
+$$
+\int_E h \, d\kappa = \int_E h w \, dm.
+$$ {#eq-density-integration}
+
+*Proof of claim.* First, $\kappa$ is a measure: $\kappa(\emptyset) = \int \mathbf{0} \, dm = 0$, and if $A = \biguplus_{k \ge 1} A_k$ with $A_k \in \mathcal{E}$ pairwise disjoint, then $\mathbf{1}_A w = \sum_{k \ge 1} \mathbf{1}_{A_k} w$ pointwise with non-negative terms, so the partial sums increase to $\mathbf{1}_A w$ and @thm-mct (with finite additivity of the integral at each stage) gives $\kappa(A) = \sum_{k\ge1} \kappa(A_k)$.
+
+Next, @eq-density-integration. For $h = \mathbf{1}_A$ both sides equal $\int_A w \, dm$, by definition of $\kappa$. By linearity of the integral on non-negative functions, @eq-density-integration extends to non-negative simple $h$. For general $\mathcal{E}$-measurable $h: E \to [0,\infty]$ choose simple functions $0 \le h_n \uparrow h$ pointwise; then $h_n w \uparrow h w$ pointwise as well, and applying @thm-mct to both sides of the simple-function identity gives @eq-density-integration. $\square$
+
+### Step 2: The product measure $\mu \otimes \nu$ has density $f(x) g(y)$
+
+Let $w(x, y) \triangleq f(x) g(y)$. Since $w = (f \circ \pi_1) \cdot (g \circ \pi_2)$ with $\pi_1, \pi_2$ the coordinate projections (which are product-measurable by @lem-product-sigma-algebra), $w$ is $\mathcal{B}(\mathbb{R}^d) \otimes \mathcal{B}(\mathbb{R}^d)$-measurable, and $w \ge 0$ is finite-valued. By Step 1 applied on $(\mathbb{R}^{2d}, \mathcal{B}(\mathbb{R}^{2d}), \lambda^d \otimes \lambda^d)$,
+$$
+\kappa(E) \triangleq \int_E w \, d(\lambda^d \otimes \lambda^d), \qquad E \in \mathcal{B}(\mathbb{R}^d) \otimes \mathcal{B}(\mathbb{R}^d),
+$$
+is a measure. For a measurable rectangle $E_1 \times E_2$ we have $\mathbf{1}_{E_1 \times E_2}(x,y) = \mathbf{1}_{E_1}(x)\mathbf{1}_{E_2}(y)$, so @thm-tonelli gives
+$$
+\begin{aligned}
+\kappa(E_1 \times E_2) &= \int_{\mathbb{R}^d}\!\! \left( \int_{\mathbb{R}^d}\!\! \mathbf{1}_{E_1}(x) f(x) \mathbf{1}_{E_2}(y) g(y) \, \lambda^d(dy) \right) \lambda^d(dx) \\
+&= \mu(E_1) \, \nu(E_2),
+\end{aligned}
+$$
+the last step using $\int \mathbf{1}_{E_2} g \, d\lambda^d = \nu(E_2)$ and $\int \mathbf{1}_{E_1} f \, d\lambda^d = \mu(E_1)$, both finite, so no $0 \cdot \infty$ convention is invoked. By the uniqueness assertion of @cor-product-measure-existence (applicable since $\mu$ and $\nu$ are probability measures, hence $\sigma$-finite), $\kappa$ is *the* product measure: $\kappa = \mu \otimes \nu$, that is,
+$$
+d(\mu \otimes \nu) = f(x) g(y) \, d(\lambda^d \otimes \lambda^d).
+$$ {#eq-product-density}
+
+### Step 3: Unfolding the definition of $\mu * \nu$
+
+Fix $B \in \mathcal{B}(\mathbb{R}^d)$. The addition map $s$ is Borel, so $\mathbf{1}_B \circ s$ is a non-negative product-measurable function. Applying @eq-convolution-def, then @eq-density-integration with @eq-product-density, then @thm-tonelli:
+$$
+\begin{aligned}
+(\mu * \nu)(B) &= \int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y) \, (\mu \otimes \nu)(dx, dy) \\
+&= \int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y) f(x) g(y) \, (\lambda^d \otimes \lambda^d)(dx, dy) \\
+&= \int_{\mathbb{R}^d} f(x) \left( \int_{\mathbb{R}^d} \mathbf{1}_B(x+y) g(y) \, \lambda^d(dy) \right) \lambda^d(dx).
+\end{aligned}
+$$ {#eq-density-convolution-proof}
+
+### Step 4: Translation invariance of the Lebesgue integral
+
+**Claim.** For every fixed $x \in \mathbb{R}^d$ and every Borel $h: \mathbb{R}^d \to [0, \infty]$,
+$$
+\int_{\mathbb{R}^d} h(y) \, \lambda^d(dy) = \int_{\mathbb{R}^d} h(u - x) \, \lambda^d(du).
+$$ {#eq-translation-integral}
+
+*Proof of claim.* We first record translation invariance of $\lambda^d$: for every $\tau \in \mathbb{R}^d$ and $A \in \mathcal{B}(\mathbb{R}^d)$,
+$$
+\lambda^d(A + \tau) = \lambda^d(A).
+$$ {#eq-lambda-d-translation}
+Indeed, in dimension one $\lambda(A_j + \tau_j) = \lambda(A_j)$ for all $A_j \in \mathcal{B}(\mathbb{R})$, as established in the *Translation Invariance* section of Lecture 5.2. Hence the Borel measure $A \mapsto \lambda^d(A + \tau)$ agrees with $\lambda^d = \lambda^{\otimes d}$ on every measurable rectangle $A_1 \times \cdots \times A_d$, because $(A_1 \times \cdots \times A_d) + \tau = (A_1+\tau_1)\times\cdots\times(A_d+\tau_d)$. Both are $\sigma$-finite measures, so the uniqueness assertion of @cor-product-measure-existence forces them to coincide on $\mathcal{B}(\mathbb{R}^d)$, giving @eq-lambda-d-translation.
+
+Now let $T_x(u) \triangleq u - x$, a continuous (hence Borel) bijection of $\mathbb{R}^d$. For $A \in \mathcal{B}(\mathbb{R}^d)$ we have $T_x^{-1}(A) = \{u : u - x \in A\} = A + x$, so by @eq-lambda-d-translation
+$$
+\bigl((T_x)_* \lambda^d\bigr)(A) = \lambda^d\bigl(T_x^{-1}(A)\bigr) = \lambda^d(A + x) = \lambda^d(A).
+$$
+Hence $(T_x)_* \lambda^d = \lambda^d$, and @cor-change-of-variables-nonneg applied to $T_x$ with the non-negative integrand $h$ yields $\int h \, d\lambda^d = \int h \circ T_x \, d\lambda^d$, which is @eq-translation-integral. $\square$
+
+Apply @eq-translation-integral to the inner integral in @eq-density-convolution-proof with $h(y) = \mathbf{1}_B(x+y) g(y)$, noting $h(u - x) = \mathbf{1}_B\bigl(x + (u-x)\bigr) g(u-x) = \mathbf{1}_B(u) g(u-x)$:
+$$
+\int_{\mathbb{R}^d} \mathbf{1}_B(x+y) g(y) \, \lambda^d(dy) = \int_{\mathbb{R}^d} \mathbf{1}_B(u) g(u-x) \, \lambda^d(du).
+$$
+
+### Step 5: Interchanging the order of integration
+
+The map $\Phi(x, u) \triangleq (x, u - x)$ is continuous, hence Borel on $\mathbb{R}^{2d}$, so
+$$
+(x, u) \longmapsto f(x) g(u - x) = w\bigl(\Phi(x, u)\bigr)
+$$
+is product-measurable and non-negative; multiplying by the product-measurable $\mathbf{1}_B(u)$ preserves this. Note also that the constant $f(x) \ge 0$ may be moved inside the inner $\lambda^d(du)$-integral without invoking the convention $0 \cdot \infty = 0$, since that inner integral is bounded by $\int_{\mathbb{R}^d} g \, d\lambda^d = 1 < \infty$. Therefore @thm-tonelli permits the interchange
+$$
+\begin{aligned}
+(\mu * \nu)(B) &= \int_{\mathbb{R}^d} \left( \int_{\mathbb{R}^d} \mathbf{1}_B(u) f(x) g(u-x) \, \lambda^d(du) \right) \lambda^d(dx) \\
+&= \int_{\mathbb{R}^d} \mathbf{1}_B(u) \left( \int_{\mathbb{R}^d} f(x) g(u-x) \, \lambda^d(dx) \right) \lambda^d(du) \\
+&= \int_B (f * g)(u) \, \lambda^d(du).
+\end{aligned}
+$$ {#eq-density-convolution-conclusion}
+The measurability clause of @thm-tonelli also gives that $u \mapsto (f*g)(u)$ is Borel measurable, proving the first half of claim 1.
+
+### Step 6: Integrability and identification of the density
+
+Taking $B = \mathbb{R}^d$ in @eq-density-convolution-conclusion and using that $\mu * \nu$ is a probability measure (@def-measure-convolution),
+$$
+\int_{\mathbb{R}^d} (f * g) \, d\lambda^d = (\mu * \nu)(\mathbb{R}^d) = 1 < \infty,
+$$
+which is claim 2. A non-negative measurable function with finite integral is finite a.e., so $(f*g)(u) < \infty$ for $\lambda^d$-a.e. $u$; this completes claim 1. Replacing $f * g$ by the finite-valued version $(f*g) \mathbf{1}_{\{f * g < \infty\}}$ changes no integral.
+
+Finally, @eq-density-convolution-conclusion holds for **every** $B \in \mathcal{B}(\mathbb{R}^d)$. In particular $\lambda^d(B) = 0$ implies $(\mu * \nu)(B) = \int_B (f*g) \, d\lambda^d = 0$, so $\mu * \nu \ll \lambda^d$ by @def-absolute-continuity. Since @eq-density-convolution-conclusion exhibits $f * g$ as a density of $\mu * \nu$ with respect to $\lambda^d$, the a.e.-uniqueness clause of @thm-radon-nikodym identifies it as the Radon-Nikodym derivative, giving @eq-density-convolution-rn.
+:::
+
+::: {#prp-pure-point-convolution}
+## Point Masses of a Convolution
+
+Let $\mu, \nu$ be Borel probability measures on $(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d))$, and let
+$$
+A_\mu \triangleq \{ x \in \mathbb{R}^d \mid \mu(\{x\}) > 0 \}
+$$
+denote the (at most countable) set of atoms of $\mu$. Then for every $u \in \mathbb{R}^d$,
+$$
+(\mu * \nu)(\{u\}) = \sum_{x \in A_\mu} \mu(\{x\}) \, \nu(\{u-x\}),
+$$ {#eq-pure-point-convolution-formula}
+the series having non-negative terms and hence an unambiguous value in $[0, 1]$. **No discreteness assumption on $\mu$ or $\nu$ is required.**
+:::
+
+::: {.proof}
+## Proof of @prp-pure-point-convolution
+
+**Step 1: $A_\mu$ is at most countable.** For each $n \in \mathbb{N}$ the set $A_\mu^n \triangleq \{x : \mu(\{x\}) > 1/n\}$ has at most $n$ elements: any $n+1$ distinct points of $A_\mu^n$ would be disjoint singletons of total $\mu$-measure $> 1$, contradicting $\mu(\mathbb{R}^d) = 1$. Hence $A_\mu = \bigcup_{n \ge 1} A_\mu^n$ is a countable union of finite sets.
+
+**Step 2: Reduction to a sum.** Note $\{u\} \in \mathcal{B}(\mathbb{R}^d)$ and $\{u\} - y = \{u - y\}$. Taking $B = \{u\}$ in the second line of @eq-convolution-def,
+$$
+(\mu * \nu)(\{u\}) = \int_{\mathbb{R}^d} \mu(\{u\} - y) \, \nu(dy) = \int_{\mathbb{R}^d} \varphi(y) \, \nu(dy), \qquad \varphi(y) \triangleq \mu(\{u-y\}),
+$$
+where $\varphi \ge 0$ is Borel measurable by the measurability clause of @thm-tonelli recorded after @eq-convolution-def.
+
+By definition of $A_\mu$, we have $\varphi(y) > 0$ if and only if $u - y \in A_\mu$, i.e. if and only if $y \in u - A_\mu$. By Step 1 this set is at most countable; enumerate it as $u - A_\mu = \{y_1, y_2, \dots\}$ (a finite or countably infinite list of distinct points), so that
+$$
+\varphi = \sum_{i} \varphi(y_i) \, \mathbf{1}_{\{y_i\}} \quad \text{pointwise on } \mathbb{R}^d .
+$$
+All terms are non-negative, so @cor-infinite-sums-lplus (integration of series in $L^+$, itself a consequence of @thm-mct) gives
+$$
+\int_{\mathbb{R}^d} \varphi \, d\nu = \sum_i \varphi(y_i) \, \nu(\{y_i\}) = \sum_i \mu(\{u - y_i\}) \, \nu(\{y_i\}).
+$$
+
+**Step 3: Reindexing.** Substitute $x \triangleq u - y_i$. As $y_i$ runs over $u - A_\mu$, the point $x$ runs bijectively over $A_\mu$, and $y_i = u - x$. Therefore
+$$
+(\mu * \nu)(\{u\}) = \sum_{x \in A_\mu} \mu(\{x\}) \, \nu(\{u - x\}),
+$$
+which is @eq-pure-point-convolution-formula. Since the terms are non-negative, the sum is independent of the enumeration chosen. Finally, adjoining any further terms with $x \notin A_\mu$ would change nothing, because such terms have $\mu(\{x\}) = 0$. Thus one may use the common shorthand $\sum_{x \in \mathbb{R}^d} \mu(\{x\})\nu(\{u-x\})$, interpreting it as the non-negative sum whose only nonzero terms occur at the at most countable set $A_\mu$.
+:::
+
+The discrete case is the one in which these point masses determine the whole measure.
+
+::: {#cor-discrete-convolution}
+## Convolution of Purely Atomic Measures
+
+Let $\mu, \nu$ be Borel probability measures on $\mathbb{R}^d$ that are **purely atomic**, i.e. there exist at most countable sets $S_\mu, S_\nu \subset \mathbb{R}^d$ with $\mu(S_\mu) = \nu(S_\nu) = 1$. Then $\mu * \nu$ is purely atomic and concentrated on the at most countable set
+$$
+S_\mu + S_\nu \triangleq \{ a + b \mid a \in S_\mu,\ b \in S_\nu \},
+$$
+its point masses being given by @eq-pure-point-convolution-formula. Consequently $\mu * \nu$ is uniquely determined by the numbers $\bigl((\mu*\nu)(\{u\})\bigr)_{u \in S_\mu + S_\nu}$.
+:::
+
+::: {.proof}
+## Proof of @cor-discrete-convolution
+Set $C \triangleq S_\mu + S_\nu$, a countable union of countable sets, hence at most countable, and Borel (being countable). By @eq-convolution-as-pushforward, $(\mu*\nu)(C) = (\mu \otimes \nu)(s^{-1}(C))$, and $S_\mu \times S_\nu \subseteq s^{-1}(C)$ by construction, so
+$$
+(\mu * \nu)(C) \ge (\mu \otimes \nu)(S_\mu \times S_\nu) = \mu(S_\mu)\,\nu(S_\nu) = 1,
+$$
+using @cor-product-measure-existence for the value on the rectangle. Hence $(\mu*\nu)(C) = 1$, so $\mu * \nu$ is concentrated on the countable set $C$ and is therefore purely atomic. For any $B \in \mathcal{B}(\mathbb{R}^d)$, countable additivity then gives
+$$
+(\mu*\nu)(B) = (\mu*\nu)(B \cap C) = \sum_{u \in B \cap C} (\mu*\nu)(\{u\}),
+$$
+so the measure is determined by its point masses on $C$, each of which is computed by @eq-pure-point-convolution-formula.
+:::
+
+
+---
+
+## Canonical Examples
+
+::: {#exm-poisson-convolution}
+### Sum of Independent Poisson RVs
+
+Take $d = 1$ and let $\alpha, \beta \in (0, \infty)$. Let $\mu = \text{Poisson}(\alpha)$ and $\nu = \text{Poisson}(\beta)$, i.e. the purely atomic probability measures on $\mathbb{R}$ with $\mu(\{j\}) = e^{-\alpha}\alpha^j/j!$ and $\nu(\{j\}) = e^{-\beta}\beta^j/j!$ for $j \in \mathbb{N}_0$, and no mass elsewhere; thus $A_\mu = S_\mu = S_\nu = \mathbb{N}_0$.
+
+Fix $k \in \mathbb{N}_0$. In @eq-pure-point-convolution-formula the sum runs over $x \in A_\mu = \mathbb{N}_0$; writing $x = j$, the factor $\nu(\{k - j\})$ vanishes unless $k - j \in \mathbb{N}_0$, i.e. unless $j \le k$. Hence the sum truncates at $j = k$ and
+$$
+\begin{aligned}
+(\mu * \nu)(\{k\}) &= \sum_{j=0}^k \left( e^{-\alpha} \frac{\alpha^j}{j!} \right) \left( e^{-\beta} \frac{\beta^{k-j}}{(k-j)!} \right) \\
+&= \frac{e^{-(\alpha+\beta)}}{k!} \sum_{j=0}^k \frac{k!}{j!\,(k-j)!} \alpha^j \beta^{k-j}\\
+& = \frac{e^{-(\alpha+\beta)}}{k!} \sum_{j=0}^k \binom{k}{j} \alpha^j \beta^{k-j} \\
+&= e^{-(\alpha+\beta)} \frac{(\alpha+\beta)^k}{k!},
+\end{aligned}
+$$ {#eq-poisson-convolution-algebra}
+the last step by the binomial theorem.
+
+By @cor-discrete-convolution, $\mu * \nu$ is purely atomic and concentrated on $S_\mu + S_\nu = \mathbb{N}_0 + \mathbb{N}_0 = \mathbb{N}_0$, and is therefore *determined* by the point masses just computed. Since these coincide with those of $\text{Poisson}(\alpha+\beta)$ — which is likewise concentrated on $\mathbb{N}_0$ — we conclude
+$$
+\text{Poisson}(\alpha) * \text{Poisson}(\beta) = \text{Poisson}(\alpha + \beta).
+$$
+:::
+
+::: {#exm-gaussian-convolution}
+### Sum of Independent Gaussian RVs
+
+Take $d = 1$. For $m \in \mathbb{R}$ and $\sigma \in (0,\infty)$ write $\varphi_{m,\sigma^2}(x) \triangleq \frac{1}{\sqrt{2\pi}\,\sigma} e^{-(x-m)^2/(2\sigma^2)}$ for the $\mathcal{N}(m,\sigma^2)$ density with respect to $\lambda$. These are strictly positive continuous functions, hence Borel measurable with values in $(0,\infty)$, and they integrate to $1$; so @prp-density-convolution applies to any pair of them.
+
+**The standard case.** Let $\mu = \nu = \mathcal{N}(0,1)$, so $f = g = \varphi_{0,1}$. Completing the square,
+$$
+-\frac{x^2}{2} - \frac{(u-x)^2}{2} = -x^2 + ux - \frac{u^2}{2} = -\left(x - \frac{u}{2}\right)^2 - \frac{u^2}{4},
+$$
+so that
+$$
+\begin{aligned}
+(\varphi_{0,1} * \varphi_{0,1})(u) &= \frac{1}{2\pi} \int_{\mathbb{R}} e^{-x^2/2} e^{-(u-x)^2/2} \, \lambda(dx) \\
+&= \frac{1}{2\pi} e^{-u^2/4} \int_{\mathbb{R}} e^{-(x - u/2)^2} \, \lambda(dx) \\
+&= \frac{1}{2\pi} e^{-u^2/4} \int_{\mathbb{R}} e^{-x^2} \, \lambda(dx)\\
+&= \frac{\sqrt{\pi}}{2\pi} e^{-u^2/4} \\
+&= \frac{1}{2\sqrt{\pi}} e^{-u^2/4},
+\end{aligned}
+$$ {#eq-gaussian-convolution-algebra}
+where the third equality is the translation invariance @eq-translation-integral (with $x$ there taken to be $u/2$) and the fourth is the Gaussian integral $\int_{\mathbb{R}} e^{-x^2}\,dx = \sqrt{\pi}$. Since
+$$
+\varphi_{0,2}(u) = \frac{1}{\sqrt{2\pi \cdot 2}} e^{-u^2/(2 \cdot 2)} = \frac{1}{2\sqrt{\pi}} e^{-u^2/4},
+$$
+the computed density is exactly $\varphi_{0,2}$, and @prp-density-convolution gives $\mathcal{N}(0, 1) * \mathcal{N}(0, 1) = \mathcal{N}(0, 2)$.
+
+**The general case.** The preceding computation does *not* by itself yield the general formula, since a single rescaling cannot reduce a pair with $s \ne t$ to the standard pair. We therefore redo the completion of the square in general.
+:::
+
+::: {#prp-gaussian-convolution}
+## Convolution of Gaussian Laws
+
+For all $\alpha, \beta \in \mathbb{R}$ and $s, t \in (0, \infty)$,
+$$
+\mathcal{N}(\alpha, s^2) * \mathcal{N}(\beta, t^2) = \mathcal{N}(\alpha + \beta,\, s^2 + t^2).
+$$ {#eq-gaussian-general-convolution}
+:::
+
+::: {.proof}
+## Proof of @prp-gaussian-convolution
+
+Set $v \triangleq s^2 + t^2 \in (0,\infty)$. By @prp-density-convolution it suffices to show that $\varphi_{\alpha, s^2} * \varphi_{\beta, t^2} = \varphi_{\alpha+\beta,\, v}$ pointwise on $\mathbb{R}$, since both sides are then densities of the two measures in @eq-gaussian-general-convolution with respect to $\lambda$.
+
+Fix $u \in \mathbb{R}$. Abbreviate $a \triangleq x - \alpha$ and $b \triangleq (u - x) - \beta$, and put $\bar u \triangleq u - \alpha - \beta$, so that $a + b = \bar u$. The exponent in the convolution integrand is $-\tfrac12\bigl(\tfrac{a^2}{s^2} + \tfrac{b^2}{t^2}\bigr)$. Substituting $b = \bar u - a$ and collecting powers of $a$,
+$$
+\begin{aligned}
+\frac{a^2}{s^2} + \frac{(\bar u - a)^2}{t^2} &= \frac{v}{s^2 t^2}\, a^2 - \frac{2\bar u}{t^2}\, a + \frac{\bar u^2}{t^2}\\
+&= \frac{v}{s^2 t^2}\left( a - \frac{s^2 \bar u}{v} \right)^{2} + \frac{\bar u^{2}}{t^{2}} - \frac{s^{2}\bar u^{2}}{v\, t^{2}} .
+\end{aligned}
+$$
+Since $\dfrac{1}{t^2} - \dfrac{s^2}{v t^2} = \dfrac{v - s^2}{v t^2} = \dfrac{t^2}{v t^2} = \dfrac{1}{v}$, the last two terms combine to $\bar u^2 / v$, giving the identity
+$$
+\begin{aligned}
+&\frac{(x-\alpha)^2}{s^2} + \frac{(u - x - \beta)^2}{t^2} \\
+&= \frac{v}{s^2 t^2}\left( x - \alpha - \frac{s^2 \bar u}{v} \right)^{2} + \frac{(u - \alpha - \beta)^2}{v}.
+\end{aligned}
+$$ {#eq-gaussian-completion}
+Let $c \triangleq \alpha + s^2 \bar u / v$ and $\sigma_*^2 \triangleq s^2 t^2 / v$, so the first term on the right of @eq-gaussian-completion equals $(x - c)^2/\sigma_*^2$. Therefore
+$$
+\begin{aligned}
+(\varphi_{\alpha,s^2} * \varphi_{\beta,t^2})(u)
+&= \frac{1}{2\pi s t} \int_{\mathbb{R}} \exp\left( -\frac{1}{2}\left[ \frac{(x-\alpha)^2}{s^2} + \frac{(u-x-\beta)^2}{t^2} \right] \right) \lambda(dx) \\
+&= \frac{1}{2\pi s t}\, e^{-(u-\alpha-\beta)^2/(2v)} \int_{\mathbb{R}} e^{-(x-c)^2/(2\sigma_*^2)} \, \lambda(dx) \\
+&= \frac{1}{2\pi s t}\, e^{-(u-\alpha-\beta)^2/(2v)} \cdot \sqrt{2\pi}\,\sigma_* \\
+&= \frac{1}{\sqrt{2\pi}}\cdot\frac{\sigma_*}{st}\, e^{-(u-\alpha-\beta)^2/(2v)}\\
+&= \frac{1}{\sqrt{2\pi v}}\, e^{-(u-\alpha-\beta)^2/(2v)}\\
+&= \varphi_{\alpha+\beta,\,v}(u),
+\end{aligned}
+$$
+where the third equality uses $\int_{\mathbb{R}} e^{-(x-c)^2/(2\sigma_*^2)}\,\lambda(dx) = \sqrt{2\pi}\,\sigma_*$ (translation invariance @eq-translation-integral followed by the scaling substitution $x = \sigma_* z$, legitimate by @thm-lebesgue-scaling, and the Gaussian integral), and the fifth uses $\sigma_*/(st) = \sqrt{s^2t^2/v}/(st) = 1/\sqrt{v}$. This holds for every $u \in \mathbb{R}$.
+
+Since $\varphi_{\alpha+\beta,v}$ is a version of $d(\mu*\nu)/d\lambda$ by @prp-density-convolution, and it is also the density of $\mathcal{N}(\alpha+\beta, v)$, the two measures assign the same value $\int_B \varphi_{\alpha+\beta,v}\,d\lambda$ to every $B \in \mathcal{B}(\mathbb{R})$, i.e. they are equal.
+:::
+
+---
+
+## Partial Sum Laws and Scaling Behavior
+
+Let $\{X_n\}_{n=1}^\infty$ be i.i.d. random vectors on $(\Omega,\mathcal{F},P)$ with values in $\mathbb{R}^d$ and common law $\mu$, and let $S_n \triangleq \sum_{k=1}^n X_k$ (so $S_0 \triangleq 0$).
+
+::: {#prp-law-of-partial-sums}
+## Law of the Partial Sum
+For every $n \in \mathbb{N}$,
+$$
+\mu_{S_n} = \mu_{S_{n-1}} * \mu_{X_n} = \mu^{*n} \triangleq \underbrace{\mu * \mu * \dots * \mu}_{n \text{ times}} .
+$$ {#eq-n-fold-convolution}
+:::
+
+::: {.proof}
+## Proof of @prp-law-of-partial-sums
+We argue by induction on $n$. For $n = 1$, $\mu_{S_1} = \mu_{X_1} = \mu = \mu^{*1}$.
+
+Assume $\mu_{S_{n-1}} = \mu^{*(n-1)}$ for some $n \ge 2$. The map $f_1(x_1,\dots,x_{n-1}) = x_1 + \cdots + x_{n-1}$ is continuous, hence Borel, and $f_2(x_n) = x_n$ is the identity; so by @cor-function-groupings (applied to the independent family $X_1,\dots,X_n$ with blocks $\{1,\dots,n-1\}$ and $\{n\}$), the random vectors
+$$
+S_{n-1} = f_1(X_1,\dots,X_{n-1}) \qquad \text{and} \qquad X_n
+$$
+are **independent**. This is the step that requires genuine mutual independence of the family and does not follow from pairwise independence alone. Equivalently, this is the block-independence principle: measurable functions of disjoint blocks of an independent family are independent.
+
+By @thm-joint-law-factorization the joint law therefore factorizes, $\mu_{(S_{n-1}, X_n)} = \mu_{S_{n-1}} \otimes \mu_{X_n}$. Applying @prp-joint-law-sum to the pair $(S_{n-1}, X_n)$ and then @def-measure-convolution,
+$$
+\mu_{S_n}(B) = \int_{\mathbb{R}^{2d}} \mathbf{1}_B(x+y)\, \bigl(\mu_{S_{n-1}} \otimes \mu_{X_n}\bigr)(dx,dy) = \bigl(\mu_{S_{n-1}} * \mu_{X_n}\bigr)(B)
+$$
+for every $B \in \mathcal{B}(\mathbb{R}^d)$. Since $X_n \sim \mu$, the induction hypothesis gives $\mu_{S_n} = \mu^{*(n-1)} * \mu$, which equals $\mu^{*n}$ unambiguously by the associativity established in @prp-convolution-algebra.
+:::
+
+### Normalizing sequences
+
+We now specialize to $d = 1$ and ask how to choose a positive normalizing sequence $b_n \to \infty$ so that $S_n / b_n$ has a non-degenerate limiting behavior. Note that the two computations below require *different* moment hypotheses. Stabilization requires convergence of a ratio, which in particular implies a corresponding $\Theta$ bound; a $\Theta$ bound by itself is not sufficient.
+
+* **Mean stabilization.** Assume $X_1 \in L^1(P)$ with $\mathbb{E}[X_1] \ne 0$. By linearity of expectation,
+$$
+\mathbb{E}\!\left[ \frac{S_n}{b_n} \right] = \frac{n}{b_n} \, \mathbb{E}[X_1].
+$$
+This converges to a finite **nonzero** limit if and only if $n/b_n$ converges to a finite nonzero limit. Equivalently, $b_n/n$ converges to a finite positive limit. This condition implies $b_n = \Theta(n)$, but the converse is false: for example, $b_n = n(1 + \tfrac12(-1)^n)$ is positive and satisfies $b_n = \Theta(n)$, while $n/b_n$ does not converge. The weaker condition $b_n = \mathcal{O}(n)$ would *not* suffice: taking $b_n = \log(n+1)$ gives $b_n \to \infty$ and $b_n = \mathcal{O}(n)$, yet $n/b_n \to \infty$, so the mean diverges. Conversely $b_n = n^2$ gives $n/b_n \to 0$ and the mean degenerates to $0$.
+
+* **Variance stabilization.** Assume $X_1 \in L^2(P)$ with $\operatorname{Var}(X_1) \in (0,\infty)$. Since $X_1,\dots,X_n$ are independent and in $L^2$, they are pairwise uncorrelated by @cor-independence-uncorrelated, so the Bienaymé identity @eq-bienayme-formula gives $\operatorname{Var}(S_n) = n \operatorname{Var}(X_1)$ and hence
+$$
+\operatorname{Var}\!\left( \frac{S_n}{b_n} \right) = \frac{n}{b_n^2} \, \operatorname{Var}(X_1).
+$$
+This converges to a finite nonzero limit if and only if $n/b_n^2$ converges to a finite nonzero limit. Equivalently, $b_n/\sqrt{n}$ converges to a finite positive limit. This condition implies $b_n = \Theta(\sqrt{n})$, but the converse is false for the same oscillation reason. Again $b_n = \mathcal{O}(\sqrt n)$ is insufficient: $b_n = n^{1/4}$ satisfies $b_n \to \infty$ and this upper bound, while $\operatorname{Var}(S_n/b_n) = n^{1/2}\operatorname{Var}(X_1) \to \infty$.
+
+The requirements $b_n/n \to c_1 \in (0,\infty)$ and $b_n/\sqrt n \to c_2 \in (0,\infty)$ are mutually incompatible, so they cannot both be met when $\mathbb{E}[X_1] \ne 0$. This is precisely why one **centers first**: replacing $S_n$ by $S_n - n\mathbb{E}[X_1]$ makes the mean identically zero for every $b_n$. Under the finite, positive variance hypothesis, the canonical choice $b_n = \sqrt{n}\,\sigma$ with $\sigma^2 = \operatorname{Var}(X_1)$ is then a scale at which the variance is exactly constant. The Gaussian case shows that at this scale the *entire law*, not merely its first two moments, can be exactly stationary in $n$.
+
+::: {#thm-embryonic-clt}
+## Exact Scaling Theorem for Gaussian i.i.d. Sequences
+
+Let $\{X_n\}_{n=1}^\infty$ be i.i.d. $\mathcal{N}(\alpha, s^2)$ random variables with $\alpha \in \mathbb{R}$ and $s \in (0, \infty)$. Then $\mathbb{E}[S_n] = n\alpha$ and $\operatorname{Var}(S_n) = n s^2 \in (0,\infty)$, and for **every** $n \in \mathbb{N}$:
+$$
+\text{Law}\left( \frac{S_n - n\alpha}{\sqrt{n}\,s} \right) = \text{Law}\left( \frac{S_n - \mathbb{E}[S_n]}{\sqrt{\text{Var}(S_n)}} \right) = \mathcal{N}(0, 1).
+$$ {#eq-embryonic-clt-exact}
+:::
+
+::: {.proof}
+## Proof of @thm-embryonic-clt
+
+**Step 1: Moments of $S_n$.** Gaussian random variables with finite variance lie in $L^2(P)$, so the $X_k$ are independent $L^2$ random variables. By linearity, $\mathbb{E}[S_n] = n\alpha$. They are pairwise uncorrelated by @cor-independence-uncorrelated, so @eq-bienayme-formula gives $\operatorname{Var}(S_n) = n s^2$, which lies in $(0,\infty)$ because $s > 0$. Hence $\sqrt{\operatorname{Var}(S_n)} = \sqrt{n}\,s \ne 0$ and both normalizations in @eq-embryonic-clt-exact are well defined and identical. This proves the first equality.
+
+**Step 2: Law of $S_n$.** By @prp-law-of-partial-sums, $\mu_{S_n} = \mu^{*n}$ with $\mu = \mathcal{N}(\alpha, s^2)$. Applying @prp-gaussian-convolution and induction on $n$: the case $n=1$ is trivial, and if $\mu^{*(n-1)} = \mathcal{N}((n-1)\alpha, (n-1)s^2)$ then
+$$
+\mu^{*n} = \mathcal{N}\bigl((n-1)\alpha, (n-1)s^2\bigr) * \mathcal{N}(\alpha, s^2) = \mathcal{N}(n\alpha, n s^2),
+$$
+the hypotheses of @prp-gaussian-convolution being met since $(n-1)s^2 > 0$ for $n \ge 2$ and $s^2 > 0$. Hence $\mu_{S_n} = \mathcal{N}(n\alpha, ns^2)$.
+
+**Step 3: The affine normalization.** Write $T_n \triangleq (S_n - n\alpha)/(\sqrt n\, s)$ and fix $t \in \mathbb{R}$. Since $\sqrt n\,s > 0$, the event $\{T_n \le t\}$ equals $\{S_n \le n\alpha + \sqrt n\, s\, t\}$, so by Step 2
+$$
+P(T_n \le t) = \int_{-\infty}^{\,n\alpha + \sqrt n\, s\, t} \frac{1}{\sqrt{2\pi n s^2}}\, e^{-(x - n\alpha)^2/(2 n s^2)} \, \lambda(dx).
+$$
+Apply the affine substitution $x = n\alpha + \sqrt n\, s\, u$. This is the pushforward of $\lambda$ under an invertible affine map, and combining translation invariance @eq-lambda-d-translation with the scaling identity @eq-lebesgue-scaling-identity (with $\gamma = \sqrt n\, s$) gives $\lambda(dx) = \sqrt{n}\,s\,\lambda(du)$ in the sense of @cor-change-of-variables-nonneg. The exponent becomes $-u^2/2$, the prefactor $\sqrt n\, s / \sqrt{2\pi n s^2} = 1/\sqrt{2\pi}$, and the upper limit becomes $t$. Therefore
+$$
+P(T_n \le t) = \int_{-\infty}^{t} \frac{1}{\sqrt{2\pi}} e^{-u^2/2} \, \lambda(du) = \Phi(t), \qquad t \in \mathbb{R}.
+$$
+
+**Step 4: From the CDF to the law.** The two Borel probability measures $\mu_{T_n}$ and $\mathcal{N}(0,1)$ agree on the collection $\{(-\infty, t] : t \in \mathbb{R}\}$, which is a $\pi$-system generating $\mathcal{B}(\mathbb{R})$. By @lem-pi-system-uniqueness they agree on all of $\mathcal{B}(\mathbb{R})$, i.e. $\text{Law}(T_n) = \mathcal{N}(0,1)$.
+:::
+
+---

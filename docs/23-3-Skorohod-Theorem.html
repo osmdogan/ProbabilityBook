@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>50&nbsp; Lecture 23.3: Skorohod’s Theorem – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./24-1-Complex-Integration-Dynkin-Theorem.html" rel="next">
+<link href="./23-2-Prokhorov-Compactness-Theorem.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./23-3-Skorohod-Theorem.html"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-motivation" id="toc-introduction-motivation" class="nav-link active" data-scroll-target="#introduction-motivation"><span class="header-section-number">50.1</span> Introduction &amp; Motivation</a></li>
+  <li><a href="#inverting-the-cdf-generalized-inverses" id="toc-inverting-the-cdf-generalized-inverses" class="nav-link" data-scroll-target="#inverting-the-cdf-generalized-inverses"><span class="header-section-number">50.2</span> Inverting the CDF &amp; Generalized Inverses</a></li>
+  <li><a href="#technical-properties-of-fleftarrow-and-frightarrow" id="toc-technical-properties-of-fleftarrow-and-frightarrow" class="nav-link" data-scroll-target="#technical-properties-of-fleftarrow-and-frightarrow"><span class="header-section-number">50.3</span> Technical Properties of <span class="math inline">\(F^\leftarrow\)</span> and <span class="math inline">\(F^\rightarrow\)</span></a></li>
+  <li><a href="#construction-of-the-random-variable" id="toc-construction-of-the-random-variable" class="nav-link" data-scroll-target="#construction-of-the-random-variable"><span class="header-section-number">50.4</span> Construction of the Random Variable</a></li>
+  <li><a href="#proof-of-skorohods-theorem-s-mathbbr" id="toc-proof-of-skorohods-theorem-s-mathbbr" class="nav-link" data-scroll-target="#proof-of-skorohods-theorem-s-mathbbr"><span class="header-section-number">50.5</span> Proof of Skorohod’s Theorem (<span class="math inline">\(S = \mathbb{R}\)</span>)</a></li>
+  <li><a href="#application-the-continuous-mapping-theorem" id="toc-application-the-continuous-mapping-theorem" class="nav-link" data-scroll-target="#application-the-continuous-mapping-theorem"><span class="header-section-number">50.6</span> Application: The Continuous Mapping Theorem</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">50.7</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/23-3-Skorohod-Theorem.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./23-3-Skorohod-Theorem.html"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-motivation" class="level2" data-number="50.1">
+<h2 data-number="50.1" class="anchored" data-anchor-id="introduction-motivation"><span class="header-section-number">50.1</span> Introduction &amp; Motivation</h2>
+<p>For random variables defined on a <strong>common</strong> probability space, almost sure convergence and <span class="math inline">\(L^p\)</span> convergence (for <span class="math inline">\(1 \le p &lt; \infty\)</span>, assuming the relevant moments are finite) each imply convergence in probability, which in turn implies <strong>weak convergence</strong> (<span class="math inline">\(\mu_n \Rightarrow \mu\)</span>, or <span class="math inline">\(X_n \xrightarrow{d} X\)</span>). None of the converse implications holds in general, so weak convergence is the weakest of these modes. Note also that, unlike the other three, weak convergence depends only on the <em>laws</em> of the random variables and does not require them to be defined on a common space.</p>
+<p>However, there is a fundamental connection back to <strong>almost sure convergence</strong> that serves as a powerful analytical tool in many stochastic contexts.</p>
+<div id="thm-skorohod" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 50.1 (Skorohod’s Representation Theorem)</strong></span> Let <span class="math inline">\((S, d)\)</span> be a separable metric space, and let <span class="math inline">\(\mu_n, \mu \in \text{Prob}(S,\mathcal{B}(S))\)</span>. If <span class="math inline">\(\mu_n \Rightarrow \mu\)</span> weakly as <span class="math inline">\(n \to \infty\)</span>, then there exists a common probability space <span class="math inline">\((\Omega, \mathcal{F}, P)\)</span> and random variables <span class="math inline">\(Y_n, Y: (\Omega, \mathcal{F}) \to (S, \mathcal{B}(S))\)</span> such that:</p>
+<ol type="1">
+<li><span class="math inline">\(Y_{n*} P = \mu_{Y_n} = \mu_n\)</span> for all <span class="math inline">\(n \ge 1\)</span>,</li>
+<li><span class="math inline">\(Y_{*} P = \mu_Y = \mu\)</span>,</li>
+<li><span class="math inline">\(Y_n \xrightarrow{a.s.} Y\)</span> as <span class="math inline">\(n \to \infty\)</span>.</li>
+</ol>
+</div>
+<ul>
+<li><p>Recall that <span class="math inline">\(Y_{n*} P= P \circ Y_n^{-1} = \mu_{Y_n}\)</span> is the <strong>pushforward measure</strong> of <span class="math inline">\(P\)</span> under <span class="math inline">\(Y_n\)</span>, which is the same as the <strong>distribution</strong> of <span class="math inline">\(Y_n\)</span>. Similarly, <span class="math inline">\(Y_{*} P = \mu_Y\)</span> is the distribution of <span class="math inline">\(Y\)</span>.</p></li>
+<li><p><strong>On the hypotheses.</strong> Separability of <span class="math inline">\((S,d)\)</span> is enough; <strong>completeness is not required</strong>, so we do not need <span class="math inline">\(S\)</span> to be Polish. (It suffices that the limit law <span class="math inline">\(\mu\)</span> have separable support.) Polishness is often assumed in textbook statements only because it supplies convenient tightness and standard-Borel machinery.</p></li>
+<li><p><strong>On the scope of these notes.</strong> <a href="#thm-skorohod" class="quarto-xref">Theorem&nbsp;<span>50.1</span></a> is quoted here as a standard result in this generality. What we prove below is the case <span class="math inline">\(S = \mathbb{R}\)</span>; the general separable case is not proved in this chapter.</p></li>
+</ul>
+<div id="exm-skorohod-normal" class="theorem example">
+<p><span class="theorem-title"><strong>Example 50.1 (Skorohod Representation for Converging Normal Distributions)</strong></span> Consider the sequence of probability measures <span class="math inline">\(\mu_n = N\left(\frac{1}{n},1\right)\)</span> for <span class="math inline">\(n\geq 1\)</span> and let <span class="math inline">\(\mu=N(0,1)\)</span>. We first observe that <span class="math inline">\(\mu_n\Rightarrow\mu\)</span>. Indeed, the CDF of <span class="math inline">\(\mu_n\)</span> is <span class="math inline">\(F_n(x)=\Phi\left(x-\frac{1}{n}\right)\)</span>, where <span class="math inline">\(\Phi\)</span> is the CDF of the standard normal distribution. Since <span class="math inline">\(x-\frac{1}{n}\longrightarrow x\)</span> and <span class="math inline">\(\Phi\)</span> is continuous, <span class="math inline">\(F_n(x) = \Phi\left(x-\frac{1}{n}\right) \longrightarrow \Phi(x) = F(x)\)</span> for every <span class="math inline">\(x\in\mathbb{R}\)</span>. Hence <span class="math inline">\(\mu_n\Rightarrow\mu\)</span>.</p>
+<p>Skorohod’s Representation Theorem tells us that there exists a common probability space on which random variables with these distributions can be constructed so that they converge almost surely. We now construct such random variables explicitly.</p>
+<section id="step-1-start-with-a-uniform-random-variable" class="level4" data-number="50.1.0.1">
+<h4 data-number="50.1.0.1" class="anchored" data-anchor-id="step-1-start-with-a-uniform-random-variable"><span class="header-section-number">50.1.0.1</span> Step 1: Start with a uniform random variable</h4>
+<p>Let <span class="math inline">\((\Omega,\mathcal{F},P)=\bigl((0,1),\mathcal{B}((0,1)),\lambda\bigr)\)</span>, where <span class="math inline">\(\lambda\)</span> denotes Lebesgue measure, and define <span class="math inline">\(U(\omega)=\omega\)</span>. Then <span class="math inline">\(U\sim\operatorname{Uniform}(0,1)\)</span>.</p>
+<p>We work on the <strong>open</strong> interval <span class="math inline">\((0,1)\)</span>, not on <span class="math inline">\([0,1]\)</span>. The reason is that <span class="math inline">\(\Phi^{-1}(0)=-\infty\)</span> and <span class="math inline">\(\Phi^{-1}(1)=+\infty\)</span>, so on <span class="math inline">\([0,1]\)</span> the variables defined below would fail to be <span class="math inline">\(\mathbb{R}\)</span>-valued at the two endpoints, and the difference <span class="math inline">\(Y_n-Y\)</span> would be the undefined expression <span class="math inline">\(\infty-\infty\)</span> there. On <span class="math inline">\((0,1)\)</span> every value is finite.</p>
+</section>
+<section id="step-2-transform-the-uniform-random-variable" class="level4" data-number="50.1.0.2">
+<h4 data-number="50.1.0.2" class="anchored" data-anchor-id="step-2-transform-the-uniform-random-variable"><span class="header-section-number">50.1.0.2</span> Step 2: Transform the uniform random variable</h4>
+<p>Define <span class="math inline">\(Y=\Phi^{-1}(U)\)</span> and, for each <span class="math inline">\(n\geq1\)</span>, <span class="math inline">\(Y_n=\frac{1}{n}+\Phi^{-1}(U)\)</span>. The important feature of this construction is that <strong>the same random variable <span class="math inline">\(U\)</span> is used for every <span class="math inline">\(Y_n\)</span> and for <span class="math inline">\(Y\)</span></strong>.</p>
+</section>
+<section id="step-3-verify-the-distribution-of-y" class="level4" data-number="50.1.0.3">
+<h4 data-number="50.1.0.3" class="anchored" data-anchor-id="step-3-verify-the-distribution-of-y"><span class="header-section-number">50.1.0.3</span> Step 3: Verify the distribution of <span class="math inline">\(Y\)</span></h4>
+<p>We first show that <span class="math inline">\(Y\sim N(0,1)\)</span>. For any <span class="math inline">\(y\in\mathbb{R}\)</span>, <span class="math display">\[
+\begin{aligned}
+P(Y\leq y)
+&amp;=
+P\left(\Phi^{-1}(U)\leq y\right)\\
+&amp;=
+P\left(U\leq\Phi(y)\right).
+\end{aligned}
+\]</span> The second equality follows because <span class="math inline">\(\Phi\)</span> is a <strong>continuous, strictly increasing bijection</strong> from <span class="math inline">\(\mathbb{R}\)</span> onto <span class="math inline">\((0,1)\)</span>; hence <span class="math inline">\(\Phi^{-1}:(0,1)\to\mathbb{R}\)</span> is well defined and <span class="math inline">\(\Phi^{-1}(u)\leq y\Longleftrightarrow u\leq\Phi(y)\)</span>. (Strict increase alone would not suffice; see the warning in the next section.) Since <span class="math inline">\(U\sim\operatorname{Uniform}(0,1)\)</span> and <span class="math inline">\(\Phi(y)\in(0,1)\)</span>, <span class="math inline">\(P\left(U\leq\Phi(y)\right)=\Phi(y)\)</span>. Therefore, <span class="math inline">\(P(Y\leq y)=\Phi(y)\)</span>. Thus the CDF of <span class="math inline">\(Y\)</span> is <span class="math inline">\(\Phi\)</span>, so <span class="math inline">\(Y\sim N(0,1)=\mu\)</span>.</p>
+</section>
+<section id="step-4-verify-the-distribution-of-y_n" class="level4" data-number="50.1.0.4">
+<h4 data-number="50.1.0.4" class="anchored" data-anchor-id="step-4-verify-the-distribution-of-y_n"><span class="header-section-number">50.1.0.4</span> Step 4: Verify the distribution of <span class="math inline">\(Y_n\)</span></h4>
+<p>We now show that <span class="math inline">\(Y_n\sim N\left(\frac1n,1\right)=\mu_n\)</span>. For any <span class="math inline">\(y\in\mathbb{R}\)</span>, <span class="math display">\[
+\begin{aligned}
+P(Y_n\leq y)
+&amp;=
+P\left(\frac1n+\Phi^{-1}(U)\leq y\right)\\
+&amp;=
+P\left(\Phi^{-1}(U)\leq y-\frac1n\right)\\
+&amp;=
+P\left(U\leq
+\Phi\left(y-\frac1n\right)\right)\\
+&amp;=
+\Phi\left(y-\frac1n\right).
+\end{aligned}
+\]</span> But <span class="math inline">\(F_n(y)=\Phi\left(y-\frac1n\right)\)</span> is the CDF of <span class="math inline">\(N(1/n,1)\)</span>. Hence <span class="math inline">\(Y_n\sim N\left(\frac1n,1\right)=\mu_n\)</span>. Thus the construction preserves all the required marginal distributions: <span class="math display">\[
+P\circ Y_n^{-1}=\mu_n,
+\qquad
+P\circ Y^{-1}=\mu.
+\]</span></p>
+</section>
+<section id="step-5-verify-almost-sure-convergence" class="level4" data-number="50.1.0.5">
+<h4 data-number="50.1.0.5" class="anchored" data-anchor-id="step-5-verify-almost-sure-convergence"><span class="header-section-number">50.1.0.5</span> Step 5: Verify almost-sure convergence</h4>
+<p>The construction makes the convergence particularly simple. We have <span class="math display">\[
+Y_n-Y
+=\left(\frac1n+\Phi^{-1}(U)\right)-\Phi^{-1}(U)
+=\frac1n.
+\]</span> Both terms are finite at every <span class="math inline">\(\omega\in\Omega=(0,1)\)</span>, so the subtraction is legitimate pointwise. Therefore, for every <span class="math inline">\(\omega\in\Omega\)</span>, <span class="math inline">\(|Y_n(\omega)-Y(\omega)|=\frac1n\longrightarrow0\)</span>. Hence <span class="math inline">\(Y_n\longrightarrow Y\)</span> <em>everywhere</em> on <span class="math inline">\(\Omega\)</span>, which is in particular the almost sure convergence asserted by <a href="#thm-skorohod" class="quarto-xref">Theorem&nbsp;<span>50.1</span></a>.</p>
+</section>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Note on the General Metric Space Proof
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The proof for a general separable metric space is quite involved. The canonical probability space can be constructed on <span class="math inline">\(\Omega = (0, 1) \times S^{\mathbb{N}}\)</span>, with <span class="math inline">\(\mathcal{F} = \mathcal{B}((0, 1) \times S^{\mathbb{N}})\)</span>, and <span class="math inline">\(P\)</span> taken to be a suitable <strong>joint coupling measure</strong> (built, for instance, from nested partitions of <span class="math inline">\(S\)</span>, or from probability kernels). It is essential that <span class="math inline">\(P\)</span> is in general <strong>not</strong> the product of the marginal laws: a product measure would make the coordinates <em>independent</em>, whereas the entire purpose of the construction is to introduce precise dependence between the <span class="math inline">\(Y_n\)</span>’s.</p>
+<p>In these notes, we present the complete proof for the foundational case where <strong><span class="math inline">\(S = \mathbb{R}\)</span></strong> by explicitly <strong>inverting the Cumulative Distribution Function (CDF)</strong>.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="inverting-the-cdf-generalized-inverses" class="level2" data-number="50.2">
+<h2 data-number="50.2" class="anchored" data-anchor-id="inverting-the-cdf-generalized-inverses"><span class="header-section-number">50.2</span> Inverting the CDF &amp; Generalized Inverses</h2>
+<p>Suppose <span class="math inline">\(F: \mathbb{R} \to [0, 1]\)</span> is the CDF of a probability measure <span class="math inline">\(\mu \in \text{Prob}\left(\mathbb{R}, \mathcal{B}(\mathbb{R})\right)\)</span>, i.e., <span class="math inline">\(F = F_\mu\)</span>.</p>
+<p>Suppose for a moment that <span class="math inline">\(F\)</span> is <strong>continuous and strictly increasing</strong>. Strict increase means <span class="math inline">\(F(a) &lt; F(b)\)</span> whenever <span class="math inline">\(a&lt;b\)</span>, which (since <span class="math inline">\(F(b)-F(a) = \mu((a,b])\)</span>) is equivalent to <span class="math inline">\(\mu\left((a,b)\right) &gt; 0\)</span> for all <span class="math inline">\(a&lt;b\)</span>. Combined with <span class="math inline">\(\lim_{x\to-\infty}F(x)=0\)</span>, <span class="math inline">\(\lim_{x\to+\infty}F(x)=1\)</span> and the intermediate value theorem, continuity and strict increase make <span class="math inline">\(F\)</span> a bijection from <span class="math inline">\(\mathbb{R}\)</span> onto <span class="math inline">\((0,1)\)</span>. We may then set <span class="math inline">\(Y := F^{-1}: (0, 1) \to \mathbb{R}\)</span>. Equipping <span class="math inline">\((0, 1)\)</span> with the Lebesgue measure <span class="math inline">\(\lambda\)</span>, the distribution function of <span class="math inline">\(Y\)</span> satisfies: <span class="math display">\[
+\begin{aligned}
+F_Y(t) &amp;= \lambda\left(Y^{-1}\left((-\infty, t]\right)\right)
+= \lambda\left(\left\{ u \in (0,1) : F^{-1}(u) \le t \right\}\right) \\
+&amp;= \lambda\left(\left(0, F(t)\right]\right) = F(t),
+\end{aligned}
+\]</span> hence <span class="math inline">\(\mu_Y = \mu\)</span>.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Strict increase alone is not enough
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Continuity cannot be dropped. A strictly increasing CDF may still have jumps, in which case its range omits an interval and <span class="math inline">\(F^{-1}\)</span> is <strong>not</strong> defined on all of <span class="math inline">\((0,1)\)</span>. For example, take <span class="math display">\[
+\mu = \tfrac12 \delta_0 + \tfrac12 N(0,1),
+\qquad
+F(x) = \tfrac12 \Phi(x) + \tfrac12 \mathbf{1}_{\{x \ge 0\}}.
+\]</span> The normal component forces <span class="math inline">\(\mu\left((a,b)\right)&gt;0\)</span> for all <span class="math inline">\(a&lt;b\)</span>, so <span class="math inline">\(F\)</span> is strictly increasing. But <span class="math inline">\(F\)</span> jumps by <span class="math inline">\(\tfrac12\)</span> at <span class="math inline">\(x=0\)</span>, and its range omits <span class="math inline">\(\left(\tfrac14,\tfrac34\right)\)</span>. Hence <span class="math inline">\(F^{-1}(u)\)</span> is undefined in the ordinary sense for every <span class="math inline">\(u \in \left(\tfrac14,\tfrac34\right)\)</span>. This is precisely the defect the generalized inverses below repair.</p>
+</div>
+</div>
+<p>To handle general CDFs (which may have flat spots or jump discontinuities), we define generalized lower and upper inverses.</p>
+<div id="def-cdf-inverses" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 50.1 (Generalized CDF Inverses)</strong></span> Let <span class="math inline">\(F: \mathbb{R} \to [0, 1]\)</span> be a CDF. For <span class="math inline">\(u \in (0, 1)\)</span>, define:</p>
+<ol type="1">
+<li><strong>Left-continuous Inverse (Lower Quantile Function)</strong>: <span class="math display">\[
+F^\leftarrow(u) := \sup \{ x \in \mathbb{R} : F(x) &lt; u \}
+\]</span></li>
+<li><strong>Right-continuous Inverse (Upper Quantile Function)</strong>: <span class="math display">\[
+F^\rightarrow(u) := \inf \{ x \in \mathbb{R} : F(x) &gt; u \}
+\]</span></li>
+</ol>
+</div>
+<p><strong>Finiteness.</strong> Both quantities are <em>finite real numbers</em> for every <span class="math inline">\(u \in (0,1)\)</span>, so that <span class="math inline">\(F^\leftarrow, F^\rightarrow : (0,1) \to \mathbb{R}\)</span>. Indeed, fix <span class="math inline">\(u \in (0,1)\)</span>. Since <span class="math inline">\(F(x) \to 0\)</span> as <span class="math inline">\(x \to -\infty\)</span>, there is <span class="math inline">\(m\)</span> with <span class="math inline">\(F(m) &lt; u\)</span>, so <span class="math inline">\(\{F &lt; u\} \ne \emptyset\)</span>. Since <span class="math inline">\(F(x) \to 1\)</span> as <span class="math inline">\(x \to +\infty\)</span>, there is <span class="math inline">\(M\)</span> with <span class="math inline">\(F(M) &gt; u\)</span>; then <span class="math inline">\(F(x) &lt; u\)</span> forces <span class="math inline">\(x \le M\)</span> by monotonicity, so <span class="math inline">\(\{F&lt;u\}\)</span> is bounded above. Hence <span class="math inline">\(F^\leftarrow(u) = \sup\{F&lt;u\}\)</span> is finite, and a symmetric argument applies to <span class="math inline">\(F^\rightarrow(u) = \inf\{F&gt;u\}\)</span>. This is what makes the expression <span class="math inline">\(F\left(F^\leftarrow(u)\right)\)</span> meaningful and makes the quantile transform an <span class="math inline">\(\mathbb{R}\)</span>-valued random variable.</p>
+<div id="exm-generalized-inverses" class="theorem example">
+<p><span class="theorem-title"><strong>Example 50.2</strong></span> Suppose <span class="math inline">\(P(X=0)=0.3\)</span>, <span class="math inline">\(P(X=1)=0.4\)</span>, and <span class="math inline">\(P(X=2)=0.3\)</span>. Then the CDF is <span class="math display">\[
+F(y)=
+\begin{cases} 0, &amp; y&lt;0,\\
+0.3, &amp; 0\leq y&lt;1,\\ 0.7, &amp; 1\leq y&lt;2,\\
+1, &amp; y\geq2.
+\end{cases}
+\]</span> Now take <span class="math inline">\(u=0.5\)</span>. We want <span class="math inline">\(F^\leftarrow(0.5) = \sup\{y:F(y)&lt;0.5\}\)</span>. Since <span class="math inline">\(F(y)&lt;0.5\)</span> whenever <span class="math inline">\(y&lt;1\)</span>, <span class="math inline">\(\{y:F(y)&lt;0.5\}=(-\infty,1)\)</span>. Therefore, <span class="math inline">\(F^\leftarrow(0.5) = 1\)</span>.</p>
+<p>Now consider the upper quantile: <span class="math inline">\(F^\rightarrow(0.5) = \inf\{y:F(y)&gt;0.5\}\)</span>. We need to find all <span class="math inline">\(y\)</span> for which <span class="math inline">\(F(y)&gt;0.5\)</span>. From the CDF, <span class="math inline">\(F(y)=0.7&gt;0.5\)</span> for <span class="math inline">\(y\ge1\)</span>. Therefore, <span class="math inline">\(\{y:F(y)&gt;0.5\}=[1,\infty)\)</span> and hence <span class="math inline">\(F^\rightarrow(0.5)=1\)</span>.</p>
+<p>Consider <span class="math inline">\(u=0.7\)</span>. Now we see the difference. For the lower quantile, <span class="math inline">\(F^\leftarrow(0.7) = \sup\{y:F(y)&lt;0.7\}\)</span>. Since <span class="math inline">\(F(y)&lt;0.7\)</span> for <span class="math inline">\(y&lt;1\)</span>, <span class="math inline">\(F^\leftarrow(0.7)=1\)</span>. But for the upper quantile, <span class="math inline">\(F^\rightarrow(0.7) = \inf\{y:F(y)&gt;0.7\}\)</span>. At <span class="math inline">\(y=1\)</span>, we have <span class="math inline">\(F(1)=0.7\)</span>, which is not strictly greater than <span class="math inline">\(0.7\)</span>. We therefore have to move to the next jump: <span class="math inline">\(F(y)&gt;0.7 \Longleftrightarrow y\ge2\)</span>. Thus, <span class="math inline">\(F^\rightarrow(0.7)=2\)</span>. So here <span class="math display">\[
+F^\leftarrow(0.7)=1, \qquad F^\rightarrow(0.7)=2.
+\]</span></p>
+<ul>
+<li>The lower quantile asks: what is the <strong>supremum</strong> (right endpoint) of the set on which the CDF is strictly below <span class="math inline">\(0.7\)</span>? Answer: 1. Observe that this supremum is <em>not attained</em>: <span class="math inline">\(\{y:F(y)&lt;0.7\}=(-\infty,1)\)</span> has no largest element. This is exactly why the definition takes a supremum rather than a maximum.</li>
+<li>The upper quantile asks: what is the <strong>infimum</strong> (left endpoint) of the set on which the CDF is strictly greater than <span class="math inline">\(0.7\)</span>? Answer: 2. Here the infimum <em>is</em> attained, since <span class="math inline">\(\{y:F(y)&gt;0.7\}=[2,\infty)\)</span>.</li>
+</ul>
+</div>
+<hr>
+</section>
+<section id="technical-properties-of-fleftarrow-and-frightarrow" class="level2" data-number="50.3">
+<h2 data-number="50.3" class="anchored" data-anchor-id="technical-properties-of-fleftarrow-and-frightarrow"><span class="header-section-number">50.3</span> Technical Properties of <span class="math inline">\(F^\leftarrow\)</span> and <span class="math inline">\(F^\rightarrow\)</span></h2>
+<ol type="1">
+<li><p><strong>Ordering</strong>: <span class="math display">\[
+F^\leftarrow(u) \le F^\rightarrow(u), \quad \forall u \in (0, 1).
+\]</span></p></li>
+<li><p><strong>Equivalence &amp; Flat Spots</strong>: Say that <span class="math inline">\(u\)</span> is the <strong>height of a flat spot</strong> of <span class="math inline">\(F\)</span> if <span class="math inline">\(F \equiv u\)</span> on some nonempty open interval. Then <span class="math inline">\(F^\leftarrow(u) &lt; F^\rightarrow(u)\Longleftrightarrow  u\)</span> is the height of a flat spot of <span class="math inline">\(F\)</span>. Consequently, define <span class="math display">\[
+E := \{u\in(0,1):F^\leftarrow(u)&lt;F^\rightarrow(u)\}.
+\]</span> For each <span class="math inline">\(u\in E\)</span>, the interval <span class="math inline">\(\bigl(F^\leftarrow(u),F^\rightarrow(u)\bigr)\)</span> is a nonempty open interval on which <span class="math inline">\(F\)</span> is constant and equal to <span class="math inline">\(u\)</span>. These intervals are pairwise disjoint. Hence, since every nonempty open interval in <span class="math inline">\(\mathbb R\)</span> contains a rational number, <span class="math inline">\(E\)</span> is at most countable. Therefore, <span class="math inline">\(\lambda(E)=0\)</span>.</p></li>
+<li><p><strong>Key Inequality</strong>: For all <span class="math inline">\(u \in (0, 1)\)</span>, <span class="math display">\[
+\lim_{y \uparrow F^\leftarrow(u)} F(y) \le u \le F\left(F^\leftarrow(u)\right)
+\]</span> together with the two implications</p>
+<ul>
+<li>If <span class="math inline">\(y &gt; F^\leftarrow(u)\)</span>, then <span class="math inline">\(F(y) \ge u\)</span>;</li>
+<li>If <span class="math inline">\(y &lt; F^\leftarrow(u)\)</span>, then <span class="math inline">\(F(y) &lt; u\)</span>.</li>
+</ul>
+<p>The two implications and the left-hand inequality use only the definition of the supremum and the monotonicity of <span class="math inline">\(F\)</span>. <strong>Right-continuity of <span class="math inline">\(F\)</span> is needed only for the right-hand inequality</strong> <span class="math inline">\(u \le F\left(F^\leftarrow(u)\right)\)</span>.</p></li>
+</ol>
+<div id="fig-cdf-inverses" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cdf-inverses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="CDF.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cdf-inverses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;50.1: Generalized CDF Inverses
+</figcaption>
+</figure>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of Technical Properties of <span class="math inline">\(F^\leftarrow\)</span> and <span class="math inline">\(F^\rightarrow\)</span>). </span><strong>Proof of 1</strong>: Fix <span class="math inline">\(u\in(0,1)\)</span> and define <span class="math inline">\(A_u:=\{x\in\mathbb{R}:F(x)&lt;u\}\)</span> and <span class="math inline">\(B_u:=\{x\in\mathbb{R}:F(x)&gt;u\}\)</span>. Take any <span class="math inline">\(a\in A_u\)</span> and <span class="math inline">\(b\in B_u\)</span>. Then <span class="math inline">\(F(a)&lt;u&lt;F(b)\)</span>. Since <span class="math inline">\(F\)</span> is nondecreasing, we must have <span class="math inline">\(a&lt;b\)</span>. Otherwise, if <span class="math inline">\(b\leq a\)</span>, then <span class="math inline">\(F(b)\leq F(a)\)</span>, which contradicts <span class="math inline">\(F(a)&lt;u&lt;F(b)\)</span>. Thus every element of <span class="math inline">\(A_u\)</span> is less than every element of <span class="math inline">\(B_u\)</span>. Therefore, <span class="math inline">\(\sup A_u\leq\inf B_u\)</span>. By the definitions of the lower and upper quantile functions, <span class="math display">\[
+F^\leftarrow(u)=\sup A_u\leq\inf B_u=F^\rightarrow(u).
+\]</span> Hence <span class="math inline">\(F^\leftarrow(u)\leq F^\rightarrow(u)\)</span>.</p>
+<p><strong>Proof of 2</strong>: Fix <span class="math inline">\(u\in(0,1)\)</span> and write <span class="math inline">\(a:=F^\leftarrow(u)\)</span> and <span class="math inline">\(b:=F^\rightarrow(u)\)</span>. Suppose first that <span class="math inline">\(a&lt;b\)</span>. Take any <span class="math inline">\(x\in(a,b)\)</span>. Since <span class="math inline">\(x&gt;a\)</span> and <span class="math inline">\(a=\sup\{y:F(y)&lt;u\}\)</span>, we cannot have <span class="math inline">\(F(x)&lt;u\)</span>. Otherwise, <span class="math inline">\(x\)</span> itself would belong to <span class="math inline">\(\{y:F(y)&lt;u\}\)</span>, implying <span class="math inline">\(x\leq a\)</span>, which contradicts <span class="math inline">\(x&gt;a\)</span>. Similarly, since <span class="math inline">\(x&lt;b\)</span> and <span class="math inline">\(b=\inf\{y:F(y)&gt;u\}\)</span>, we cannot have <span class="math inline">\(F(x)&gt;u\)</span>. Otherwise, <span class="math inline">\(x\)</span> would belong to <span class="math inline">\(\{y:F(y)&gt;u\}\)</span>, implying <span class="math inline">\(b\leq x\)</span>, which contradicts <span class="math inline">\(x&lt;b\)</span>. Therefore, <span class="math inline">\(F(x)=u\)</span> for <span class="math inline">\(x\in(a,b)\)</span>. Thus <span class="math inline">\(F\)</span> is constant and equal to <span class="math inline">\(u\)</span> on the nonempty open interval <span class="math inline">\((a,b)\)</span>; that is, <span class="math inline">\(u\)</span> is the height of a flat spot of <span class="math inline">\(F\)</span>.</p>
+<p>Conversely, suppose that <span class="math inline">\(F\)</span> has a flat spot at height <span class="math inline">\(u\)</span>. That is, there exist <span class="math inline">\(a&lt;b\)</span> such that <span class="math inline">\(F(x)=u\)</span> for <span class="math inline">\(x\in(a,b)\)</span>. We claim that <span class="math inline">\(\{y:F(y)&lt;u\}\subseteq(-\infty,a]\)</span>. Indeed, no <span class="math inline">\(x\in(a,b)\)</span> belongs to this set, since <span class="math inline">\(F(x)=u\)</span>; and if <span class="math inline">\(z\geq b\)</span>, then monotonicity gives <span class="math inline">\(F(z)\geq F(x)=u\)</span> for any <span class="math inline">\(x\in(a,b)\)</span>, so <span class="math inline">\(z\)</span> does not belong to it either. Taking suprema yields <span class="math inline">\(F^\leftarrow(u)\leq a\)</span>. Symmetrically, <span class="math inline">\(\{y:F(y)&gt;u\}\subseteq[b,\infty)\)</span>, so <span class="math inline">\(F^\rightarrow(u)\geq b\)</span>. Hence <span class="math display">\[
+F^\leftarrow(u)\leq a&lt;b\leq F^\rightarrow(u).
+\]</span> Therefore, <span class="math inline">\(F^\leftarrow(u)&lt;F^\rightarrow(u)\)</span>. This proves <span class="math inline">\(F^\leftarrow(u)&lt;F^\rightarrow(u)\Longleftrightarrow u\)</span> is the height of a flat spot of F.</p>
+<p>Now consider <span class="math display">\[
+E=\{u\in(0,1):F^\leftarrow(u)&lt;F^\rightarrow(u)\}.
+\]</span> For each <span class="math inline">\(u\in E\)</span>, define <span class="math display">\[
+I_u:=\bigl(F^\leftarrow(u),F^\rightarrow(u)\bigr).
+\]</span></p>
+<p>Each <span class="math inline">\(I_u\)</span> is a nonempty open interval on which <span class="math inline">\(F(x)=u\)</span>. Moreover, these intervals are pairwise disjoint. Indeed, suppose that <span class="math inline">\(u,v\in E\)</span> with <span class="math inline">\(u&lt;v\)</span>. If <span class="math inline">\(I_u\)</span> and <span class="math inline">\(I_v\)</span> had a common point <span class="math inline">\(x\)</span>, then the flat-spot property would give <span class="math inline">\(F(x)=u\)</span> and <span class="math inline">\(F(x)=v\)</span>, which is impossible because <span class="math inline">\(u\neq v\)</span>. Thus <span class="math inline">\(\{I_u:u\in E\}\)</span> is a collection of pairwise disjoint nonempty open intervals in <span class="math inline">\(\mathbb R\)</span>.</p>
+<p>Every nonempty open interval in <span class="math inline">\(\mathbb R\)</span> contains a rational number. Since the intervals are pairwise disjoint, we can associate a distinct rational number with each <span class="math inline">\(u\in E\)</span>. Because <span class="math inline">\(\mathbb Q\)</span> is countable, <span class="math inline">\(E\)</span> must be at most countable. Consequently, <span class="math inline">\(\lambda(E)=0\)</span>.</p>
+<p><strong>Proof of 3</strong>: Fix <span class="math inline">\(u\in(0,1)\)</span>, set <span class="math inline">\(A_u:=\{y\in\mathbb{R}:F(y)&lt;u\}\)</span>, and let <span class="math inline">\(q:=F^\leftarrow(u)=\sup A_u\)</span>, which is finite by the finiteness remark following <a href="#def-cdf-inverses" class="quarto-xref">Definition&nbsp;<span>50.1</span></a>.</p>
+<p><em>Second implication.</em> Let <span class="math inline">\(y&lt;q\)</span>. By definition of the supremum there exists <span class="math inline">\(z\in A_u\)</span> with <span class="math inline">\(y&lt;z\leq q\)</span>. Monotonicity of <span class="math inline">\(F\)</span> then gives <span class="math display">\[
+F(y)\leq F(z)&lt;u.
+\]</span> Hence <span class="math inline">\(F(y)&lt;u\)</span> whenever <span class="math inline">\(y&lt;q\)</span>. Letting <span class="math inline">\(y\uparrow q\)</span> in this inequality gives <span class="math display">\[
+\lim_{y\uparrow q}F(y)\leq u,
+\]</span> which is the left-hand inequality of the display. (The limit exists because <span class="math inline">\(F\)</span> is nondecreasing and bounded.) Note that only monotonicity and the definition of the supremum were used.</p>
+<p><em>First implication.</em> Let <span class="math inline">\(y&gt;q\)</span>. Since every element of <span class="math inline">\(A_u\)</span> is at most <span class="math inline">\(q\)</span>, we have <span class="math inline">\(y\notin A_u\)</span>, which by the definition of <span class="math inline">\(A_u\)</span> means exactly <span class="math inline">\(F(y)\geq u\)</span>.</p>
+<p><em>Right-hand inequality.</em> Apply the first implication along any sequence <span class="math inline">\(y_k\downarrow q\)</span> with <span class="math inline">\(y_k&gt;q\)</span>, obtaining <span class="math inline">\(F(y_k)\geq u\)</span> for every <span class="math inline">\(k\)</span>. Since <span class="math inline">\(F\)</span> is <strong>right-continuous</strong>, <span class="math display">\[
+F(q)=\lim_{k\to\infty}F(y_k)\geq u.
+\]</span> Combining the two inequalities gives <span class="math display">\[
+\lim_{y\uparrow F^\leftarrow(u)}F(y)\leq u\leq F\left(F^\leftarrow(u)\right),
+\]</span> as claimed. <span class="math inline">\(\blacksquare\)</span></p>
+</div>
+<hr>
+</section>
+<section id="construction-of-the-random-variable" class="level2" data-number="50.4">
+<h2 data-number="50.4" class="anchored" data-anchor-id="construction-of-the-random-variable"><span class="header-section-number">50.4</span> Construction of the Random Variable</h2>
+<div id="lem-quantile-transformation" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 50.1 (Quantile Transformation)</strong></span> Let <span class="math inline">\(\mu \in \text{Prob}\left(\mathbb{R}, \mathcal{B}(\mathbb{R})\right)\)</span> with CDF <span class="math inline">\(F_\mu = F\)</span>. Define <span class="math inline">\(Y: (0, 1) \to \mathbb{R}\)</span> by: <span class="math display">\[
+Y(u) := F^\leftarrow(u) = \sup \{ y \in \mathbb{R} : F(y) &lt; u \}.
+\]</span> Equip <span class="math inline">\(\left((0, 1), \mathcal{B}((0, 1))\right)\)</span> with the Lebesgue measure <span class="math inline">\(\lambda\)</span>. Then <span class="math inline">\(Y\)</span> is a Borel-measurable random variable, and: <span class="math display">\[
+Y_* \lambda = \lambda \circ Y^{-1} = \mu_Y = \mu.
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-quantile-transformation" class="quarto-xref">Lemma&nbsp;<span>50.1</span></a>). </span>First note that <span class="math inline">\(Y\)</span> is real-valued at every <span class="math inline">\(u \in (0,1)\)</span>, by the finiteness remark following <a href="#def-cdf-inverses" class="quarto-xref">Definition&nbsp;<span>50.1</span></a>. For any <span class="math inline">\(t \in \mathbb{R}\)</span>, we claim the fundamental equivalence: <span class="math display">\[
+\{ u \in (0, 1) : Y(u) \le t \} = (0, 1) \cap (0, F(t)].
+\]</span></p>
+<ul>
+<li><span class="math inline">\((\subseteq)\)</span>: Suppose <span class="math inline">\(Y(u) \le t\)</span>. By the right-hand inequality of Property 3, applied at level <span class="math inline">\(u\)</span>, we have <span class="math inline">\(u \le F\left(F^\leftarrow(u)\right)\)</span>. Since <span class="math inline">\(F^\leftarrow(u) = Y(u) \le t\)</span>, monotonicity gives <span class="math inline">\(F\left(F^\leftarrow(u)\right) \le F(t)\)</span>. Combining, <span class="math inline">\(u \le F(t)\)</span>, so <span class="math inline">\(u \in (0,1) \cap (0, F(t)]\)</span>.</li>
+<li><span class="math inline">\((\supseteq)\)</span>: If <span class="math inline">\(u \le F(t)\)</span>, then every <span class="math inline">\(y\)</span> with <span class="math inline">\(F(y) &lt; u\)</span> satisfies <span class="math inline">\(y \le t\)</span>: if <span class="math inline">\(y &gt; t\)</span>, then non-decreasingness of <span class="math inline">\(F\)</span> gives <span class="math inline">\(F(y) \ge F(t) \ge u\)</span>, contradicting <span class="math inline">\(F(y) &lt; u\)</span>. Thus <span class="math inline">\(t\)</span> is an upper bound for <span class="math inline">\(\{y : F(y) &lt; u\}\)</span>, so <span class="math inline">\(Y(u) = \sup\{y : F(y) &lt; u\} \le t\)</span>.</li>
+</ul>
+<p><strong>Measurability.</strong> The displayed identity shows that <span class="math inline">\(\{Y \le t\} \in \mathcal{B}((0,1))\)</span> for every <span class="math inline">\(t \in \mathbb{R}\)</span>. Since the sets <span class="math inline">\(\{(-\infty, t] : t \in \mathbb{R}\}\)</span> generate <span class="math inline">\(\mathcal{B}(\mathbb{R})\)</span>, it follows that <span class="math inline">\(Y\)</span> is Borel measurable.</p>
+<p><strong>Distribution.</strong> Taking the Lebesgue measure of the above set gives, for every <span class="math inline">\(t \in \mathbb{R}\)</span>, <span class="math display">\[
+\lambda\left(\{ u \in (0, 1) : Y(u) \le t \}\right) = \lambda\left((0,1) \cap (0, F(t)]\right) = F(t) = F_\mu(t).
+\]</span> The middle equality also covers the degenerate cases: if <span class="math inline">\(F(t) = 0\)</span> the set is empty, and if <span class="math inline">\(F(t) = 1\)</span> it equals <span class="math inline">\((0,1)\)</span>. Since two probability measures on <span class="math inline">\(\mathbb{R}\)</span> with the same CDF coincide, <span class="math inline">\(\mu_Y = \mu\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+</div>
+<div id="cor-inverse-transform-sampling" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 50.1 (Inverse Transform Sampling)</strong></span> Let <span class="math inline">\(\mu \in \text{Prob}\left(\mathbb{R}, \mathcal{B}(\mathbb{R})\right)\)</span> have CDF <span class="math inline">\(F\)</span>, and let <span class="math inline">\(U \sim \text{Unif}(0, 1)\)</span> be defined on some probability space <span class="math inline">\((\Omega, \mathcal{F}, P)\)</span>. Since <span class="math inline">\(P(U \in (0,1)) = 1\)</span>, the composition <span class="math inline">\(F^\leftarrow(U)\)</span> is defined almost surely, and <span class="math display">\[
+F^\leftarrow(U) \sim \mu.
+\]</span></p>
+</div>
+<p>This is immediate from <a href="#lem-quantile-transformation" class="quarto-xref">Lemma&nbsp;<span>50.1</span></a>: the law of <span class="math inline">\(U\)</span> is <span class="math inline">\(\lambda\)</span> on <span class="math inline">\((0,1)\)</span>, and pushing forward once more along the Borel map <span class="math inline">\(F^\leftarrow\)</span> gives <span class="math inline">\(\left(F^\leftarrow\right)_* \lambda = \mu\)</span>.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#cor-inverse-transform-sampling" class="quarto-xref">Corollary&nbsp;<span>50.1</span></a>). </span>Set <span class="math inline">\(Y=F^\leftarrow(U)\)</span>. For any <span class="math inline">\(x\in\mathbb{R}\)</span>, the generalized inverse satisfies <span class="math display">\[
+F^\leftarrow(u)\leq x
+\quad\Longleftrightarrow\quad
+u\leq F(x),
+\qquad u\in(0,1).
+\]</span> Therefore, <span class="math display">\[
+\begin{aligned}
+P(Y\leq x)
+&amp;=P\left(F^\leftarrow(U)\leq x\right)\\
+&amp;=P\left(U\leq F(x)\right).
+\end{aligned}
+\]</span> Since <span class="math inline">\(U\sim\operatorname{Unif}(0,1)\)</span> and <span class="math inline">\(F(x)\in[0,1]\)</span>, <span class="math inline">\(P\left(U\leq F(x)\right)=F(x)\)</span>. Hence, <span class="math inline">\(P(Y\leq x)=F(x)=F_\mu(x)\)</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span>. Thus <span class="math inline">\(Y\)</span> and <span class="math inline">\(\mu\)</span> have the same CDF. Therefore, <span class="math inline">\(F_Y=F_\mu\)</span>, and consequently <span class="math inline">\(Y\sim\mu\)</span>. That is, <span class="math inline">\(F^\leftarrow(U)\sim\mu\)</span>.</p>
+</div>
+<div id="exm-illustrating-corollary" class="theorem example">
+<p><span class="theorem-title"><strong>Example 50.3</strong></span> Suppose we want to generate a random variable <span class="math inline">\(X\)</span> with <span class="math inline">\(P(X=1)=0.2\)</span>, <span class="math inline">\(P(X=2)=0.5\)</span>, <span class="math inline">\(P(X=4)=0.3\)</span>. Its CDF is <span class="math display">\[
+F(x)=
+\begin{cases} 0, &amp; x&lt;1,\\
+0.2, &amp; 1\le x&lt;2,\\
+0.7, &amp; 2\le x&lt;4,\\
+1, &amp; x\ge4.
+\end{cases}
+\]</span> The generalized inverse is <span class="math inline">\(F^\leftarrow(u)=\sup\{x:F(x)&lt;u\}\)</span>. We can determine it interval by interval: <span class="math display">\[
+F^\leftarrow(u)=
+\begin{cases} 1, &amp; 0&lt;u\le0.2,\\
+2, &amp; 0.2&lt;u\le0.7,\\
+4, &amp; 0.7&lt;u&lt;1.
+\end{cases}
+\]</span> Now let <span class="math inline">\(U\sim\operatorname{Unif}(0,1)\)</span> and define <span class="math inline">\(Y=F^\leftarrow(U)\)</span>. Then: <span class="math display">\[
+\begin{aligned}
+&amp;P(Y=1) = P(0&lt;U\le0.2) =0.2, \\
+&amp;P(Y=2) = P(0.2&lt;U\le0.7) =0.5, \\
+&amp;P(Y=4) = P(0.7&lt;U&lt;1) =0.3.
+\end{aligned}
+\]</span> Therefore, <span class="math inline">\(Y\sim\mu\)</span>, exactly as the corollary states.</p>
+</div>
+<hr>
+</section>
+<section id="proof-of-skorohods-theorem-s-mathbbr" class="level2" data-number="50.5">
+<h2 data-number="50.5" class="anchored" data-anchor-id="proof-of-skorohods-theorem-s-mathbbr"><span class="header-section-number">50.5</span> Proof of Skorohod’s Theorem (<span class="math inline">\(S = \mathbb{R}\)</span>)</h2>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-skorohod" class="quarto-xref">Theorem&nbsp;<span>50.1</span></a> for <span class="math inline">\(S = \mathbb{R}\)</span>). </span>Let <span class="math inline">\(\mu_n, \mu \in \text{Prob}\left(\mathbb{R}, \mathcal{B}(\mathbb{R})\right)\)</span> with <span class="math inline">\(\mu_n \Rightarrow \mu\)</span>. Let <span class="math inline">\(F_n = F_{\mu_n}\)</span> and <span class="math inline">\(F = F_\mu\)</span> be their corresponding CDFs.</p>
+<p>Define our probability space as <span class="math inline">\(\Omega = (0, 1)\)</span>, <span class="math inline">\(\mathcal{F} = \mathcal{B}((0, 1))\)</span>, and <span class="math inline">\(P = \lambda\)</span> (Lebesgue measure). Define the sequence of random variables: <span class="math display">\[
+Y_n(u) := F_n^\leftarrow(u), \quad Y(u) := F^\leftarrow(u), \quad \forall u \in (0, 1).
+\]</span> These are real-valued and Borel measurable by <a href="#lem-quantile-transformation" class="quarto-xref">Lemma&nbsp;<span>50.1</span></a>, which also gives <span class="math display">\[
+\mathcal{L}(Y_n) = \mu_n \quad \forall n \ge 1,
+\qquad
+\mathcal{L}(Y) = \mu,
+\]</span> establishing conclusions 1 and 2 of <a href="#thm-skorohod" class="quarto-xref">Theorem&nbsp;<span>50.1</span></a>. To obtain conclusion 3, it suffices to show that <span class="math inline">\(Y_n(u) \to Y(u)\)</span> for every <span class="math inline">\(u \in (0,1) \setminus E\)</span>, where <span class="math display">\[
+E = \{ t \in (0, 1) : F^\leftarrow(t) &lt; F^\rightarrow(t) \}
+\]</span> is defined in terms of the <strong>limit</strong> CDF <span class="math inline">\(F\)</span> only. By Property 2, <span class="math inline">\(E\)</span> is at most countable, hence <span class="math inline">\(\lambda(E) = 0\)</span>, so this yields <span class="math inline">\(Y_n \xrightarrow{a.s.} Y\)</span>.</p>
+<p>Throughout we use two standard facts. First, since <span class="math inline">\(\mu_n \Rightarrow \mu\)</span> on <span class="math inline">\(\mathbb{R}\)</span>, we have <span class="math inline">\(F_n(y) \to F(y)\)</span> at every <span class="math inline">\(y \in \text{Cont}(F)\)</span>. Second, <span class="math inline">\(\text{Cont}(F)\)</span> is <strong>dense</strong> in <span class="math inline">\(\mathbb{R}\)</span>, because the monotone bounded function <span class="math inline">\(F\)</span> has at most countably many discontinuities.</p>
+<p><strong>Step 1: Lower Bound, <span class="math inline">\(\liminf_{n\to\infty} Y_n(u) \ge Y(u)\)</span>.</strong></p>
+<p>Fix <span class="math inline">\(u \in (0,1)\)</span> (this step does not require <span class="math inline">\(u \notin E\)</span>). Choose <span class="math inline">\(y \in \text{Cont}(F)\)</span> with <span class="math inline">\(y &lt; Y(u) = F^\leftarrow(u)\)</span>; such <span class="math inline">\(y\)</span> exist by density of <span class="math inline">\(\text{Cont}(F)\)</span> and finiteness of <span class="math inline">\(Y(u)\)</span>. By the second implication in Property 3, since <span class="math inline">\(y &lt; F^\leftarrow(u)\)</span>, we have <span class="math inline">\(F(y) &lt; u\)</span>.</p>
+<p>Since <span class="math inline">\(y\)</span> is a continuity point of <span class="math inline">\(F\)</span>, we have <span class="math inline">\(F_n(y) \to F(y)\)</span>. Because <span class="math inline">\(F(y) &lt; u\)</span>, for all sufficiently large <span class="math inline">\(n\)</span> we have <span class="math inline">\(F_n(y) &lt; u\)</span>. Therefore, by definition of <span class="math inline">\(Y_n(u) = F_n^\leftarrow(u)\)</span>, the point <span class="math inline">\(y\)</span> lies in the set whose supremum defines <span class="math inline">\(Y_n(u)\)</span>: <span class="math display">\[
+Y_n(u) = \sup \{ y' : F_n(y') &lt; u \} \ge y.
+\]</span> Taking the limit inferior as <span class="math inline">\(n \to \infty\)</span> gives: <span class="math display">\[
+\liminf_{n \to \infty} Y_n(u) \ge y.
+\]</span> Since this holds for every <span class="math inline">\(y \in \text{Cont}(F)\)</span> with <span class="math inline">\(y &lt; Y(u)\)</span>, and such <span class="math inline">\(y\)</span> can be taken with <span class="math inline">\(y \uparrow Y(u)\)</span> by density, we obtain: <span class="math display">\[
+\liminf_{n \to \infty} Y_n(u) \ge Y(u).
+\]</span></p>
+<p><strong>Step 2: Upper Bound, <span class="math inline">\(\limsup_{n\to\infty} Y_n(u) \le Y(u)\)</span>.</strong></p>
+<p>Now fix <span class="math inline">\(u \in (0,1) \setminus E\)</span> and choose <span class="math inline">\(y \in \text{Cont}(F)\)</span> with <span class="math inline">\(y &gt; Y(u)\)</span>. Since <span class="math inline">\(u \notin E\)</span>, we have <span class="math inline">\(Y(u) = F^\leftarrow(u) = F^\rightarrow(u) = \inf \{ y' : F(y') &gt; u \}\)</span>. <strong>This is the only place where <span class="math inline">\(u \notin E\)</span> is used.</strong> Thus <span class="math inline">\(y &gt; F^\rightarrow(u)\)</span>. Since the set <span class="math inline">\(\{y': F(y') &gt; u\}\)</span> is closed upward (non-decreasingness of <span class="math inline">\(F\)</span>: if <span class="math inline">\(F(z)&gt;u\)</span> and <span class="math inline">\(z'\ge z\)</span> then <span class="math inline">\(F(z')\ge F(z)&gt;u\)</span>) and <span class="math inline">\(F^\rightarrow(u)\)</span> is its infimum, any <span class="math inline">\(y &gt; F^\rightarrow(u)\)</span> belongs to the set, i.e.~<span class="math inline">\(F(y) &gt; u\)</span>.</p>
+<p>Since <span class="math inline">\(y \in \text{Cont}(F)\)</span>, <span class="math inline">\(F_n(y) \to F(y) &gt; u\)</span>, so for all sufficiently large <span class="math inline">\(n\)</span>, <span class="math inline">\(F_n(y) &gt; u\)</span>. Because <span class="math inline">\(F_n\)</span> is non-decreasing, <span class="math inline">\(F_n(y) &gt; u\)</span> makes <span class="math inline">\(y\)</span> an upper bound for <span class="math inline">\(\{z : F_n(z) &lt; u\}\)</span> (any <span class="math inline">\(z &gt; y\)</span> satisfies <span class="math inline">\(F_n(z) \ge F_n(y) &gt; u\)</span>), so <span class="math inline">\(Y_n(u) = \sup\{z : F_n(z) &lt; u\} \le y\)</span>. Taking the limit superior as <span class="math inline">\(n \to \infty\)</span> gives: <span class="math display">\[
+\limsup_{n \to \infty} Y_n(u) \le y.
+\]</span> Taking <span class="math inline">\(y \downarrow Y(u)\)</span> over continuity points <span class="math inline">\(y \in \text{Cont}(F)\)</span> yields: <span class="math display">\[
+\limsup_{n \to \infty} Y_n(u) \le Y(u).
+\]</span></p>
+<p><strong>Conclusion.</strong> Combining both steps: <span class="math display">\[
+\lim_{n \to \infty} Y_n(u) = Y(u), \quad \forall u \in (0, 1) \setminus E.
+\]</span> Since <span class="math inline">\(\lambda(E) = 0\)</span>, we conclude <span class="math inline">\(Y_n \xrightarrow{a.s.} Y\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+</div>
+<hr>
+</section>
+<section id="application-the-continuous-mapping-theorem" class="level2" data-number="50.6">
+<h2 data-number="50.6" class="anchored" data-anchor-id="application-the-continuous-mapping-theorem"><span class="header-section-number">50.6</span> Application: The Continuous Mapping Theorem</h2>
+<p>Skorohod’s representation theorem allows us to easily transfer continuous functional properties to weak limit theorems.</p>
+<div id="cor-continuous-mapping" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 50.2 (Continuous Mapping Theorem)</strong></span> Let <span class="math inline">\(f: \mathbb{R} \to \mathbb{R}\)</span> be a Borel-measurable function, and let <span class="math inline">\(X_n\)</span> (<span class="math inline">\(n \ge 1\)</span>) and <span class="math inline">\(X\)</span> be real-valued random variables, <strong>not necessarily defined on a common probability space</strong>. Write <span class="math inline">\(\text{Disc}(f)\)</span> for the set of discontinuity points of <span class="math inline">\(f\)</span>, and <span class="math inline">\(\mu_X\)</span> for the law of <span class="math inline">\(X\)</span>. Suppose <span class="math display">\[
+X_n \xrightarrow{d} X
+\quad (\text{i.e., } \mu_{X_n} \Rightarrow \mu_X),
+\qquad
+\mu_X\left(\text{Disc}(f)\right) = 0.
+\]</span></p>
+<ol type="1">
+<li><strong>Weak Convergence</strong>: <span class="math inline">\(f(X_n) \xrightarrow{d} f(X)\)</span>.</li>
+<li><strong>Expectation Limit</strong>: If <span class="math inline">\(f\)</span> is additionally bounded, then <span class="math inline">\(\mathbb{E}[f(X_n)] \to \mathbb{E}[f(X)]\)</span>.</li>
+</ol>
+</div>
+<p><strong>Two remarks on the hypotheses</strong>:</p>
+<ul>
+<li>First, the condition <span class="math inline">\(\mu_X\left(\text{Disc}(f)\right) = 0\)</span> is meaningful because <span class="math inline">\(\text{Disc}(f)\)</span> is always a Borel set: it is the <span class="math inline">\(F_\sigma\)</span> set <span class="math inline">\(\bigcup_{k \ge 1}\left\{x : \operatorname{osc} f(x) \ge 1/k\right\}\)</span>, and each oscillation set is closed.</li>
+<li>Second, the hypothesis is intrinsic to the <em>law</em> of <span class="math inline">\(X\)</span>, which is why the <span class="math inline">\(X_n\)</span> and <span class="math inline">\(X\)</span> need not share a probability space. Borel measurability of <span class="math inline">\(f\)</span> ensures that <span class="math inline">\(f(X_n)\)</span> and <span class="math inline">\(f(X)\)</span> are themselves random variables, so that all expectations below are defined.</li>
+</ul>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#cor-continuous-mapping" class="quarto-xref">Corollary&nbsp;<span>50.2</span></a>). </span><strong>Step 0: Skorohod Coupling</strong>:</p>
+<p>Since <span class="math inline">\(X_n \xrightarrow{d} X\)</span>, Skorohod’s Representation Theorem provides a common probability space <span class="math inline">\(((0, 1), \mathcal{B}(0,1), \lambda)\)</span> and random variables <span class="math inline">\((Y_n, Y)\)</span> satisfying: <span class="math display">\[
+Y_n \overset{d}{=} X_n \quad \forall n, \qquad Y \overset{d}{=} X, \qquad \text{and} \qquad Y_n \xrightarrow{a.s.} Y.
+\]</span> That is, there exists a set <span class="math inline">\(\Omega_1 \subset (0,1)\)</span> with <span class="math inline">\(\lambda(\Omega_1) = 1\)</span> such that <span class="math inline">\(Y_n(\omega) \to Y(\omega)\)</span> for all <span class="math inline">\(\omega \in \Omega_1\)</span>.</p>
+<p><strong>Step 1: The Composition <span class="math inline">\(g \circ f\)</span> is Continuous <span class="math inline">\(\lambda\)</span>-a.s. at <span class="math inline">\(Y\)</span></strong>:</p>
+<p>Let <span class="math inline">\(g \in C_b(\mathbb{R})\)</span> be any bounded continuous test function. Since <span class="math inline">\(g\)</span> is everywhere continuous, any point of continuity of <span class="math inline">\(f\)</span> is also a point of continuity of <span class="math inline">\(g \circ f\)</span>: <span class="math display">\[
+x \in \text{Cont}(f) \implies g \circ f \text{ is continuous at } x \implies x \notin \text{Disc}(g \circ f).
+\]</span> Taking complements: <span class="math inline">\(\text{Disc}(g \circ f) \subseteq \text{Disc}(f)\)</span>. Therefore: <span class="math display">\[
+\lambda\left(Y^{-1}\left(\text{Disc}(g \circ f)\right)\right) = \mu_X\left(\text{Disc}(g \circ f)\right) \le \mu_X\left(\text{Disc}(f)\right) = 0,
+\]</span> where the first equality holds because <span class="math inline">\(\mathcal{L}(Y) = \mu_X\)</span>. So there exists <span class="math inline">\(\Omega_2 \subset (0,1)\)</span> with <span class="math inline">\(\lambda(\Omega_2) = 1\)</span> and <span class="math inline">\(Y(\omega) \notin \text{Disc}(g \circ f)\)</span> for all <span class="math inline">\(\omega \in \Omega_2\)</span>. Note that <span class="math inline">\(\Omega_2\)</span> depends on the chosen <span class="math inline">\(g\)</span>; this is harmless for Part 1, in which <span class="math inline">\(g\)</span> stays fixed throughout Steps 1–5.</p>
+<p><strong>Step 2: Pointwise A.S. Convergence of <span class="math inline">\(g \circ f\)</span></strong>:</p>
+<p>The set <span class="math inline">\(\Omega^* := \Omega_1 \cap \Omega_2\)</span> satisfies <span class="math inline">\(\lambda(\Omega^*) = 1\)</span>. Fix any <span class="math inline">\(\omega \in \Omega^*\)</span>:</p>
+<ul>
+<li><span class="math inline">\(Y_n(\omega) \to Y(\omega)\)</span> (since <span class="math inline">\(\omega \in \Omega_1\)</span>).</li>
+<li><span class="math inline">\(g \circ f\)</span> is continuous at <span class="math inline">\(Y(\omega)\)</span> (since <span class="math inline">\(\omega \in \Omega_2\)</span>).</li>
+</ul>
+<p>By the definition of continuity, <span class="math inline">\(y_n \to y\)</span> and <span class="math inline">\(h\)</span> continuous at <span class="math inline">\(y\)</span> implies <span class="math inline">\(h(y_n) \to h(y)\)</span>. Applying this with <span class="math inline">\(y_n = Y_n(\omega)\)</span>, <span class="math inline">\(y = Y(\omega)\)</span>, <span class="math inline">\(h = g \circ f\)</span>: <span class="math display">\[(g \circ f)(Y_n(\omega)) \longrightarrow (g \circ f)(Y(\omega)).\]</span> Since this holds for all <span class="math inline">\(\omega \in \Omega^*\)</span>: <span class="math display">\[
+(g \circ f)(Y_n) \xrightarrow{a.s.} (g \circ f)(Y).
+\]</span></p>
+<p><strong>Step 3: Dominated Convergence</strong>:</p>
+<p>Since <span class="math inline">\(g \in C_b(\mathbb{R})\)</span>, there exists <span class="math inline">\(M &lt; \infty\)</span> with <span class="math inline">\(|g(y)| \le M\)</span> for all <span class="math inline">\(y\)</span>. Thus: <span class="math display">\[
+|(g \circ f)(Y_n(\omega))| \le M \quad \text{for all } n \text{ and all } \omega \in (0,1).
+\]</span> The constant function <span class="math inline">\(M\)</span> is integrable on <span class="math inline">\(((0,1), \lambda)\)</span>. By the <strong>Dominated Convergence Theorem</strong>: <span class="math display">\[
+\mathbb{E}_\lambda[(g \circ f)(Y_n)] \longrightarrow \mathbb{E}_\lambda[(g \circ f)(Y)].\]</span></p>
+<p><strong>Step 4: Transfer Back to <span class="math inline">\((X_n, X)\)</span></strong>:</p>
+<p>Since <span class="math inline">\(Y_n \overset{d}{=} X_n\)</span>, for any bounded Borel-measurable function <span class="math inline">\(h\)</span>: <span class="math display">\[
+\mathbb{E}_\lambda[h(Y_n)] = \int_{\mathbb{R}} h \, d\mu_{Y_n} = \int_{\mathbb{R}} h \, d\mu_{X_n} = \mathbb{E}[h(X_n)],
+\]</span> and similarly <span class="math inline">\(\mathbb{E}_\lambda[h(Y)] = \mathbb{E}[h(X)]\)</span>. Here <span class="math inline">\(\mathbb{E}_\lambda\)</span> denotes expectation on the coupling space <span class="math inline">\(\left((0,1), \mathcal{B}((0,1)), \lambda\right)\)</span>, whereas <span class="math inline">\(\mathbb{E}\)</span> denotes expectation on whichever space carries <span class="math inline">\(X_n\)</span> (respectively <span class="math inline">\(X\)</span>); the two are linked only through equality of laws. Applying this with <span class="math inline">\(h = g \circ f\)</span>, which is bounded and Borel: <span class="math display">\[
+\mathbb{E}[g(f(X_n))] = \mathbb{E}_\lambda[(g \circ f)(Y_n)] \longrightarrow \mathbb{E}_\lambda[(g \circ f)(Y)] = \mathbb{E}[g(f(X))].
+\]</span></p>
+<p><strong>Step 5: Conclusion of Part 1</strong>:</p>
+<p>Since <span class="math inline">\(g \in C_b(\mathbb{R})\)</span> was arbitrary and <span class="math inline">\(\mathbb{E}[g(f(X_n))] \to \mathbb{E}[g(f(X))]\)</span> for every such <span class="math inline">\(g\)</span>, the definition of weak convergence gives <span class="math inline">\(f(X_n) \xrightarrow{d} f(X)\)</span>.</p>
+<p><strong>Step 6: Part 2 — Bounded <span class="math inline">\(f\)</span> Implies <span class="math inline">\(\mathbb{E}[f(X_n)] \to \mathbb{E}[f(X)]\)</span></strong>:</p>
+<p>Suppose <span class="math inline">\(|f| \le M\)</span> for some <span class="math inline">\(M &lt; \infty\)</span>. We must <strong>not</strong> reuse the set <span class="math inline">\(\Omega^*\)</span> of Step 2: that set was built to make <span class="math inline">\(g \circ f\)</span> continuous at <span class="math inline">\(Y(\omega)\)</span>, which does not imply that <span class="math inline">\(f\)</span> itself is continuous there (see the warning below). Instead, define a new full-measure set directly from the hypothesis: <span class="math display">\[
+\Omega_f := \Omega_1 \cap \left\{ \omega \in (0,1) : Y(\omega) \notin \text{Disc}(f) \right\}.
+\]</span> Since <span class="math inline">\(\mathcal{L}(Y) = \mu_X\)</span> and <span class="math inline">\(\mu_X\left(\text{Disc}(f)\right) = 0\)</span>, the second set has <span class="math inline">\(\lambda\)</span>-measure <span class="math inline">\(1\)</span>; hence <span class="math inline">\(\lambda(\Omega_f) = 1\)</span>.</p>
+<p>For every <span class="math inline">\(\omega \in \Omega_f\)</span> we have <span class="math inline">\(Y_n(\omega) \to Y(\omega)\)</span> and <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(Y(\omega)\)</span>, so <span class="math inline">\(f(Y_n(\omega)) \to f(Y(\omega))\)</span>. Hence: <span class="math display">\[
+f(Y_n) \xrightarrow{a.s.} f(Y).
+\]</span> The uniform bound <span class="math inline">\(|f(Y_n)| \le M\)</span> provides a dominating function, integrable because <span class="math inline">\(\lambda\)</span> is a probability measure, so by DCT: <span class="math display">\[
+\mathbb{E}_\lambda[f(Y_n)] \longrightarrow \mathbb{E}_\lambda[f(Y)].
+\]</span> Transferring back via Step 4 (with <span class="math inline">\(h = f\)</span>, which is bounded Borel): <span class="math display">\[
+\mathbb{E}[f(X_n)] = \mathbb{E}_\lambda[f(Y_n)] \longrightarrow \mathbb{E}_\lambda[f(Y)] = \mathbb{E}[f(X)].
+\]</span></p>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Why Part 2 needs its own full-measure set
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The inclusion established in Step 1 is <span class="math display">\[
+\text{Disc}(g \circ f) \subseteq \text{Disc}(f),
+\]</span> and it runs in the <strong>wrong direction</strong> for deducing continuity of <span class="math inline">\(f\)</span> from continuity of <span class="math inline">\(g \circ f\)</span>. The inclusion can be strict in the extreme: if <span class="math inline">\(g \equiv c\)</span> is constant, then <span class="math inline">\(g \circ f\)</span> is continuous everywhere, so <span class="math inline">\(\text{Disc}(g \circ f) = \emptyset\)</span> and <span class="math inline">\(\Omega_2 = (0,1)\)</span>, no matter how badly discontinuous <span class="math inline">\(f\)</span> may be. Nor can one simply take <span class="math inline">\(g = \text{id}\)</span>, since <span class="math inline">\(\text{id} \notin C_b(\mathbb{R})\)</span> — and boundedness of <span class="math inline">\(g\)</span> is exactly what supplied the dominating constant in Step 3. This is why Part 2 is proved using <span class="math inline">\(\Omega_f\)</span>, which invokes the hypothesis <span class="math inline">\(\mu_X\left(\text{Disc}(f)\right) = 0\)</span> directly.</p>
+</div>
+</div>
+<div id="exm-continuous-mapping-theorem" class="theorem example">
+<p><span class="theorem-title"><strong>Example 50.4 (Absolute deviation around a threshold)</strong></span> Suppose <span class="math inline">\(X_n\sim N\left(c_n,1\right)\)</span>, where <span class="math inline">\(c_n=1+\frac1n\)</span> so that <span class="math inline">\(X_n\xrightarrow{d}X\)</span>, where <span class="math inline">\(X\sim N(1,1)\)</span>. Consider the function <span class="math display">\[
+f(x)=
+\begin{cases}
+(x-1)^2, &amp; x\leq 1,\\
+2(x-1)^2+1, &amp; x&gt;1.
+\end{cases}
+\]</span> This function is discontinuous at <span class="math inline">\(x=1\)</span> because <span class="math display">\[
+\lim_{x\uparrow1}f(x)=0, \qquad \lim_{x\downarrow1}f(x)=1.
+\]</span> Thus <span class="math inline">\(\operatorname{Disc}(f)=\{1\}\)</span>. But the limiting random variable <span class="math inline">\(X\sim N(1,1)\)</span> has a continuous distribution, so <span class="math inline">\(P(X=1)=0\)</span>. Consequently, <span class="math inline">\(\mu_X(\operatorname{Disc}(f))=0\)</span>. The Continuous Mapping Theorem therefore gives <span class="math inline">\(f(X_n)\xrightarrow{d}f(X)\)</span>.</p>
+<p>What does the transformed distribution look like? The transformation is <span class="math display">\[
+f(X_n) = (X_n-1)^2\mathbf 1\{X_n\leq1\} + \left[2(X_n-1)^2+1\right]\mathbf 1\{X_n&gt;1\}.
+\]</span> The transformation treats observations differently depending on whether they fall below or above the threshold 1. Nevertheless, <span class="math inline">\(X_n\xrightarrow d X\)</span> is enough to conclude that the entire transformed random variable converges in distribution: <span class="math display">\[
+\begin{aligned}
+&amp;(X_n-1)^2\mathbf 1\{X_n\leq1\} + [2(X_n-1)^2+1]\mathbf 1\{X_n&gt;1\} \\
+&amp;\xrightarrow d
+(X-1)^2\mathbf 1\{X\leq1\} + [2(X-1)^2+1]\mathbf 1\{X&gt;1\}.
+\end{aligned}
+\]</span></p>
+</div>
+<hr>
+</section>
+<section id="takeaways" class="level2" data-number="50.7">
+<h2 data-number="50.7" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">50.7</span> Takeaways</h2>
+<p><strong>1. The Quantile Construction.</strong> For any CDF <span class="math inline">\(F\)</span> on <span class="math inline">\(\mathbb{R}\)</span>, the left-continuous inverse <span class="math inline">\(F^\leftarrow(u) = \sup\{y : F(y) &lt; u\}\)</span> is finite for each <span class="math inline">\(u \in (0,1)\)</span> and defines a Borel map on <span class="math inline">\(\left((0,1),\lambda\right)\)</span> whose pushforward is <span class="math inline">\(\mu\)</span>. This is the <em>inverse transform sampling</em> principle and is the key building block of the theorem.</p>
+<p><strong>2. Skorohod’s Representation Theorem.</strong> If <span class="math inline">\(\mu_n \Rightarrow \mu\)</span> on <span class="math inline">\(\mathbb{R}\)</span>, the explicit Skorohod coupling is <span class="math inline">\(Y_n = F_n^\leftarrow\)</span> and <span class="math inline">\(Y = F^\leftarrow\)</span> on the same Lebesgue space <span class="math inline">\(\left((0,1),\lambda\right)\)</span>. The a.s. convergence <span class="math inline">\(Y_n \to Y\)</span> is proved by a two-sided squeeze: - <em>Lower bound</em>: for <span class="math inline">\(y &lt; Y(u)\)</span>, Property 3 gives <span class="math inline">\(F(y) &lt; u\)</span>; weak convergence then forces <span class="math inline">\(F_n(y) &lt; u\)</span> eventually, so <span class="math inline">\(Y_n(u) \ge y\)</span>. - <em>Upper bound</em>: for <span class="math inline">\(y &gt; Y(u)\)</span> (using <span class="math inline">\(u \notin E\)</span>, so <span class="math inline">\(F^\leftarrow = F^\rightarrow\)</span>), the fact that <span class="math inline">\(\{z: F(z)&gt;u\}\)</span> is upward-closed gives <span class="math inline">\(F(y)&gt;u\)</span>; weak convergence forces <span class="math inline">\(F_n(y)&gt;u\)</span> eventually, and non-decreasingness of <span class="math inline">\(F_n\)</span> then gives <span class="math inline">\(Y_n(u) \le y\)</span>.</p>
+<p>Both limiting arguments are legitimate because <span class="math inline">\(\text{Cont}(F)\)</span> is dense in <span class="math inline">\(\mathbb{R}\)</span>, a monotone bounded <span class="math inline">\(F\)</span> having at most countably many discontinuities.</p>
+<p><strong>3. Why <span class="math inline">\(u \notin E\)</span> is required.</strong> The set <span class="math inline">\(E = \{u : F^\leftarrow(u) &lt; F^\rightarrow(u)\}\)</span> collects the heights of the flat spots of <span class="math inline">\(F\)</span>. The upper bound argument uses <span class="math inline">\(F^\leftarrow(u) = F^\rightarrow(u)\)</span>, which fails on <span class="math inline">\(E\)</span>; the lower bound argument needs no such restriction. Since flat spots of <span class="math inline">\(F\)</span> correspond to disjoint open intervals in <span class="math inline">\(\mathbb{R}\)</span>, <span class="math inline">\(E\)</span> is countable, so <span class="math inline">\(\lambda(E) = 0\)</span> and the a.s. conclusion holds.</p>
+<p><strong>4. The Continuous Mapping Theorem.</strong> Skorohod’s theorem reduces CMT to a pointwise statement: since <span class="math inline">\(Y_n \to Y\)</span> a.s. and <span class="math inline">\(g \circ f\)</span> is continuous at <span class="math inline">\(Y(\omega)\)</span> for <span class="math inline">\(\lambda\)</span>-a.e. <span class="math inline">\(\omega\)</span> (because <span class="math inline">\(\mathcal{L}(Y) = \mu_X\)</span>, <span class="math inline">\(\mu_X(\text{Disc}(f)) = 0\)</span>, and <span class="math inline">\(\text{Disc}(g \circ f) \subseteq \text{Disc}(f)\)</span>), we get <span class="math inline">\((g\circ f)(Y_n) \to (g\circ f)(Y)\)</span> a.s., and DCT finishes the argument. For bounded <span class="math inline">\(f\)</span> one argues the same way, but on the set <span class="math inline">\(\Omega_f\)</span> where <span class="math inline">\(f\)</span> <em>itself</em> is continuous at <span class="math inline">\(Y(\omega)\)</span>: the set built for a fixed test function <span class="math inline">\(g\)</span> will not do, since <span class="math inline">\(\text{Disc}(g \circ f)\)</span> can be much smaller than <span class="math inline">\(\text{Disc}(f)\)</span>.</p>
+<p><strong>5. Scope and Limitations.</strong> The explicit CDF-inversion proof is special to <span class="math inline">\(\mathbb{R}\)</span>. For a general separable metric space <span class="math inline">\(S\)</span> — completeness is <em>not</em> needed — the coupling is obtained by constructing a suitable <strong>joint</strong> measure on an auxiliary space (via nested partitions or probability kernels), not a product of the marginals; the conclusion, and all applications including CMT, remain the same. That general statement is quoted here as a standard result and is <strong>not</strong> proved in this chapter. Importantly, Skorohod’s theorem does <strong>not</strong> assert that <span class="math inline">\(X_n \to X\)</span> a.s. on the <em>original</em> probability space; it only provides an equivalent coupling on a new space.</p>
+<hr>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="pagination-link" aria-label="Lecture 23.2: Prokhorov's Compactness Theorem">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="pagination-link" aria-label="Lecture 24.1: Complex Integration and Dynkin's Theorem">
+        <span class="nav-page-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/23-3-Skorohod-Theorem.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

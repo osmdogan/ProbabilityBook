@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>81&nbsp; Lecture 37.2: Kolmogorov Extension Theorem – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./38-1-Path-Space.html" rel="next">
+<link href="./37-1-Markov-Processes.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./37-2-Kolmogorov-Extension-Theorem.html"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-and-conceptual-context" id="toc-introduction-and-conceptual-context" class="nav-link active" data-scroll-target="#introduction-and-conceptual-context"><span class="header-section-number">81.1</span> Introduction and Conceptual Context</a></li>
+  <li><a href="#kolmogorovs-extension-theorem" id="toc-kolmogorovs-extension-theorem" class="nav-link" data-scroll-target="#kolmogorovs-extension-theorem"><span class="header-section-number">81.2</span> Kolmogorov’s Extension Theorem</a></li>
+  <li><a href="#proof-construction" id="toc-proof-construction" class="nav-link" data-scroll-target="#proof-construction"><span class="header-section-number">81.3</span> Proof Construction</a>
+  <ul class="collapse">
+  <li><a href="#step-1-definition-on-the-cylinder-algebra" id="toc-step-1-definition-on-the-cylinder-algebra" class="nav-link" data-scroll-target="#step-1-definition-on-the-cylinder-algebra"><span class="header-section-number">81.3.1</span> Step 1: Definition on the Cylinder Algebra</a></li>
+  <li><a href="#step-2-verification-of-countable-additivity" id="toc-step-2-verification-of-countable-additivity" class="nav-link" data-scroll-target="#step-2-verification-of-countable-additivity"><span class="header-section-number">81.3.2</span> Step 2: Verification of Countable Additivity</a></li>
+  </ul></li>
+  <li><a href="#canonical-construction-of-markov-processes" id="toc-canonical-construction-of-markov-processes" class="nav-link" data-scroll-target="#canonical-construction-of-markov-processes"><span class="header-section-number">81.4</span> Canonical Construction of Markov Processes</a></li>
+  <li><a href="#proof" id="toc-proof" class="nav-link" data-scroll-target="#proof"><span class="header-section-number">81.5</span> Proof</a>
+  <ul class="collapse">
+  <li><a href="#step-1-definition-of-finite-dimensional-marginals-and-consistency" id="toc-step-1-definition-of-finite-dimensional-marginals-and-consistency" class="nav-link" data-scroll-target="#step-1-definition-of-finite-dimensional-marginals-and-consistency"><span class="header-section-number">81.5.1</span> Step 1: Definition of Finite-Dimensional Marginals and Consistency</a></li>
+  <li><a href="#step-2-verification-of-the-markov-property" id="toc-step-2-verification-of-the-markov-property" class="nav-link" data-scroll-target="#step-2-verification-of-the-markov-property"><span class="header-section-number">81.5.2</span> Step 2: Verification of the Markov Property</a></li>
+  </ul></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">81.6</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/37-2-Kolmogorov-Extension-Theorem.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-II.html">Probability Theory II</a></li><li class="breadcrumb-item"><a href="./37-2-Kolmogorov-Extension-Theorem.html"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-and-conceptual-context" class="level2" data-number="81.1">
+<h2 data-number="81.1" class="anchored" data-anchor-id="introduction-and-conceptual-context"><span class="header-section-number">81.1</span> Introduction and Conceptual Context</h2>
+<p>In the foundational theory of Markov processes, a process defined on a standard Borel space <span class="math inline">\((S, \mathcal{B})\)</span> comes equipped with a family of transition operators <span class="math inline">\(\{Q_{s,t}\}_{s \le t}\)</span> acting on <span class="math inline">\(\mathcal{B}_b(S, \mathcal{B})\)</span>. These operators satisfy the <strong>Chapman–Kolmogorov equations</strong>: <span id="eq-ck-intro"><span class="math display">\[
+Q_{r,t} = Q_{r,s} Q_{s,t}, \quad Q_{t,t} = \text{Id} \quad \text{for all } r \le s \le t \text{ in } T.
+\tag{81.1}\]</span></span></p>
+<p>This setup is directly analogous to the independent and identically distributed (i.i.d.) setting: an i.i.d. sequence <span class="math inline">\(\{X_n\}_{n \in \mathbb{N}}\)</span> comes with a sequence of joint laws <span class="math inline">\(\mu_n \in \mathcal{P}(S^n)\)</span> satisfying the multiplicativity property <span class="math inline">\(\mu_n \otimes \mu_m = \mu_{n+m}\)</span> — a special case of the (weaker, and operative) projective-consistency condition defined in <a href="#def-consistency-condition" class="quarto-xref">Definition&nbsp;<span>81.2</span></a> below, which only requires compatibility of marginals rather than this full tensor-factorization property.</p>
+<p>The fundamental reverse problem asks: given a family of consistent finite-dimensional marginal distributions, can we construct an actual stochastic process on a canonical probability space having these exact joint distributions? For i.i.d. random variables, the existence of such a process on <span class="math inline">\(S^{\mathbb{N}}\)</span> is established via <strong>Kolmogorov’s Extension Theorem</strong>. Here, we extend this framework to construct general continuous- or discrete-time Markov processes on product spaces <span class="math inline">\(S^T\)</span>.</p>
+<hr>
+</section>
+<section id="kolmogorovs-extension-theorem" class="level2" data-number="81.2">
+<h2 data-number="81.2" class="anchored" data-anchor-id="kolmogorovs-extension-theorem"><span class="header-section-number">81.2</span> Kolmogorov’s Extension Theorem</h2>
+<p>Let <span class="math inline">\((S, \mathcal{B})\)</span> be a <strong>standard Borel space</strong> (a space homeomorphic to a Borel subset of a complete separable metric space) and let <span class="math inline">\(T\)</span> be an arbitrary index set (e.g., <span class="math inline">\(T = \mathbb{R}_+\)</span>, <span class="math inline">\(T = \mathbb{N}\)</span>, or an uncountably infinite set).</p>
+<div id="def-product-space" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 81.1 (Canonical Product Space and Cylinder Sets)</strong></span> The product space <span class="math inline">\(S^T := \{\omega : T \to S\}\)</span> consists of all paths/functions from <span class="math inline">\(T\)</span> to <span class="math inline">\(S\)</span>. For each <span class="math inline">\(t \in T\)</span>, the <strong>coordinate projection map</strong> <span class="math inline">\(\pi_t : S^T \to S\)</span> is defined by: <span id="eq-projection-map"><span class="math display">\[
+\pi_t(\omega) = \omega(t).
+\tag{81.2}\]</span></span></p>
+<p>For a finite subset <span class="math inline">\(\Lambda = \{t_1, \dots, t_n\} \subseteq T\)</span> (listed in the order induced by <span class="math inline">\(T\)</span>), the finite-dimensional projection <span class="math inline">\(\pi_\Lambda : S^T \to S^\Lambda\)</span> is: <span id="eq-finite-projection-map"><span class="math display">\[
+\pi_\Lambda(\omega) = \big(\omega(t_1), \dots, \omega(t_n)\big),
+\tag{81.3}\]</span></span> where we identify <span class="math inline">\(S^\Lambda\)</span> (functions <span class="math inline">\(\Lambda \to S\)</span>) with <span class="math inline">\(S^n\)</span> via this ordering; the product <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{B}^{\otimes \Lambda}\)</span> is transported along the same identification. This identification is used silently throughout the rest of this chapter.</p>
+<p>The <strong>product <span class="math inline">\(\sigma\)</span>-algebra</strong> <span class="math inline">\(\mathcal{B}^{\otimes T}\)</span> is generated by all individual coordinate projections: <span id="eq-product-sigma-algebra"><span class="math display">\[
+\mathcal{B}^{\otimes T} := \sigma(\pi_t : t \in T) = \sigma \left( \bigcup_{\Lambda \subseteq T, \, |\Lambda| &lt; \infty} \sigma(\pi_\Lambda) \right).
+\tag{81.4}\]</span></span> (The two expressions on the right agree because <span class="math inline">\(\sigma(\pi_t) \subseteq \sigma(\pi_\Lambda)\)</span> whenever <span class="math inline">\(t \in \Lambda\)</span>, giving “<span class="math inline">\(\subseteq\)</span>”; and <span class="math inline">\(\sigma(\pi_\Lambda) \subseteq \sigma(\pi_t : t \in T)\)</span> for every finite <span class="math inline">\(\Lambda\)</span>, since <span class="math inline">\(\mathcal{B}^{\otimes\Lambda}\)</span> is generated by rectangles and <span class="math inline">\(\pi_\Lambda^{-1}(B_1\times\cdots\times B_n) = \bigcap_i \pi_{t_i}^{-1}(B_i)\)</span>, giving “<span class="math inline">\(\supseteq\)</span>”.)</p>
+<p>A subset <span class="math inline">\(A \subseteq S^T\)</span> is called a <strong>cylinder set</strong> if <span class="math inline">\(A = \pi_\Lambda^{-1}(B)\)</span> for some finite subset <span class="math inline">\(\Lambda \subseteq T\)</span> and <span class="math inline">\(B \in \mathcal{B}^{\otimes \Lambda}\)</span>; every cylinder set belongs to <span class="math inline">\(\mathcal{B}^{\otimes T}\)</span>, by the displayed equality above.</p>
+</div>
+<div id="rem-cylinder-set" class="proof remark">
+<p><span class="proof-title"><em>Remark 81.1</em> (Remark on Cylinder Sets). </span>Let <span class="math inline">\(\Lambda=\{t_1,\ldots,t_n\}\subseteq T\)</span> be a finite set of time points, and define the coordinate map <span class="math inline">\(\pi_\Lambda:\Omega\to S^\Lambda\)</span> and <span class="math inline">\(\pi_\Lambda(\omega)=(\omega(t_1),\ldots,\omega(t_n))\)</span>. For <span class="math inline">\(B\in\mathcal B^{\otimes\Lambda}\)</span>, a cylinder set is a set of the form <span class="math display">\[
+A=\pi_\Lambda^{-1}(B)
+=\{\omega\in\Omega:\pi_\Lambda(\omega)\in B\}.
+\]</span> In other words, a path belongs to <span class="math inline">\(A\)</span> if its values at the selected finite set of times satisfy the condition specified by <span class="math inline">\(B\)</span>. The path’s values at all other times are irrelevant to membership in <span class="math inline">\(A\)</span>.</p>
+<p>For example, take <span class="math inline">\(S=\mathbb R\)</span>, <span class="math inline">\(T=[0,\infty)\)</span>, and <span class="math inline">\(\Lambda=\{1,2\}\)</span>. Let <span class="math inline">\(B=\{(x_1,x_2)\in\mathbb R^2:x_1\leq 0,\ x_2&gt;1\}\)</span>. The corresponding cylinder set is <span class="math inline">\(A=\{\omega\in\Omega:\omega(1)\leq 0,\ \omega(2)&gt;1\}\)</span>. This set contains every path whose value at time <span class="math inline">\(1\)</span> is nonpositive and whose value at time <span class="math inline">\(2\)</span> exceeds <span class="math inline">\(1\)</span>, regardless of what the path does at any other time.</p>
+<p><strong>Basic Properties of Cylinder Sets</strong></p>
+<ol type="1">
+<li><p>Every cylinder set is measurable: By definition of the product <span class="math inline">\(\sigma\)</span>-algebra, <span class="math inline">\(A=\pi_\Lambda^{-1}(B)\in\mathcal F\)</span>. Thus, every cylinder set is an event in the canonical measurable space.</p></li>
+<li><p>Cylinder sets are closed under finite intersections: Suppose <span class="math inline">\(A_1=\pi_{\Lambda_1}^{-1}(B_1)\)</span> and <span class="math inline">\(A_2=\pi_{\Lambda_2}^{-1}(B_2)\)</span>. Then <span class="math inline">\(A_1\cap A_2=\pi_{\Lambda_1\cup\Lambda_2}^{-1}(C)\)</span>, where <span class="math inline">\(C\)</span> imposes both conditions <span class="math inline">\(B_1\)</span> and <span class="math inline">\(B_2\)</span> on their respective coordinates. Since <span class="math inline">\(\Lambda_1\cup\Lambda_2\)</span> is finite, the intersection is again a cylinder set. More generally, a finite intersection of cylinder sets is a cylinder set.</p></li>
+<li><p>The complement of a cylinder set is a cylinder set: If <span class="math inline">\(A=\pi_\Lambda^{-1}(B)\)</span>, then <span class="math inline">\(A^c=\pi_\Lambda^{-1}(B^c)\)</span>, where <span class="math inline">\(B^c=S^\Lambda\setminus B\)</span>. Hence <span class="math inline">\(A^c\)</span> is a cylinder set.</p></li>
+<li><p>Cylinder sets are closed under finite unions: For cylinder sets <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span>, their union can be represented as a cylinder set based on <span class="math inline">\(\Lambda_1\cup\Lambda_2\)</span>, just as for intersections. Therefore, finite unions of cylinder sets are cylinder sets.</p></li>
+<li><p>Cylinder sets generate the product <span class="math inline">\(\sigma\)</span>-algebra: The product <span class="math inline">\(\sigma\)</span>-algebra is precisely <span class="math inline">\(\mathcal B^{\otimes T} = \sigma(\mathcal C)\)</span>, where <span class="math inline">\(\mathcal C\)</span> denotes the collection of all cylinder sets. This means that every set in the product <span class="math inline">\(\sigma\)</span>-algebra can be obtained from cylinder sets by taking countable unions, countable intersections, and complements.</p></li>
+<li><p>Important: Cylinder sets themselves are generally not closed under countable unions or countable intersections. They form an algebra of sets, not necessarily a <span class="math inline">\(\sigma\)</span>-algebra.</p></li>
+<li><p>Cylinder sets depend on finitely many coordinates: If two paths <span class="math inline">\(\omega,\omega'\in\Omega\)</span> agree on <span class="math inline">\(\Lambda\)</span>, then <span class="math inline">\(\pi_\Lambda(\omega)=\pi_\Lambda(\omega')\)</span>.Consequently, <span class="math inline">\(\omega\in A\iff\omega'\in A\)</span> for every cylinder set <span class="math inline">\(A=\pi_\Lambda^{-1}(B)\)</span>.</p></li>
+</ol>
+</div>
+<p>The goal is to construct a probability measure on the entire path space <span class="math inline">\(S^T\)</span>, where a path specifies the process’s values at every time point. We begin by specifying distributions for finite collections of coordinates. But these distributions cannot be chosen independently: they must be compatible. <strong>Projective consistency</strong> is precisely this compatibility requirement. In short, projective consistency means that reducing a joint distribution to fewer coordinates must give the distribution already specified for those coordinates.</p>
+<div id="def-consistency-condition" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 81.2 (Consistency Condition)</strong></span> A family of probability measures <span class="math inline">\(\{\mu_\Lambda \in \mathcal{P}(S^\Lambda, \mathcal{B}^{\otimes \Lambda}) : \Lambda \subseteq T, \, |\Lambda| &lt; \infty\}\)</span> is called <strong>projectively consistent</strong> if, for all finite index sets <span class="math inline">\(\Lambda' \subseteq \Lambda \subseteq T\)</span>, we have: <span id="eq-projective-consistency"><span class="math display">\[
+(\pi_{\Lambda' \mid S^\Lambda})^* \mu_\Lambda = \mu_{\Lambda'},
+\tag{81.5}\]</span></span> where <span class="math inline">\(\pi_{\Lambda' \mid S^\Lambda} : S^\Lambda \to S^{\Lambda'}\)</span> is the natural restriction map between finite Cartesian products, and <span class="math inline">\(f^*\mu\)</span> denotes the <strong>pushforward</strong> of a measure <span class="math inline">\(\mu\)</span> along a measurable map <span class="math inline">\(f\)</span> (i.e.&nbsp;<span class="math inline">\((f^*\mu)(B) := \mu(f^{-1}(B))\)</span>); we use this superscript-star convention for pushforwards throughout. Explicitly, for all <span class="math inline">\(B' \in \mathcal{B}^{\otimes \Lambda'}\)</span>: <span id="eq-consistency-product-form"><span class="math display">\[
+\mu_\Lambda \big( B' \times S^{\Lambda \setminus \Lambda'} \big) = \mu_{\Lambda'}(B').
+\tag{81.6}\]</span></span></p>
+</div>
+<div id="thm-kolmogorov-extension" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 81.1 (Kolmogorov’s (Extended) Extension Theorem)</strong></span> Let <span class="math inline">\((S, \mathcal{B})\)</span> be a standard Borel space and let <span class="math inline">\(T\)</span> be an arbitrary set. Suppose <span class="math inline">\(\{\mu_\Lambda\}_{\Lambda \subseteq T, \, |\Lambda| &lt; \infty}\)</span> is a projectively consistent family of probability measures. Then there exists a <strong>unique</strong> probability measure <span class="math inline">\(\mathbb{P} \in \mathcal{P}(S^T, \mathcal{B}^{\otimes T})\)</span> such that: <span id="eq-kolmogorov-extension-conclusion"><span class="math display">\[
+\pi_\Lambda^* \mathbb{P} = \mu_\Lambda \quad \text{for all finite subsets } \Lambda \subseteq T.
+\tag{81.7}\]</span></span></p>
+</div>
+<div id="rem-kolmogorov-extension" class="proof remark">
+<p><span class="proof-title"><em>Remark 81.2</em> (Kolmogorov’s Extension Theorem). </span>The theorem provides the mathematical foundation for constructing a stochastic process from its finite-dimensional distributions.</p>
+<ul>
+<li>Input: A probability distribution for every finite collection of time points, with all these distributions satisfying projective consistency.</li>
+<li>Output: A probability measure <span class="math inline">\(\mathbb P\)</span> on the entire path space <span class="math inline">\(S^T\)</span> that reproduces every specified finite-dimensional distribution.</li>
+</ul>
+<p>The existence part says that the finite-dimensional distributions can be realized jointly on a common path space. The uniqueness part says that there is only one such probability measure on the product <span class="math inline">\(\sigma\)</span>-algebra.</p>
+</div>
+</section>
+<div id="proof-kolmogorov-extension">
+<section id="proof-construction" class="level2" data-number="81.3">
+<h2 data-number="81.3" class="anchored" data-anchor-id="proof-construction"><span class="header-section-number">81.3</span> Proof Construction</h2>
+<p>We structure the proof in two main steps: pre-measure construction on an algebra, followed by verification of countable additivity.</p>
+<section id="step-1-definition-on-the-cylinder-algebra" class="level3" data-number="81.3.1">
+<h3 data-number="81.3.1" class="anchored" data-anchor-id="step-1-definition-on-the-cylinder-algebra"><span class="header-section-number">81.3.1</span> Step 1: Definition on the Cylinder Algebra</h3>
+<p>Define the collection of cylinder sets: <span id="eq-algebra-definition"><span class="math display">\[
+\mathcal{A} := \bigcup_{\Lambda \subseteq T, \, |\Lambda| &lt; \infty} \sigma(\pi_\Lambda) = \left\{ \pi_\Lambda^{-1}(B) : \Lambda \subseteq T \text{ finite}, \, B \in \mathcal{B}^{\otimes \Lambda} \right\}.
+\tag{81.8}\]</span></span></p>
+<p>We will repeatedly use the following elementary fact. For finite <span class="math inline">\(\Lambda \subseteq \Lambda' \subseteq T\)</span>, write <span class="math inline">\(p_\Lambda^{\Lambda'} : S^{\Lambda'} \to S^\Lambda\)</span> for the natural restriction map; then <span class="math inline">\(\pi_\Lambda = p_\Lambda^{\Lambda'} \circ \pi_{\Lambda'}\)</span>, so for <span class="math inline">\(C \subseteq S^\Lambda\)</span>, <span id="eq-cylinder-factorization"><span class="math display">\[
+\pi_\Lambda^{-1}(C) = \pi_{\Lambda'}^{-1}\big( (p_\Lambda^{\Lambda'})^{-1}(C) \big).
+\tag{81.9}\]</span></span> Moreover, since <span class="math inline">\(S \ne \emptyset\)</span> (implicit throughout, as each <span class="math inline">\(\mu_\Lambda\)</span> with <span class="math inline">\(\Lambda \ne \emptyset\)</span> is a genuine probability measure on <span class="math inline">\(S^\Lambda\)</span>), every projection <span class="math inline">\(\pi_\Lambda : S^T \to S^\Lambda\)</span> and every restriction map <span class="math inline">\(p_\Lambda^{\Lambda'}\)</span> is <strong>surjective</strong> (any partial assignment extends to <span class="math inline">\(S^T\)</span>, resp. <span class="math inline">\(S^{\Lambda'}\)</span>, by filling in arbitrary values of <span class="math inline">\(S\)</span> elsewhere). Consequently, for surjective <span class="math inline">\(f\)</span>, <span class="math inline">\(f^{-1}(C_1) \subseteq f^{-1}(C_2) \iff C_1 \subseteq C_2\)</span> (so in particular <span class="math inline">\(f^{-1}(C_1)=f^{-1}(C_2) \iff C_1=C_2\)</span>, and <span class="math inline">\(f^{-1}\)</span> commutes with the resulting set operations, including monotone limits). We refer to this as the <strong>cylinder-factorization lemma</strong>; it is used below to pass between a cylinder set on <span class="math inline">\(S^T\)</span> and any of its finite-dimensional representations.</p>
+<p>Using <a href="#eq-cylinder-factorization" class="quarto-xref">Equation&nbsp;<span>81.9</span></a> and surjectivity of the restriction maps, <span class="math inline">\(\mathcal{A}\)</span> is closed under complementation (<span class="math inline">\((\pi_\Lambda^{-1}(B))^c = \pi_\Lambda^{-1}(B^c)\)</span>) and finite unions (lift two cylinders <span class="math inline">\(\pi_{\Lambda_1}^{-1}(B_1), \pi_{\Lambda_2}^{-1}(B_2)\)</span> to the common index set <span class="math inline">\(\Lambda_1 \cup \Lambda_2\)</span> via <a href="#eq-cylinder-factorization" class="quarto-xref">Equation&nbsp;<span>81.9</span></a>, then take the union of the lifted base sets in <span class="math inline">\(\mathcal{B}^{\otimes(\Lambda_1\cup\Lambda_2)}\)</span>); together with <span class="math inline">\(S^T \in \mathcal A\)</span>, this shows <span class="math inline">\(\mathcal{A}\)</span> forms a Boolean algebra of subsets of <span class="math inline">\(S^T\)</span>. Also <span class="math inline">\(\sigma(\mathcal{A}) = \mathcal{B}^{\otimes T}\)</span>, by <a href="#eq-product-sigma-algebra" class="quarto-xref">Equation&nbsp;<span>81.4</span></a>.</p>
+<p>Define a set function <span class="math inline">\(\mathbb{P} : \mathcal{A} \to [0, 1]\)</span> by setting, for <span class="math inline">\(A = \pi_\Lambda^{-1}(B)\)</span>: <span id="eq-premeasure-def"><span class="math display">\[
+\mathbb{P}(A) := \mu_\Lambda(B).
+\tag{81.10}\]</span></span></p>
+<p>To verify that <span class="math inline">\(\mathbb{P}\)</span> is <strong>well-defined</strong>, suppose <span class="math inline">\(A \in \mathcal{A}\)</span> has two representations: <span class="math inline">\(A = \pi_\Lambda^{-1}(B)\)</span> and <span class="math inline">\(A = \pi_{\Lambda'}^{-1}(B')\)</span>. Let <span class="math inline">\(\Lambda'' = \Lambda \cup \Lambda'\)</span>. By <a href="#eq-cylinder-factorization" class="quarto-xref">Equation&nbsp;<span>81.9</span></a>, <span class="math inline">\(A = \pi_{\Lambda''}^{-1}(B \times S^{\Lambda''\setminus\Lambda}) = \pi_{\Lambda''}^{-1}(B' \times S^{\Lambda''\setminus\Lambda'})\)</span>, and surjectivity of <span class="math inline">\(\pi_{\Lambda''}\)</span> then forces the literal set equality <span class="math inline">\(B \times S^{\Lambda''\setminus\Lambda} = B' \times S^{\Lambda''\setminus\Lambda'}\)</span> in <span class="math inline">\(S^{\Lambda''}\)</span> (cylinder-factorization lemma). Hence, by the projective consistency condition <a href="#eq-consistency-product-form" class="quarto-xref">Equation&nbsp;<span>81.6</span></a>: <span class="math display">\[
+\mu_\Lambda(B) = \mu_{\Lambda''}(B \times S^{\Lambda'' \setminus \Lambda}) = \mu_{\Lambda''}(B' \times S^{\Lambda'' \setminus \Lambda'}) = \mu_{\Lambda'}(B'),
+\]</span> where the middle equality now holds because both sides are the <span class="math inline">\(\mu_{\Lambda''}\)</span>-measure of the <em>same</em> set. Thus, <span class="math inline">\(\mathbb{P}(A)\)</span> does not depend on the choice of cylinder representation.</p>
+<p>Furthermore, <span class="math inline">\(\mathbb{P}(S^T) = \mu_\Lambda(S^\Lambda) = 1\)</span>. <strong>Finite additivity</strong> follows directly: if <span class="math inline">\(A_1, \dots, A_n \in \mathcal{A}\)</span> are disjoint cylinder sets, we represent them over a joint index set <span class="math inline">\(\Lambda = \bigcup_{j=1}^n \Lambda_j\)</span> as <span class="math inline">\(A_j = \pi_\Lambda^{-1}(B_j')\)</span> (via <a href="#eq-cylinder-factorization" class="quarto-xref">Equation&nbsp;<span>81.9</span></a>) with <span class="math inline">\(B_j' \in \mathcal{B}^{\otimes \Lambda}\)</span> pairwise disjoint — disjointness of the <span class="math inline">\(B_j'\)</span> follows from disjointness of the <span class="math inline">\(A_j\)</span> and surjectivity of <span class="math inline">\(\pi_\Lambda\)</span>, again by the cylinder-factorization lemma. By finite additivity of <span class="math inline">\(\mu_\Lambda\)</span>: <span id="eq-finite-additivity"><span class="math display">\[
+\mathbb{P}\left(\bigcup_{j=1}^n A_j\right) = \mu_\Lambda\left(\bigcup_{j=1}^n B_j'\right) = \sum_{j=1}^n \mu_\Lambda(B_j') = \sum_{j=1}^n \mathbb{P}(A_j).
+\tag{81.11}\]</span></span></p>
+</section>
+<section id="step-2-verification-of-countable-additivity" class="level3" data-number="81.3.2">
+<h3 data-number="81.3.2" class="anchored" data-anchor-id="step-2-verification-of-countable-additivity"><span class="header-section-number">81.3.2</span> Step 2: Verification of Countable Additivity</h3>
+<p>To extend <span class="math inline">\(\mathbb{P}\)</span> from <span class="math inline">\(\mathcal{A}\)</span> to <span class="math inline">\(\mathcal{B}^{\otimes T}\)</span> via the Carathéodory Extension Theorem (<a href="4-1-Outer-Pseudo-Metric.html#thm-measure-extension-general" class="quarto-xref">Theorem&nbsp;<span>8.1</span></a>), it suffices to prove that <span class="math inline">\(\mathbb{P}\)</span> is countably additive on <span class="math inline">\(\mathcal{A}\)</span>, or equivalently (since <span class="math inline">\(\mathcal{A}\)</span> is an algebra and <span class="math inline">\(\mathbb{P}\)</span> is finite with <span class="math inline">\(\mathbb{P}(S^T)=1\)</span>), that if <span class="math inline">\(A_n \downarrow \emptyset\)</span> in <span class="math inline">\(\mathcal{A}\)</span>, then <span class="math inline">\(\mathbb{P}(A_n) \to 0\)</span>.</p>
+<p>Let <span class="math inline">\(A_n = \pi_{\Lambda_n}^{-1}(B_n) \in \mathcal{A}\)</span> with <span class="math inline">\(A_n \downarrow \emptyset\)</span>. Each <span class="math inline">\(A_n\)</span> depends on a finite coordinate set <span class="math inline">\(\Lambda_n \subseteq T\)</span>. Define the countable collection of involved time points: <span id="eq-countable-index-set"><span class="math display">\[
+L := \bigcup_{n=1}^\infty \Lambda_n \subseteq T.
+\tag{81.12}\]</span></span></p>
+<p>Consider the countable product space <span class="math inline">\((S^L, \mathcal{B}^{\otimes L})\)</span>. Since <span class="math inline">\(L\)</span> is countable, fix a bijection between <span class="math inline">\(L\)</span> and <span class="math inline">\(\mathbb{N}\)</span> (or an initial segment of <span class="math inline">\(\mathbb{N}\)</span>, if <span class="math inline">\(L\)</span> is finite); under this relabeling, <span class="math inline">\(\{\mu_\Lambda\}_{\Lambda \subseteq L, \,|\Lambda|&lt;\infty}\)</span> is exactly a projectively consistent family of finite-dimensional measures indexed by initial segments of <span class="math inline">\(\mathbb{N}\)</span>, in the sense of <a href="16-2-Kolmogorov-Extension-Theorem2.html#cor-kolmogorov-extension-real" class="quarto-xref">Corollary&nbsp;<span>35.2</span></a>. That theorem — proved independently in Lecture 16.2 via tightness of Borel probability measures on a Polish space (and extended there, in <a href="16-2-Kolmogorov-Extension-Theorem2.html#rem-transport-mechanism" class="quarto-xref">Remark&nbsp;<span>35.2</span></a>, from <span class="math inline">\(S = \mathbb{R}\)</span> to an arbitrary standard Borel state space) — is a logically prior result, <strong>not</strong> a special case of the theorem we are currently proving; invoking it here for the countable index set <span class="math inline">\(L\)</span> therefore involves no circularity. It guarantees the existence of a unique probability measure <span class="math inline">\(\mathbb{P}_L \in \mathcal{P}(S^L, \mathcal{B}^{\otimes L})\)</span> satisfying <span class="math inline">\(\pi_{\Lambda_n \mid S^L}^* \mathbb{P}_L = \mu_{\Lambda_n}\)</span> for every <span class="math inline">\(n\)</span>.</p>
+<p>Define <span class="math inline">\(\tilde{B}_n := (\pi_{\Lambda_n \mid S^L})^{-1}(B_n) \subseteq S^L\)</span>. Then: <span id="eq-measure-reduction"><span class="math display">\[
+\mathbb{P}(A_n) = \mu_{\Lambda_n}(B_n) = \mathbb{P}_L(\tilde{B}_n).
+\tag{81.13}\]</span></span></p>
+<p>Since <span class="math inline">\(A_n \downarrow \emptyset\)</span> on <span class="math inline">\(S^T\)</span>, and <span class="math inline">\(A_n = \pi_L^{-1}(\tilde B_n)\)</span> by <a href="#eq-cylinder-factorization" class="quarto-xref">Equation&nbsp;<span>81.9</span></a> (as <span class="math inline">\(\Lambda_n \subseteq L\)</span>), surjectivity of <span class="math inline">\(\pi_L : S^T \to S^L\)</span> (cylinder-factorization lemma) transfers both the monotonicity and the empty intersection through the projection, so <span class="math inline">\(\tilde{B}_n \downarrow \emptyset\)</span> in <span class="math inline">\(S^L\)</span>. By the countable additivity of the probability measure <span class="math inline">\(\mathbb{P}_L\)</span> on <span class="math inline">\((S^L, \mathcal{B}^{\otimes L})\)</span>: <span id="eq-countable-additivity-limit"><span class="math display">\[
+\lim_{n \to \infty} \mathbb{P}(A_n) = \lim_{n \to \infty} \mathbb{P}_L(\tilde{B}_n) = \mathbb{P}_L(\emptyset) = 0.
+\tag{81.14}\]</span></span></p>
+<p>Thus, <span class="math inline">\(\mathbb{P}\)</span> is countably additive on <span class="math inline">\(\mathcal{A}\)</span>, i.e.&nbsp;<span class="math inline">\(\mathbb{P}\)</span> is a (finite) premeasure on the algebra <span class="math inline">\(\mathcal{A}\)</span>. By the Carathéodory Extension Theorem (<a href="4-1-Outer-Pseudo-Metric.html#thm-measure-extension-general" class="quarto-xref">Theorem&nbsp;<span>8.1</span></a>), <span class="math inline">\(\mathbb{P}\)</span> extends to a probability measure on <span class="math inline">\(\mathcal{B}^{\otimes T} = \sigma(\mathcal{A})\)</span>, and since <span class="math inline">\(\mathbb{P}(S^T) = 1 &lt; \infty\)</span>, this extension is unique by the uniqueness theorem for finite premeasures (<a href="4-3-Uniqueness-Sigma-Finite Extension.html#thm-uniqueness-finite" class="quarto-xref">Theorem&nbsp;<span>10.1</span></a>). <span class="math inline">\(\blacksquare\)</span></p>
+</section>
+</section>
+</div>
+<hr>
+<section id="canonical-construction-of-markov-processes" class="level2" data-number="81.4">
+<h2 data-number="81.4" class="anchored" data-anchor-id="canonical-construction-of-markov-processes"><span class="header-section-number">81.4</span> Canonical Construction of Markov Processes</h2>
+<p>The following theorem provides a canonical construction of Markov processes using the Kolmogorov Extension Theorem.</p>
+<div id="thm-canonical-markov-construction" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 81.2 (Existence of Canonical Markov Measure)</strong></span> Let <span class="math inline">\(T\)</span> be a totally ordered index set with a least element, denoted <span class="math inline">\(0\)</span> (e.g.&nbsp;<span class="math inline">\(T \subseteq [0,\infty)\)</span> or <span class="math inline">\(T = \mathbb{N}\)</span>, as in Lecture 37.1), and let <span class="math inline">\((S, \mathcal{B})\)</span> be a standard Borel space. Let <span class="math inline">\(\nu \in \mathcal{P}(S, \mathcal{B})\)</span> be an initial distribution, and let <span class="math inline">\(\{Q_{s,t}\}_{s \le t}\)</span> be a family of Markov transition operators on <span class="math inline">\((S, \mathcal{B})\)</span> satisfying the Chapman–Kolmogorov equations.</p>
+<p>Then there exists a <strong>unique probability measure</strong> <span class="math inline">\(\mathbb{P}^\nu \in \mathcal{P}(S^T, \mathcal{B}^{\otimes T})\)</span> on the product space <span class="math inline">\((\Omega, \mathcal{F}) = (S^T, \mathcal{B}^{\otimes T})\)</span> such that the coordinate process <span class="math inline">\(X_t(\omega) := \omega(t)\)</span> is a Markov process relative to its natural filtration <span class="math inline">\(\mathcal{F}_t^X = \sigma(X_s : s \le t)\)</span>, with initial law <span class="math inline">\(\text{Law}_{\mathbb{P}^\nu}(X_0) = \nu\)</span> and transition operators <span class="math inline">\(\{Q_{s,t}\}_{s \le t}\)</span>. We write <span class="math inline">\(\mathbb{E}^\nu[\cdot]\)</span> for expectation with respect to <span class="math inline">\(\mathbb{P}^\nu\)</span>.</p>
+</div>
+</section>
+<div id="proof-canonical-markov-construction">
+<section id="proof" class="level2" data-number="81.5">
+<h2 data-number="81.5" class="anchored" data-anchor-id="proof"><span class="header-section-number">81.5</span> Proof</h2>
+<p>The proof proceeds in two main steps: defining finite-dimensional distributions and checking consistency, followed by verifying the Markov property.</p>
+<section id="step-1-definition-of-finite-dimensional-marginals-and-consistency" class="level3" data-number="81.5.1">
+<h3 data-number="81.5.1" class="anchored" data-anchor-id="step-1-definition-of-finite-dimensional-marginals-and-consistency"><span class="header-section-number">81.5.1</span> Step 1: Definition of Finite-Dimensional Marginals and Consistency</h3>
+<p>For any finite ordered set of times <span class="math inline">\(\Lambda = \{t_0 &lt; t_1 &lt; \dots &lt; t_n\} \subseteq T\)</span>, write <span class="math inline">\(\nu_{t_0} := \nu Q_{0,t_0}\)</span> for the pushforward of <span class="math inline">\(\nu\)</span> along the transition operator from <span class="math inline">\(0\)</span> to <span class="math inline">\(t_0\)</span> (so <span class="math inline">\(\nu_{t_0} = \nu\)</span> when <span class="math inline">\(t_0 = 0\)</span>, since <span class="math inline">\(Q_{0,0} = \text{Id}\)</span>), and define the finite-dimensional measure <span class="math inline">\(\mu_\Lambda \in \mathcal{P}(S^{n+1})\)</span> by: <span id="eq-fdd-definition"><span class="math display">\[
+\begin{aligned}
+\mu_\Lambda(dx_0, dx_1, \dots, dx_n) &amp;:= \nu_{t_0}(dx_0) \, q_{t_0, t_1}(x_0, dx_1) \, q_{t_1, t_2}(x_1, dx_2)\\
+&amp;\quad \cdots q_{t_{n-1}, t_n}(x_{n-1}, dx_n).
+\end{aligned}
+\tag{81.15}\]</span></span> (When <span class="math inline">\(0 \in \Lambda\)</span>, i.e.&nbsp;<span class="math inline">\(t_0 = 0\)</span>, this reduces to the familiar <span class="math inline">\(\nu(dx_0) q_{0,t_1}(x_0,dx_1)\cdots\)</span>; the role of <span class="math inline">\(\nu_{t_0}\)</span> is to supply the correct marginal law of <span class="math inline">\(X_{t_0}\)</span> at the smallest element of <span class="math inline">\(\Lambda\)</span> when <span class="math inline">\(\Lambda\)</span> does <em>not</em> contain <span class="math inline">\(0\)</span> — using <span class="math inline">\(\nu\)</span> itself in that case would be incorrect in general, since it would force <span class="math inline">\(\nu\)</span> to be invariant under the transition kernels, which is not assumed.)</p>
+<p>We verify projective consistency by checking that deleting a single point from <span class="math inline">\(\Lambda\)</span> reproduces the corresponding smaller measure; full consistency for arbitrary <span class="math inline">\(\Lambda' \subseteq \Lambda\)</span> then follows by induction on <span class="math inline">\(|\Lambda \setminus \Lambda'|\)</span>. There are three cases, according to whether the deleted point is interior, the largest point of <span class="math inline">\(\Lambda\)</span>, or the smallest point of <span class="math inline">\(\Lambda\)</span>.</p>
+<p><strong>Interior point.</strong> Let <span class="math inline">\(\Lambda = \{t_0 &lt; t_1 &lt; t_2\}\)</span> and <span class="math inline">\(\Lambda' = \{t_0 &lt; t_2\}\)</span> (deleting <span class="math inline">\(t_1\)</span>). Integrating over the intermediate state <span class="math inline">\(x_1 \in S\)</span>: <span id="eq-ck-consistency-verification"><span class="math display">\[
+\begin{aligned}
+&amp;\mu_\Lambda(B_0 \times S \times B_2) = \int_{B_0} \nu_{t_0}(dx_0) \int_S q_{t_0, t_1}(x_0, dx_1) \int_{B_2} q_{t_1, t_2}(x_1, dx_2) \\
+&amp;= \int_{B_0} \nu_{t_0}(dx_0) \int_{B_2} \left( \int_S q_{t_0, t_1}(x_0, dx_1) \, q_{t_1, t_2}(x_1, dx_2) \right) \\
+&amp;= \int_{B_0} \nu_{t_0}(dx_0) \int_{B_2} q_{t_0, t_2}(x_0, dx_2) \quad \text{(by Chapman–Kolmogorov)} \\
+&amp;= \mu_{\Lambda'}(B_0 \times B_2).
+\end{aligned}
+\tag{81.16}\]</span></span> (The inner reordering of the two integrals is Tonelli’s theorem, valid since all integrands are nonnegative.) The same computation, with an arbitrary number of untouched factors carried along on either side of <span class="math inline">\(t_1\)</span>, handles deletion of any interior point of <span class="math inline">\(\Lambda\)</span>.</p>
+<p><strong>Largest point.</strong> Deleting <span class="math inline">\(t_n\)</span> from <span class="math inline">\(\Lambda\)</span> is immediate: since <span class="math inline">\(q_{t_{n-1},t_n}(x_{n-1}, \cdot)\)</span> is a probability measure, <span class="math inline">\(\int_S q_{t_{n-1},t_n}(x_{n-1}, dx_n) = 1\)</span>, so integrating the last factor of <a href="#eq-fdd-definition" class="quarto-xref">Equation&nbsp;<span>81.15</span></a> over <span class="math inline">\(S\)</span> gives <span class="math inline">\(\mu_\Lambda(B_0\times\cdots\times B_{n-1}\times S) = \mu_{\Lambda \setminus \{t_n\}}(B_0 \times \cdots \times B_{n-1})\)</span>.</p>
+<p><strong>Smallest point.</strong> This is the case not covered by the two above, and the one for which the correction <span class="math inline">\(\nu_{t_0} = \nu Q_{0,t_0}\)</span> (rather than <span class="math inline">\(\nu\)</span> itself) is essential. Let <span class="math inline">\(\Lambda = \{t_0 &lt; t_1\}\)</span> and <span class="math inline">\(\Lambda' = \{t_1\}\)</span> (deleting <span class="math inline">\(t_0\)</span>). Integrating over <span class="math inline">\(x_0 \in S\)</span> and using associativity of kernel composition together with the Chapman–Kolmogorov identity <span class="math inline">\(Q_{0,t_0}Q_{t_0,t_1} = Q_{0,t_1}\)</span>: <span id="eq-ck-consistency-verification-boundary"><span class="math display">\[
+\begin{aligned}
+\mu_\Lambda(S \times B_1) &amp;= \int_S \nu_{t_0}(dx_0) \int_{B_1} q_{t_0,t_1}(x_0,dx_1) \\
+&amp;= \int_{B_1} \big( (\nu Q_{0,t_0}) Q_{t_0,t_1} \big)(dx_1) \\
+&amp;= \int_{B_1} (\nu Q_{0,t_1})(dx_1) \\
+&amp;= \nu_{t_1}(B_1) \\
+&amp;= \mu_{\Lambda'}(B_1).
+\end{aligned}
+\tag{81.17}\]</span></span> (With <span class="math inline">\(\nu\)</span> in place of <span class="math inline">\(\nu_{t_0}\)</span>, this computation would instead require <span class="math inline">\(\nu Q_{t_0,t_1} = \nu\)</span> for every <span class="math inline">\(t_0 &lt; t_1\)</span> — i.e.&nbsp;<span class="math inline">\(\nu\)</span> invariant under the whole transition semigroup — which is not assumed; this is exactly why the plain formula <span class="math inline">\(\nu(dx_0)q_{t_0,t_1}(x_0,dx_1)\cdots\)</span> fails to be projectively consistent when <span class="math inline">\(\Lambda\)</span> does not contain <span class="math inline">\(0\)</span>.)</p>
+<p>Together, these three cases show that the family <span class="math inline">\(\{\mu_\Lambda\}_{\Lambda \subseteq T, \, |\Lambda| &lt; \infty}\)</span> satisfies projective consistency for all finite subsets.</p>
+<p>Applying Kolmogorov’s Extension Theorem (<a href="#thm-kolmogorov-extension" class="quarto-xref">Theorem&nbsp;<span>81.1</span></a>), there exists a unique probability measure <span class="math inline">\(\mathbb{P}^\nu \in \mathcal{P}(S^T, \mathcal{B}^{\otimes T})\)</span> such that <span class="math inline">\(\pi_\Lambda^* \mathbb{P}^\nu = \mu_\Lambda\)</span>. Taking <span class="math inline">\(\Lambda = \{0\}\)</span> gives <span class="math inline">\(\nu_0 = \nu Q_{0,0} = \nu\)</span>, so under <span class="math inline">\(\mathbb{P}^\nu\)</span>, the coordinate process <span class="math inline">\(X_t(\omega) = \omega(t)\)</span> has initial law <span class="math inline">\(\nu\)</span> and the target finite-dimensional distributions.</p>
+</section>
+<section id="step-2-verification-of-the-markov-property" class="level3" data-number="81.5.2">
+<h3 data-number="81.5.2" class="anchored" data-anchor-id="step-2-verification-of-the-markov-property"><span class="header-section-number">81.5.2</span> Step 2: Verification of the Markov Property</h3>
+<p>Fix <span class="math inline">\(t_0 &lt; t_1 &lt; \dots &lt; t_{n-1} = s &lt; t = t_n\)</span> in <span class="math inline">\(T\)</span> (not necessarily including <span class="math inline">\(0\)</span>). Let <span class="math inline">\(g \in \mathcal{B}_b(S)\)</span> and let <span class="math inline">\(h \in \mathcal{B}_b(S^n)\)</span> be a bounded test function. Compute the joint expectation under <span class="math inline">\(\mathbb{P}^\nu\)</span>, using <a href="#eq-fdd-definition" class="quarto-xref">Equation&nbsp;<span>81.15</span></a> with leading factor <span class="math inline">\(\nu_{t_0} = \nu Q_{0,t_0}\)</span>: <span id="eq-markov-property-test-fn"><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb{E}^\nu \left[ h(X_{t_0}, \dots, X_{t_{n-1}}) \, g(X_{t_n}) \right] = \int_{S^{n+1}} h(x_0, \dots, x_{n-1}) \, g(x_n) \, \nu_{t_0}(dx_0) \prod_{i=1}^n q_{t_{i-1}, t_i}(x_{i-1}, dx_i) \\
+&amp;= \int_{S^n} h(x_0, \dots, x_{n-1}) \left( \int_S g(x_n) \, q_{t_{n-1}, t_n}(x_{n-1}, dx_n) \right) \nu_{t_0}(dx_0) \prod_{i=1}^{n-1} q_{t_{i-1}, t_i}(x_{i-1}, dx_i) \\
+&amp;= \int_{S^n} h(x_0, \dots, x_{n-1}) \, (Q_{s,t} g)(x_{n-1}) \, \nu_{t_0}(dx_0) \prod_{i=1}^{n-1} q_{t_{i-1}, t_i}(x_{i-1}, dx_i) \\
+&amp;= \mathbb{E}^\nu \left[ h(X_{t_0}, \dots, X_{t_{n-1}}) \, (Q_{s,t} g)(X_s) \right].
+\end{aligned}
+\tag{81.18}\]</span></span></p>
+<p>Thus, for any cylinder random variable <span class="math inline">\(Y = h(X_{t_0}, \dots, X_{t_{n-1}})\)</span> with <span class="math inline">\(t_{n-1} = s\)</span>: <span id="eq-cylinder-markov-identity"><span class="math display">\[
+\mathbb{E}^\nu \left[ g(X_t) \, Y \right] = \mathbb{E}^\nu \left[ (Q_{s,t} g)(X_s) \, Y \right].
+\tag{81.19}\]</span></span></p>
+<p>By Dynkin’s <span class="math inline">\(\pi\)</span>-<span class="math inline">\(\lambda\)</span> Theorem (uniqueness of measures agreeing on a generating <span class="math inline">\(\pi\)</span>-system; cf. <a href="15-1-Independence.html#lem-pi-system-uniqueness" class="quarto-xref">Lemma&nbsp;<span>32.1</span></a>) — or standard monotone class arguments — identity <a href="#eq-cylinder-markov-identity" class="quarto-xref">Equation&nbsp;<span>81.19</span></a> extends from the generating class of finite-dimensional cylinder functions <span class="math inline">\(Y = h(X_{t_0},\dots,X_{t_{n-1}})\)</span>, <span class="math inline">\(t_0 &lt; \dots &lt; t_{n-1} \le s\)</span> arbitrary, to all bounded <span class="math inline">\(\mathcal{F}_s^X\)</span>-measurable random variables <span class="math inline">\(Y \in \mathcal{B}_b(\Omega, \mathcal{F}_s^X)\)</span>.</p>
+<p>By definition of conditional expectation: <span id="eq-markov-property-final"><span class="math display">\[
+\mathbb{E}^\nu \left[ g(X_t) \mid \mathcal{F}_s^X \right] = (Q_{s,t} g)(X_s) = \mathbb{E}^\nu \left[ g(X_t) \mid X_s \right] \quad \mathbb{P}^\nu\text{-a.s.}
+\tag{81.20}\]</span></span></p>
+<p>This proves that <span class="math inline">\(X_t\)</span> is a Markov process relative to <span class="math inline">\(\mathcal{F}_t^X\)</span> with transition operators <span class="math inline">\(\{Q_{s,t}\}_{s \le t}\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+</section>
+</section>
+</div>
+<hr>
+<section id="takeaways" class="level2" data-number="81.6">
+<h2 data-number="81.6" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">81.6</span> Takeaways</h2>
+<ul>
+<li><strong>The reverse problem.</strong> Given a consistent family of finite-dimensional distributions <span class="math inline">\(\{\mu_\Lambda\}_{\Lambda \subseteq T, \, |\Lambda| &lt; \infty}\)</span> (<a href="#def-consistency-condition" class="quarto-xref">Definition&nbsp;<span>81.2</span></a>), Kolmogorov’s Extension Theorem produces an actual process on the canonical product space <span class="math inline">\((S^T, \mathcal{B}^{\otimes T})\)</span> realizing exactly those marginals, with no restriction on the cardinality of <span class="math inline">\(T\)</span>.</li>
+<li><strong>Standard Borel is the right hypothesis.</strong> The theorem genuinely needs <span class="math inline">\((S,\mathcal{B})\)</span> to be standard Borel; this is what lets the classical, tightness-based countable-index theorem (<a href="16-2-Kolmogorov-Extension-Theorem2.html#cor-kolmogorov-extension-real" class="quarto-xref">Corollary&nbsp;<span>35.2</span></a>, Lecture 16.2) be bootstrapped to an arbitrary index set <span class="math inline">\(T\)</span> by reducing countable additivity on the cylinder algebra to countable additivity on the countable sub-product <span class="math inline">\(S^L\)</span> determined by any given decreasing sequence of cylinder sets.</li>
+<li><strong>Cylinder sets behave like a generating algebra.</strong> Every measurability, well-definedness, and limit argument in the proof reduces to one fact: finite-dimensional projections <span class="math inline">\(\pi_\Lambda\)</span> factor consistently (<span class="math inline">\(\pi_\Lambda = p_\Lambda^{\Lambda'}\circ\pi_{\Lambda'}\)</span>) and are surjective, so set relations transfer freely between a cylinder set on <span class="math inline">\(S^T\)</span> and any of its finite-dimensional representations.</li>
+<li><strong>Canonical construction of Markov processes.</strong> An initial law <span class="math inline">\(\nu\)</span> together with a Chapman–Kolmogorov-consistent transition family <span class="math inline">\(\{Q_{s,t}\}_{s\le t}\)</span> determines a unique probability measure <span class="math inline">\(\mathbb{P}^\nu\)</span> on <span class="math inline">\((S^T,\mathcal{B}^{\otimes T})\)</span> under which the coordinate process is Markov with exactly these ingredients — provided <span class="math inline">\(T\)</span> has a least element <span class="math inline">\(0\)</span>, so that “initial law” is meaningful.</li>
+<li><strong>Mind the starting point.</strong> When assembling the finite-dimensional law <span class="math inline">\(\mu_\Lambda\)</span> for <span class="math inline">\(\Lambda = \{t_0 &lt; \dots &lt; t_n\}\)</span> not containing <span class="math inline">\(0\)</span>, the correct marginal at <span class="math inline">\(t_0\)</span> is <span class="math inline">\(\nu Q_{0,t_0}\)</span> — the law <span class="math inline">\(\nu\)</span> pushed forward through the transition kernel from <span class="math inline">\(0\)</span> to <span class="math inline">\(t_0\)</span> — not <span class="math inline">\(\nu\)</span> itself; using <span class="math inline">\(\nu\)</span> directly would silently assume <span class="math inline">\(\nu\)</span> is invariant under the transition semigroup.</li>
+<li><strong>Chapman–Kolmogorov consistency and the Markov property are separate.</strong> Verifying that <span class="math inline">\(\{\mu_\Lambda\}\)</span> is projectively consistent only uses the Chapman–Kolmogorov equations; it says nothing yet about conditioning on the <em>whole</em> past. The Markov property itself is established separately, in Step 2, via a generating class of finite-dimensional cylinder functions and Dynkin’s <span class="math inline">\(\pi\)</span>-<span class="math inline">\(\lambda\)</span> theorem.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./37-1-Markov-Processes.html" class="pagination-link" aria-label="Lecture 37.1: Markov Processes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./38-1-Path-Space.html" class="pagination-link" aria-label="Lecture 38.1: Path Space">
+        <span class="nav-page-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/37-2-Kolmogorov-Extension-Theorem.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
