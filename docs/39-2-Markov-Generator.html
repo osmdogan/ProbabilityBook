@@ -803,7 +803,10 @@ Q_{t+s} = Q_t Q_s, \quad Q_0 = \mathrm{Id}.
 </ol>
 <p>The matrix <span class="math inline">\(A\)</span> is called the <strong>infinitesimal generator</strong> of the transition semigroup <span class="math inline">\((Q_t)_{t \ge 0}\)</span>.</p>
 <p>If <span class="math inline">\(A\)</span> exists, it can be recovered via the time derivative at <span class="math inline">\(t = 0\)</span>: <span id="eq-generator-derivative"><span class="math display">\[
-\frac{\mathrm{d}}{\mathrm{d}t} Q_t = A e^{tA} = e^{tA} A \implies A = \left. \frac{\mathrm{d}}{\mathrm{d}t} Q_t \right|_{t=0} = \lim_{t \downarrow 0} \frac{Q_t - \mathrm{Id}}{t}.
+\begin{aligned}
+&amp;\frac{\mathrm{d}}{\mathrm{d}t} Q_t = A e^{tA} = e^{tA} A\\
+&amp;\implies A = \left. \frac{\mathrm{d}}{\mathrm{d}t} Q_t \right|_{t=0} = \lim_{t \downarrow 0} \frac{Q_t - \mathrm{Id}}{t}.
+\end{aligned}
 \tag{85.2}\]</span></span></p>
 <p>Because <span class="math inline">\(q_t(i, j) = \mathbb{P}(X_t = j \mid X_0 = i)\)</span> denotes the scalar entries of the transition kernel of <span class="math inline">\(Q_t\)</span> on <span class="math inline">\(S\)</span> (so that <span class="math inline">\(Q_t = (q_t(i,j))_{i,j\in S}\)</span>, matching the operator/matrix-entry convention of Lecture 39.1), <span class="math inline">\(q_t\)</span> satisfies: <span id="eq-stochastic-kernel-cond"><span class="math display">\[
 q_t(i, j) \ge 0 \quad \forall i, j \in S, \quad \text{and} \quad \sum_{j=1}^n q_t(i, j) = 1 \quad \forall i \in S.
@@ -856,7 +859,10 @@ q_{s,t}(m, n) &amp;= \mathbb{P}(N_t = n \mid N_s = m) \\
 \end{aligned}
 \]</span></p>
 <p>For any <span class="math inline">\(f \in \mathcal{B}_b(\mathbb{N}_0)\)</span>, the operator <span class="math inline">\(Q_t\)</span> acts on <span class="math inline">\(f\)</span> as: <span id="eq-poisson-qt"><span class="math display">\[
-(Q_t f)(k) = \sum_{n=0}^\infty q_t(k, k+n) f(k+n) = e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n).
+\begin{aligned}
+(Q_t f)(k) &amp;= \sum_{n=0}^\infty q_t(k, k+n) f(k+n)\\
+&amp;= e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n).
+\end{aligned}
 \tag{85.4}\]</span></span></p>
 <p>Differentiating <span class="math inline">\((Q_t f)(k)\)</span> with respect to <span class="math inline">\(t\)</span> using power series term-by-term differentiation (valid since <span class="math inline">\(f\)</span> is bounded): <span class="math display">\[
 \begin{aligned}
@@ -873,7 +879,12 @@ q_{s,t}(m, n) &amp;= \mathbb{P}(N_t = n \mid N_s = m) \\
 (Q_t A f)(k) &amp;= \lambda \sum_{n=0}^\infty q_t(k,k+n)\big[f(k+n+1) - f(k+n)\big] \\
 &amp;= \lambda\big[(Q_tf)(k+1) - (Q_tf)(k)\big] = (AQ_tf)(k),
 \end{aligned}
-\]</span> using <span class="math inline">\(\sum_n q_t(k,k+n) f(k+n+1) = \sum_n q_t(k+1,(k+1)+n) f((k+1)+n) = (Q_tf)(k+1)\)</span>. Hence we obtain the differential equation <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t} Q_t f = Q_t A f = A Q_t f\)</span>.</p>
+\]</span> where we use <span class="math display">\[
+\begin{aligned}
+\sum_n q_t(k,k+n) f(k+n+1) &amp;= \sum_n q_t(k+1,(k+1)+n) f((k+1)+n) \\
+&amp;= (Q_tf)(k+1).
+\end{aligned}
+\]</span> Hence, we obtain the differential equation <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t} Q_t f = Q_t A f = A Q_t f\)</span>.</p>
 <div id="thm-poisson-exponential-representation" class="theorem">
 <p><span class="theorem-title"><strong>Theorem 85.1 (Exponential Representation for Poisson Generator)</strong></span> Let <span class="math inline">\(A = \lambda (T - \mathrm{Id})\)</span> where <span class="math inline">\(T f(k) = f(k+1)\)</span> is the forward shift operator on <span class="math inline">\(\mathcal{B}_b(\mathbb{N}_0)\)</span>. Then <span class="math inline">\(A\)</span> is a bounded operator on <span class="math inline">\((\mathcal{B}_b(\mathbb{N}_0), \|\cdot\|_\infty)\)</span> with <span class="math inline">\(\|A\| \le 2\lambda\)</span>.</p>
 <p>Consequently, the operator exponential series <span class="math inline">\(e^{tA} = \sum_{n=0}^\infty \frac{t^n A^n}{n!}\)</span> converges uniformly, and: <span id="eq-poisson-exp-proof"><span class="math display">\[
@@ -885,6 +896,39 @@ e^{tA} &amp;= e^{t \lambda (T - \mathrm{Id})} \\
 \end{aligned}
 \tag{85.6}\]</span></span> Thus, <span class="math inline">\(A = \lambda (T - \mathrm{Id})\)</span> is the explicit infinitesimal generator of the Poisson process.</p>
 </div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-poisson-exponential-representation" class="quarto-xref">Theorem&nbsp;<span>85.1</span></a>). </span>Let <span class="math inline">\(T:\mathcal{B}_b(\mathbb{N}_0)\to\mathcal{B}_b(\mathbb{N}_0)\)</span> be the forward shift <span class="math inline">\(Tf(k)=f(k+1)\)</span>, and set <span class="math inline">\(A=\lambda(T-\mathrm{Id})\)</span>. Then:</p>
+<ol type="1">
+<li><span class="math inline">\(A\)</span> is a bounded operator with <span class="math inline">\(\|A\|\le 2\lambda\)</span>.</li>
+<li>The series <span class="math inline">\(e^{tA}=\sum_{n=0}^\infty \frac{t^n A^n}{n!}\)</span> converges in operator norm for every <span class="math inline">\(t\ge 0\)</span>.</li>
+<li><span class="math inline">\(e^{tA} = Q_t\)</span>, i.e.&nbsp;<span class="math inline">\((e^{tA}f)(k) = e^{-\lambda t}\sum_{n=0}^\infty \frac{(\lambda t)^n}{n!}f(k+n)\)</span>.</li>
+</ol>
+<p><strong>Step 1</strong>: Boundedness of <span class="math inline">\(T\)</span> and <span class="math inline">\(A\)</span>: The shift <span class="math inline">\(T\)</span> is an isometry: for any <span class="math inline">\(f\in\mathcal{B}_b(\mathbb{N}_0)\)</span>, <span class="math display">\[
+\|Tf\|_\infty = \sup_{k\in\mathbb{N}_0}|f(k+1)| = \sup_{k\in\mathbb{N}_0}|f(k)| = \|f\|_\infty,
+\]</span> so <span class="math inline">\(\|T\|=1\)</span>. Since <span class="math inline">\(\|\mathrm{Id}\|=1\)</span> as well, the triangle inequality gives <span class="math display">\[
+\|Af\|_\infty = \lambda\|(T-\mathrm{Id})f\|_\infty \le \lambda\bigl(\|Tf\|_\infty + \|f\|_\infty\bigr) = 2\lambda\|f\|_\infty.
+\]</span> Hence <span class="math inline">\(A\)</span> is bounded with <span class="math inline">\(\|A\|\le 2\lambda\)</span>.</p>
+<p><strong>Step 2</strong>: Norm convergence of <span class="math inline">\(e^{tA}\)</span>: Because <span class="math inline">\(\|A^n\|\le\|A\|^n\le(2\lambda)^n\)</span> (operator norm is submultiplicative), the series of operator norms satisfies <span class="math display">\[
+\sum_{n=0}^\infty \frac{t^n\|A^n\|}{n!} \le \sum_{n=0}^\infty \frac{(2\lambda t)^n}{n!} = e^{2\lambda t} &lt; \infty.
+\]</span> Absolute convergence in operator norm implies the series <span class="math inline">\(e^{tA}=\sum_{n=0}^\infty \frac{t^nA^n}{n!}\)</span> converges to a well-defined bounded operator.</p>
+<p><strong>Step 3</strong>: Splitting <span class="math inline">\(e^{tA}=e^{-\lambda t}e^{\lambda tT}\)</span>: Write <span class="math inline">\(A = \lambda T - \lambda\,\mathrm{Id}\)</span>, so <span class="math inline">\(tA = (\lambda t T) + (-\lambda t\,\mathrm{Id})\)</span>. The two summands commute because <span class="math inline">\(\mathrm{Id}\)</span> commutes with every operator. For commuting bounded operators <span class="math inline">\(B\)</span> and <span class="math inline">\(C\)</span> (meaning <span class="math inline">\(BC=CB\)</span>), the identity <span class="math inline">\(e^{B+C}=e^Be^C\)</span> holds. To see why, use the binomial theorem (valid since <span class="math inline">\(B\)</span> and <span class="math inline">\(C\)</span> commute): <span class="math display">\[
+(B+C)^n = \sum_{k=0}^n\binom{n}{k}B^k C^{n-k},
+\]</span> so <span class="math display">\[
+e^{B+C} = \sum_{n=0}^\infty\frac{1}{n!}\sum_{k=0}^n\binom{n}{k}B^kC^{n-k} = \sum_{k=0}^\infty\sum_{j=0}^\infty\frac{B^k}{k!}\frac{C^j}{j!} = e^Be^C,
+\]</span> where the double series rearrangement is justified by absolute convergence (both <span class="math inline">\(B\)</span> and <span class="math inline">\(C\)</span> are bounded). Applying this with <span class="math inline">\(B=-\lambda t\,\mathrm{Id}\)</span> and <span class="math inline">\(C=\lambda tT\)</span>: <span class="math display">\[
+e^{tA} = e^{-\lambda t\,\mathrm{Id}}\,e^{\lambda tT}.
+\]</span> Since <span class="math inline">\((\alpha\,\mathrm{Id})^n=\alpha^n\mathrm{Id}\)</span>, the series for <span class="math inline">\(e^{-\lambda t\,\mathrm{Id}}\)</span> gives simply the scalar <span class="math inline">\(e^{-\lambda t}\)</span> times the identity, so <span class="math display">\[
+e^{tA} = e^{-\lambda t}\,e^{\lambda tT}.
+\]</span></p>
+<p><strong>Step 4</strong>: Computing <span class="math inline">\(T^n\)</span> and the series for <span class="math inline">\(e^{\lambda tT}\)</span>: Applying the shift <span class="math inline">\(n\)</span> times: <span class="math inline">\(T^n f(k) = T^{n-1}(Tf)(k) = T^{n-1}f(k+1) = \cdots = f(k+n)\)</span>. Therefore <span class="math display">\[
+(e^{\lambda tT}f)(k) = \sum_{n=0}^\infty\frac{(\lambda t)^n}{n!}(T^nf)(k) = \sum_{n=0}^\infty\frac{(\lambda t)^n}{n!}f(k+n).
+\]</span> This series converges for every <span class="math inline">\(k\)</span> since <span class="math inline">\(f\)</span> is bounded: <span class="math display">\[
+\left|\sum_{n=0}^\infty\frac{(\lambda t)^n}{n!}f(k+n)\right| \le \|f\|_\infty\sum_{n=0}^\infty\frac{(\lambda t)^n}{n!} = e^{\lambda t}\|f\|_\infty &lt; \infty.
+\]</span></p>
+<p><strong>Step 5</strong>: Conclusion <span class="math inline">\(e^{tA}=Q_t\)</span>: Combining Steps 3 and 4: <span class="math display">\[
+(e^{tA}f)(k) = e^{-\lambda t}(e^{\lambda tT}f)(k) = e^{-\lambda t}\sum_{n=0}^\infty\frac{(\lambda t)^n}{n!}f(k+n).
+\]</span> This is exactly <span class="math inline">\((Q_tf)(k)\)</span> from the file. Hence <span class="math inline">\(e^{tA}=Q_t\)</span> as operators on <span class="math inline">\(\mathcal{B}_b(\mathbb{N}_0)\)</span>, and <span class="math inline">\(A=\lambda(T-\mathrm{Id})\)</span> is the infinitesimal generator of the Poisson semigroup.</p>
+</div>
 <hr>
 </section>
 <section id="generator-of-brownian-motion" class="level2" data-number="85.5">
@@ -892,9 +936,20 @@ e^{tA} &amp;= e^{t \lambda (T - \mathrm{Id})} \\
 <p>Consider standard Brownian motion <span class="math inline">\((B_t)_{t \ge 0}\)</span> on <span class="math inline">\(\mathbb{R}\)</span>. Its transition density is the Gaussian heat kernel: <span id="eq-heat-kernel"><span class="math display">\[
 q_t(x, y) = \frac{1}{\sqrt{2\pi t}} e^{-\frac{|x-y|^2}{2t}}, \quad t &gt; 0, \, x, y \in \mathbb{R}.
 \tag{85.7}\]</span></span></p>
-<p>The transition operator <span class="math inline">\(Q_t\)</span> acts via convolution: <span id="eq-bm-convolution"><span class="math display">\[
-(Q_t f)(x) = \int_{\mathbb{R}} q_t(x, y) f(y) \, \mathrm{d}y = (q_t * f)(x).
+<p>By definition, <span class="math inline">\((Q_t f)(x) = \mathbb{E}[f(B_t) \mid B_0 = x]\)</span>. Given <span class="math inline">\(B_0 = x\)</span>, the random variable <span class="math inline">\(B_t\)</span> has distribution <span class="math inline">\(\mathcal{N}(x, t)\)</span>, whose density is exactly <span class="math inline">\(q_t(x, y) = \frac{1}{\sqrt{2\pi t}}e^{-\frac{(y-x)^2}{2t}}\)</span>. Writing the expectation as an integral against this density: <span id="eq-bm-convolution"><span class="math display">\[
+\begin{aligned}
+(Q_t f)(x) &amp;= \mathbb{E}[f(B_t)\mid B_0=x] \\
+&amp; = \int_\mathbb{R} f(y)\, q_t(x,y)\,\mathrm{d}y\\
+&amp; = (q_t * f)(x).
+\end{aligned}
 \tag{85.8}\]</span></span></p>
+<div id="rem-bm-convolution" class="proof remark">
+<p><span class="proof-title"><em>Remark 85.1</em>. </span>A convolution <span class="math inline">\((g * f)(x) = \int_\mathbb{R} g(x-y)f(y)\,\mathrm{d}y\)</span> only makes sense when the kernel depends on <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> solely through their difference <span class="math inline">\(x - y\)</span>. The heat kernel has exactly this structure: since <span class="math inline">\(|x-y|^2 = |y-x|^2\)</span>, the kernel satisfies <span class="math display">\[
+q_t(x,y) = \frac{1}{\sqrt{2\pi t}}e^{-\frac{(y-x)^2}{2t}} = p_t(y-x),
+\]</span> where <span class="math inline">\(p_t(z) = \frac{1}{\sqrt{2\pi t}}e^{-z^2/2t}\)</span> is a function of the single variable <span class="math inline">\(z = y - x\)</span> only. Because <span class="math inline">\(p_t\)</span> is even (<span class="math inline">\(p_t(-z) = p_t(z)\)</span>, since the Gaussian is symmetric), we also have <span class="math inline">\(p_t(y-x) = p_t(x-y)\)</span>, so <span class="math display">\[
+\int_\mathbb{R} f(y)\,q_t(x,y)\,\mathrm{d}y = \int_\mathbb{R} p_t(x-y)f(y)\,\mathrm{d}y = (p_t * f)(x).
+\]</span> We write this as <span class="math inline">\((q_t * f)(x)\)</span>, using <span class="math inline">\(q_t\)</span> to also denote the one-variable function <span class="math inline">\(p_t\)</span> — a slight abuse of notation, but standard in this context.</p>
+</div>
 <div id="prp-brownian-generator" class="theorem proposition">
 <p><span class="theorem-title"><strong>Proposition 85.2 (Infinitesimal Generator of Brownian Motion)</strong></span> If <span class="math inline">\(f \in C_b^2(\mathbb{R})\)</span> (bounded, with bounded continuous first and second derivatives), then <span class="math inline">\((Q_t f)(x)\)</span> satisfies the Kolmogorov forward/backward equations: <span id="eq-bm-diff-eq"><span class="math display">\[
 \frac{\mathrm{d}}{\mathrm{d}t} (Q_t f)(x) = A (Q_t f)(x) = Q_t (A f)(x),
@@ -919,8 +974,23 @@ Af(x) := \lim_{t\downarrow0}\frac{(Q_tf)(x)-f(x)}{t} = \tfrac12 f''(x).
 \end{aligned}
 \]</span> where passing the limit inside <span class="math inline">\(Q_t\)</span> uses boundedness/linearity of <span class="math inline">\(Q_t\)</span> together with Step 1 applied at the point <span class="math inline">\(x\)</span> after convolving. This proves <a href="#eq-bm-diff-eq" class="quarto-xref">Equation&nbsp;<span>85.9</span></a>.</p>
 </div>
+<div id="rem-brownian-motion-generator" class="proof remark">
+<p><span class="proof-title"><em>Remark 85.2</em>. </span></p>
+<ol type="1">
+<li><p>The generator of Brownian motion is the half-Laplacian. The most concrete output is the formula <span class="math inline">\(Af = \frac{1}{2}f''\)</span>. Recall that the generator is defined as <span class="math inline">\(Af(x) = \lim_{t\downarrow 0}\frac{(Q_tf)(x)-f(x)}{t}\)</span>, the “instantaneous rate of change” of the semigroup. The proof shows this limit equals <span class="math inline">\(\frac{1}{2}f''(x)\)</span> by a second-order Taylor expansion of <span class="math inline">\(f(x+B_t)\)</span>: the mean-zero symmetry of <span class="math inline">\(B_t\)</span> kills the first-order term <span class="math inline">\(f'(x)\mathbb{E}[B_t] = 0\)</span>, and the second-order term contributes <span class="math inline">\(\frac{1}{2}f''(x)\cdot\frac{\mathbb{E}[B_t^2]}{t} = \frac{1}{2}f''(x)\)</span>. So the curvature of <span class="math inline">\(f\)</span>, measured by <span class="math inline">\(f''\)</span>, is what the Brownian semigroup “sees” instantaneously.</p></li>
+<li><p>The evolution equation is the heat equation. Setting <span class="math inline">\(u(t,x) := (Q_tf)(x)\)</span>, the equation <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = A\,Q_tf\)</span> becomes <span class="math display">\[
+\frac{\partial u}{\partial t}(t,x) = \frac{1}{2}\frac{\partial^2 u}{\partial x^2}(t,x),
+\]</span> which is the classical heat equation with initial condition <span class="math inline">\(u(0,x) = f(x)\)</span>. The proposition is therefore saying that Brownian motion solves the heat equation: <span class="math inline">\((Q_tf)(x) = \mathbb{E}[f(x+B_t)]\)</span> is the unique solution starting from <span class="math inline">\(f\)</span>.</p></li>
+<li><p>The two sides of the equation <span class="math inline">\(AQ_tf = Q_tAf\)</span> say different things. The equality <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = AQ_tf = Q_tAf\)</span> actually encodes two separate results:</p></li>
+</ol>
+<ul>
+<li><span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = AQ_tf\)</span> (the backward equation): differentiate <span class="math inline">\(Q_{t+h}f = Q_h(Q_tf)\)</span> in <span class="math inline">\(h\)</span> at <span class="math inline">\(h=0\)</span>, applying the generator to <span class="math inline">\(Q_tf\)</span>. This says: to find how the evolved function <span class="math inline">\(Q_tf\)</span> is changing in time, apply <span class="math inline">\(A\)</span> to it.</li>
+<li><span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = Q_t(Af)\)</span> (the forward equation): differentiate <span class="math inline">\(Q_{t+h}f = Q_t(Q_hf)\)</span> in <span class="math inline">\(h\)</span> at <span class="math inline">\(h=0\)</span>, pulling <span class="math inline">\(Q_t\)</span> outside the limit. This says: you can instead first apply the generator to <span class="math inline">\(f\)</span>, then evolve the result with <span class="math inline">\(Q_t\)</span>.</li>
+</ul>
+<p>Together they mean that <span class="math inline">\(A\)</span> and <span class="math inline">\(Q_t\)</span> commute on <span class="math inline">\(C_b^2(\mathbb{R})\)</span>: <span class="math inline">\(AQ_t = Q_tA\)</span>. This commutativity is the operator-theoretic reflection of the translation invariance of Brownian motion.</p>
+</div>
 <div id="rem-feller-domain-problem" class="proof remark">
-<p><span class="proof-title"><em>Remark 85.1</em> (Domain Restrictions and Feller Processes). </span>Unlike the Poisson generator <span class="math inline">\(A = \lambda(T - \mathrm{Id})\)</span>, which is bounded on all of <span class="math inline">\(\mathcal{B}_b(\mathbb{N}_0)\)</span>, the Laplacian operator <span class="math inline">\(A = \frac{1}{2} \frac{\mathrm{d}^2}{\mathrm{d}x^2}\)</span> is <strong>unbounded</strong>.</p>
+<p><span class="proof-title"><em>Remark 85.3</em> (Domain Restrictions and Feller Processes). </span>Unlike the Poisson generator <span class="math inline">\(A = \lambda(T - \mathrm{Id})\)</span>, which is bounded on all of <span class="math inline">\(\mathcal{B}_b(\mathbb{N}_0)\)</span>, the Laplacian operator <span class="math inline">\(A = \frac{1}{2} \frac{\mathrm{d}^2}{\mathrm{d}x^2}\)</span> is <strong>unbounded</strong>.</p>
 <p>It cannot be defined on all of <span class="math inline">\(\mathcal{B}_b(\mathbb{R})\)</span> because discontinuous or non-differentiable functions (such as <span class="math inline">\(f = \mathbf{1}_{[0,1]}\)</span>) cannot be differentiated twice in the classical sense. Sequences <span class="math inline">\(\psi_n \in C_c^2(\mathbb{R})\)</span> approximating <span class="math inline">\(\mathbf{1}_{[0,1]}\)</span> pointwise have unbounded second derivatives <span class="math inline">\(\|\psi_n''\|_\infty \to \infty\)</span>.</p>
 <p>This domain issue motivates the theory of <strong>Feller semigroups</strong> and <strong>Feller processes</strong>, where the domain of <span class="math inline">\(A\)</span> is restricted to continuous functions vanishing at infinity, <span class="math inline">\(\mathcal{D}(A) \subset C_0(\mathbb{R})\)</span>.</p>
 </div>
@@ -933,7 +1003,7 @@ Af(x) := \lim_{t\downarrow0}\frac{(Q_tf)(x)-f(x)}{t} = \tfrac12 f''(x).
 <li><strong>On a finite state space, generators are exactly the <span class="math inline">\(Q\)</span>-matrices.</strong> <a href="#prp-generator-characterization" class="quarto-xref">Proposition&nbsp;<span>85.1</span></a> shows <span class="math inline">\(Q_t=e^{tA}\)</span> defines a valid Markov semigroup iff <span class="math inline">\(A\)</span> has non-negative off-diagonal entries and zero row sums — the classical intensity-matrix conditions. The (<span class="math inline">\(\Leftarrow\)</span>) direction is proved via the shift trick <span class="math inline">\(A=B-cI\)</span> with <span class="math inline">\(B\ge0\)</span> entrywise, which simultaneously gives positivity of <span class="math inline">\(Q_t\)</span> (via the non-negative series <span class="math inline">\(e^{tB}\)</span>) and conservation of probability (via <span class="math inline">\(A\mathbf 1=0 \Rightarrow A^k\mathbf 1 = 0\)</span> for <span class="math inline">\(k\ge1\)</span>).</li>
 <li><strong>Not every Markov semigroup has a generator.</strong> <a href="#exm-discontinuous-semigroup" class="quarto-xref">Example&nbsp;<span>85.1</span></a> exhibits a perfectly valid semigroup (<span class="math inline">\(Q_t=P\)</span> for all <span class="math inline">\(t&gt;0\)</span>, <span class="math inline">\(Q_0=\mathrm{Id}\)</span>) that is discontinuous at <span class="math inline">\(t=0\)</span> whenever <span class="math inline">\(|S|\ge2\)</span>, so no bounded <span class="math inline">\(A\)</span> with <span class="math inline">\(Q_t=e^{tA}\)</span> can exist (such a family is automatically continuous at <span class="math inline">\(0\)</span>). Existence of a generator is therefore a genuine extra hypothesis (continuity of <span class="math inline">\(t\mapsto Q_t\)</span> at <span class="math inline">\(t=0\)</span>), not automatic.</li>
 <li><strong>Bounded generators: the Poisson process.</strong> For the Poisson process, <span class="math inline">\(A=\lambda(T-\mathrm{Id})\)</span> (forward-shift minus identity, scaled by the rate <span class="math inline">\(\lambda\)</span>) is a <em>bounded</em> operator on <span class="math inline">\(\mathcal{B}_b(\mathbb{N}_0)\)</span> (<a href="#thm-poisson-exponential-representation" class="quarto-xref">Theorem&nbsp;<span>85.1</span></a>), so <span class="math inline">\(Q_t=e^{tA}\)</span> holds literally as a convergent operator-norm series — the discrete-state-space picture carries over verbatim to the countably infinite case because <span class="math inline">\(\|A\|\le2\lambda&lt;\infty\)</span>.</li>
-<li><strong>Unbounded generators: Brownian motion.</strong> The generator of Brownian motion is <span class="math inline">\(Af=\tfrac12f''\)</span> (<a href="#prp-brownian-generator" class="quarto-xref">Proposition&nbsp;<span>85.2</span></a>), proved via a second-order Taylor expansion of <span class="math inline">\(f(x+B_t)\)</span> combined with dominated convergence. Unlike the Poisson case, <span class="math inline">\(A\)</span> cannot be bounded on all of <span class="math inline">\(\mathcal{B}_b(\mathbb{R})\)</span>: it is not even classically defined outside <span class="math inline">\(C_b^2(\mathbb{R})\)</span>, since indicator-type functions have no second derivative and their smooth approximations have second derivatives blowing up (<a href="#rem-feller-domain-problem" class="quarto-xref">Remark&nbsp;<span>85.1</span></a>). This is the generic situation for diffusions, not a pathology specific to Brownian motion.</li>
+<li><strong>Unbounded generators: Brownian motion.</strong> The generator of Brownian motion is <span class="math inline">\(Af=\tfrac12f''\)</span> (<a href="#prp-brownian-generator" class="quarto-xref">Proposition&nbsp;<span>85.2</span></a>), proved via a second-order Taylor expansion of <span class="math inline">\(f(x+B_t)\)</span> combined with dominated convergence. Unlike the Poisson case, <span class="math inline">\(A\)</span> cannot be bounded on all of <span class="math inline">\(\mathcal{B}_b(\mathbb{R})\)</span>: it is not even classically defined outside <span class="math inline">\(C_b^2(\mathbb{R})\)</span>, since indicator-type functions have no second derivative and their smooth approximations have second derivatives blowing up (<a href="#rem-feller-domain-problem" class="quarto-xref">Remark&nbsp;<span>85.3</span></a>). This is the generic situation for diffusions, not a pathology specific to Brownian motion.</li>
 <li><strong>Domain restriction, not boundedness, is the right generalization.</strong> The Brownian/Poisson contrast shows that “bounded generator on <span class="math inline">\(\mathcal{B}_b\)</span>” is too strong a requirement for continuous-state-space processes; the correct framework (Feller semigroups, restricting to <span class="math inline">\(C_0(\mathbb{R})\)</span> with a dense domain <span class="math inline">\(\mathcal{D}(A)\)</span>) is what must replace it, motivating the operator-theoretic machinery developed in Lecture 40.1.</li>
 </ul>
 

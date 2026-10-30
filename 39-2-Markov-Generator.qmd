@@ -20,7 +20,10 @@ The matrix $A$ is called the **infinitesimal generator** of the transition semig
 
 If $A$ exists, it can be recovered via the time derivative at $t = 0$:
 $$
-\frac{\mathrm{d}}{\mathrm{d}t} Q_t = A e^{tA} = e^{tA} A \implies A = \left. \frac{\mathrm{d}}{\mathrm{d}t} Q_t \right|_{t=0} = \lim_{t \downarrow 0} \frac{Q_t - \mathrm{Id}}{t}.
+\begin{aligned}
+&\frac{\mathrm{d}}{\mathrm{d}t} Q_t = A e^{tA} = e^{tA} A\\
+&\implies A = \left. \frac{\mathrm{d}}{\mathrm{d}t} Q_t \right|_{t=0} = \lim_{t \downarrow 0} \frac{Q_t - \mathrm{Id}}{t}.
+\end{aligned}
 $$ {#eq-generator-derivative}
 
 Because $q_t(i, j) = \mathbb{P}(X_t = j \mid X_0 = i)$ denotes the scalar entries of the transition kernel of $Q_t$ on $S$ (so that $Q_t = (q_t(i,j))_{i,j\in S}$, matching the operator/matrix-entry convention of Lecture 39.1), $q_t$ satisfies:
@@ -45,7 +48,6 @@ Furthermore, since $\sum_{j=1}^n q_t(i, j) = 1$ for all $t \ge 0$, differentiati
 $$
 \sum_{j=1}^n A_{ij} = \left. \frac{\mathrm{d}}{\mathrm{d}t} \sum_{j=1}^n q_t(i, j) \right|_{t=0} = \frac{\mathrm{d}}{\mathrm{d}t}(1) = 0.
 $$
-
 
 $(\impliedby)$ Suppose $A$ satisfies conditions 1–2. Let $c := \max_{i} (-A_{ii}) = \max_i \sum_{j \ne i} A_{ij} < \infty$ (finite since $S$ is finite), and set $B := A + cI$. Then $B_{ij} = A_{ij} \ge 0$ for $i \ne j$, and $B_{ii} = A_{ii} + c \ge 0$ by the choice of $c$; so $B$ has **all** entries $\ge 0$. Since $B$ and $cI$ commute,
 $$
@@ -101,7 +103,10 @@ $$
 
 For any $f \in \mathcal{B}_b(\mathbb{N}_0)$, the operator $Q_t$ acts on $f$ as:
 $$
-(Q_t f)(k) = \sum_{n=0}^\infty q_t(k, k+n) f(k+n) = e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n).
+\begin{aligned}
+(Q_t f)(k) &= \sum_{n=0}^\infty q_t(k, k+n) f(k+n)\\
+&= e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n).
+\end{aligned}
 $$ {#eq-poisson-qt}
 
 Differentiating $(Q_t f)(k)$ with respect to $t$ using power series term-by-term differentiation (valid since $f$ is bounded):
@@ -125,7 +130,14 @@ $$
 &= \lambda\big[(Q_tf)(k+1) - (Q_tf)(k)\big] = (AQ_tf)(k),
 \end{aligned}
 $$
-using $\sum_n q_t(k,k+n) f(k+n+1) = \sum_n q_t(k+1,(k+1)+n) f((k+1)+n) = (Q_tf)(k+1)$. Hence we obtain the differential equation $\frac{\mathrm{d}}{\mathrm{d}t} Q_t f = Q_t A f = A Q_t f$.
+where we use 
+$$
+\begin{aligned}
+\sum_n q_t(k,k+n) f(k+n+1) &= \sum_n q_t(k+1,(k+1)+n) f((k+1)+n) \\
+&= (Q_tf)(k+1).
+\end{aligned}
+$$ 
+Hence, we obtain the differential equation $\frac{\mathrm{d}}{\mathrm{d}t} Q_t f = Q_t A f = A Q_t f$.
 
 ::: {#thm-poisson-exponential-representation}
 ## Exponential Representation for Poisson Generator
@@ -143,6 +155,67 @@ $$ {#eq-poisson-exp-proof}
 Thus, $A = \lambda (T - \mathrm{Id})$ is the explicit infinitesimal generator of the Poisson process.
 :::
 
+:::{.proof}
+## Proof of @thm-poisson-exponential-representation
+Let $T:\mathcal{B}_b(\mathbb{N}_0)\to\mathcal{B}_b(\mathbb{N}_0)$ be the forward shift $Tf(k)=f(k+1)$, and set $A=\lambda(T-\mathrm{Id})$. Then:
+
+1. $A$ is a bounded operator with $\|A\|\le 2\lambda$.
+2. The series $e^{tA}=\sum_{n=0}^\infty \frac{t^n A^n}{n!}$ converges in operator norm for every $t\ge 0$.
+3. $e^{tA} = Q_t$, i.e. $(e^{tA}f)(k) = e^{-\lambda t}\sum_{n=0}^\infty \frac{(\lambda t)^n}{n!}f(k+n)$.
+
+**Step 1**: Boundedness of $T$ and $A$: The shift $T$ is an isometry: for any $f\in\mathcal{B}_b(\mathbb{N}_0)$,
+$$
+\|Tf\|_\infty = \sup_{k\in\mathbb{N}_0}|f(k+1)| = \sup_{k\in\mathbb{N}_0}|f(k)| = \|f\|_\infty,
+$$
+so $\|T\|=1$. Since $\|\mathrm{Id}\|=1$ as well, the triangle inequality gives
+$$
+\|Af\|_\infty = \lambda\|(T-\mathrm{Id})f\|_\infty \le \lambda\bigl(\|Tf\|_\infty + \|f\|_\infty\bigr) = 2\lambda\|f\|_\infty.
+$$
+Hence $A$ is bounded with $\|A\|\le 2\lambda$.
+
+**Step 2**: Norm convergence of $e^{tA}$: Because $\|A^n\|\le\|A\|^n\le(2\lambda)^n$ (operator norm is submultiplicative), the series of operator norms satisfies
+$$
+\sum_{n=0}^\infty \frac{t^n\|A^n\|}{n!} \le \sum_{n=0}^\infty \frac{(2\lambda t)^n}{n!} = e^{2\lambda t} < \infty.
+$$
+Absolute convergence in operator norm implies the series $e^{tA}=\sum_{n=0}^\infty \frac{t^nA^n}{n!}$ converges to a well-defined bounded operator.
+
+**Step 3**: Splitting $e^{tA}=e^{-\lambda t}e^{\lambda tT}$: Write $A = \lambda T - \lambda\,\mathrm{Id}$, so $tA = (\lambda t T) + (-\lambda t\,\mathrm{Id})$. The two summands commute because $\mathrm{Id}$ commutes with every operator. For commuting bounded operators $B$ and $C$ (meaning $BC=CB$), the identity $e^{B+C}=e^Be^C$ holds. To see why, use the binomial theorem (valid since $B$ and $C$ commute):
+$$
+(B+C)^n = \sum_{k=0}^n\binom{n}{k}B^k C^{n-k},
+$$
+so
+$$
+e^{B+C} = \sum_{n=0}^\infty\frac{1}{n!}\sum_{k=0}^n\binom{n}{k}B^kC^{n-k} = \sum_{k=0}^\infty\sum_{j=0}^\infty\frac{B^k}{k!}\frac{C^j}{j!} = e^Be^C,
+$$
+where the double series rearrangement is justified by absolute convergence (both $B$ and $C$ are bounded). Applying this with $B=-\lambda t\,\mathrm{Id}$ and $C=\lambda tT$:
+$$
+e^{tA} = e^{-\lambda t\,\mathrm{Id}}\,e^{\lambda tT}.
+$$
+Since $(\alpha\,\mathrm{Id})^n=\alpha^n\mathrm{Id}$, the series for $e^{-\lambda t\,\mathrm{Id}}$ gives simply the scalar $e^{-\lambda t}$ times the identity, so
+$$
+e^{tA} = e^{-\lambda t}\,e^{\lambda tT}.
+$$
+
+**Step 4**: Computing $T^n$ and the series for $e^{\lambda tT}$: Applying the shift $n$ times: $T^n f(k) = T^{n-1}(Tf)(k) = T^{n-1}f(k+1) = \cdots = f(k+n)$. Therefore
+$$
+(e^{\lambda tT}f)(k) = \sum_{n=0}^\infty\frac{(\lambda t)^n}{n!}(T^nf)(k) = \sum_{n=0}^\infty\frac{(\lambda t)^n}{n!}f(k+n).
+$$
+This series converges for every $k$ since $f$ is bounded:
+$$
+\left|\sum_{n=0}^\infty\frac{(\lambda t)^n}{n!}f(k+n)\right| \le \|f\|_\infty\sum_{n=0}^\infty\frac{(\lambda t)^n}{n!} = e^{\lambda t}\|f\|_\infty < \infty.
+$$
+
+
+**Step 5**: Conclusion $e^{tA}=Q_t$: Combining Steps 3 and 4:
+$$
+(e^{tA}f)(k) = e^{-\lambda t}(e^{\lambda tT}f)(k) = e^{-\lambda t}\sum_{n=0}^\infty\frac{(\lambda t)^n}{n!}f(k+n).
+$$
+This is exactly $(Q_tf)(k)$ from the file. Hence $e^{tA}=Q_t$ as operators on $\mathcal{B}_b(\mathbb{N}_0)$, and $A=\lambda(T-\mathrm{Id})$ is the infinitesimal generator of the Poisson semigroup.
+
+:::
+
+
+
 ---
 
 ## Generator of Brownian Motion
@@ -152,10 +225,27 @@ $$
 q_t(x, y) = \frac{1}{\sqrt{2\pi t}} e^{-\frac{|x-y|^2}{2t}}, \quad t > 0, \, x, y \in \mathbb{R}.
 $$ {#eq-heat-kernel}
 
-The transition operator $Q_t$ acts via convolution:
+By definition, $(Q_t f)(x) = \mathbb{E}[f(B_t) \mid B_0 = x]$. Given $B_0 = x$, the random variable $B_t$ has distribution $\mathcal{N}(x, t)$, whose density is exactly $q_t(x, y) = \frac{1}{\sqrt{2\pi t}}e^{-\frac{(y-x)^2}{2t}}$. Writing the expectation as an integral against this density:
 $$
-(Q_t f)(x) = \int_{\mathbb{R}} q_t(x, y) f(y) \, \mathrm{d}y = (q_t * f)(x).
+\begin{aligned}
+(Q_t f)(x) &= \mathbb{E}[f(B_t)\mid B_0=x] \\
+& = \int_\mathbb{R} f(y)\, q_t(x,y)\,\mathrm{d}y\\
+& = (q_t * f)(x).
+\end{aligned}
 $$ {#eq-bm-convolution}
+
+:::{#rem-bm-convolution}
+A convolution $(g * f)(x) = \int_\mathbb{R} g(x-y)f(y)\,\mathrm{d}y$ only makes sense when the kernel depends on $x$ and $y$ solely through their difference $x - y$. The heat kernel has exactly this structure: since $|x-y|^2 = |y-x|^2$, the kernel satisfies
+$$
+q_t(x,y) = \frac{1}{\sqrt{2\pi t}}e^{-\frac{(y-x)^2}{2t}} = p_t(y-x),
+$$
+where $p_t(z) = \frac{1}{\sqrt{2\pi t}}e^{-z^2/2t}$ is a function of the single variable $z = y - x$ only. Because $p_t$ is even ($p_t(-z) = p_t(z)$, since the Gaussian is symmetric), we also have $p_t(y-x) = p_t(x-y)$, so
+$$
+\int_\mathbb{R} f(y)\,q_t(x,y)\,\mathrm{d}y = \int_\mathbb{R} p_t(x-y)f(y)\,\mathrm{d}y = (p_t * f)(x).
+$$
+We write this as $(q_t * f)(x)$, using $q_t$ to also denote the one-variable function $p_t$ — a slight abuse of notation, but standard in this context.
+
+:::
 
 ::: {#prp-brownian-generator}
 ## Infinitesimal Generator of Brownian Motion
@@ -196,6 +286,24 @@ $$
 $$
 where passing the limit inside $Q_t$ uses boundedness/linearity of $Q_t$ together with Step 1 applied at the point $x$ after convolving. This proves @eq-bm-diff-eq. 
 :::
+
+:::{#rem-brownian-motion-generator}
+1. The generator of Brownian motion is the half-Laplacian. The most concrete output is the formula $Af = \frac{1}{2}f''$. Recall that the generator is defined as $Af(x) = \lim_{t\downarrow 0}\frac{(Q_tf)(x)-f(x)}{t}$, the “instantaneous rate of change” of the semigroup. The proof shows this limit equals $\frac{1}{2}f''(x)$ by a second-order Taylor expansion of $f(x+B_t)$: the mean-zero symmetry of $B_t$ kills the first-order term $f'(x)\mathbb{E}[B_t] = 0$, and the second-order term contributes $\frac{1}{2}f''(x)\cdot\frac{\mathbb{E}[B_t^2]}{t} = \frac{1}{2}f''(x)$. So the curvature of $f$, measured by $f''$, is what the Brownian semigroup “sees” instantaneously.
+
+2. The evolution equation is the heat equation. Setting $u(t,x) := (Q_tf)(x)$, the equation $\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = A\,Q_tf$ becomes
+$$
+\frac{\partial u}{\partial t}(t,x) = \frac{1}{2}\frac{\partial^2 u}{\partial x^2}(t,x),
+$$
+which is the classical heat equation with initial condition $u(0,x) = f(x)$. The proposition is therefore saying that Brownian motion solves the heat equation: $(Q_tf)(x) = \mathbb{E}[f(x+B_t)]$ is the unique solution starting from $f$.
+
+3. The two sides of the equation $AQ_tf = Q_tAf$ say different things. The equality $\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = AQ_tf = Q_tAf$ actually encodes two separate results:
+
+* $\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = AQ_tf$ (the backward equation): differentiate $Q_{t+h}f = Q_h(Q_tf)$ in $h$ at $h=0$, applying the generator to $Q_tf$. This says: to find how the evolved function $Q_tf$ is changing in time, apply $A$ to it.
+* $\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = Q_t(Af)$ (the forward equation): differentiate $Q_{t+h}f = Q_t(Q_hf)$ in $h$ at $h=0$, pulling $Q_t$ outside the limit. This says: you can instead first apply the generator to $f$, then evolve the result with $Q_t$.
+
+Together they mean that $A$ and $Q_t$ commute on $C_b^2(\mathbb{R})$: $AQ_t = Q_tA$. This commutativity is the operator-theoretic reflection of the translation invariance of Brownian motion.
+:::
+
 
 ::: {#rem-feller-domain-problem}
 ## Domain Restrictions and Feller Processes
