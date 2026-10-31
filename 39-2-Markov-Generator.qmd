@@ -96,6 +96,8 @@ The transition kernel is:
 $$
 \begin{aligned}
 q_{s,t}(m, n) &= \mathbb{P}(N_t = n \mid N_s = m) \\
+&= \mathbb{P}(N_t - N_s+N_s  = n\mid N_s = m) \\
+&= \mathbb{P}(N_t - N_s + m = n \mid N_s = m) \\
 &= \mathbb{P}(N_t - N_s = n - m) \\
 &= e^{-\lambda(t-s)} \frac{(\lambda(t-s))^{n-m}}{(n-m)!} \mathbf{1}_{\{n \ge m\}}.
 \end{aligned}

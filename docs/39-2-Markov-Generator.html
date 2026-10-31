@@ -854,6 +854,8 @@ Q_t \mathbf{1} = \sum_{k=0}^\infty \frac{t^k}{k!} A^k \mathbf{1} = \mathbf{1} + 
 <p>The transition kernel is: <span class="math display">\[
 \begin{aligned}
 q_{s,t}(m, n) &amp;= \mathbb{P}(N_t = n \mid N_s = m) \\
+&amp;= \mathbb{P}(N_t - N_s+N_s  = n\mid N_s = m) \\
+&amp;= \mathbb{P}(N_t - N_s + m = n \mid N_s = m) \\
 &amp;= \mathbb{P}(N_t - N_s = n - m) \\
 &amp;= e^{-\lambda(t-s)} \frac{(\lambda(t-s))^{n-m}}{(n-m)!} \mathbf{1}_{\{n \ge m\}}.
 \end{aligned}
