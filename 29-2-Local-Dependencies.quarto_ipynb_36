@@ -153,7 +153,7 @@
         "* **Total Edges:** $H = \\sum_{i < j} X_{ij} \\sim \\operatorname{Binom}\\left(\\binom{n}{2}, p\\right)$ with $\\mathbb{E}[H] = p \\binom{n}{2}$.\n",
         "* **Vertex Degree:** $\\operatorname{deg}(i) = \\sum_{j \\neq i} X_{ij} \\sim \\operatorname{Binom}(n-1, p)$ with $\\mathbb{E}[\\operatorname{deg}(i)] = p(n-1)$."
       ],
-      "id": "84e1756b"
+      "id": "d40ce506"
     },
     {
       "cell_type": "code",
@@ -184,7 +184,7 @@
       "source": [
         ":::"
       ],
-      "id": "cc621d4b"
+      "id": "822c1e63"
     }
   ],
   "metadata": {

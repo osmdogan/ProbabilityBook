@@ -53,7 +53,7 @@
         "\n",
         "Using Python, we can generate the plot of $g_R(t)$ for $R = 10$:"
       ],
-      "id": "db87a1ad"
+      "id": "1e32184a"
     },
     {
       "cell_type": "code",
@@ -335,7 +335,7 @@
         "5. **The full Portmanteau equivalence on $\\mathbb{R}^d$ now has eight conditions.**\n",
         "   This lecture adds three items to the five Portmanteau conditions from Lecture 22.1: testing against $C_c(\\mathbb{R}^d)$, testing against $C_c^\\infty(\\mathbb{R}^d)$, and (in dimension $d = 1$) CDF convergence at all continuity points of the limit. Each is strictly more convenient to verify than testing all of $C_b(\\mathbb{R}^d)$."
       ],
-      "id": "b2f25d09"
+      "id": "ee39030f"
     }
   ],
   "metadata": {

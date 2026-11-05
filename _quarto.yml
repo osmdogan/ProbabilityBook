@@ -114,6 +114,7 @@ book:
     - part: Probability-Theory-III.qmd
       chapters:
         - 40-1-Operator-Norm-Continuity.qmd
+        - 40-2-Bounded-Generators.qmd
         
 
 

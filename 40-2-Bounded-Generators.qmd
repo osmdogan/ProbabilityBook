@@ -1,0 +1,294 @@
+
+# Lecture 40.2: Bounded Generators
+
+## Introduction
+
+In continuous-time Markov process theory, the transition operators $(Q_t)_{t \ge 0}$ form a semigroup of bounded linear operators on the space of bounded measurable functions. A central question in the analytical theory of Markov processes is the differentiability of the mapping $t \mapsto Q_t$ with respect to the operator norm and the existence of a generator operator $A$.
+
+In these notes, we establish that under uniform operator-norm continuity at $t = 0^+$, the semigroup $(Q_t)_{t \ge 0}$ is operator-norm differentiable for all $t \in [0, \infty)$, the generator $A$ is a bounded operator, and $Q_t$ can be represented explicitly as an operator exponential $Q_t = e^{tA}$.
+
+---
+
+## Main Theorem
+
+::: {#thm-bounded-generator}
+## Bounded Generator Theorem
+
+Let $(S, \mathcal{B})$ be a measurable space, and let $(Q_t)_{t \ge 0}$ be a **semigroup** of Markov transition operators on $\mathcal{B}_b(S)$, the Banach space of real-valued, bounded, $\mathcal{B}$-measurable functions endowed with the supremum norm $\|f\|_\infty = \sup_{x \in S} |f(x)|$. That is, each $Q_t$ is a linear, positivity-preserving operator with $Q_t 1 = 1$, and the family satisfies the **Chapman–Kolmogorov equations**
+$$
+Q_0 = I, \qquad Q_{s+t} = Q_s Q_t \quad \text{for all } s, t \ge 0.
+$${#eq-chapman-kolmogorov}
+Suppose further that $(Q_t)_{t \ge 0}$ is operator-norm continuous at $t = 0^+$:
+$$
+\lim_{t \downarrow 0} \|Q_t - I\|_{\text{op}} = 0,
+$${#eq-norm-cont-at-zero}
+where $I$ denotes the identity operator on $\mathcal{B}_b(S)$.
+
+Then:
+
+1. The mapping $t \mapsto Q_t$ is operator-norm differentiable on $[0, \infty)$ (one-sided at $t = 0$).
+2. The infinitesimal generator defined by
+
+   $$
+   A := \lim_{h \downarrow 0} \frac{Q_h - I}{h} = \left. \frac{d}{dt} Q_t \right|_{t=0^+}
+   $${#eq-def-generator}
+
+   exists in the operator norm and satisfies $\|A\|_{\text{op}} < \infty$.
+3. For all $t \ge 0$, the transition operator is given by the operator exponential
+
+   $$
+   Q_t = e^{tA} := \sum_{n=0}^{\infty} \frac{t^n}{n!} A^n,
+   $${#eq-operator-exp}
+
+   where the series converges uniformly in the operator norm on compact subintervals of $[0, \infty)$.
+4. In particular, $(Q_t)_{t \ge 0}$ satisfies the Kolmogorov forward and backward differential equations:
+
+   $$
+   \frac{d}{dt} Q_t = Q_t A = A Q_t, \quad Q_0 = I.
+   $${#eq-kolmogorov-odes}
+:::
+
+---
+
+## Motivational Example: Poisson Process
+
+::: {#exm-poisson}
+## Discrete State Space Poisson Process
+
+Consider a Poisson process with rate $\lambda > 0$ on the state space $S = \mathbb{N}_0 = \{0, 1, 2, \dots\}$ equipped with the discrete $\sigma$-algebra $\mathcal{B} = \mathcal{P}(\mathbb{N}_0)$. The transition probabilities are given by:
+$$
+q_t(i, j) = \mathbb{P}(X_t = j \mid X_0 = i) = e^{-\lambda t} \frac{(\lambda t)^{j-i}}{(j-i)!} \mathbb{I}_{\{j \ge i\}}, 
+$${#eq-poisson-transition-kernel}
+for $i, j \in \mathbb{N}_0$. We verify condition (@eq-norm-cont-at-zero) directly. Since $\mathcal{B} = \mathcal{P}(\mathbb{N}_0)$ is discrete, $Q_t - I$ is represented by the matrix kernel $q_t(i,j) - \delta_{ij}$, and by the row-sum operator-norm formula (@prp-matrix-operator-norm, Lecture 40.1):
+$$
+\begin{aligned}
+\|Q_t - I\|_{\text{op}} &= \sup_{i \in \mathbb{N}_0} \sum_{j=0}^{\infty} |q_t(i, j) - \delta_{ij}| \\
+&= \sup_{i \in \mathbb{N}_0} \left( |q_t(i, i) - 1| + \sum_{j > i} q_t(i, j) \right) \\
+&= \sup_{i \in \mathbb{N}_0} \left( |e^{-\lambda t} - 1| + e^{-\lambda t} \sum_{k=1}^{\infty} \frac{(\lambda t)^k}{k!} \right) \\
+&= (1 - e^{-\lambda t}) + e^{-\lambda t} (e^{\lambda t} - 1) \\
+&= 2(1 - e^{-\lambda t}).
+\end{aligned}
+$$
+
+As $t \downarrow 0$, we have:
+
+$$
+\lim_{t \downarrow 0} \|Q_t - I\|_{\text{op}} = \lim_{t \downarrow 0} 2(1 - e^{-\lambda t}) = 0.
+$$
+
+Thus, the Poisson process semigroup is uniformly operator-norm continuous at $t = 0$. The infinitesimal generator $A$ corresponds to the infinite matrix:
+
+$$
+A_{ij} = \left. \frac{d}{dt} q_t(i,j) \right|_{t=0^+} = \begin{cases} -\lambda & \text{if } j = i, \\ \lambda & \text{if } j = i+1, \\ 0 & \text{otherwise.} \end{cases}
+$$
+:::
+
+---
+
+## Proof of the Main Theorem
+
+We break the proof into several logical steps.
+
+### Step 1: Norm Boundedness of $Q_t$ and Continuity on $[0, \infty)$
+
+Since $(Q_t)_{t \ge 0}$ are Markov transition operators, they preserve positivity and satisfy $Q_t 1 = 1$. Consequently, for any $f \in \mathcal{B}_b(S)$,
+$$
+\|Q_t f\|_\infty = \sup_{x \in S} |Q_t f(x)| \le \sup_{x \in S} Q_t |f|(x) \le \|f\|_\infty Q_t 1 = \|f\|_\infty.
+$$
+Thus, $\|Q_t\|_{\text{op}} \le 1$ for all $t \ge 0$. Now, let $t \ge 0$. For any $h > 0$, using the Chapman–Kolmogorov identity $Q_{t+h} = Q_h Q_t$ (@eq-chapman-kolmogorov) and submultiplicativity of the operator norm (cf. @lem-submultiplicative, Lecture 40.1):
+$$
+\begin{aligned}
+\|Q_{t+h} - Q_t\|_{\text{op}} &= \|(Q_h - I) Q_t\|_{\text{op}} \\
+&\le \|Q_h - I\|_{\text{op}} \|Q_t\|_{\text{op}} \\
+&\le \|Q_h - I\|_{\text{op}} \xrightarrow[h \downarrow 0]{} 0.
+\end{aligned}
+$$
+Similarly, for $t > h > 0$, using $Q_t - Q_{t-h} = (Q_h - I) Q_{t-h}$ (again from @eq-chapman-kolmogorov, since $Q_t = Q_hQ_{t-h}$):
+$$
+\begin{aligned}
+\|Q_t - Q_{t-h}\|_{\text{op}} &= \|(Q_h - I) Q_{t-h}\|_{\text{op}}\\
+&\le \|Q_h - I\|_{\text{op}} \|Q_{t-h}\|_{\text{op}} \\
+&\le \|Q_h - I\|_{\text{op}} \xrightarrow[h \downarrow 0]{} 0.
+\end{aligned}
+$$
+Hence, $t \mapsto Q_t$ is operator-norm continuous on $[0, \infty)$. In particular, $s \mapsto \|I - Q_s\|_{\text{op}}$ is continuous on $[0,\infty)$, and $\|Q_s\|_{\text{op}} \le 1$ for every $s \ge 0$; both facts will be used repeatedly below.
+
+---
+
+### Step 2: Equivalence of Global Differentiability and Local Differentiability at $t=0^+$
+
+Consider the right difference quotient for $h > 0$:
+
+$$
+\frac{Q_{t+h} - Q_t}{h} = \frac{Q_h - I}{h} Q_t = Q_t \frac{Q_h - I}{h}.
+$$
+
+Suppose there exists a bounded linear operator $B \in \mathcal{L}(\mathcal{B}_b(S))$ such that $\lim_{h \downarrow 0} \frac{Q_h - I}{h} = B$ in the operator norm. Then:
+
+$$
+\begin{aligned}
+\left\| \frac{Q_{t+h} - Q_t}{h} - Q_t B \right\|_{\text{op}} &= \left\| Q_t \left( \frac{Q_h - I}{h} - B \right) \right\|_{\text{op}}\\
+& \le \|Q_t\|_{\text{op}} \left\| \frac{Q_h - I}{h} - B \right\|_{\text{op}} \\
+& \le \left\| \frac{Q_h - I}{h} - B \right\|_{\text{op}} \xrightarrow[h \downarrow 0]{} 0.
+\end{aligned}
+$$
+
+so the right-derivative of $t\mapsto Q_t$ exists at every $t\ge0$ and equals $Q_tB$.
+
+For $t > 0$ we must also check the **left** difference quotient, since differentiability at an interior point is a two-sided notion. For $0 < h < t$, Step 1 gives $Q_t - Q_{t-h} = (Q_h - I)Q_{t-h}$, so
+$$
+\frac{Q_t - Q_{t-h}}{h} = \frac{Q_h - I}{h}\,Q_{t-h}.
+$$
+Hence
+$$
+\begin{aligned}
+\left\| \frac{Q_t - Q_{t-h}}{h} - BQ_t \right\|_{\text{op}}
+&= \left\| \left(\frac{Q_h - I}{h} - B\right) Q_{t-h} + B(Q_{t-h} - Q_t) \right\|_{\text{op}} \\
+&\le \left\| \frac{Q_h - I}{h} - B \right\|_{\text{op}} \|Q_{t-h}\|_{\text{op}} + \|B\|_{\text{op}} \|Q_{t-h} - Q_t\|_{\text{op}} \\
+&\le \left\| \frac{Q_h - I}{h} - B \right\|_{\text{op}} + \|B\|_{\text{op}} \|Q_{t-h} - Q_t\|_{\text{op}} \xrightarrow[h \downarrow 0]{} 0,
+\end{aligned}
+$$
+where the first term vanishes by hypothesis and the second vanishes because $h \mapsto Q_{t-h}$ is operator-norm continuous at $h=0$ (Step 1) and $B$ is bounded. Thus the left-derivative at $t$ also exists and equals $BQ_t$. Moreover $Q_tB=BQ_t$: this is immediate from the identity $\frac{Q_h-I}{h}Q_t = Q_t\frac{Q_h-I}{h}$ established above, which holds for *every* $h>0$ (not merely in the limit) and whose two sides converge, as $h\downarrow0$, to $BQ_t$ and $Q_tB$ respectively. Hence the right- and left-derivatives at $t$ coincide, and $t\mapsto Q_t$ is (two-sided) differentiable at every $t>0$.
+
+This shows that $\frac{d}{dt} Q_t$ exists (two-sided for $t>0$, one-sided at $t=0$) at every point $t \ge 0$ **if and only if** $A = \lim_{h \downarrow 0} \frac{Q_h - I}{h}$ exists at $t = 0^+$ as a bounded operator, in which case:
+
+$$
+\frac{d}{dt} Q_t = Q_t A = A Q_t.
+$$
+
+---
+
+### Step 3: Gårding's Regularization Trick
+
+To prove that $A = \lim_{h \downarrow 0} \frac{Q_h - I}{h}$ exists, it suffices to show that $t \mapsto Q_t$ is right-differentiable at some $t \ge 0$. We employ a technique due to Lars Gårding.
+
+::: {#def-garding-operator}
+## Gårding Averaging Operator
+
+For any $\varepsilon > 0$, define the linear operator $B_\varepsilon$ on $\mathcal{B}_b(S)$ by:
+
+$$
+B_\varepsilon = \frac{1}{\varepsilon} \int_0^\varepsilon Q_s \, ds,
+$${#eq-garding-op-def}
+
+meaning that for any $f \in \mathcal{B}_b(S)$ and $x \in S$:
+
+$$
+(B_\varepsilon f)(x) = \frac{1}{\varepsilon} \int_0^\varepsilon (Q_s f)(x) \, ds.
+$$
+
+This is well defined: for fixed $f$ and $x$, the map $s \mapsto (Q_sf)(x)$ is continuous and bounded by $\|f\|_\infty$ (Step 1), so the Riemann integral exists and $|(B_\varepsilon f)(x)| \le \|f\|_\infty$. Measurability of $x \mapsto (B_\varepsilon f)(x)$ follows because it is the pointwise limit, as $n \to \infty$, of the Riemann sums $\frac{\varepsilon}{n}\sum_{k=1}^n (Q_{k\varepsilon/n}f)(x)$, each of which is a finite linear combination of the measurable functions $Q_{k\varepsilon/n}f \in \mathcal{B}_b(S)$. Hence $B_\varepsilon f \in \mathcal{B}_b(S)$ and $B_\varepsilon \in \mathcal{L}(\mathcal{B}_b(S))$ with $\|B_\varepsilon\|_{\text{op}} \le 1$.
+:::
+
+Applying $B_\varepsilon$ to $Q_t$, and using the Chapman–Kolmogorov identity $Q_s Q_t = Q_{s+t}$ (@eq-chapman-kolmogorov), we obtain:
+
+$$
+B_\varepsilon Q_t = \frac{1}{\varepsilon} \int_0^\varepsilon Q_s Q_t \, ds = \frac{1}{\varepsilon} \int_0^\varepsilon Q_{s+t} \, ds = \frac{1}{\varepsilon} \int_t^{t+\varepsilon} Q_u \, du.
+$${#eq-garding-qt}
+
+By Step 1, $u \mapsto Q_u$ is continuous in the operator norm on all of $[0,\infty)$, and $\mathcal{L}(\mathcal{B}_b(S))$ is a Banach space (@cor-operator-exp, Lecture 40.1); hence $t \mapsto \frac{1}{\varepsilon}\int_t^{t+\varepsilon} Q_u\,du$ is the difference of two indefinite Riemann integrals of a continuous Banach-space-valued function and is therefore differentiable **in both directions** (two-sided for $t>0$, one-sided at $t=0$) by the vector-valued Fundamental Theorem of Calculus, with derivative:
+
+$$
+\frac{d}{dt} \left( B_\varepsilon Q_t \right) = \frac{1}{\varepsilon} [Q_{t+\varepsilon} - Q_t].
+$${#eq-garding-diff}
+
+---
+
+### Step 4: Invertibility of $B_\varepsilon$ for Small $\varepsilon > 0$
+
+To recover the differentiability of $Q_t$ from $B_\varepsilon Q_t$, we show that $B_\varepsilon$ is an invertible operator for sufficiently small $\varepsilon > 0$.
+
+Define $T_\varepsilon := I - B_\varepsilon$. We attempt to construct the inverse $C_\varepsilon := B_\varepsilon^{-1}$ using a Neumann geometric series:
+
+$$
+C_\varepsilon = \sum_{n=0}^{\infty} T_\varepsilon^n = \sum_{n=0}^{\infty} (I - B_\varepsilon)^n.
+$${#eq-neumann-series}
+
+If the series converges in operator norm, we have:
+
+$$
+\begin{aligned}
+C_\varepsilon B_\varepsilon &= \lim_{N \to \infty} \sum_{n=0}^N T_\varepsilon^n (I - T_\varepsilon) \\
+&= \lim_{N \to \infty} \sum_{n=0}^N (T_\varepsilon^n - T_\varepsilon^{n+1}) \\
+&= \lim_{N \to \infty} (I - T_\varepsilon^{N+1}) = I,
+\end{aligned}
+$$
+
+and similarly $B_\varepsilon C_\varepsilon = I$.
+
+Since $\mathcal{L}(\mathcal{B}_b(S))$ is a Banach space (@cor-operator-exp, Lecture 40.1), the Neumann series converges in operator norm whenever $\|T_\varepsilon\|_{\text{op}} < 1$: absolute convergence, $\sum_{n=0}^\infty \|T_\varepsilon^n\|_{\text{op}} \le \sum_{n=0}^\infty \|T_\varepsilon\|_{\text{op}}^n < \infty$, implies convergence in a Banach space. We estimate $\|T_\varepsilon\|_{\text{op}}$:
+
+$$
+\begin{aligned}
+\|I - B_\varepsilon\|_{\text{op}} &= \sup_{\|f\|_\infty = 1} \left\| f - \frac{1}{\varepsilon} \int_0^\varepsilon Q_s f \, ds \right\|_\infty \\
+&= \sup_{\|f\|_\infty = 1} \left\| \frac{1}{\varepsilon} \int_0^\varepsilon (f - Q_s f) \, ds \right\|_\infty \\
+&\le \frac{1}{\varepsilon} \int_0^\varepsilon \|I - Q_s\|_{\text{op}} \, ds.
+\end{aligned}
+$$
+
+By the Mean Value Theorem for integrals, since $s \mapsto \|I - Q_s\|_{\text{op}}$ is continuous on $[0,\varepsilon]$ (Step 1) and $\|I - Q_0\|_{\text{op}} = 0$, there exists $s^*=s^*(\varepsilon) \in [0, \varepsilon]$ such that:
+
+$$
+\frac{1}{\varepsilon} \int_0^\varepsilon \|I - Q_s\|_{\text{op}} \, ds = \|I - Q_{s^*(\varepsilon)}\|_{\text{op}}.
+$$
+
+Since $0 \le s^*(\varepsilon) \le \varepsilon$, we have $s^*(\varepsilon) \downarrow 0$ as $\varepsilon \downarrow 0$; combined with condition (@eq-norm-cont-at-zero), i.e. $\lim_{s \downarrow 0}\|I-Q_s\|_{\text{op}}=0$, this gives $\lim_{\varepsilon \downarrow 0} \|I - Q_{s^*(\varepsilon)}\|_{\text{op}} = 0$. Thus, for all sufficiently small $\varepsilon > 0$, we have:
+
+$$
+\|T_\varepsilon\|_{\text{op}} = \|I - B_\varepsilon\|_{\text{op}} < 1.
+$$
+
+Hence, $B_\varepsilon$ is invertible on $\mathcal{B}_b(S)$ with continuous inverse $C_\varepsilon = \sum_{n=0}^\infty (I - B_\varepsilon)^n$.
+
+---
+
+### Step 5: Existence of the Generator $A$ and Solution of the ODE
+
+Using the invertibility of $B_\varepsilon$ from Step 4, we write $Q_t = C_\varepsilon (B_\varepsilon Q_t)$ for every $t \ge 0$. Setting $t = 0$ (recall $Q_0 = I$ by @eq-chapman-kolmogorov) and using the fixed, bounded operator $C_\varepsilon$:
+
+$$
+\begin{aligned}
+\lim_{h \downarrow 0} \frac{Q_h - I}{h} &= \lim_{h \downarrow 0} C_\varepsilon \left( \frac{B_\varepsilon Q_h - B_\varepsilon Q_0}{h} \right) \\
+&= C_\varepsilon \left[ \frac{d}{dt}\Big|_{t=0} (B_\varepsilon Q_t) \right] \\
+&= C_\varepsilon \left( \frac{Q_{\varepsilon} - I}{\varepsilon} \right),
+\end{aligned}
+$$
+
+where the second equality uses continuity of the bounded linear map $X \mapsto C_\varepsilon X$ on $\mathcal{L}(\mathcal{B}_b(S))$ (so the limit can be passed inside $C_\varepsilon$), and the third equality is (@eq-garding-diff) evaluated at $t=0$. Hence the limit
+$$
+A := \lim_{h \downarrow 0} \frac{Q_h - I}{h} = C_\varepsilon \left( \frac{Q_\varepsilon - I}{\varepsilon} \right)
+$$
+exists in operator norm and is bounded, being a composition of the bounded operators $C_\varepsilon$ and $\varepsilon^{-1}(Q_\varepsilon - I)$:
+$$
+\|A\|_{\text{op}} \le \|C_\varepsilon\|_{\text{op}} \cdot \frac{1}{\varepsilon}\|Q_\varepsilon - I\|_{\text{op}} < \infty.
+$$
+
+Since $A$ now exists as a bounded linear operator, Step 2 applies and shows that $t \mapsto Q_t$ is operator-norm differentiable at **every** $t \ge 0$ (two-sided for $t>0$, one-sided at $t=0$), with
+$$
+\frac{d}{dt} Q_t = Q_t A = A Q_t, \qquad Q_0 = I,
+$${#eq-kolmogorov-odes-proof}
+proving parts 1, 2, and 4 of the theorem.
+
+Finally, we show part 3, $Q_t = e^{tA}$. Since $A$ is bounded, @eq-operator-exp defines $e^{tA}$ as a bounded operator for every $t$, with the series converging absolutely and uniformly on compact $t$-intervals (comparison with $\sum_n |t|^n\|A\|_{\text{op}}^n/n!=e^{|t|\|A\|_{\text{op}}}$); in particular $e^{-tA}$ is well defined and commutes with $A$ and with $Q_t$ for every $t$ (via @eq-kolmogorov-odes-proof and the fact that $A$ commutes with every power of itself). Define $F(t) := Q_t e^{-tA} \in \mathcal{L}(\mathcal{B}_b(S))$. Term-by-term differentiation of the (uniformly convergent) power series for $e^{-tA}$ gives $\frac{d}{dt}e^{-tA} = -Ae^{-tA}$, so by the Leibniz (product) rule for operator-norm-differentiable $\mathcal{L}(\mathcal{B}_b(S))$-valued functions and @eq-kolmogorov-odes-proof,
+$$
+F'(t) = (Q_tA)e^{-tA} + Q_t(-Ae^{-tA}) = Q_tAe^{-tA} - Q_tAe^{-tA} = 0 \quad \text{for all } t \ge 0.
+$$
+Since $F$ is continuously differentiable with $F'\equiv0$, the Fundamental Theorem of Calculus for Banach-space-valued functions gives $F(t) = F(0) = Q_0e^{0} = I$ for all $t\ge0$, i.e. $Q_t = e^{tA}$. This same computation shows that $e^{tA}$ is the *unique* operator-norm-differentiable solution of the Cauchy problem $\frac{d}{dt}X_t = AX_t$, $X_0 = I$: applying it to any such solution $X_t$ in place of $Q_t$ gives $X_te^{-tA}\equiv I$, hence $X_t = e^{tA}$. $\blacksquare$
+
+---
+
+## Concluding Remarks
+
+1. **Scope of Uniform Continuity:** The condition $\lim_{t \downarrow 0} \|Q_t - I\|_{\text{op}} = 0$, together with the Chapman–Kolmogorov property (@eq-chapman-kolmogorov), guarantees that the generator $A$ is a bounded operator.
+2. **General Markov Chains vs. General State Spaces:** For general continuous-state Markov processes (e.g., Brownian motion), uniform continuity in the operator norm is typically too restrictive, and $A$ is generally an unbounded, densely defined operator under the weaker notion of strong continuity ($L^p$ or $C_0$-semigroups). By contrast, for continuous-time Markov chains on discrete state spaces with *bounded* jump rates (i.e. $\sup_i q_i < \infty$ for the Q-matrix), uniform operator-norm continuity does hold; this can be shown via uniformization (dominating the chain by a Poisson clock of rate $\Lambda := \sup_i q_i$), though we do not prove it here. The converse direction — passing from a bounded Q-matrix to operator-norm continuity — is thus the natural converse of @thm-bounded-generator, not a restatement of it.
+
+---
+
+## Takeaways
+
+* A **semigroup** of Markov transition operators $(Q_t)_{t\ge0}$ (linear, positivity-preserving, $Q_t1=1$, satisfying $Q_0=I$ and the Chapman–Kolmogorov law $Q_{s+t}=Q_sQ_t$) that is merely continuous *at the single point* $t=0$ in the **operator norm** is automatically continuous and (one-sided/two-sided) differentiable on **all** of $[0,\infty)$, with a **bounded** generator $A$. This is the content of @thm-bounded-generator, re-proved here by a method different from Lecture 40.1.
+* The key mechanism, due to Gårding, is to replace the semigroup by its short-time averages $B_\varepsilon = \varepsilon^{-1}\int_0^\varepsilon Q_s\,ds$. Operator-norm continuity at $t=0$ forces $B_\varepsilon \to I$ in operator norm as $\varepsilon\downarrow0$, so $B_\varepsilon$ is invertible (via a Neumann series) for small $\varepsilon$; the generator is then extracted algebraically as $A = C_\varepsilon(Q_\varepsilon - I)/\varepsilon$, where $C_\varepsilon = B_\varepsilon^{-1}$.
+* Differentiability at an interior point $t>0$ is a **two-sided** condition: both the right-quotient $(Q_{t+h}-Q_t)/h$ and the left-quotient $(Q_t-Q_{t-h})/h$ must converge to the same limit as $h\downarrow0$. Both are controlled by the Chapman–Kolmogorov identity together with the uniform bound $\|Q_s\|_{\text{op}}\le1$ and the operator-norm continuity of $s\mapsto Q_s$ established in Step 1.
+* Once $A$ is known to be bounded, $Q_t=e^{tA}=\sum_{n\ge0}t^nA^n/n!$ is the *unique* operator-norm-differentiable solution of $\frac{d}{dt}X_t=AX_t=X_tA$, $X_0=I$; uniqueness follows from differentiating $F(t)=X_te^{-tA}$ and finding $F'\equiv0$.
+* The discrete-state-space Poisson process illustrates the theorem concretely: the row-sum operator norm gives $\|Q_t-I\|_{\text{op}}=2(1-e^{-\lambda t})\to0$, so the semigroup is uniformly operator-norm continuous and its generator is the familiar bounded birth generator $A_{ii}=-\lambda$, $A_{i,i+1}=\lambda$, $A_{ij}=0$ otherwise.
+* This "bounded generator" regime is the technically simplest case of semigroup theory. It fails for most continuous-state-space Markov processes (e.g. diffusions), where the generator is only densely defined and unbounded, and one must instead invoke the Hille–Yosida theorem for strongly continuous ($C_0$) semigroups — the subject of the general theory this lecture pair (40.1–40.2) specializes.

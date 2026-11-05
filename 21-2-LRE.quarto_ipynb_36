@@ -133,7 +133,7 @@
         "\n",
         "### Visualization of the Joint Coupling $(Z_i, M_i)$"
       ],
-      "id": "f533894f"
+      "id": "2491e78c"
     },
     {
       "cell_type": "code",
@@ -266,7 +266,7 @@
         "6. **Total variation and Wasserstein measure different things.**  \n",
         "   $d_{\\text{TV}}$ asks *whether* $X$ and $Y$ differ; $W_p$ of @def-Wasserstein-Distance asks *how far apart* they are, and so is sensitive to the geometry of the state space. Neither topology dominates the other on $\\text{Prob}_p(\\mathbb{R}^d)$: $\\delta_{1/n} \\to \\delta_0$ in $W_p$ but not in $d_{\\text{TV}}$, while $(1 - \\tfrac1n)\\delta_0 + \\tfrac1n \\delta_{n^2} \\to \\delta_0$ in $d_{\\text{TV}}$ but not in $W_p$. On uniformly bounded supports the comparison $W_p \\le D \\cdot d_{\\text{TV}}^{1/p}$ does hold. Total variation is the right tool here because Bernoulli and Poisson laws live on the common discrete space $\\mathbb{N}_0$, where \"differ\" is the natural unit of error."
       ],
-      "id": "705974c2"
+      "id": "7a39281b"
     }
   ],
   "metadata": {

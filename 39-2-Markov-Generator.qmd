@@ -110,8 +110,7 @@ $$
 &= e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n).
 \end{aligned}
 $$ {#eq-poisson-qt}
-
-Differentiating $(Q_t f)(k)$ with respect to $t$ using power series term-by-term differentiation (valid since $f$ is bounded):
+Notice that $(Q_t f)(k)$ is simply $(Q_tf)(k)=\mathbb E[f(k+N_t)]$. This representation makes the probabilistic interpretation particularly transparent: starting from state $k$, the process moves to state $k+N_t$. Differentiating $(Q_t f)(k)$ with respect to $t$ using power series term-by-term differentiation (valid since $f$ is bounded):
 $$
 \begin{aligned}
 \frac{\mathrm{d}}{\mathrm{d}t} (Q_t f)(k) &= -\lambda e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n) + e^{-\lambda t} \sum_{n=1}^\infty \lambda \frac{n (\lambda t)^{n-1}}{n!} f(k+n) \\
@@ -270,9 +269,18 @@ Taking expectations and using $\mathbb{E}[B_t]=0$, $\mathbb{E}[B_t^2]=t$:
 $$
 \frac{(Q_tf)(x) - f(x)}{t} = \tfrac12 f''(x) + \tfrac12\,\mathbb{E}\!\left[\big(f''(\xi)-f''(x)\big)\frac{B_t^2}{t}\right].
 $$
-Write $B_t = \sqrt t\, Z$ with $Z \sim N(0,1)$, and set $g_t(z) := f''(\xi(x,\sqrt t z)) - f''(x)$, so the remainder term is $\tfrac12\mathbb{E}[g_t(Z)Z^2]$. Since $f''$ is bounded, $|g_t(Z)Z^2| \le 2\|f''\|_\infty Z^2$ with $\mathbb{E}[Z^2] < \infty$; and since $\sqrt t Z \to 0$ a.s. as $t \downarrow 0$ while $\xi$ lies between $x$ and $x+\sqrt t Z$, continuity of $f''$ at $x$ gives $g_t(Z) \to 0$ a.s. By the Dominated Convergence Theorem, $\mathbb{E}[g_t(Z)Z^2] \to 0$ as $t \downarrow 0$. Hence
+We next show that the remainder $\to 0$ as $t\downarrow 0$. This is where dominated convergence does the heavy lifting. Write $B_t = \sqrt{t}\,Z$ with $Z\sim N(0,1)$. Then $B_t^2/t = Z^2$, and the remainder becomes
 $$
-Af(x) := \lim_{t\downarrow0}\frac{(Q_tf)(x)-f(x)}{t} = \tfrac12 f''(x).
+\tfrac{1}{2}\,\mathbb{E}\!\left[(f''(\xi)-f''(x))\,Z^2\right].
+$$
+Now check the two hypotheses for DCT:
+
+* Domination: since $f''$ is bounded, $|f''(\xi)-f''(x)| \le 2\|f''\|_\infty$, so the integrand is dominated by $2\|f''\|_\infty Z^2$, which has finite expectation $2\|f''\|_\infty \cdot \mathbb{E}[Z^2] = 2\|f''\|_\infty$.
+* Pointwise convergence: as $t\downarrow 0$, $B_t = \sqrt{t}\,Z \to 0$ almost surely, which forces $\xi \to x$ almost surely (since $\xi$ is squeezed between $x$ and $x+B_t$). By continuity of $f''$ at $x$, we get $f''(\xi)\to f''(x)$ a.s., so the integrand goes to $0$ pointwise.
+
+By DCT, the remainder expectation $\to 0$. Putting it together:
+$$
+Af(x) = \lim_{t\downarrow 0}\frac{(Q_tf)(x)-f(x)}{t} = \frac{1}{2}f''(x).
 $$
 
 **Step 2: extension to all $t \ge 0$.** The heat kernel @eq-heat-kernel is $C^\infty$ in $x$ with all $x$-derivatives bounded by integrable functions of $y$ uniformly for $x$ in compacts (Gaussian tails dominate any polynomial prefactor), so differentiation under the integral sign in @eq-bm-convolution is justified and $Q_tf \in C_b^2(\mathbb{R})$ for every $t>0$ and every $f\in\mathcal B_b(\mathbb R)$, in particular for $f \in C_b^2(\mathbb{R})$. Using the semigroup property $Q_{t+h}=Q_tQ_h=Q_hQ_t$ (@eq-semigroup-continuous),
@@ -298,12 +306,6 @@ $$
 $$
 which is the classical heat equation with initial condition $u(0,x) = f(x)$. The proposition is therefore saying that Brownian motion solves the heat equation: $(Q_tf)(x) = \mathbb{E}[f(x+B_t)]$ is the unique solution starting from $f$.
 
-3. The two sides of the equation $AQ_tf = Q_tAf$ say different things. The equality $\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = AQ_tf = Q_tAf$ actually encodes two separate results:
-
-* $\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = AQ_tf$ (the backward equation): differentiate $Q_{t+h}f = Q_h(Q_tf)$ in $h$ at $h=0$, applying the generator to $Q_tf$. This says: to find how the evolved function $Q_tf$ is changing in time, apply $A$ to it.
-* $\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = Q_t(Af)$ (the forward equation): differentiate $Q_{t+h}f = Q_t(Q_hf)$ in $h$ at $h=0$, pulling $Q_t$ outside the limit. This says: you can instead first apply the generator to $f$, then evolve the result with $Q_t$.
-
-Together they mean that $A$ and $Q_t$ commute on $C_b^2(\mathbb{R})$: $AQ_t = Q_tA$. This commutativity is the operator-theoretic reflection of the translation invariance of Brownian motion.
 :::
 
 
@@ -316,6 +318,19 @@ It cannot be defined on all of $\mathcal{B}_b(\mathbb{R})$ because discontinuous
 
 This domain issue motivates the theory of **Feller semigroups** and **Feller processes**, where the domain of $A$ is restricted to continuous functions vanishing at infinity, $\mathcal{D}(A) \subset C_0(\mathbb{R})$.
 :::
+
+:::{#exm-unbounded-generator}
+An operator $A: X \to X$ on a normed space $(X, \|\cdot\|)$ is bounded if there is a constant $C < \infty$ such that $\|Af\| \leq C\|f\|$ for all $f$ in the domain. Work with the sup-norm $\|\cdot\|_\infty$ and consider the sequence of functions
+$$
+f_n(x) = \sin(nx), \quad n = 1, 2, 3, \ldots
+$$
+Each $f_n \in C_b^2(\mathbb{R})$, and they all have the same sup-norm: $\|f_n\|_\infty = 1 \quad \text{for all } n$. But applying the generator:
+$$
+Af_n(x) = \tfrac{1}{2}f_n''(x) = \tfrac{1}{2}(-n^2)\sin(nx) = -\tfrac{n^2}{2}\sin(nx),
+$$
+so $\|Af_n\|_\infty = \frac{n^2}{2} \to \infty \text{ as } n\to\infty$. A bounded operator would need $\|Af_n\|_\infty \leq C\|f_n\|_\infty = C$ for some fixed $C$. No such $C$ exists here, so $A$ is unbounded. This is ultimately why the Brownian motion generator requires a restricted domain $C_b^2(\mathbb{R})$ and cannot be extended to all of $\mathcal{B}_b(\mathbb{R})$, motivating the Feller semigroup framework.
+:::
+
 
 ---
 

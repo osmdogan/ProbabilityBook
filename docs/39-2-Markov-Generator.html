@@ -715,6 +715,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-2-Bounded-Generators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">87</span>&nbsp; <span class="chapter-title">Lecture 40.2: Bounded Generators</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -865,8 +871,7 @@ q_{s,t}(m, n) &amp;= \mathbb{P}(N_t = n \mid N_s = m) \\
 (Q_t f)(k) &amp;= \sum_{n=0}^\infty q_t(k, k+n) f(k+n)\\
 &amp;= e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n).
 \end{aligned}
-\tag{85.4}\]</span></span></p>
-<p>Differentiating <span class="math inline">\((Q_t f)(k)\)</span> with respect to <span class="math inline">\(t\)</span> using power series term-by-term differentiation (valid since <span class="math inline">\(f\)</span> is bounded): <span class="math display">\[
+\tag{85.4}\]</span></span> Notice that <span class="math inline">\((Q_t f)(k)\)</span> is simply <span class="math inline">\((Q_tf)(k)=\mathbb E[f(k+N_t)]\)</span>. This representation makes the probabilistic interpretation particularly transparent: starting from state <span class="math inline">\(k\)</span>, the process moves to state <span class="math inline">\(k+N_t\)</span>. Differentiating <span class="math inline">\((Q_t f)(k)\)</span> with respect to <span class="math inline">\(t\)</span> using power series term-by-term differentiation (valid since <span class="math inline">\(f\)</span> is bounded): <span class="math display">\[
 \begin{aligned}
 \frac{\mathrm{d}}{\mathrm{d}t} (Q_t f)(k) &amp;= -\lambda e^{-\lambda t} \sum_{n=0}^\infty \frac{(\lambda t)^n}{n!} f(k+n) + e^{-\lambda t} \sum_{n=1}^\infty \lambda \frac{n (\lambda t)^{n-1}}{n!} f(k+n) \\
 &amp;= -\lambda (Q_t f)(k) + \lambda e^{-\lambda t} \sum_{m=0}^\infty \frac{(\lambda t)^m}{m!} f(k+m+1) \quad (\text{setting } m = n-1) \\
@@ -964,8 +969,15 @@ A f(x) = \frac{1}{2} \frac{\mathrm{d}^2 f}{\mathrm{d}x^2}(x) = \frac{1}{2} f''(x
 f(x+B_t) = f(x) + f'(x)B_t + \tfrac12 f''(x) B_t^2 + \tfrac12\big[f''(\xi) - f''(x)\big]B_t^2.
 \]</span> Taking expectations and using <span class="math inline">\(\mathbb{E}[B_t]=0\)</span>, <span class="math inline">\(\mathbb{E}[B_t^2]=t\)</span>: <span class="math display">\[
 \frac{(Q_tf)(x) - f(x)}{t} = \tfrac12 f''(x) + \tfrac12\,\mathbb{E}\!\left[\big(f''(\xi)-f''(x)\big)\frac{B_t^2}{t}\right].
-\]</span> Write <span class="math inline">\(B_t = \sqrt t\, Z\)</span> with <span class="math inline">\(Z \sim N(0,1)\)</span>, and set <span class="math inline">\(g_t(z) := f''(\xi(x,\sqrt t z)) - f''(x)\)</span>, so the remainder term is <span class="math inline">\(\tfrac12\mathbb{E}[g_t(Z)Z^2]\)</span>. Since <span class="math inline">\(f''\)</span> is bounded, <span class="math inline">\(|g_t(Z)Z^2| \le 2\|f''\|_\infty Z^2\)</span> with <span class="math inline">\(\mathbb{E}[Z^2] &lt; \infty\)</span>; and since <span class="math inline">\(\sqrt t Z \to 0\)</span> a.s. as <span class="math inline">\(t \downarrow 0\)</span> while <span class="math inline">\(\xi\)</span> lies between <span class="math inline">\(x\)</span> and <span class="math inline">\(x+\sqrt t Z\)</span>, continuity of <span class="math inline">\(f''\)</span> at <span class="math inline">\(x\)</span> gives <span class="math inline">\(g_t(Z) \to 0\)</span> a.s. By the Dominated Convergence Theorem, <span class="math inline">\(\mathbb{E}[g_t(Z)Z^2] \to 0\)</span> as <span class="math inline">\(t \downarrow 0\)</span>. Hence <span class="math display">\[
-Af(x) := \lim_{t\downarrow0}\frac{(Q_tf)(x)-f(x)}{t} = \tfrac12 f''(x).
+\]</span> We next show that the remainder <span class="math inline">\(\to 0\)</span> as <span class="math inline">\(t\downarrow 0\)</span>. This is where dominated convergence does the heavy lifting. Write <span class="math inline">\(B_t = \sqrt{t}\,Z\)</span> with <span class="math inline">\(Z\sim N(0,1)\)</span>. Then <span class="math inline">\(B_t^2/t = Z^2\)</span>, and the remainder becomes <span class="math display">\[
+\tfrac{1}{2}\,\mathbb{E}\!\left[(f''(\xi)-f''(x))\,Z^2\right].
+\]</span> Now check the two hypotheses for DCT:</p>
+<ul>
+<li>Domination: since <span class="math inline">\(f''\)</span> is bounded, <span class="math inline">\(|f''(\xi)-f''(x)| \le 2\|f''\|_\infty\)</span>, so the integrand is dominated by <span class="math inline">\(2\|f''\|_\infty Z^2\)</span>, which has finite expectation <span class="math inline">\(2\|f''\|_\infty \cdot \mathbb{E}[Z^2] = 2\|f''\|_\infty\)</span>.</li>
+<li>Pointwise convergence: as <span class="math inline">\(t\downarrow 0\)</span>, <span class="math inline">\(B_t = \sqrt{t}\,Z \to 0\)</span> almost surely, which forces <span class="math inline">\(\xi \to x\)</span> almost surely (since <span class="math inline">\(\xi\)</span> is squeezed between <span class="math inline">\(x\)</span> and <span class="math inline">\(x+B_t\)</span>). By continuity of <span class="math inline">\(f''\)</span> at <span class="math inline">\(x\)</span>, we get <span class="math inline">\(f''(\xi)\to f''(x)\)</span> a.s., so the integrand goes to <span class="math inline">\(0\)</span> pointwise.</li>
+</ul>
+<p>By DCT, the remainder expectation <span class="math inline">\(\to 0\)</span>. Putting it together: <span class="math display">\[
+Af(x) = \lim_{t\downarrow 0}\frac{(Q_tf)(x)-f(x)}{t} = \frac{1}{2}f''(x).
 \]</span></p>
 <p><strong>Step 2: extension to all <span class="math inline">\(t \ge 0\)</span>.</strong> The heat kernel <a href="#eq-heat-kernel" class="quarto-xref">Equation&nbsp;<span>85.7</span></a> is <span class="math inline">\(C^\infty\)</span> in <span class="math inline">\(x\)</span> with all <span class="math inline">\(x\)</span>-derivatives bounded by integrable functions of <span class="math inline">\(y\)</span> uniformly for <span class="math inline">\(x\)</span> in compacts (Gaussian tails dominate any polynomial prefactor), so differentiation under the integral sign in <a href="#eq-bm-convolution" class="quarto-xref">Equation&nbsp;<span>85.8</span></a> is justified and <span class="math inline">\(Q_tf \in C_b^2(\mathbb{R})\)</span> for every <span class="math inline">\(t&gt;0\)</span> and every <span class="math inline">\(f\in\mathcal B_b(\mathbb R)\)</span>, in particular for <span class="math inline">\(f \in C_b^2(\mathbb{R})\)</span>. Using the semigroup property <span class="math inline">\(Q_{t+h}=Q_tQ_h=Q_hQ_t\)</span> (<a href="#eq-semigroup-continuous" class="quarto-xref">Equation&nbsp;<span>85.1</span></a>), <span class="math display">\[
 \frac{\mathrm{d}}{\mathrm{d}t}(Q_tf)(x) = \lim_{h\downarrow0}\frac{(Q_h(Q_tf))(x) - (Q_tf)(x)}{h} = A(Q_tf)(x)
@@ -983,18 +995,19 @@ Af(x) := \lim_{t\downarrow0}\frac{(Q_tf)(x)-f(x)}{t} = \tfrac12 f''(x).
 <li><p>The evolution equation is the heat equation. Setting <span class="math inline">\(u(t,x) := (Q_tf)(x)\)</span>, the equation <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = A\,Q_tf\)</span> becomes <span class="math display">\[
 \frac{\partial u}{\partial t}(t,x) = \frac{1}{2}\frac{\partial^2 u}{\partial x^2}(t,x),
 \]</span> which is the classical heat equation with initial condition <span class="math inline">\(u(0,x) = f(x)\)</span>. The proposition is therefore saying that Brownian motion solves the heat equation: <span class="math inline">\((Q_tf)(x) = \mathbb{E}[f(x+B_t)]\)</span> is the unique solution starting from <span class="math inline">\(f\)</span>.</p></li>
-<li><p>The two sides of the equation <span class="math inline">\(AQ_tf = Q_tAf\)</span> say different things. The equality <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = AQ_tf = Q_tAf\)</span> actually encodes two separate results:</p></li>
 </ol>
-<ul>
-<li><span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = AQ_tf\)</span> (the backward equation): differentiate <span class="math inline">\(Q_{t+h}f = Q_h(Q_tf)\)</span> in <span class="math inline">\(h\)</span> at <span class="math inline">\(h=0\)</span>, applying the generator to <span class="math inline">\(Q_tf\)</span>. This says: to find how the evolved function <span class="math inline">\(Q_tf\)</span> is changing in time, apply <span class="math inline">\(A\)</span> to it.</li>
-<li><span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d}t}Q_tf = Q_t(Af)\)</span> (the forward equation): differentiate <span class="math inline">\(Q_{t+h}f = Q_t(Q_hf)\)</span> in <span class="math inline">\(h\)</span> at <span class="math inline">\(h=0\)</span>, pulling <span class="math inline">\(Q_t\)</span> outside the limit. This says: you can instead first apply the generator to <span class="math inline">\(f\)</span>, then evolve the result with <span class="math inline">\(Q_t\)</span>.</li>
-</ul>
-<p>Together they mean that <span class="math inline">\(A\)</span> and <span class="math inline">\(Q_t\)</span> commute on <span class="math inline">\(C_b^2(\mathbb{R})\)</span>: <span class="math inline">\(AQ_t = Q_tA\)</span>. This commutativity is the operator-theoretic reflection of the translation invariance of Brownian motion.</p>
 </div>
 <div id="rem-feller-domain-problem" class="proof remark">
 <p><span class="proof-title"><em>Remark 85.3</em> (Domain Restrictions and Feller Processes). </span>Unlike the Poisson generator <span class="math inline">\(A = \lambda(T - \mathrm{Id})\)</span>, which is bounded on all of <span class="math inline">\(\mathcal{B}_b(\mathbb{N}_0)\)</span>, the Laplacian operator <span class="math inline">\(A = \frac{1}{2} \frac{\mathrm{d}^2}{\mathrm{d}x^2}\)</span> is <strong>unbounded</strong>.</p>
 <p>It cannot be defined on all of <span class="math inline">\(\mathcal{B}_b(\mathbb{R})\)</span> because discontinuous or non-differentiable functions (such as <span class="math inline">\(f = \mathbf{1}_{[0,1]}\)</span>) cannot be differentiated twice in the classical sense. Sequences <span class="math inline">\(\psi_n \in C_c^2(\mathbb{R})\)</span> approximating <span class="math inline">\(\mathbf{1}_{[0,1]}\)</span> pointwise have unbounded second derivatives <span class="math inline">\(\|\psi_n''\|_\infty \to \infty\)</span>.</p>
 <p>This domain issue motivates the theory of <strong>Feller semigroups</strong> and <strong>Feller processes</strong>, where the domain of <span class="math inline">\(A\)</span> is restricted to continuous functions vanishing at infinity, <span class="math inline">\(\mathcal{D}(A) \subset C_0(\mathbb{R})\)</span>.</p>
+</div>
+<div id="exm-unbounded-generator" class="theorem example">
+<p><span class="theorem-title"><strong>Example 85.2</strong></span> An operator <span class="math inline">\(A: X \to X\)</span> on a normed space <span class="math inline">\((X, \|\cdot\|)\)</span> is bounded if there is a constant <span class="math inline">\(C &lt; \infty\)</span> such that <span class="math inline">\(\|Af\| \leq C\|f\|\)</span> for all <span class="math inline">\(f\)</span> in the domain. Work with the sup-norm <span class="math inline">\(\|\cdot\|_\infty\)</span> and consider the sequence of functions <span class="math display">\[
+f_n(x) = \sin(nx), \quad n = 1, 2, 3, \ldots
+\]</span> Each <span class="math inline">\(f_n \in C_b^2(\mathbb{R})\)</span>, and they all have the same sup-norm: <span class="math inline">\(\|f_n\|_\infty = 1 \quad \text{for all } n\)</span>. But applying the generator: <span class="math display">\[
+Af_n(x) = \tfrac{1}{2}f_n''(x) = \tfrac{1}{2}(-n^2)\sin(nx) = -\tfrac{n^2}{2}\sin(nx),
+\]</span> so <span class="math inline">\(\|Af_n\|_\infty = \frac{n^2}{2} \to \infty \text{ as } n\to\infty\)</span>. A bounded operator would need <span class="math inline">\(\|Af_n\|_\infty \leq C\|f_n\|_\infty = C\)</span> for some fixed <span class="math inline">\(C\)</span>. No such <span class="math inline">\(C\)</span> exists here, so <span class="math inline">\(A\)</span> is unbounded. This is ultimately why the Brownian motion generator requires a restricted domain <span class="math inline">\(C_b^2(\mathbb{R})\)</span> and cannot be extended to all of <span class="math inline">\(\mathcal{B}_b(\mathbb{R})\)</span>, motivating the Feller semigroup framework.</p>
 </div>
 <hr>
 </section>
