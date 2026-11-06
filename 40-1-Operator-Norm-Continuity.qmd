@@ -136,6 +136,8 @@ Combining both inequalities establishes $\Vert{}A\Vert{}_{\mathrm{op}} = \Vert{}
 ---
 
 ## Uniformly Continuous Markov Semigroups
+The following result shows that operator norm continuity at a single point, combined with the semigroup property, forces the entire semigroup to have the simplest possible structure: The entire semigroup collapses to $Q_t = e^{tA}$ for a single bounded operator $A$. This means the infinitely many operators $\{Q_t\}_{t \geq 0}$ are completely encoded in just one object $A$, and the time evolution is as explicit as it could possibly be.
+
 
 ::: {#thm-uniformly-continuous-semigroup}
 ## Uniformly Continuous Markov Semigroups
@@ -176,7 +178,7 @@ Since $s \mapsto Q_s$ is continuous on $[0,\delta]$ (Step 1), the Riemann integr
 $$
 \left\Vert{} \frac{S_\delta}{\delta} - I \right\Vert{}_{\mathrm{op}} = \left\Vert{} \frac{1}{\delta}\int_0^\delta (Q_s - I) \, \mathrm{d}s \right\Vert{}_{\mathrm{op}} \le \frac{1}{\delta}\int_0^\delta \Vert{}Q_s - I\Vert{}_{\mathrm{op}} \, \mathrm{d}s \le \frac{1}{2} < 1.
 $$
-By the convergent Neumann series in the Banach algebra $\mathcal{L}(B)$ (as in @cor-operator-exp), $S_\delta/\delta$, and hence $S_\delta$, is invertible in $\mathcal{L}(B)$. Define the bounded operator
+The last inequality uses the uniform bound $\|Q_s - I\|_\text{op} \leq 1/2$ on $[0, \delta]$ from Step 1. Since we’re in a Banach algebra and $\|S_\delta/\delta - I\|_\text{op} < 1$, the **Neumann series** $\sum_{n=0}^\infty (I - S_\delta/\delta)^n$ converges in operator norm and gives $(S_\delta/\delta)^{-1}$. Hence $S_\delta$ is invertible with a bounded inverse $S_\delta^{-1}$. Define the bounded operator
 $$
 A := (Q_\delta - I) S_\delta^{-1}.
 $$
@@ -184,10 +186,30 @@ For $h > 0$, since the bounded linear operator $Q_h$ commutes with the Riemann i
 $$
 \frac{Q_h - I}{h} S_\delta = \frac{1}{h}\left( \int_0^\delta Q_{h+s}\,\mathrm{d}s - \int_0^\delta Q_s\,\mathrm{d}s \right) = \frac{1}{h}\left( \int_\delta^{\delta+h} Q_u\,\mathrm{d}u - \int_0^h Q_u\,\mathrm{d}u \right).
 $$
-By continuity of $u \mapsto Q_u$ at $u = \delta$ and $u = 0$ (Step 1), each averaged integral converges in operator norm as $h \to 0^+$: $h^{-1}\int_\delta^{\delta+h}Q_u\,\mathrm{d}u \to Q_\delta$ and $h^{-1}\int_0^h Q_u\,\mathrm{d}u \to Q_0 = I$. Hence
+By continuity of $u \mapsto Q_u$ at $u = \delta$ and $u = 0$ (Step 1), each averaged integral converges in operator norm as $h \to 0^+$: $h^{-1}\int_\delta^{\delta+h}Q_u\,\mathrm{d}u \to Q_\delta$ and $h^{-1}\int_0^h Q_u\,\mathrm{d}u \to Q_0 = I$ (see @rem-banach-ftc). Hence
 $$
 \frac{Q_h-I}{h}S_\delta \to Q_\delta - I \quad \text{in operator norm as } h \to 0^+.
 $$
+
+:::{#rem-banach-ftc}
+Banach-space analogue of the fundamental theorem of calculus: if $u \mapsto Q_u$ is continuous in operator norm at a point $u_0$, then
+$$
+\frac{1}{h}\int_{u_0}^{u_0+h} Q_u\, du \xrightarrow{h \to 0^+} Q_{u_0}.
+$$
+Proof of this fact. Write:
+$$
+\begin{aligned}
+\left\|\frac{1}{h}\int_{u_0}^{u_0+h} Q_u\, du - Q_{u_0}\right\|_\text{op} &= \left\|\frac{1}{h}\int_{u_0}^{u_0+h}(Q_u - Q_{u_0})\, du\right\|_\text{op} \\
+&\leq \frac{1}{h}\int_{u_0}^{u_0+h}\|Q_u - Q_{u_0}\|_\text{op}\, du.
+\end{aligned}
+$$
+The first equality uses the fact that $\frac{1}{h}\int_{u_0}^{u_0+h} Q_{u_0}\, du = Q_{u_0}$ exactly. The inequality is the triangle inequality for Banach-space-valued integrals. Now fix any $\varepsilon > 0$. Since $u \mapsto Q_u$ is operator-norm continuous at $u_0$, there exists $\eta > 0$ such that $|u - u_0| < \eta \implies \|Q_u - Q_{u_0}\|_\text{op} < \varepsilon$. For any $0 < h < \eta$, every $u \in [u_0, u_0 + h]$ satisfies $|u - u_0| \leq h < \eta$, so:
+$$
+\frac{1}{h}\int_{u_0}^{u_0+h}\|Q_u - Q_{u_0}\|_\text{op}\, du < \frac{1}{h}\int_{u_0}^{u_0+h} \varepsilon\, du = \varepsilon.
+$$
+Since $\varepsilon > 0$ was arbitrary, the limit holds.
+:::
+
 Right-multiplication by the fixed bounded operator $S_\delta^{-1}$ is continuous on $\mathcal{L}(B)$ (@lem-submultiplicative), so
 $$
 \frac{Q_h-I}{h} = \left[\frac{Q_h-I}{h}S_\delta\right]S_\delta^{-1} \longrightarrow (Q_\delta-I)S_\delta^{-1} = A
@@ -197,7 +219,10 @@ in operator norm as $h \to 0^+$. This shows the limit defining $A$ exists in ope
 **Step 3 (Differentiability for all $t \ge 0$ and the Kolmogorov equations).**
 Fix $t_0 \ge 0$. For $h > 0$, @eq-chapman-kolmogorov gives
 $$
-\frac{Q_{t_0+h}-Q_{t_0}}{h} = Q_{t_0}\cdot\frac{Q_h-I}{h} \longrightarrow Q_{t_0}A, \qquad \frac{Q_{t_0+h}-Q_{t_0}}{h} = \frac{Q_h-I}{h}\cdot Q_{t_0} \longrightarrow A Q_{t_0}
+\begin{aligned}
+& \frac{Q_{t_0+h}-Q_{t_0}}{h} = Q_{t_0}\cdot\frac{Q_h-I}{h} \longrightarrow Q_{t_0}A, \\
+& \frac{Q_{t_0+h}-Q_{t_0}}{h} = \frac{Q_h-I}{h}\cdot Q_{t_0} \longrightarrow A Q_{t_0}
+\end{aligned}
 $$
 as $h \to 0^+$, using Step 2 and continuity of left- and right-multiplication by the fixed bounded operator $Q_{t_0}$ (@lem-submultiplicative). Hence the right-derivative of $Q_t$ at $t_0$ equals $Q_{t_0}A = AQ_{t_0}$. For $t_0 > 0$ and $0 < h < t_0$,
 $$
@@ -212,9 +237,9 @@ proving (3).
 **Step 4 ($Q_t = e^{tA}$).**
 By @cor-operator-exp, $e^{-tA}$ is a well-defined bounded operator for every $t$, and $A$ commutes with $e^{-tA}$ since $A$ commutes with every power of itself. Define $F(t) := Q_t e^{-tA} \in \mathcal{L}(B)$. Differentiating the power series for $e^{-tA}$ term-by-term (justified by the same absolute-convergence argument as in @cor-operator-exp) gives $\frac{\mathrm{d}}{\mathrm{d}t}e^{-tA} = -Ae^{-tA}$, so by the Leibniz rule for operator-norm-differentiable $\mathcal{L}(B)$-valued functions (valid since operator multiplication is bounded bilinear) and Step 3,
 $$
-F'(t) = (Q_tA)e^{-tA} + Q_t(-Ae^{-tA}) = Q_tAe^{-tA} - Q_tAe^{-tA} = 0 \quad \text{for all } t \ge 0.
+F'(t) = (Q_tA)e^{-tA} + Q_t(-Ae^{-tA}) = Q_tAe^{-tA} - Q_tAe^{-tA} = 0, 
 $$
-Since $F$ is continuously differentiable with $F' \equiv 0$ on $[0,\infty)$, the fundamental theorem of calculus for Banach-space-valued functions gives $F(t) - F(0) = \int_0^t F'(s)\,\mathrm{d}s = 0$, i.e., $F(t) = F(0) = Q_0 e^0 = I$ for all $t \ge 0$. Hence $Q_t = e^{tA}$ for all $t \ge 0$, proving (2).
+for all $t \ge 0$. Since $F$ is continuously differentiable with $F' \equiv 0$ on $[0,\infty)$, the fundamental theorem of calculus for Banach-space-valued functions gives $F(t) - F(0) = \int_0^t F'(s)\,\mathrm{d}s = 0$, i.e., $F(t) = F(0) = Q_0 e^0 = I$ for all $t \ge 0$. Hence $Q_t = e^{tA}$ for all $t \ge 0$, proving (2).
 :::
 
 ---
