@@ -858,6 +858,22 @@ q_t(i, j) = \mathbb{P}(X_t = j \mid X_0 = i) = e^{-\lambda t} \frac{(\lambda t)^
 A_{ij} = \left. \frac{d}{dt} q_t(i,j) \right|_{t=0^+} = \begin{cases} -\lambda &amp; \text{if } j = i, \\ \lambda &amp; \text{if } j = i+1, \\ 0 &amp; \text{otherwise.} \end{cases}
 \]</span></p>
 </div>
+<div id="rem-poisson-generator" class="proof remark">
+<p><span class="proof-title"><em>Remark 87.1</em>. </span>In <a href="39-2-Markov-Generator.html#thm-poisson-exponential-representation" class="quarto-xref">Theorem&nbsp;<span>85.1</span></a>, we show that <span class="math inline">\(A=\lambda (T - I)\)</span>, where <span class="math inline">\(T\)</span> is the right-shift operator defined by <span class="math inline">\((Tf)(i) = f(i+1)\)</span> for <span class="math inline">\(i \in \mathbb{N}_0\)</span>. Any linear operator on <span class="math inline">\(\mathcal{B}_b(\mathbb{N}_0)\)</span> can be written as an infinite matrix acting on functions via <span class="math display">\[
+(Af)(i) = \sum_{j \in \mathbb{N}_0} A_{ij}\, f(j),
+\]</span> exactly analogous to how a matrix acts on a vector: <span class="math inline">\((Av)_i = \sum_j A_{ij} v_j\)</span>. The entry <span class="math inline">\(A_{ij}\)</span> is the coefficient of <span class="math inline">\(f(j)\)</span> in the expression for <span class="math inline">\((Af)(i)\)</span>. Since <span class="math inline">\((Af)(i) = \lambda(f(i+1) - f(i))\)</span>, expanding gives: <span class="math display">\[
+(Af)(i) = \lambda \cdot f(i+1) + (-\lambda) \cdot f(i) + 0 \cdot f(j) \text{ for all other } j,
+\]</span> so reading off the coefficient of each <span class="math inline">\(f(j)\)</span> immediately gives: <span class="math display">\[
+A_{ij} = \lambda \cdot \mathbf{1}_{j=i+1} - \lambda \cdot \mathbf{1}_{j=i},
+\]</span> which is exactly the matrix in <a href="#exm-poisson" class="quarto-xref">Example&nbsp;<span>87.1</span></a>. You can also verify the same entries come from differentiating <span class="math inline">\(q_t(i,j) = e^{-\lambda t} \frac{(\lambda t)^{j-i}}{(j-i)!}\mathbf{1}_{j \ge i}\)</span> at <span class="math inline">\(t = 0^+\)</span> directly:</p>
+<ul>
+<li><span class="math inline">\(j = i\)</span>: <span class="math inline">\(q_t(i,i) = e^{-\lambda t}\)</span>, so <span class="math inline">\(\frac{d}{dt}\big|_{t=0^+} = -\lambda\)</span>.</li>
+<li><span class="math inline">\(j = i+1\)</span>: <span class="math inline">\(q_t(i,i+1) = \lambda t e^{-\lambda t}\)</span>, so <span class="math inline">\(\frac{d}{dt}\big|_{t=0^+} = \lambda\)</span>.</li>
+<li><span class="math inline">\(j \ge i+2\)</span>: <span class="math inline">\(q_t(i,j) = O(t^{j-i})\)</span> with <span class="math inline">\(j-i \ge 2\)</span>, so the derivative at <span class="math inline">\(0^+\)</span> is <span class="math inline">\(0\)</span>.</li>
+<li><span class="math inline">\(j &lt; i\)</span>: <span class="math inline">\(q_t(i,j) = 0\)</span> identically, so again <span class="math inline">\(0\)</span>.</li>
+</ul>
+<p>The two routes agree because the generator theorem guarantees that the abstract limit <span class="math inline">\(\lim_{h\downarrow 0}(Q_h - I)/h\)</span> converges in operator norm to <span class="math inline">\(A\)</span>; in particular it converges entry-by-entry, and <span class="math inline">\(\lim_{h\downarrow 0}\frac{q_h(i,j)-\delta_{ij}}{h} = \frac{d}{dt}q_t(i,j)\big|_{t=0^+}\)</span> is just the pointwise statement of that limit.</p>
+</div>
 <hr>
 </section>
 <section id="proof-of-the-main-theorem" class="level2" data-number="87.4">

@@ -115,6 +115,7 @@ book:
       chapters:
         - 40-1-Operator-Norm-Continuity.qmd
         - 40-2-Bounded-Generators.qmd
+        - 41-1-Generator-Matrix.qmd
         
 
 

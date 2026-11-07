@@ -83,6 +83,29 @@ A_{ij} = \left. \frac{d}{dt} q_t(i,j) \right|_{t=0^+} = \begin{cases} -\lambda &
 $$
 :::
 
+:::{#rem-poisson-generator}
+In @thm-poisson-exponential-representation, we show that $A=\lambda (T - I)$, where $T$ is the right-shift operator defined by $(Tf)(i) = f(i+1)$ for $i \in \mathbb{N}_0$. Any linear operator on $\mathcal{B}_b(\mathbb{N}_0)$ can be written as an infinite matrix acting on functions via
+$$
+(Af)(i) = \sum_{j \in \mathbb{N}_0} A_{ij}\, f(j),
+$$
+exactly analogous to how a matrix acts on a vector: $(Av)_i = \sum_j A_{ij} v_j$. The entry $A_{ij}$ is the coefficient of $f(j)$ in the expression for $(Af)(i)$. Since $(Af)(i) = \lambda(f(i+1) - f(i))$, expanding gives:
+$$
+(Af)(i) = \lambda \cdot f(i+1) + (-\lambda) \cdot f(i) + 0 \cdot f(j) \text{ for all other } j,
+$$
+so reading off the coefficient of each $f(j)$ immediately gives:
+$$
+A_{ij} = \lambda \cdot \mathbf{1}_{j=i+1} - \lambda \cdot \mathbf{1}_{j=i},
+$$
+which is exactly the matrix in @exm-poisson. You can also verify the same entries come from differentiating $q_t(i,j) = e^{-\lambda t} \frac{(\lambda t)^{j-i}}{(j-i)!}\mathbf{1}_{j \ge i}$ at $t = 0^+$ directly:
+
+* $j = i$: $q_t(i,i) = e^{-\lambda t}$, so $\frac{d}{dt}\big|_{t=0^+} = -\lambda$.
+* $j = i+1$: $q_t(i,i+1) = \lambda t e^{-\lambda t}$, so $\frac{d}{dt}\big|_{t=0^+} = \lambda$.
+* $j \ge i+2$: $q_t(i,j) = O(t^{j-i})$ with $j-i \ge 2$, so the derivative at $0^+$ is $0$.
+* $j < i$: $q_t(i,j) = 0$ identically, so again $0$.
+
+The two routes agree because the generator theorem guarantees that the abstract limit $\lim_{h\downarrow 0}(Q_h - I)/h$ converges in operator norm to $A$; in particular it converges entry-by-entry, and $\lim_{h\downarrow 0}\frac{q_h(i,j)-\delta_{ij}}{h} = \frac{d}{dt}q_t(i,j)\big|_{t=0^+}$ is just the pointwise statement of that limit.
+:::
+
 ---
 
 ## Proof of the Main Theorem

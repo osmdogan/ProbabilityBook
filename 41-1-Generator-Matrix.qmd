@@ -1,0 +1,385 @@
+
+# Lecture 41.1: Generator Matrix
+
+## Introduction and Background
+
+Recall from previous lectures that if $(Q_t)_{t \ge 0}$ is a Markov transition semigroup on the Banach space $B(S, \mathcal{B})$ of bounded measurable functions equipped with the supremum norm (so that $Q_0 = I$ and $Q_{t+s} = Q_t Q_s$ for all $s, t \ge 0$), and $(Q_t)_{t \ge 0}$ is continuous in operator norm at $t = 0$, i.e. $\|Q_t - I\|_{\mathrm{op}} \to 0$ as $t \downarrow 0$, then there exists a bounded linear operator $A \in \mathcal{L}(B(S, \mathcal{B}))$ called the **generator** such that 
+$$
+Q_t = e^{tA} = \sum_{n=0}^{\infty} \frac{t^n}{n!} A^n, \quad t \ge 0,
+$$ {#eq-semigroup-exp}
+where the series converges in operator norm, and $A = \lim_{t \downarrow 0} \frac{Q_t - I}{t}$ in operator norm.
+
+Markov chains on discrete state spaces are a classical setting in which operator-norm continuity can be characterized concretely in terms of the transition probabilities. As we shall see, when the state space is infinite this is a genuinely restrictive, *uniform* condition (@rem-finite-vs-infinite).
+
+Let $S$ be a countable set endowed with the discrete $\sigma$-algebra $\mathcal{B} = 2^S$. Since every function on $S$ is $2^S$-measurable, the Banach space $B(S) \coloneqq B(S, 2^S)$ is exactly $\ell_\infty(S)$, the space of all bounded real-valued functions $f \colon S \to \mathbb{R}$, equipped with the supremum norm
+$$
+\|f\|_{\infty} = \sup_{i \in S} |f(i)|.
+$$
+
+For each $t \ge 0$, the operator action $Q_t f$ on $f \in B(S)$ is defined pointwise by
+$$
+Q_t f(i) = \sum_{j \in S} q_t(i, j) f(j), \quad i \in S,
+$$ {#eq-action-kernel}
+where $(q_t)_{t \ge 0}$ are the transition probability mass functions satisfying:
+
+1. Non-negativity: $q_t(i, j) \ge 0$ for all $i, j \in S$ and $t \ge 0$.
+2. Unit row sums: $\sum_{j \in S} q_t(i, j) = 1$ for all $i \in S$ and $t \ge 0$.
+3. Initial condition: $q_0(i, j) = \delta_{ij}$ for all $i, j \in S$.
+4. Chapman–Kolmogorov equations: $q_{t+s}(i, k) = \sum_{j \in S} q_t(i, j)\, q_s(j, k)$ for all $i, k \in S$ and $s, t \ge 0$.
+
+By 1 and 2, the series in @eq-action-kernel converges absolutely, since $\sum_{j} q_t(i, j) |f(j)| \le \|f\|_\infty$; in particular, the sum over the countable set $S$ does not depend on the order of summation. Conditions 3 and 4 are exactly the statements $Q_0 = I$ and $Q_{t+s} = Q_t Q_s$ evaluated on indicator functions $\mathbf{1}_{\{k\}}$.
+
+## Matrix Operators and Their Norms
+
+Throughout, a *matrix* means a family $\Theta = (\Theta(i, j))_{i, j \in S}$ of real numbers. Its **row-sum norm** is
+$$
+\|\Theta\|_{\mathrm{row}} \coloneqq \sup_{i \in S} \sum_{j \in S} |\Theta(i, j)| \in [0, \infty].
+$$
+(We use the subscript "row" to avoid confusion with the supremum norm $\|f\|_\infty$ of a function.)
+
+::: {#def-matrix-representation}
+## Matrix Representation
+A bounded linear operator $T \colon B(S) \to B(S)$ is **represented by the matrix** $\Theta$ if $\|\Theta\|_{\mathrm{row}} < \infty$ and
+$$
+T f(i) = \sum_{j \in S} \Theta(i, j) f(j) \quad \text{for all } f \in B(S),\ i \in S.
+$$
+Taking $f = \mathbf{1}_{\{j\}}$ shows that necessarily $\Theta(i, j) = T(\mathbf{1}_{\{j\}})(i)$; hence a representing matrix, if it exists, is unique.
+:::
+
+::: {#lem-row-sum-norm}
+## Operator Norm of a Matrix Operator
+Let $\Theta$ be a matrix with $\|\Theta\|_{\mathrm{row}} < \infty$. Then for every $f \in B(S)$ and $i \in S$ the series $\sum_{j \in S} \Theta(i, j) f(j)$ converges absolutely, the formula
+$$
+T_\Theta f(i) \coloneqq \sum_{j \in S} \Theta(i, j) f(j)
+$$
+defines a bounded linear operator $T_\Theta$ on $B(S)$, and
+$$
+\|T_\Theta\|_{\mathrm{op}} = \|\Theta\|_{\mathrm{row}}.
+$$
+Moreover, $T_{\Theta} - T_{\Theta'} = T_{\Theta - \Theta'}$ whenever $\|\Theta\|_{\mathrm{row}}, \|\Theta'\|_{\mathrm{row}} < \infty$.
+:::
+
+::: {.proof}
+## Proof of @lem-row-sum-norm
+For $f \in B(S)$ and $i \in S$,
+$$
+\sum_{j \in S} |\Theta(i, j)|\, |f(j)| \le \|f\|_\infty \sum_{j \in S} |\Theta(i, j)| \le \|\Theta\|_{\mathrm{row}} \|f\|_\infty < \infty,
+$$
+so the series converges absolutely and $\|T_\Theta f\|_\infty \le \|\Theta\|_{\mathrm{row}} \|f\|_\infty$. Linearity of $T_\Theta$, and the identity $T_\Theta - T_{\Theta'} = T_{\Theta - \Theta'}$, follow from linearity of absolutely convergent series. Hence $T_\Theta$ is bounded with $\|T_\Theta\|_{\mathrm{op}} \le \|\Theta\|_{\mathrm{row}}$.
+
+For the reverse inequality, fix $i_0 \in S$ and define $f(j) \coloneqq \operatorname{sgn} \Theta(i_0, j)$ (with $\operatorname{sgn} 0 = 0$). Then $\|f\|_\infty \le 1$ and
+$$
+\sum_{j \in S} |\Theta(i_0, j)| = T_\Theta f(i_0) \le \|T_\Theta f\|_\infty \le \|T_\Theta\|_{\mathrm{op}}.
+$$
+Taking the supremum over $i_0 \in S$ gives $\|\Theta\|_{\mathrm{row}} \le \|T_\Theta\|_{\mathrm{op}}$.
+:::
+
+By @eq-action-kernel, each $Q_t$ is represented by the matrix $q_t$, and by @lem-row-sum-norm,
+$$
+\|Q_t\|_{\mathrm{op}} = \|q_t\|_{\mathrm{row}} = \sup_{i \in S} \sum_{j \in S} q_t(i, j) = 1.
+$$
+
+## Operator Norm Continuity Condition
+
+The identity $I$ is represented by the matrix $(\delta_{ij})$, so by @lem-row-sum-norm the operator $Q_t - I$ is represented by $q_t - \delta$ and its operator norm can be expressed directly in terms of the transition probabilities. Using $\sum_{j \ne i} q_t(i, j) = 1 - q_t(i, i)$,
+
+$$
+\begin{aligned}
+\|Q_t - I\|_{\mathrm{op}} &= \|q_t - \delta\|_{\mathrm{row}} = \sup_{i \in S} \sum_{j \in S} |q_t(i, j) - \delta_{ij}| \\
+&= \sup_{i \in S} \left( |q_t(i, i) - 1| + \sum_{j \neq i} q_t(i, j) \right) \\
+&= \sup_{i \in S} \left( (1 - q_t(i, i)) + (1 - q_t(i, i)) \right) \\
+&= 2 \sup_{i \in S} \bigl(1 - q_t(i, i)\bigr).
+\end{aligned}
+$$ {#eq-norm-continuity-equivalence}
+
+Thus, $\|Q_t - I\|_{\mathrm{op}} \to 0$ as $t \downarrow 0$ if and only if
+$$
+\lim_{t \downarrow 0} \sup_{i \in S} \bigl(1 - q_t(i, i)\bigr) = 0, \quad \text{i.e.,} \quad \lim_{t \downarrow 0} \inf_{i \in S} q_t(i, i) = 1.
+$$ {#eq-uniform-condition}
+
+Hence, if $(q_t)_{t \ge 0}$ satisfy conditions 1–4 on a countable state space $S$ and $\lim_{t \downarrow 0} \inf_{i \in S} q_t(i, i) = 1$, then the semigroup $(Q_t)_{t \ge 0}$ has a bounded generator $A$, and conversely.
+
+::: {#rem-finite-vs-infinite}
+## Finite versus Infinite State Spaces
+If $S$ is finite, the infimum in @eq-uniform-condition is a minimum over finitely many states, so operator-norm continuity is equivalent to the pointwise condition $q_t(i, i) \to 1$ for every $i \in S$.
+
+If $S$ is infinite, @eq-uniform-condition is strictly stronger than pointwise continuity. For example, let $S = \{0, 1, 2, \dots\}$ and consider the chain that waits at state $i$ for an exponential time with rate $i$ and then jumps to the absorbing state $0$:
+$$
+q_t(i, i) = e^{-it}, \qquad q_t(i, 0) = 1 - e^{-it} \ (i \ge 1), \qquad q_t(0, 0) = 1,
+$$
+and all other entries are $0$. One checks directly that conditions 1–4 hold; e.g. $q_{t+s}(i, 0) = e^{-it}(1 - e^{-is}) + (1 - e^{-it}) \cdot 1 = 1 - e^{-i(t+s)}$. Here $q_t(i, i) \to 1$ as $t \downarrow 0$ for each fixed $i$, but $\inf_{i} q_t(i, i) = 0$ for every $t > 0$, so $\|Q_t - I\|_{\mathrm{op}} = 2$ for all $t > 0$. Thus this semigroup does **not** have a bounded generator. As we shall see in @cor-q-matrix-properties, operator-norm continuity forces the jump rates $-a(i, i)$ to be uniformly bounded.
+:::
+
+## The Generator Matrix Problem
+
+We now ask: **What can we say about the operator $A$?**
+
+Since $\frac{Q_t - I}{t} \to A$ in operator norm, we have $A f(i) = \lim_{t \downarrow 0} \frac{Q_t f(i) - f(i)}{t}$ for every $f \in B(S)$ and $i \in S$. Using $q_0(i, j) = \delta_{ij}$ and writing $\left. \frac{d}{dt} \right|_{t=0^+}$ for the right derivative at $t = 0$, this reads
+$$
+\begin{aligned}
+A f(i) &= \left. \frac{d}{dt} \right|_{t=0^+} Q_t f(i) \\
+&= \left. \frac{d}{dt} \right|_{t=0^+} \sum_{j \in S} q_t(i, j) f(j) \\
+&\overset{?}{=} \sum_{j \in S} \left( \left. \frac{d}{dt} \right|_{t=0^+} q_t(i, j) \right) f(j).
+\end{aligned}
+$$
+
+This formal calculation suggests that $A$ is represented by a matrix $(a(i, j))_{i, j \in S}$ with entries:
+$$
+a(i, j) = \left. \frac{d}{dt} \right|_{t=0^+} q_t(i, j).
+$$ {#eq-generator-entries-def}
+
+When the state space $S$ is infinite, interchanging the derivative with the infinite summation $\sum_{j \in S}$ (the step marked "?") requires rigorous proof; it is also not a priori clear that the derivatives on the right-hand side exist.
+
+---
+
+## Matrix Representation of Bounded Linear Operators on $B(S)$
+
+### Do all bounded operators have matrix representations?
+
+One might naively expect that every bounded linear operator $T \colon B(S) \to B(S)$ is represented by a matrix. If $S$ is finite, every function $f \in B(S)$ can be written uniquely as a finite sum:
+$$
+f = \sum_{j \in S} f(j) \mathbf{1}_{\{j\}}.
+$$
+
+More generally, call $f$ **finitely supported** if $f(j) = 0$ for all but finitely many $j \in S$, and denote the space of such functions by $c_{00}(S)$. (This is *not* the notion of a simple function from Lecture 7.1, which requires only that $f$ take finitely many values.) For $f \in c_{00}(S)$, linearity of $T$ yields:
+$$
+T f(i) = \sum_{j \in S} f(j) T(\mathbf{1}_{\{j\}})(i).
+$$
+
+Thus, on finitely supported functions, $T$ is given by the matrix
+$$
+\Theta_T(i, j) \coloneqq T(\mathbf{1}_{\{j\}})(i).
+$$
+This matrix always has finite row-sum norm: fix $i \in S$ and a finite set $F \subseteq S$, and let $f = \sum_{j \in F} \operatorname{sgn}(\Theta_T(i, j)) \mathbf{1}_{\{j\}}$. Then $\|f\|_\infty \le 1$ and $\sum_{j \in F} |\Theta_T(i, j)| = T f(i) \le \|T\|_{\mathrm{op}}$; taking the supremum over $F$ and then over $i$ gives $\|\Theta_T\|_{\mathrm{row}} \le \|T\|_{\mathrm{op}}$. Hence, by @lem-row-sum-norm, $T_{\Theta_T}$ is a bounded operator that agrees with $T$ on $c_{00}(S)$. The real question is therefore whether $T = T_{\Theta_T}$ on all of $B(S)$.
+
+When $S$ is infinite, this cannot be settled by a density argument under the supremum norm.
+
+::: {#rem-counterexample}
+## Basic Obstacle: Finitely Supported Functions Are Not Dense
+Let $S$ be infinite. For any $g \in c_{00}(S)$, choose $j \in S$ outside the (finite) support of $g$; then
+$$
+\|\mathbf{1} - g\|_{\infty} \ge |1 - g(j)| = 1.
+$$
+Thus $c_{00}(S)$ is **not dense** in $B(S)$ under the supremum norm; its closure is the space $c_0(S)$ of functions $f$ such that $\{j : |f(j)| > \varepsilon\}$ is finite for every $\varepsilon > 0$. For instance, if $F_1 \subseteq F_2 \subseteq \cdots$ are finite sets with $\bigcup_k F_k = S$, then $\mathbf{1}_{F_k} \to \mathbf{1}$ pointwise, but $\|\mathbf{1} - \mathbf{1}_{F_k}\|_\infty = 1$ for all $k$. (By contrast, simple functions in the sense of Lecture 7.1 *are* dense in $B(S)$.)
+
+Consequently, the fact that $T$ and $T_{\Theta_T}$ agree on $c_{00}(S)$ does not imply that they agree on $B(S)$.
+:::
+
+::: {#exm-banach-limit}
+## A Bounded Operator without a Matrix Representation
+Let $S = \mathbb{N}$ and let $L \colon \ell_\infty(\mathbb{N}) \to \mathbb{R}$ be a Banach limit, i.e. a positive linear functional with $L(\mathbf{1}) = 1$ and $L(f) = \lim_{j \to \infty} f(j)$ whenever this limit exists (its existence follows from the Hahn–Banach theorem). Define
+$$
+T f(i) \coloneqq L(f), \quad i \in \mathbb{N}.
+$$
+Then $T$ is linear, positive, $T \mathbf{1} = \mathbf{1}$, and $\|T\|_{\mathrm{op}} = 1$. However, $T(\mathbf{1}_{\{j\}}) = 0$ for every $j$, since $\mathbf{1}_{\{j\}}(k) \to 0$ as $k \to \infty$. Hence $\Theta_T \equiv 0$ while $T \ne 0$, so $T$ is not represented by any matrix (by @def-matrix-representation, the only candidate is $\Theta_T$).
+
+If $S$ is finite, every linear operator on $B(S)$ is represented by a matrix, so such examples exist only for infinite $S$.
+:::
+
+::: {#rem-bp-continuity}
+## Characterization of Matrix Operators
+A bounded linear operator $T$ on $B(S)$ is represented by a matrix if and only if it is *bounded-pointwise sequentially continuous*: whenever $f_n \to f$ pointwise with $\sup_n \|f_n\|_\infty < \infty$, we have $T f_n \to T f$ pointwise. (Compare the bounded pointwise continuity condition in the characterization of Markov transition operators in Lecture 36.2.)
+
+Indeed, if $T = T_\Theta$, this follows from dominated convergence for the counting measure on $S$, with dominating function $j \mapsto \sup_n \|f_n\|_\infty |\Theta(i, j)|$. Conversely, given $f \in B(S)$, choose finite sets $F_k \uparrow S$; then $f \mathbf{1}_{F_k} \to f$ boundedly and pointwise, so
+$$
+T f(i) = \lim_{k \to \infty} T(f \mathbf{1}_{F_k})(i) = \lim_{k \to \infty} \sum_{j \in F_k} \Theta_T(i, j) f(j) = \sum_{j \in S} \Theta_T(i, j) f(j),
+$$
+where the last series converges absolutely because $\|\Theta_T\|_{\mathrm{row}} < \infty$. The operator in @exm-banach-limit fails this condition, since $\mathbf{1}_{\{1, \dots, k\}} \to \mathbf{1}$ boundedly and pointwise but $T(\mathbf{1}_{\{1, \dots, k\}}) = 0 \not\to \mathbf{1} = T\mathbf{1}$.
+:::
+
+### Approximation Theorem for Matrix Operators
+
+The following proposition shows that the class of operators represented by matrices is closed under operator-norm limits.
+
+::: {#prp-operator-matrix-limit}
+## Matrix Representation of Limit Operators
+Let $(T_n)_{n \ge 1}$ be a sequence of bounded linear operators on $B(S)$, each represented by a matrix $\Theta_n = (\Theta_n(i, j))_{i, j \in S}$ with $\|\Theta_n\|_{\mathrm{row}} < \infty$, so that
+$$
+T_n f(i) = \sum_{j \in S} \Theta_n(i, j) f(j), \quad f \in B(S),\ i \in S,
+$$
+and (by @lem-row-sum-norm) $\|T_n\|_{\mathrm{op}} = \|\Theta_n\|_{\mathrm{row}}$.
+If $T \in \mathcal{L}(B(S))$ satisfies $\|T_n - T\|_{\mathrm{op}} \to 0$ as $n \to \infty$, then:
+
+1. for all $i, j \in S$ the limit $\Theta(i, j) \coloneqq \lim_{n \to \infty} \Theta_n(i, j)$ exists and equals $T(\mathbf{1}_{\{j\}})(i)$;
+2. $\|\Theta_n - \Theta\|_{\mathrm{row}} \le \|T_n - T\|_{\mathrm{op}}$ for every $n$; in particular $\|\Theta\|_{\mathrm{row}} < \infty$;
+3. $T$ is represented by the matrix $\Theta$.
+:::
+
+::: {.proof}
+## Proof of @prp-operator-matrix-limit
+**Step 1: Pointwise convergence of matrix elements.**
+For any fixed $j \in S$, evaluate $T_n$ on the indicator function $\mathbf{1}_{\{j\}} \in B(S)$:
+$$
+T_n(\mathbf{1}_{\{j\}})(i) = \sum_{k \in S} \Theta_n(i, k) \mathbf{1}_{\{j\}}(k) = \Theta_n(i, j).
+$$
+
+Hence, for each $i, j \in S$:
+$$
+\begin{aligned}
+|\Theta_n(i, j) - T(\mathbf{1}_{\{j\}})(i)| &= |T_n(\mathbf{1}_{\{j\}})(i) - T(\mathbf{1}_{\{j\}})(i)| \\
+& \le \|T_n(\mathbf{1}_{\{j\}}) - T(\mathbf{1}_{\{j\}})\|_{\infty} \\
+& \le \|T_n - T\|_{\mathrm{op}} \|\mathbf{1}_{\{j\}}\|_{\infty}.
+\end{aligned}
+$$
+
+Since $\|\mathbf{1}_{\{j\}}\|_{\infty} = 1$ and $\|T_n - T\|_{\mathrm{op}} \to 0$, the limit exists:
+$$
+\lim_{n \to \infty} \Theta_n(i, j) = T(\mathbf{1}_{\{j\}})(i) \eqcolon \Theta(i, j).
+$$ {#eq-theta-def}
+
+**Step 2: Norms of differences.**
+For any $n, m \ge 1$, by @lem-row-sum-norm the operator $T_n - T_m = T_{\Theta_n} - T_{\Theta_m}$ is represented by the matrix $\Theta_n - \Theta_m$, and
+$$
+\|\Theta_n - \Theta_m\|_{\mathrm{row}} = \sup_{i \in S} \sum_{j \in S} |\Theta_n(i, j) - \Theta_m(i, j)| = \|T_n - T_m\|_{\mathrm{op}}.
+$$
+
+**Step 3: Fatou's Lemma argument for the row-sum bound.**
+Fix $i \in S$ and $n \ge 1$. By @eq-theta-def and Fatou's Lemma applied to the counting measure on $S$:
+$$
+\begin{aligned}
+\sum_{j \in S} |\Theta_n(i, j) - \Theta(i, j)| &= \sum_{j \in S} \lim_{m \to \infty} |\Theta_n(i, j) - \Theta_m(i, j)| \\
+&\le \liminf_{m \to \infty} \sum_{j \in S} |\Theta_n(i, j) - \Theta_m(i, j)| \\
+&\le \liminf_{m \to \infty} \|T_n - T_m\|_{\mathrm{op}} = \|T_n - T\|_{\mathrm{op}},
+\end{aligned}
+$$
+where the last equality holds because $\bigl| \|T_n - T_m\|_{\mathrm{op}} - \|T_n - T\|_{\mathrm{op}} \bigr| \le \|T_m - T\|_{\mathrm{op}} \to 0$.
+The right-hand side does not depend on $i$, so taking the supremum over $i \in S$ yields:
+$$
+\|\Theta_n - \Theta\|_{\mathrm{row}} \le \|T_n - T\|_{\mathrm{op}}.
+$$ {#eq-fatou-bound}
+
+By the triangle inequality for $\|\cdot\|_{\mathrm{row}}$, $\|\Theta\|_{\mathrm{row}} \le \|\Theta - \Theta_n\|_{\mathrm{row}} + \|\Theta_n\|_{\mathrm{row}} < \infty$. Therefore, by @lem-row-sum-norm, $\Theta$ defines a bounded linear operator $\hat{T} \coloneqq T_\Theta \in \mathcal{L}(B(S))$,
+$$
+\hat{T}f(i) = \sum_{j \in S} \Theta(i, j) f(j).
+$$
+
+**Step 4: Identification of the limit operator.**
+By @lem-row-sum-norm, $\hat{T} - T_n = T_{\Theta - \Theta_n}$, so by @eq-fatou-bound
+$$
+\|\hat{T} - T_n\|_{\mathrm{op}} = \|\Theta - \Theta_n\|_{\mathrm{row}} \le \|T - T_n\|_{\mathrm{op}} \to 0 \quad \text{as } n \to \infty.
+$$
+
+Thus $T_n \to \hat{T}$ and $T_n \to T$ in operator norm. Since limits in a normed space are unique, $\hat{T} = T$. Hence $T$ is represented by the matrix $\Theta$, i.e. $T f(i) = \sum_{j \in S} \Theta(i, j) f(j)$ for all $f \in B(S)$ and $i \in S$.
+:::
+
+---
+
+## Construction and Properties of the Generator Matrix $a = (a(i, j))$
+
+::: {#cor-generator-matrix}
+## Matrix Representation of the Generator
+Let $(q_t)_{t \ge 0}$ satisfy conditions 1–4 on a countable set $S$, and assume the operator-norm continuity condition 
+$$
+\|Q_t - I\|_{\mathrm{op}} \to 0 \quad \text{as } t \downarrow 0 \quad \left(\text{equivalently, } \lim_{t \downarrow 0} \inf_{i \in S} q_t(i, i) = 1 \right).
+$$
+Let $A$ be the generator of $(Q_t)_{t \ge 0}$. Then:
+
+1. for all $i, j \in S$, the right derivative
+$$
+a(i, j) \coloneqq \left. \frac{d}{dt} \right|_{t=0^+} q_t(i, j) = \lim_{t \downarrow 0} \frac{q_t(i, j) - \delta_{ij}}{t}
+$$
+exists and equals $A(\mathbf{1}_{\{j\}})(i)$;
+2. $A$ is represented by the matrix $a = (a(i, j))_{i, j \in S}$; that is, $\|a\|_{\mathrm{row}} < \infty$ and $A f(i) = \sum_{j \in S} a(i, j) f(j)$ for all $f \in B(S)$, $i \in S$.
+:::
+
+::: {.proof}
+## Proof of @cor-generator-matrix
+By @eq-semigroup-exp,
+$$
+\begin{aligned}
+\left\| \frac{Q_t - I}{t} - A \right\|_{\mathrm{op}} &= \left\| \sum_{n=2}^{\infty} \frac{t^{n-1}}{n!} A^n \right\|_{\mathrm{op}} \\
+& \le \frac{e^{t\|A\|_{\mathrm{op}}} - 1 - t\|A\|_{\mathrm{op}}}{t} \to 0 \quad \text{as } t \downarrow 0.
+|\end{aligned}
+$$ {#eq-generator-norm-limit}
+
+**Part 1.** Since $\frac{Q_t - I}{t}$ is represented by the matrix $\frac{q_t - \delta}{t}$, for all $i, j \in S$ and $t > 0$,
+$$
+\begin{aligned}
+\left| \frac{q_t(i, j) - \delta_{ij}}{t} - A(\mathbf{1}_{\{j\}})(i) \right| &= \left| \left( \frac{Q_t - I}{t} - A \right)(\mathbf{1}_{\{j\}})(i) \right| \\
+& \le \left\| \frac{Q_t - I}{t} - A \right\|_{\mathrm{op}} \to 0.
+\end{aligned}
+$$
+Hence the right derivative $a(i, j)$ exists and equals $A(\mathbf{1}_{\{j\}})(i)$.
+
+**Part 2.** Choose any sequence $t_n \downarrow 0$ and define $T_n \coloneqq \frac{Q_{t_n} - I}{t_n}$. Each $T_n$ is represented by the matrix $\Theta_n$ with entries
+$$
+\Theta_n(i, j) = \frac{q_{t_n}(i, j) - \delta_{ij}}{t_n}, \qquad \|\Theta_n\|_{\mathrm{row}} \le \frac{2}{t_n} < \infty.
+$$
+By @eq-generator-norm-limit, $\|T_n - A\|_{\mathrm{op}} \to 0$, so @prp-operator-matrix-limit implies that $A$ is represented by the matrix with entries $\lim_{n \to \infty} \Theta_n(i, j) = a(i, j)$, the last equality by Part 1.
+:::
+
+::: {#cor-q-matrix-properties}
+## Properties of the Generator Matrix
+Under the assumptions of @cor-generator-matrix, the matrix entries $a(i, j)$ satisfy:
+
+1. Off-diagonal non-negativity: $a(i, j) \ge 0$ for all $i \neq j$.
+2. Non-positive diagonal: $a(i, i) \le 0$ for all $i \in S$.
+3. Zero row sums: $\sum_{j \in S} a(i, j) = 0$ for all $i \in S$, where the series converges absolutely; equivalently, $\sum_{j \ne i} a(i, j) = -a(i, i)$.
+4. Bounded diagonal: $\sup_{i \in S} |a(i, i)| < \infty$; more precisely, $\|A\|_{\mathrm{op}} = \|a\|_{\mathrm{row}} = 2 \sup_{i \in S} |a(i, i)|$.
+:::
+
+::: {.proof}
+## Proof of @cor-q-matrix-properties
+1. For $i \neq j$, $q_t(i, j) \ge 0$ and $\delta_{ij} = 0$. Thus:
+   $$
+   a(i, j) = \lim_{t \downarrow 0} \frac{q_t(i, j)}{t} \ge 0.
+   $$
+
+2. Since $q_t(i, i) \le \sum_j q_t(i, j) = 1$,
+   $$
+   a(i, i) = \lim_{t \downarrow 0} \frac{q_t(i, i) - 1}{t} \le 0.
+   $$
+
+3. By @cor-generator-matrix, $A$ is represented by $a$, so applying this representation to the constant function $\mathbf{1} \in B(S)$ (which is *not* finitely supported when $S$ is infinite) gives $A \mathbf{1}(i) = \sum_{j \in S} a(i, j)$, an absolutely convergent series since $\|a\|_{\mathrm{row}} < \infty$. On the other hand,
+   $$
+   Q_t \mathbf{1}(i) = \sum_{j \in S} q_t(i, j) = 1 \implies \frac{Q_t \mathbf{1} - \mathbf{1}}{t} = 0 \implies A \mathbf{1} = \mathbf{0},
+   $$
+   where the last implication uses @eq-generator-norm-limit. Therefore, $\sum_{j \in S} a(i, j) = 0$ for every $i \in S$.
+
+4. By 1–3, for each $i \in S$,
+   $$
+   \sum_{j \in S} |a(i, j)| = |a(i, i)| + \sum_{j \ne i} a(i, j) = |a(i, i)| - a(i, i) = 2 |a(i, i)|.
+   $$
+   Taking the supremum over $i$ and using @lem-row-sum-norm together with @cor-generator-matrix gives $\|A\|_{\mathrm{op}} = \|a\|_{\mathrm{row}} = 2 \sup_i |a(i, i)| < \infty$.
+:::
+
+The four properties in @cor-q-matrix-properties in fact characterize generators of operator-norm continuous Markov semigroups on a countable state space.
+
+::: {#thm-q-matrix-converse}
+## Every Bounded Q-Matrix Generates a Markov Semigroup
+Let $a = (a(i, j))_{i, j \in S}$ be a matrix on a countable set $S$ such that $a(i, j) \ge 0$ for $i \ne j$, $\sum_{j \in S} a(i, j) = 0$ for every $i$, and $\lambda_0 \coloneqq \sup_{i \in S} |a(i, i)| < \infty$. Let $A \coloneqq T_a$ and $Q_t \coloneqq e^{tA}$, and set $q_t(i, j) \coloneqq Q_t(\mathbf{1}_{\{j\}})(i)$. Then $(q_t)_{t \ge 0}$ satisfies conditions 1–4, each $Q_t$ is represented by the matrix $q_t$, $\|Q_t - I\|_{\mathrm{op}} \to 0$ as $t \downarrow 0$, and the generator matrix of $(q_t)_{t \ge 0}$ is $a$.
+:::
+
+::: {.proof}
+## Proof of @thm-q-matrix-converse
+By the computation in the proof of @cor-q-matrix-properties (4), $\|a\|_{\mathrm{row}} = 2\lambda_0 < \infty$, so $A = T_a$ is bounded by @lem-row-sum-norm and $e^{tA}$ is well defined.
+
+*Representation.* If $T_\Theta$ and $T_{\Theta'}$ are matrix operators with finite row-sum norms, then for $f \in B(S)$
+$$
+T_\Theta T_{\Theta'} f(i) = \sum_{j} \Theta(i, j) \sum_{k} \Theta'(j, k) f(k) = \sum_{k} \Bigl( \sum_j \Theta(i, j) \Theta'(j, k) \Bigr) f(k),
+$$
+where interchanging the sums is justified by Fubini's theorem for the counting measure, since $\sum_{j, k} |\Theta(i, j)| |\Theta'(j, k)| |f(k)| \le \|\Theta\|_{\mathrm{row}} \|\Theta'\|_{\mathrm{row}} \|f\|_\infty$. Hence products, and by @lem-row-sum-norm finite linear combinations, of matrix operators are matrix operators. In particular each partial sum $\sum_{n=0}^{N} \frac{t^n}{n!} A^n$ is represented by a matrix, and these partial sums converge to $Q_t$ in operator norm. By @prp-operator-matrix-limit, $Q_t$ is represented by the matrix $q_t(i, j) = Q_t(\mathbf{1}_{\{j\}})(i)$.
+
+*Conditions 1–4.* Choose $\lambda > 0$ with $\lambda \ge \lambda_0$ and let $p(i, j) \coloneqq \delta_{ij} + a(i, j)/\lambda$. Then $p(i, j) \ge 0$ for all $i, j$ (for $i = j$ because $a(i, i) \ge -\lambda$) and $\sum_j p(i, j) = 1$, so $P \coloneqq T_p$ maps non-negative functions to non-negative functions. Since $A = \lambda(P - I)$ and $I$ commutes with $P$,
+$$
+Q_t = e^{-\lambda t} e^{\lambda t P} = \sum_{n=0}^{\infty} e^{-\lambda t} \frac{(\lambda t)^n}{n!} P^n,
+$$
+with convergence in operator norm and hence pointwise. Each term maps $\mathbf{1}_{\{j\}} \ge 0$ to a non-negative function, so $q_t(i, j) \ge 0$ (condition 1). Since $A \mathbf{1} = \sum_j a(\cdot, j) = 0$, we get $Q_t \mathbf{1} = \mathbf{1}$, i.e. $\sum_j q_t(i, j) = 1$ (condition 2). Condition 3 follows from $Q_0 = I$. For condition 4, $Q_{t+s} = Q_t Q_s$ (as $tA$ and $sA$ commute), so
+$$
+q_{t+s}(i, k) = Q_t\bigl(Q_s \mathbf{1}_{\{k\}}\bigr)(i) = Q_t\bigl(q_s(\cdot, k)\bigr)(i) = \sum_{j} q_t(i, j)\, q_s(j, k).
+$$
+
+*Continuity and generator.* $\|Q_t - I\|_{\mathrm{op}} \le e^{t\|A\|_{\mathrm{op}}} - 1 \to 0$, and the generator of $(Q_t)$ is $A = T_a$, so by @cor-generator-matrix its generator matrix is $A(\mathbf{1}_{\{j\}})(i) = a(i, j)$.
+:::
+
+---
+
+## Takeaways
+
+- **Setting.** For a Markov chain on a countable state space $S$, the transition operators $Q_t f(i) = \sum_j q_t(i, j) f(j)$ act on $B(S) = \ell_\infty(S)$, and the semigroup structure is encoded by $q_0 = \delta$ and the Chapman–Kolmogorov equations.
+- **Matrix norms.** An operator given by a matrix $\Theta$ with finite row-sum norm has operator norm exactly $\|\Theta\|_{\mathrm{row}} = \sup_i \sum_j |\Theta(i, j)|$ (@lem-row-sum-norm).
+- **Norm continuity is a uniform condition.** $\|Q_t - I\|_{\mathrm{op}} = 2 \sup_i (1 - q_t(i, i))$, so the semigroup has a bounded generator if and only if $\inf_i q_t(i, i) \to 1$ as $t \downarrow 0$. For finite $S$ this is automatic once each $q_t(i, i) \to 1$; for infinite $S$ it fails, e.g., whenever jump rates are unbounded (@rem-finite-vs-infinite).
+- **Not every bounded operator is a matrix.** When $S$ is infinite, finitely supported functions are not dense in $B(S)$, and there exist bounded (even positive, constant-preserving) operators that are not represented by any matrix (@exm-banach-limit). Matrix operators are exactly the bounded-pointwise sequentially continuous ones (@rem-bp-continuity).
+- **Matrix operators are closed under norm limits.** If $T_n \to T$ in operator norm and each $T_n$ is a matrix operator, then $T$ is a matrix operator whose entries are the entrywise limits, and the matrices converge in row-sum norm (@prp-operator-matrix-limit). The key step is Fatou's lemma for the counting measure.
+- **The generator is a matrix.** Under norm continuity, $a(i, j) = \frac{d}{dt}\big|_{t=0^+} q_t(i, j)$ exists for all $i, j$, and $A f(i) = \sum_j a(i, j) f(j)$ for **all** $f \in B(S)$; this justifies the formal interchange of derivative and sum (@cor-generator-matrix).
+- **Q-matrix properties.** The generator matrix has non-negative off-diagonal entries, non-positive diagonal, zero row sums, and uniformly bounded diagonal, with $\|A\|_{\mathrm{op}} = 2 \sup_i |a(i, i)|$ (@cor-q-matrix-properties). Conversely, every such matrix generates a norm-continuous Markov semigroup $Q_t = e^{tA}$ (@thm-q-matrix-converse).
