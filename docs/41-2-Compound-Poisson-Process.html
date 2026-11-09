@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>89&nbsp; Lecture 41.2: Compound Poisson Process – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./AppendixA.html" rel="next">
+<link href="./41-1-Generator-Matrix.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-III.html">Probability Theory III</a></li><li class="breadcrumb-item"><a href="./41-2-Compound-Poisson-Process.html"><span class="chapter-number">89</span>&nbsp; <span class="chapter-title">Lecture 41.2: Compound Poisson Process</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-2-Bounded-Generators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">87</span>&nbsp; <span class="chapter-title">Lecture 40.2: Bounded Generators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-1-Generator-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">88</span>&nbsp; <span class="chapter-title">Lecture 41.1: Generator Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-2-Compound-Poisson-Process.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">89</span>&nbsp; <span class="chapter-title">Lecture 41.2: Compound Poisson Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#setting-and-standing-assumptions" id="toc-setting-and-standing-assumptions" class="nav-link active" data-scroll-target="#setting-and-standing-assumptions"><span class="header-section-number">89.1</span> Setting and Standing Assumptions</a></li>
+  <li><a href="#the-bounded-generator-case" id="toc-the-bounded-generator-case" class="nav-link" data-scroll-target="#the-bounded-generator-case"><span class="header-section-number">89.2</span> The Bounded Generator Case</a></li>
+  <li><a href="#uniformization-randomization-construction" id="toc-uniformization-randomization-construction" class="nav-link" data-scroll-target="#uniformization-randomization-construction"><span class="header-section-number">89.3</span> Uniformization (Randomization) Construction</a></li>
+  <li><a href="#rescaling-and-the-stochastic-transition-matrix" id="toc-rescaling-and-the-stochastic-transition-matrix" class="nav-link" data-scroll-target="#rescaling-and-the-stochastic-transition-matrix"><span class="header-section-number">89.4</span> Rescaling and the Stochastic Transition Matrix</a></li>
+  <li><a href="#the-main-uniformization-theorem" id="toc-the-main-uniformization-theorem" class="nav-link" data-scroll-target="#the-main-uniformization-theorem"><span class="header-section-number">89.5</span> The Main Uniformization Theorem</a></li>
+  <li><a href="#filtration-construction" id="toc-filtration-construction" class="nav-link" data-scroll-target="#filtration-construction"><span class="header-section-number">89.6</span> Filtration Construction</a></li>
+  <li><a href="#the-compound-poisson-process" id="toc-the-compound-poisson-process" class="nav-link" data-scroll-target="#the-compound-poisson-process"><span class="header-section-number">89.7</span> The Compound Poisson Process</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">89.8</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/41-2-Compound-Poisson-Process.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-III.html">Probability Theory III</a></li><li class="breadcrumb-item"><a href="./41-2-Compound-Poisson-Process.html"><span class="chapter-number">89</span>&nbsp; <span class="chapter-title">Lecture 41.2: Compound Poisson Process</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">89</span>&nbsp; <span class="chapter-title">Lecture 41.2: Compound Poisson Process</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="setting-and-standing-assumptions" class="level2" data-number="89.1">
+<h2 data-number="89.1" class="anchored" data-anchor-id="setting-and-standing-assumptions"><span class="header-section-number">89.1</span> Setting and Standing Assumptions</h2>
+<p>Throughout, <span class="math inline">\(S\)</span> is a countable set with the discrete <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(2^S\)</span>, and <span class="math inline">\(B(S) = \ell_\infty(S)\)</span> is the Banach space of bounded real-valued functions on <span class="math inline">\(S\)</span> with the supremum norm <span class="math inline">\(\|f\|_\infty = \sup_{i \in S} |f(i)|\)</span>, as in Lecture 41.1. For a matrix <span class="math inline">\(\Theta = (\Theta(i,j))_{i,j \in S}\)</span> we write <span class="math inline">\(\|\Theta\|_{\mathrm{row}} = \sup_{i} \sum_{j} |\Theta(i,j)|\)</span> and, when <span class="math inline">\(\|\Theta\|_{\mathrm{row}} &lt; \infty\)</span>, <span class="math inline">\(T_\Theta\)</span> for the bounded operator <span class="math inline">\(T_\Theta f(i) = \sum_j \Theta(i,j) f(j)\)</span>; recall <span class="math inline">\(\|T_\Theta\|_{\mathrm{op}} = \|\Theta\|_{\mathrm{row}}\)</span> (<a href="41-1-Generator-Matrix.html#lem-row-sum-norm" class="quarto-xref">Lemma&nbsp;<span>88.1</span></a>). For an operator <span class="math inline">\(T\)</span> on <span class="math inline">\(B(S)\)</span> we write <span class="math inline">\(T(i,j) \coloneqq T(\mathbf{1}_{\{j\}})(i)\)</span> for its matrix entries.</p>
+<p>Let <span class="math inline">\((q_t)_{t \ge 0}\)</span> be a family of transition probability mass functions on <span class="math inline">\(S\)</span> satisfying conditions 1–4 of Lecture 41.1 (non-negativity, unit row sums, <span class="math inline">\(q_0(i,j) = \delta_{ij}\)</span>, and the Chapman–Kolmogorov equations), and let <span class="math inline">\(Q_t = T_{q_t}\)</span>, so that <span class="math inline">\((Q_t)_{t \ge 0}\)</span> is a semigroup on <span class="math inline">\(B(S)\)</span> with <span class="math inline">\(Q_0 = I\)</span>.</p>
+<p>A process <span class="math inline">\((X_t)_{t \ge 0}\)</span> of <span class="math inline">\(S\)</span>-valued random variables on a probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> is a <strong>time-homogeneous Markov chain with transition function <span class="math inline">\((q_t)\)</span> and initial law <span class="math inline">\(\mu\)</span></strong> if for all <span class="math inline">\(k \ge 0\)</span>, all <span class="math inline">\(0 = t_0 &lt; t_1 &lt; \dots &lt; t_k\)</span> and all <span class="math inline">\(i_0, \dots, i_k \in S\)</span>, <span id="eq-fdd-markov"><span class="math display">\[
+\mathbb{P}(X_{t_0} = i_0, X_{t_1} = i_1, \dots, X_{t_k} = i_k) = \mu(i_0) \prod_{\ell=1}^{k} q_{t_\ell - t_{\ell-1}}(i_{\ell-1}, i_\ell).
+\tag{89.1}\]</span></span> In particular, <span class="math inline">\(\mathbb{P}(X_t = j \mid X_0 = i) = q_t(i,j)\)</span> whenever <span class="math inline">\(\mathbb{P}(X_0 = i) &gt; 0\)</span>; the function <span class="math inline">\(q_t(i,j)\)</span> itself is defined for all <span class="math inline">\(i\)</span>, independently of <span class="math inline">\(\mu\)</span>.</p>
+</section>
+<section id="the-bounded-generator-case" class="level2" data-number="89.2">
+<h2 data-number="89.2" class="anchored" data-anchor-id="the-bounded-generator-case"><span class="header-section-number">89.2</span> The Bounded Generator Case</h2>
+<p>Suppose <span class="math inline">\((Q_t)_{t \ge 0}\)</span> is continuous in operator norm at <span class="math inline">\(0\)</span>: <span class="math display">\[
+\lim_{t \downarrow 0} \|Q_t - I\|_{\mathrm{op}} = 0,
+\]</span> equivalently (<a href="41-1-Generator-Matrix.html#eq-uniform-condition" class="quarto-xref">Equation&nbsp;<span>88.4</span></a>, Lecture 41.1), <span class="math inline">\(\lim_{t \downarrow 0} \inf_{i \in S} q_t(i,i) = 1\)</span>. By the generator theorem (<a href="40-2-Bounded-Generators.html#thm-bounded-generator" class="quarto-xref">Theorem&nbsp;<span>87.1</span></a>, Lecture 40.2; see also <a href="41-1-Generator-Matrix.html#eq-semigroup-exp" class="quarto-xref">Equation&nbsp;<span>88.1</span></a>), the limit <span class="math display">\[
+A = \lim_{t \downarrow 0} \frac{Q_t - I}{t}
+\]</span> exists in operator norm, <span class="math inline">\(A\)</span> is a bounded linear operator on <span class="math inline">\(B(S)\)</span>, and <span class="math display">\[
+Q_t = e^{tA} = \sum_{n=0}^{\infty} \frac{t^n}{n!} A^n, \quad t \ge 0,
+\]</span> with convergence in operator norm.</p>
+<p>By <a href="41-1-Generator-Matrix.html#cor-generator-matrix" class="quarto-xref">Corollary&nbsp;<span>88.1</span></a> (Lecture 41.1), the right derivatives <span class="math display">\[
+a(i, j) = \left. \frac{\mathrm{d}}{\mathrm{d}t} q_t(i, j) \right|_{t=0^+} = \lim_{t \downarrow 0} \frac{q_t(i, j) - \delta_{ij}}{t}
+\]</span> exist for all <span class="math inline">\(i, j \in S\)</span>, <span class="math inline">\(\|a\|_{\mathrm{row}} &lt; \infty\)</span>, and <span class="math inline">\(A\)</span> is represented by the matrix <span class="math inline">\(a\)</span>: <span class="math display">\[
+(Af)(i) = \sum_{j \in S} a(i, j) f(j), \qquad f \in B(S),\ i \in S.
+\]</span> (This is not automatic for an arbitrary bounded operator on <span class="math inline">\(\ell_\infty(S)\)</span>, cf. <a href="41-1-Generator-Matrix.html#exm-banach-limit" class="quarto-xref">Example&nbsp;<span>88.1</span></a>; it holds here because <span class="math inline">\(A\)</span> is the operator-norm limit of the matrix operators <span class="math inline">\((Q_t - I)/t\)</span>, <a href="41-1-Generator-Matrix.html#prp-operator-matrix-limit" class="quarto-xref">Proposition&nbsp;<span>88.1</span></a>.) Moreover, by <a href="41-1-Generator-Matrix.html#cor-q-matrix-properties" class="quarto-xref">Corollary&nbsp;<span>88.2</span></a>, <span class="math inline">\(a(i,j) \ge 0\)</span> for <span class="math inline">\(i \ne j\)</span>, <span class="math inline">\(a(i,i) \le 0\)</span>, <span class="math inline">\(\sum_{j} a(i,j) = 0\)</span> (absolutely convergent), and <span class="math inline">\(\|A\|_{\mathrm{op}} = \|a\|_{\mathrm{row}} = 2 \sup_i |a(i,i)| &lt; \infty\)</span>.</p>
+<p>The small-time expansion holds <strong>uniformly</strong> in <span class="math inline">\(i, j \in S\)</span>: since <span class="math inline">\(q_t(i,j) - \delta_{ij} - t a(i,j) = \bigl((e^{tA} - I - tA)\mathbf{1}_{\{j\}}\bigr)(i)\)</span>, <span class="math display">\[
+\begin{aligned}
+\sup_{i,j \in S} \bigl| q_t(i, j) - \delta_{ij} - t\, a(i, j) \bigr| &amp;\le \|e^{tA} - I - tA\|_{\mathrm{op}} \\
+&amp; \le e^{t\|A\|_{\mathrm{op}}} - 1 - t\|A\|_{\mathrm{op}} = O(t^2) \quad \text{as } t \downarrow 0.
+\end{aligned}
+\]</span> In particular, for <span class="math inline">\(i \neq j\)</span> and any Markov chain <span class="math inline">\((X_t)\)</span> with transition function <span class="math inline">\((q_t)\)</span> and <span class="math inline">\(\mathbb{P}(X_0 = i) &gt; 0\)</span>, <span class="math display">\[
+\mathbb{P}(X_t = j \mid X_0 = i) = a(i, j)\, t + O(t^2) \quad \text{as } t \downarrow 0.
+\]</span></p>
+<div id="def-bounded-rates" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 89.1 (Conservative Q-Matrix with Bounded Rates)</strong></span> A matrix <span class="math inline">\(a = (a(i,j))_{i,j \in S}\)</span> is a <strong>conservative Q-matrix</strong> if <span class="math inline">\(a(i,i) \in (-\infty, 0]\)</span> for all <span class="math inline">\(i\)</span>, <span class="math inline">\(a(i,j) \ge 0\)</span> for all <span class="math inline">\(i \ne j\)</span>, and <span class="math inline">\(\sum_{j \in S} a(i,j) = 0\)</span> for all <span class="math inline">\(i \in S\)</span>. It has <strong>bounded rates</strong> if, in addition, <span class="math display">\[
+\sup_{i \in S} |a(i, i)| &lt; \infty.
+\]</span></p>
+</div>
+<div id="rem-bounded-rates" class="proof remark">
+<p><span class="proof-title"><em>Remark 89.1</em> (Bounded Rates and Operator-Norm Continuity). </span></p>
+<ol type="1">
+<li>If <span class="math inline">\((q_t)\)</span> satisfies conditions 1–4 and <span class="math inline">\(\|Q_t - I\|_{\mathrm{op}} \to 0\)</span>, its generator matrix <span class="math inline">\(a\)</span> is a conservative Q-matrix with bounded rates (<a href="41-1-Generator-Matrix.html#cor-q-matrix-properties" class="quarto-xref">Corollary&nbsp;<span>88.2</span></a>).</li>
+<li>Conversely, every conservative Q-matrix <span class="math inline">\(a\)</span> with bounded rates generates the operator-norm continuous Markov semigroup <span class="math inline">\(Q_t = e^{tT_a}\)</span>, whose generator matrix is <span class="math inline">\(a\)</span> (<a href="41-1-Generator-Matrix.html#thm-q-matrix-converse" class="quarto-xref">Theorem&nbsp;<span>88.1</span></a>).</li>
+<li>Statement 2 does <strong>not</strong> by itself say that <em>every</em> transition function whose derivatives at <span class="math inline">\(0\)</span> form a bounded-rate Q-matrix is operator-norm continuous; that requires an additional argument. For a <em>standard</em> transition function (i.e.&nbsp;<span class="math inline">\(q_t(i,i) \to 1\)</span> for each <span class="math inline">\(i\)</span>) the derivatives <span class="math inline">\(q_i \coloneqq -q'_{ii}(0^+) \in [0, \infty]\)</span> always exist and satisfy <span class="math inline">\(q_t(i,i) \ge e^{-q_i t}\)</span> (Kolmogorov; see e.g.&nbsp;Chung, <em>Markov Chains with Stationary Transition Probabilities</em>, §II.2, or Anderson, <em>Continuous-Time Markov Chains</em>, Ch. 1). Granting this, if <span class="math inline">\(\sup_i q_i &lt; \infty\)</span> then <span class="math inline">\(1 - q_t(i,i) \le q_i t \le t \sup_k q_k\)</span>, so <span class="math inline">\(\inf_i q_t(i,i) \to 1\)</span>, i.e.&nbsp;<span class="math inline">\(\|Q_t - I\|_{\mathrm{op}} \to 0\)</span> by <a href="41-1-Generator-Matrix.html#eq-uniform-condition" class="quarto-xref">Equation&nbsp;<span>88.4</span></a>. We do not prove the inequality <span class="math inline">\(q_t(i,i) \ge e^{-q_i t}\)</span> here.</li>
+</ol>
+</div>
+<div id="lem-generator-bounds" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 89.1 (Total Absolute Rate per Row)</strong></span> Let <span class="math inline">\(a\)</span> be a conservative Q-matrix. Then for every <span class="math inline">\(i \in S\)</span>, <span class="math display">\[
+\sum_{j \in S} |a(i, j)| = 2 |a(i, i)|,
+\]</span> and consequently <span id="eq-rate-bound"><span class="math display">\[
+\|a\|_{\mathrm{row}} = \sup_{i \in S} \sum_{j \in S} |a(i, j)| = 2 \sup_{i \in S} |a(i, i)| \in [0, \infty].
+\tag{89.2}\]</span></span> In particular, <span class="math inline">\(\|a\|_{\mathrm{row}} &lt; \infty\)</span> if and only if <span class="math inline">\(a\)</span> has bounded rates, in which case <span class="math inline">\(T_a\)</span> is a bounded operator with <span class="math inline">\(\|T_a\|_{\mathrm{op}} = 2 \sup_i |a(i,i)|\)</span> (<a href="41-1-Generator-Matrix.html#lem-row-sum-norm" class="quarto-xref">Lemma&nbsp;<span>88.1</span></a>).</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-generator-bounds" class="quarto-xref">Lemma&nbsp;<span>89.1</span></a>). </span>Fix <span class="math inline">\(i \in S\)</span>. Since <span class="math inline">\(a(i,i)\)</span> is finite and <span class="math inline">\(\sum_j a(i,j) = 0\)</span>, we have <span class="math inline">\(\sum_{j \ne i} a(i,j) = -a(i,i) = |a(i,i)|\)</span>, the series having non-negative terms. Hence <span class="math display">\[
+\sum_{j \in S} |a(i, j)| = |a(i, i)| + \sum_{j \neq i} a(i, j) = 2 |a(i, i)|.
+\]</span> Taking the supremum over <span class="math inline">\(i \in S\)</span> yields <a href="#eq-rate-bound" class="quarto-xref">Equation&nbsp;<span>89.2</span></a> (both sides possibly <span class="math inline">\(+\infty\)</span>). Without the bounded-rates assumption the supremum may be infinite: on <span class="math inline">\(S = \mathbb{N}\)</span>, the conservative Q-matrix with <span class="math inline">\(a(i,i) = -i\)</span>, <span class="math inline">\(a(i,i+1) = i\)</span> and all other entries <span class="math inline">\(0\)</span> has <span class="math inline">\(\|a\|_{\mathrm{row}} = \infty\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="uniformization-randomization-construction" class="level2" data-number="89.3">
+<h2 data-number="89.3" class="anchored" data-anchor-id="uniformization-randomization-construction"><span class="header-section-number">89.3</span> Uniformization (Randomization) Construction</h2>
+<p>By <a href="#eq-fdd-markov" class="quarto-xref">Equation&nbsp;<span>89.1</span></a>, the finite-dimensional distributions of a Markov chain are determined by its initial law <span class="math inline">\(\mu\)</span> and its transition function; in the bounded case the transition function is <span class="math inline">\(q_t(i,j) = e^{tA}(i,j)\)</span>, so it is determined by the generator matrix <span class="math inline">\(a\)</span>. We now construct such a chain by running a discrete-time Markov chain at the jump times of an independent Poisson process.</p>
+</section>
+<section id="rescaling-and-the-stochastic-transition-matrix" class="level2" data-number="89.4">
+<h2 data-number="89.4" class="anchored" data-anchor-id="rescaling-and-the-stochastic-transition-matrix"><span class="header-section-number">89.4</span> Rescaling and the Stochastic Transition Matrix</h2>
+<p>Let <span class="math inline">\(a\)</span> be a conservative Q-matrix with bounded rates, <span class="math inline">\(A = T_a\)</span>, and let <span class="math inline">\(\lambda\)</span> be a constant with <span class="math display">\[
+\lambda &gt; 0 \quad \text{and} \quad \lambda \ge \sup_{i \in S} |a(i, i)| = \tfrac{1}{2} \|A\|_{\mathrm{op}},
+\]</span> where the equality is <a href="#eq-rate-bound" class="quarto-xref">Equation&nbsp;<span>89.2</span></a> together with <a href="41-1-Generator-Matrix.html#lem-row-sum-norm" class="quarto-xref">Lemma&nbsp;<span>88.1</span></a>. Define the matrix <span class="math inline">\(p\)</span> and the operator <span class="math inline">\(P\)</span> by <span id="eq-stochastic-matrix-def"><span class="math display">\[
+p(i,j) = \delta_{ij} + \frac{1}{\lambda} a(i,j), \qquad P = T_p = I + \frac{1}{\lambda} A.
+\tag{89.3}\]</span></span> (The second identity holds because <span class="math inline">\(T_\delta = I\)</span> and <span class="math inline">\(\Theta \mapsto T_\Theta\)</span> is linear, <a href="41-1-Generator-Matrix.html#lem-row-sum-norm" class="quarto-xref">Lemma&nbsp;<span>88.1</span></a>.)</p>
+<div id="lem-markov-matrix" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 89.2 (Properties of <span class="math inline">\(P\)</span>)</strong></span> Under the above assumptions, <span class="math inline">\(p\)</span> is a (row-)stochastic matrix, i.e.&nbsp;<span class="math inline">\(p(i,j) \ge 0\)</span> and <span class="math inline">\(\sum_{j} p(i,j) = 1\)</span> for all <span class="math inline">\(i, j \in S\)</span>. Consequently <span class="math inline">\(P\)</span> is a positivity-preserving bounded operator on <span class="math inline">\(B(S)\)</span> with <span class="math inline">\(P\mathbf{1} = \mathbf{1}\)</span> and <span class="math inline">\(\|P\|_{\mathrm{op}} = 1\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-markov-matrix" class="quarto-xref">Lemma&nbsp;<span>89.2</span></a>). </span></p>
+<ol type="1">
+<li><strong>Non-negativity:</strong> For <span class="math inline">\(i \neq j\)</span>, <span class="math inline">\(p(i, j) = \frac{1}{\lambda} a(i, j) \ge 0\)</span>. For <span class="math inline">\(i = j\)</span>, since <span class="math inline">\(a(i,i) \le 0\)</span>, <span class="math display">\[
+p(i, i) = 1 + \frac{1}{\lambda} a(i, i) = 1 - \frac{|a(i, i)|}{\lambda} \ge 0,
+\]</span> because <span class="math inline">\(|a(i,i)| \le \sup_k |a(k,k)| \le \lambda\)</span>.</li>
+<li><strong>Row sums:</strong> For every <span class="math inline">\(i \in S\)</span>, the series <span class="math inline">\(\sum_j a(i,j)\)</span> converges absolutely (<a href="#lem-generator-bounds" class="quarto-xref">Lemma&nbsp;<span>89.1</span></a>), so the sum may be split: <span class="math display">\[
+\sum_{j \in S} p(i, j) = \sum_{j \in S} \delta_{ij} + \frac{1}{\lambda} \sum_{j \in S} a(i, j) = 1 + 0 = 1.
+\]</span></li>
+<li><strong>Norm:</strong> By 1–2, <span class="math inline">\(\|p\|_{\mathrm{row}} = \sup_i \sum_j p(i,j) = 1\)</span>, so <span class="math inline">\(\|P\|_{\mathrm{op}} = 1\)</span> by <a href="41-1-Generator-Matrix.html#lem-row-sum-norm" class="quarto-xref">Lemma&nbsp;<span>88.1</span></a>; positivity and <span class="math inline">\(P\mathbf{1} = \mathbf{1}\)</span> are immediate from 1–2.</li>
+</ol>
+</div>
+<p>By the Kolmogorov extension theorem (Lectures 16.1–16.2), for every probability measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\(S\)</span> there exists a discrete-time Markov chain <span class="math inline">\((Y_n)_{n \in \mathbb{N}_0}\)</span> with initial law <span class="math inline">\(\mu\)</span> and transition matrix <span class="math inline">\(p\)</span>, i.e. <span class="math display">\[
+\mathbb{P}(Y_0 = i_0, Y_1 = i_1, \dots, Y_n = i_n) = \mu(i_0) \prod_{\ell=1}^{n} p(i_{\ell-1}, i_\ell),
+\]</span> for <span class="math inline">\(n \ge 0\)</span> and <span class="math inline">\(i_0, \dots, i_n \in S\)</span>. Summing over intermediate states (all sums have non-negative terms) gives, for <span class="math inline">\(0 = n_0 \le n_1 \le \dots \le n_k\)</span>, <span id="eq-y-fdd"><span class="math display">\[
+\mathbb{P}(Y_0 = i_0, Y_{n_1} = i_1, \dots, Y_{n_k} = i_k) = \mu(i_0) \prod_{\ell=1}^{k} p^{(n_\ell - n_{\ell-1})}(i_{\ell-1}, i_\ell),
+\tag{89.4}\]</span></span> where <span class="math inline">\(p^{(m)}\)</span> is the <span class="math inline">\(m\)</span>-th matrix power of <span class="math inline">\(p\)</span> (<span class="math inline">\(p^{(0)}(i,j) = \delta_{ij}\)</span>). As shown in the proof of <a href="41-1-Generator-Matrix.html#thm-q-matrix-converse" class="quarto-xref">Theorem&nbsp;<span>88.1</span></a>, <span class="math inline">\(P^m = T_{p^{(m)}}\)</span>, i.e.&nbsp;<span class="math inline">\(P^m(i,j) = p^{(m)}(i,j)\)</span>.</p>
+<hr>
+</section>
+<section id="the-main-uniformization-theorem" class="level2" data-number="89.5">
+<h2 data-number="89.5" class="anchored" data-anchor-id="the-main-uniformization-theorem"><span class="header-section-number">89.5</span> The Main Uniformization Theorem</h2>
+<p>For <span class="math inline">\(\theta \ge 0\)</span> write <span class="math inline">\(\pi_\theta(m) = e^{-\theta} \theta^m / m!\)</span>, <span class="math inline">\(m \in \mathbb{N}_0\)</span>, for the Poisson(<span class="math inline">\(\theta\)</span>) probability mass function.</p>
+<div id="thm-uniformization" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 89.1 (Main Uniformization Theorem)</strong></span> Let <span class="math inline">\(a\)</span> be a conservative Q-matrix with bounded rates on a countable set <span class="math inline">\(S\)</span>, let <span class="math inline">\(A = T_a\)</span>, and fix <span class="math inline">\(\lambda &gt; 0\)</span> with <span class="math inline">\(\lambda \ge \sup_{i \in S} |a(i, i)|\)</span>. Let <span class="math inline">\(p\)</span> and <span class="math inline">\(P\)</span> be as in <a href="#eq-stochastic-matrix-def" class="quarto-xref">Equation&nbsp;<span>89.3</span></a>. On a probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> let:</p>
+<ol type="1">
+<li><span class="math inline">\((Y_n)_{n \in \mathbb{N}_0}\)</span> be a discrete-time Markov chain on <span class="math inline">\(S\)</span> with initial law <span class="math inline">\(\mu\)</span> and transition matrix <span class="math inline">\(p\)</span>;</li>
+<li><span class="math inline">\((N_t)_{t \ge 0}\)</span> be a Poisson process with rate <span class="math inline">\(\lambda\)</span> (as defined in Lecture 38.1): <span class="math inline">\(N_0 = 0\)</span>; for <span class="math inline">\(0 = s_0 &lt; s_1 &lt; \dots &lt; s_k\)</span> the increments <span class="math inline">\(N_{s_1} - N_{s_0}, \dots, N_{s_k} - N_{s_{k-1}}\)</span> are independent; and <span class="math inline">\(N_t - N_s \sim \mathrm{Poisson}(\lambda(t-s))\)</span> for <span class="math inline">\(0 \le s &lt; t\)</span>. We assume, modifying <span class="math inline">\(N\)</span> on a null set if necessary, that <strong>every</strong> path <span class="math inline">\(t \mapsto N_t(\omega)\)</span> is <span class="math inline">\(\mathbb{N}_0\)</span>-valued and non-decreasing with <span class="math inline">\(N_0(\omega) = 0\)</span>;</li>
+<li>the processes <span class="math inline">\((Y_n)_{n \in \mathbb{N}_0}\)</span> and <span class="math inline">\((N_t)_{t \ge 0}\)</span> be independent, i.e.&nbsp;<span class="math inline">\(\sigma(Y_n : n \in \mathbb{N}_0)\)</span> and <span class="math inline">\(\sigma(N_t : t \ge 0)\)</span> are independent.</li>
+</ol>
+<p>Then <span class="math inline">\(X_t \coloneqq Y_{N_t}\)</span>, <span class="math inline">\(t \ge 0\)</span>, defines <span class="math inline">\(S\)</span>-valued random variables, and <span class="math inline">\((X_t)_{t \ge 0}\)</span> is a time-homogeneous Markov chain with initial law <span class="math inline">\(\mu\)</span> and transition function <span class="math display">\[
+q_t(i,j) = e^{tA}(i,j), \qquad e^{tA} = \sum_{n=0}^{\infty} \pi_{\lambda t}(n) P^n,
+\]</span> whose generator is <span class="math inline">\(A = \lambda(P - I)\)</span> and whose generator matrix is <span class="math inline">\(a\)</span>. In particular, for all <span class="math inline">\(s, t \ge 0\)</span> and <span class="math inline">\(f \in B(S)\)</span>, <span class="math display">\[
+\mathbb{E}\bigl[f(X_{t+s}) \mid \mathcal{F}^X_t\bigr] = (e^{sA} f)(X_t) \quad \text{a.s.}, \qquad \mathcal{F}^X_t \coloneqq \sigma(X_r : 0 \le r \le t).
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a>). </span></p>
+<section id="step-0-measurability" class="level3" data-number="89.5.1">
+<h3 data-number="89.5.1" class="anchored" data-anchor-id="step-0-measurability"><span class="header-section-number">89.5.1</span> Step 0: Measurability</h3>
+<p>Since every <span class="math inline">\(N_t(\omega) \in \mathbb{N}_0\)</span>, for each <span class="math inline">\(j \in S\)</span> <span class="math display">\[
+\{X_t = j\} = \bigcup_{n \in \mathbb{N}_0} \{Y_n = j\} \cap \{N_t = n\} \in \mathcal{F},
+\]</span> so <span class="math inline">\(X_t\)</span> is a random variable. Also <span class="math inline">\(X_0 = Y_{N_0} = Y_0\)</span>, so <span class="math inline">\(X_0 \sim \mu\)</span>.</p>
+</section>
+<section id="step-1-the-semigroup-representation" class="level3" data-number="89.5.2">
+<h3 data-number="89.5.2" class="anchored" data-anchor-id="step-1-the-semigroup-representation"><span class="header-section-number">89.5.2</span> Step 1: The Semigroup Representation</h3>
+<p>By <a href="#eq-stochastic-matrix-def" class="quarto-xref">Equation&nbsp;<span>89.3</span></a>, <span class="math inline">\(A = \lambda(P - I) = \lambda P - \lambda I\)</span>. Since <span class="math inline">\(\lambda I\)</span> commutes with <span class="math inline">\(\lambda P\)</span>, <span class="math inline">\(e^{tA} = e^{-\lambda t I} e^{\lambda t P} = e^{-\lambda t} e^{\lambda t P}\)</span>, hence <span id="eq-semigroup-expansion"><span class="math display">\[
+e^{tA} = \sum_{n=0}^{\infty} e^{-\lambda t} \frac{(\lambda t)^n}{n!} P^n = \sum_{n=0}^{\infty} \pi_{\lambda t}(n)\, P^n,
+\tag{89.5}\]</span></span> the series converging in operator norm because <span class="math inline">\(\|P^n\|_{\mathrm{op}} \le 1\)</span>. Evaluating at <span class="math inline">\(\mathbf{1}_{\{j\}}\)</span> and at <span class="math inline">\(i\)</span>, <span id="eq-semigroup-entries"><span class="math display">\[
+e^{tA}(i,j) = \sum_{n=0}^{\infty} \pi_{\lambda t}(n)\, p^{(n)}(i,j).
+\tag{89.6}\]</span></span> By <a href="41-1-Generator-Matrix.html#thm-q-matrix-converse" class="quarto-xref">Theorem&nbsp;<span>88.1</span></a>, <span class="math inline">\(q_t(i,j) \coloneqq e^{tA}(i,j)\)</span> satisfies conditions 1–4 of Lecture 41.1, <span class="math inline">\(e^{tA} = T_{q_t}\)</span>, and its generator matrix is <span class="math inline">\(a\)</span>.</p>
+</section>
+<section id="step-2-finite-dimensional-distributions" class="level3" data-number="89.5.3">
+<h3 data-number="89.5.3" class="anchored" data-anchor-id="step-2-finite-dimensional-distributions"><span class="header-section-number">89.5.3</span> Step 2: Finite-Dimensional Distributions</h3>
+<p>Fix <span class="math inline">\(0 = t_0 &lt; t_1 &lt; \dots &lt; t_k\)</span> and <span class="math inline">\(i_0, \dots, i_k \in S\)</span>, and put <span class="math inline">\(n_0 = 0\)</span>. Since every path of <span class="math inline">\(N\)</span> is <span class="math inline">\(\mathbb{N}_0\)</span>-valued, non-decreasing, and starts at <span class="math inline">\(0\)</span>, the events <span class="math inline">\(\{N_{t_1} = n_1, \dots, N_{t_k} = n_k\}\)</span>, <span class="math inline">\(0 \le n_1 \le \dots \le n_k\)</span>, partition <span class="math inline">\(\Omega\)</span>, and on such an event <span class="math inline">\(X_{t_\ell} = Y_{n_\ell}\)</span>. By countable additivity and the independence in hypothesis 3, <span class="math display">\[
+\begin{aligned}
+&amp;\mathbb{P}(X_{t_0} = i_0, \dots, X_{t_k} = i_k) \\
+&amp; = \sum_{0 \le n_1 \le \dots \le n_k} \mathbb{P}(Y_0 = i_0, Y_{n_1} = i_1, \dots, Y_{n_k} = i_k)\, \mathbb{P}(N_{t_1} = n_1, \dots, N_{t_k} = n_k).
+\end{aligned}
+\]</span> Set <span class="math inline">\(m_\ell = n_\ell - n_{\ell-1}\)</span>; the map <span class="math inline">\((n_1, \dots, n_k) \mapsto (m_1, \dots, m_k)\)</span> is a bijection from <span class="math inline">\(\{0 \le n_1 \le \dots \le n_k\}\)</span> onto <span class="math inline">\(\mathbb{N}_0^k\)</span>. By the independence of the increments and their Poisson laws (hypothesis 2), <span class="math display">\[
+\begin{aligned}
+\mathbb{P}(N_{t_1} = n_1, \dots, N_{t_k} = n_k) &amp;= \mathbb{P}\bigl(N_{t_\ell} - N_{t_{\ell-1}} = m_\ell,\ \ell = 1, \dots, k\bigr) \\
+&amp; = \prod_{\ell=1}^{k} \pi_{\lambda(t_\ell - t_{\ell-1})}(m_\ell),
+\end{aligned}
+\]</span> and by <a href="#eq-y-fdd" class="quarto-xref">Equation&nbsp;<span>89.4</span></a>, <span class="math inline">\(\mathbb{P}(Y_0 = i_0, Y_{n_1} = i_1, \dots, Y_{n_k} = i_k) = \mu(i_0) \prod_{\ell=1}^{k} p^{(m_\ell)}(i_{\ell-1}, i_\ell)\)</span>. Since all terms are non-negative, the sum over <span class="math inline">\(\mathbb{N}_0^k\)</span> of a product factorizes (Tonelli for counting measure), and by <a href="#eq-semigroup-entries" class="quarto-xref">Equation&nbsp;<span>89.6</span></a> <span class="math display">\[
+\begin{aligned}
+\mathbb{P}(X_{t_0} = i_0, \dots, X_{t_k} = i_k) &amp;= \mu(i_0) \prod_{\ell=1}^{k} \sum_{m=0}^{\infty} \pi_{\lambda(t_\ell - t_{\ell-1})}(m)\, p^{(m)}(i_{\ell-1}, i_\ell) \\
+&amp; = \mu(i_0) \prod_{\ell=1}^{k} q_{t_\ell - t_{\ell-1}}(i_{\ell-1}, i_\ell).
+\end{aligned}
+\]</span> This is <a href="#eq-fdd-markov" class="quarto-xref">Equation&nbsp;<span>89.1</span></a>, so <span class="math inline">\((X_t)\)</span> is a time-homogeneous Markov chain with initial law <span class="math inline">\(\mu\)</span> and transition function <span class="math inline">\((q_t)\)</span>.</p>
+</section>
+<section id="step-3-the-markov-property" class="level3" data-number="89.5.4">
+<h3 data-number="89.5.4" class="anchored" data-anchor-id="step-3-the-markov-property"><span class="header-section-number">89.5.4</span> Step 3: The Markov Property</h3>
+<p>Fix <span class="math inline">\(t \ge 0\)</span>, <span class="math inline">\(s &gt; 0\)</span> (the case <span class="math inline">\(s = 0\)</span> is trivial) and <span class="math inline">\(f \in B(S)\)</span>. Let <span class="math inline">\(\mathcal{C}_t\)</span> be the collection consisting of <span class="math inline">\(\Omega\)</span> and all cylinder events <span class="math inline">\(C = \{X_{r_1} = j_1, \dots, X_{r_m} = j_m\}\)</span> with <span class="math inline">\(m \ge 1\)</span>, <span class="math inline">\(r_1, \dots, r_m \in [0, t]\)</span> and <span class="math inline">\(j_1, \dots, j_m \in S\)</span>. Then <span class="math inline">\(\mathcal{C}_t\)</span> is a <span class="math inline">\(\pi\)</span>-system (the intersection of two cylinder events is a cylinder event or <span class="math inline">\(\emptyset = \{X_0 = j\} \cap \{X_0 = j'\}\)</span> for <span class="math inline">\(j \ne j'\)</span>) generating <span class="math inline">\(\mathcal{F}^X_t\)</span>.</p>
+<p><em>Claim:</em> <span class="math inline">\(\mathbb{E}[\mathbf{1}_C f(X_{t+s})] = \mathbb{E}[\mathbf{1}_C (Q_s f)(X_t)]\)</span> for all <span class="math inline">\(C \in \mathcal{C}_t\)</span>. Writing <span class="math inline">\(C\)</span> as a countable disjoint union over the values of <span class="math inline">\(X_0\)</span> and <span class="math inline">\(X_t\)</span> (and both sides are countably additive in <span class="math inline">\(C\)</span>, being integrals of bounded functions), it suffices to treat <span class="math inline">\(C = \{X_{r_0} = j_0, \dots, X_{r_m} = j_m\}\)</span> with <span class="math inline">\(0 = r_0 &lt; r_1 &lt; \dots &lt; r_m = t\)</span> (if <span class="math inline">\(t = 0\)</span>, <span class="math inline">\(m = 0\)</span>). By Step 2 applied to the times <span class="math inline">\(r_0 &lt; \dots &lt; r_m &lt; t + s\)</span>, <span class="math display">\[
+\mathbb{P}(C \cap \{X_{t+s} = j\}) = \mathbb{P}(C)\, q_s(j_m, j), \qquad j \in S.
+\]</span> Multiplying by <span class="math inline">\(f(j)\)</span> and summing over <span class="math inline">\(j\)</span> (absolutely convergent, since <span class="math inline">\(\sum_j \mathbb{P}(C \cap \{X_{t+s} = j\}) = \mathbb{P}(C)\)</span> and <span class="math inline">\(f\)</span> is bounded), <span class="math display">\[
+\mathbb{E}[\mathbf{1}_C f(X_{t+s})] = \mathbb{P}(C)\, (Q_s f)(j_m) = \mathbb{E}[\mathbf{1}_C (Q_s f)(X_t)].
+\]</span> The class of <span class="math inline">\(C \in \mathcal{F}^X_t\)</span> satisfying the claimed identity is a <span class="math inline">\(\lambda\)</span>-system (both sides are finite signed measures in <span class="math inline">\(C\)</span>), so by Dynkin’s <span class="math inline">\(\pi\)</span>–<span class="math inline">\(\lambda\)</span> theorem it contains <span class="math inline">\(\mathcal{F}^X_t\)</span>. Since <span class="math inline">\((Q_s f)(X_t)\)</span> is <span class="math inline">\(\mathcal{F}^X_t\)</span>-measurable and bounded, this proves <span class="math inline">\(\mathbb{E}[f(X_{t+s}) \mid \mathcal{F}^X_t] = (Q_s f)(X_t)\)</span> a.s. with <span class="math inline">\(Q_s = e^{sA}\)</span>.</p>
+</section>
+</div>
+<hr>
+</section>
+<section id="filtration-construction" class="level2" data-number="89.6">
+<h2 data-number="89.6" class="anchored" data-anchor-id="filtration-construction"><span class="header-section-number">89.6</span> Filtration Construction</h2>
+<p>The process <span class="math inline">\(X\)</span> is Markov with respect to its natural filtration by <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a>. The following result, which is formulated in Driver’s lecture notes (Thm. 22.34), shows that it is Markov with respect to a larger filtration that carries the full information of <span class="math inline">\(Y\)</span> up to the current number of jumps and of <span class="math inline">\(N\)</span> up to the current time. Here <span class="math inline">\(p\)</span> may be <strong>any</strong> stochastic matrix on <span class="math inline">\(S\)</span>.</p>
+<div id="thm-driver-filtration" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 89.2 (Explicit Filtration Construction (Driver, Thm 22.34))</strong></span> Let <span class="math inline">\((\Omega, \mathcal{F}, (\mathcal{F}_n)_{n \in \mathbb{N}_0}, \mathbb{P})\)</span> be a filtered probability space and let <span class="math inline">\(p\)</span> be a stochastic matrix on the countable set <span class="math inline">\(S\)</span>, with <span class="math inline">\(P = T_p\)</span>. Assume:</p>
+<ol type="1">
+<li><span class="math inline">\((Y_n)_{n \in \mathbb{N}_0}\)</span> is an <span class="math inline">\((\mathcal{F}_n)\)</span>-adapted, <span class="math inline">\(S\)</span>-valued process that is Markov <strong>with respect to <span class="math inline">\((\mathcal{F}_n)\)</span></strong> with transition matrix <span class="math inline">\(p\)</span>: <span class="math display">\[
+\mathbb{P}(Y_{n+1} = j \mid \mathcal{F}_n) = p(Y_n, j) \quad \text{a.s.}, \qquad n \in \mathbb{N}_0,\ j \in S;
+\]</span></li>
+<li><span class="math inline">\((N_t)_{t \ge 0}\)</span> is a Poisson process with rate <span class="math inline">\(\lambda &gt; 0\)</span> as in hypothesis 2 of <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a> (in particular every path is <span class="math inline">\(\mathbb{N}_0\)</span>-valued, non-decreasing, with <span class="math inline">\(N_0 = 0\)</span>);</li>
+<li>the <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\sigma(N_t : t \ge 0)\)</span> is independent of <span class="math display">\[
+\mathcal{F}_\infty \coloneqq \sigma\Bigl(\bigcup_{n \in \mathbb{N}_0} \mathcal{F}_n\Bigr).
+\]</span> (Note that <span class="math inline">\(\mathcal{F}_\infty\)</span> is the <em>terminal</em> <span class="math inline">\(\sigma\)</span>-algebra of the filtration, not the tail <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\bigcap_n \sigma(Y_m : m \ge n)\)</span>; independence from the latter would not suffice.)</li>
+</ol>
+<p>Let <span class="math inline">\(\mathcal{F}^N_t \coloneqq \sigma(N_r : 0 \le r \le t)\)</span> and define, for <span class="math inline">\(t \ge 0\)</span>, <span id="eq-gt-filtration"><span class="math display">\[
+\mathcal{G}_t \coloneqq \Bigl\{ B \in \mathcal{F} :\ B \cap \{N_t = n\} \in \mathcal{F}_n \vee \mathcal{F}^N_t \ \text{ for all } n \in \mathbb{N}_0 \Bigr\},
+\tag{89.7}\]</span></span> where <span class="math inline">\(\mathcal{F}_n \vee \mathcal{F}^N_t = \sigma(\mathcal{F}_n \cup \mathcal{F}^N_t)\)</span>. Let <span class="math inline">\(X_t \coloneqq Y_{N_t}\)</span> and <span class="math inline">\(Q_s \coloneqq e^{\lambda s (P - I)}\)</span>. Then:</p>
+<ol type="1">
+<li><span class="math inline">\((\mathcal{G}_t)_{t \ge 0}\)</span> is a filtration on <span class="math inline">\((\Omega, \mathcal{F})\)</span>.</li>
+<li><span class="math inline">\((X_t)_{t \ge 0}\)</span> is adapted to <span class="math inline">\((\mathcal{G}_t)_{t \ge 0}\)</span>; in particular <span class="math inline">\(\mathcal{F}^X_t \subseteq \mathcal{G}_t\)</span>.</li>
+<li><span class="math inline">\((X_t)_{t \ge 0}\)</span> is a time-homogeneous Markov process relative to <span class="math inline">\((\mathcal{G}_t)_{t \ge 0}\)</span> with transition operators <span class="math inline">\((Q_s)_{s \ge 0}\)</span>: for all <span class="math inline">\(s, t \ge 0\)</span> and <span class="math inline">\(f \in B(S)\)</span>, <span class="math display">\[
+\mathbb{E}[f(X_{t+s}) \mid \mathcal{G}_t] = (Q_s f)(X_t) \quad \text{a.s.}
+\]</span></li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-driver-filtration" class="quarto-xref">Theorem&nbsp;<span>89.2</span></a>). </span>Throughout, <span class="math inline">\(P^m = T_{p^{(m)}}\)</span> (see the discussion after <a href="#lem-markov-matrix" class="quarto-xref">Lemma&nbsp;<span>89.2</span></a>), and hypothesis 1 implies, by induction on <span class="math inline">\(m\)</span> and the tower property, <span id="eq-y-markov-m"><span class="math display">\[
+\mathbb{E}[f(Y_{n+m}) \mid \mathcal{F}_n] = (P^m f)(Y_n) \quad \text{a.s.}, \qquad n, m \in \mathbb{N}_0,\ f \in B(S).
+\tag{89.8}\]</span></span> As in Step 1 of the proof of <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a> (which used only <span class="math inline">\(\|P\|_{\mathrm{op}} = 1\)</span>), <span class="math inline">\(Q_s = \sum_{m \ge 0} \pi_{\lambda s}(m) P^m\)</span> in operator norm, hence pointwise.</p>
+<ol type="1">
+<li><p><strong>Filtration property.</strong> <em><span class="math inline">\(\mathcal{G}_t\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra:</em> <span class="math inline">\(\Omega \in \mathcal{G}_t\)</span> since <span class="math inline">\(\{N_t = n\} \in \mathcal{F}^N_t\)</span>; if <span class="math inline">\(B \in \mathcal{G}_t\)</span> then <span class="math inline">\(B^c \cap \{N_t = n\} = \{N_t = n\} \setminus (B \cap \{N_t = n\}) \in \mathcal{F}_n \vee \mathcal{F}^N_t\)</span>; and countable unions commute with intersecting by <span class="math inline">\(\{N_t = n\}\)</span>.</p>
+<p><em>Monotonicity:</em> let <span class="math inline">\(s \le t\)</span> and <span class="math inline">\(B \in \mathcal{G}_s\)</span>. Since every path of <span class="math inline">\(N\)</span> is <span class="math inline">\(\mathbb{N}_0\)</span>-valued and non-decreasing, <span class="math inline">\(\{N_t = n\} \subseteq \{N_s \le n\}\)</span>, so <span class="math display">\[
+B \cap \{N_t = n\} = \bigcup_{m=0}^{n} \bigl(B \cap \{N_s = m\}\bigr) \cap \{N_t = n\}.
+\]</span> Each <span class="math inline">\(B \cap \{N_s = m\}\)</span> lies in <span class="math inline">\(\mathcal{F}_m \vee \mathcal{F}^N_s \subseteq \mathcal{F}_n \vee \mathcal{F}^N_t\)</span> (as <span class="math inline">\(m \le n\)</span> and <span class="math inline">\(s \le t\)</span>), and <span class="math inline">\(\{N_t = n\} \in \mathcal{F}^N_t\)</span>. Hence <span class="math inline">\(B \cap \{N_t = n\} \in \mathcal{F}_n \vee \mathcal{F}^N_t\)</span> for all <span class="math inline">\(n\)</span>, i.e.&nbsp;<span class="math inline">\(B \in \mathcal{G}_t\)</span>.</p></li>
+<li><p><strong>Adaptedness.</strong> For <span class="math inline">\(E \subseteq S\)</span> and <span class="math inline">\(n \in \mathbb{N}_0\)</span>, <span class="math display">\[
+\{X_t \in E\} \cap \{N_t = n\} = \{Y_n \in E\} \cap \{N_t = n\} \in \mathcal{F}_n \vee \mathcal{F}^N_t,
+\]</span> because <span class="math inline">\(Y_n\)</span> is <span class="math inline">\(\mathcal{F}_n\)</span>-measurable and <span class="math inline">\(\{N_t = n\} \in \mathcal{F}^N_t\)</span>. Also <span class="math inline">\(\{X_t \in E\} = \bigcup_n \{Y_n \in E\} \cap \{N_t = n\} \in \mathcal{F}\)</span>. Thus <span class="math inline">\(\{X_t \in E\} \in \mathcal{G}_t\)</span>. Since <span class="math inline">\((\mathcal{G}_t)\)</span> is a filtration, <span class="math inline">\(\mathcal{F}^X_t \subseteq \mathcal{G}_t\)</span>.</p></li>
+<li><p><strong>Markov property.</strong> Fix <span class="math inline">\(s, t \ge 0\)</span>, <span class="math inline">\(f \in B(S)\)</span>, and for <span class="math inline">\(m \in \mathbb{N}_0\)</span> let <span class="math inline">\(D_m \coloneqq \{N_{t+s} - N_t = m\}\)</span>, so that <span class="math inline">\(\mathbb{P}(D_m) = \pi_{\lambda s}(m)\)</span>.</p>
+<p><em>Step (a).</em> For all <span class="math inline">\(n, m \in \mathbb{N}_0\)</span> and <span class="math inline">\(C \in \mathcal{F}_n \vee \mathcal{F}^N_t\)</span>: <span id="eq-key-identity"><span class="math display">\[
+\mathbb{E}\bigl[f(Y_{n+m}) \mathbf{1}_C \mathbf{1}_{D_m}\bigr] = \mathbb{E}\bigl[(P^m f)(Y_n) \mathbf{1}_C\bigr]\, \mathbb{P}(D_m).
+\tag{89.9}\]</span></span> First let <span class="math inline">\(C = F \cap G\)</span> with <span class="math inline">\(F \in \mathcal{F}_n\)</span>, <span class="math inline">\(G \in \mathcal{F}^N_t\)</span>. The variables <span class="math inline">\(f(Y_{n+m}) \mathbf{1}_F\)</span> and <span class="math inline">\((P^m f)(Y_n) \mathbf{1}_F\)</span> are bounded and <span class="math inline">\(\mathcal{F}_\infty\)</span>-measurable, while <span class="math inline">\(\mathbf{1}_G\)</span> and <span class="math inline">\(\mathbf{1}_G \mathbf{1}_{D_m}\)</span> are <span class="math inline">\(\sigma(N_r : r \ge 0)\)</span>-measurable. By hypothesis 3, then the independence of <span class="math inline">\(D_m\)</span> from <span class="math inline">\(\mathcal{F}^N_t\)</span> (the increment <span class="math inline">\(N_{t+s} - N_t\)</span> is independent of <span class="math inline">\((N_{r_1}, \dots, N_{r_k})\)</span> for all <span class="math inline">\(r_1, \dots, r_k \le t\)</span> by independent increments, and hence of <span class="math inline">\(\mathcal{F}^N_t\)</span> by a <span class="math inline">\(\pi\)</span>–<span class="math inline">\(\lambda\)</span> argument), then <a href="#eq-y-markov-m" class="quarto-xref">Equation&nbsp;<span>89.8</span></a>, then hypothesis 3 again: <span class="math display">\[
+\begin{aligned}
+\mathbb{E}[f(Y_{n+m}) \mathbf{1}_F \mathbf{1}_G \mathbf{1}_{D_m}] &amp;= \mathbb{E}[f(Y_{n+m}) \mathbf{1}_F]\, \mathbb{P}(G \cap D_m) \\
+&amp; = \mathbb{E}[f(Y_{n+m}) \mathbf{1}_F]\, \mathbb{P}(G)\, \mathbb{P}(D_m) \\
+&amp;= \mathbb{E}[(P^m f)(Y_n) \mathbf{1}_F]\, \mathbb{P}(G)\, \mathbb{P}(D_m) \\
+&amp;= \mathbb{E}[(P^m f)(Y_n) \mathbf{1}_F \mathbf{1}_G]\, \mathbb{P}(D_m).
+\end{aligned}
+\]</span> The sets <span class="math inline">\(F \cap G\)</span> form a <span class="math inline">\(\pi\)</span>-system containing <span class="math inline">\(\Omega\)</span> and generating <span class="math inline">\(\mathcal{F}_n \vee \mathcal{F}^N_t\)</span>. Both sides of <a href="#eq-key-identity" class="quarto-xref">Equation&nbsp;<span>89.9</span></a> are finite signed measures in <span class="math inline">\(C\)</span> (as <span class="math inline">\(f\)</span> is bounded), so the class of <span class="math inline">\(C\)</span> satisfying <a href="#eq-key-identity" class="quarto-xref">Equation&nbsp;<span>89.9</span></a> is a <span class="math inline">\(\lambda\)</span>-system, and Dynkin’s <span class="math inline">\(\pi\)</span>–<span class="math inline">\(\lambda\)</span> theorem gives <a href="#eq-key-identity" class="quarto-xref">Equation&nbsp;<span>89.9</span></a> for all <span class="math inline">\(C \in \mathcal{F}_n \vee \mathcal{F}^N_t\)</span>.</p>
+<p><em>Step (b).</em> Let <span class="math inline">\(B \in \mathcal{G}_t\)</span>. Since <span class="math inline">\(N_t\)</span> and <span class="math inline">\(N_{t+s} - N_t\)</span> are <span class="math inline">\(\mathbb{N}_0\)</span>-valued everywhere, the events <span class="math inline">\(\{N_t = n\} \cap D_m\)</span>, <span class="math inline">\(n, m \in \mathbb{N}_0\)</span>, partition <span class="math inline">\(\Omega\)</span>, and on <span class="math inline">\(\{N_t = n\} \cap D_m\)</span> we have <span class="math inline">\(X_{t+s} = Y_{n+m}\)</span>. Applying <a href="#eq-key-identity" class="quarto-xref">Equation&nbsp;<span>89.9</span></a> with <span class="math inline">\(C = B \cap \{N_t = n\} \in \mathcal{F}_n \vee \mathcal{F}^N_t\)</span> and using dominated convergence (<span class="math inline">\(f\)</span> bounded) to interchange sums and expectations, <span class="math display">\[
+\begin{aligned}
+\mathbb{E}[f(X_{t+s}) \mathbf{1}_B] &amp;= \sum_{n=0}^{\infty} \sum_{m=0}^{\infty} \mathbb{E}\bigl[f(Y_{n+m}) \mathbf{1}_{B \cap \{N_t = n\}} \mathbf{1}_{D_m}\bigr] \\
+&amp;= \sum_{n=0}^{\infty} \sum_{m=0}^{\infty} \pi_{\lambda s}(m)\, \mathbb{E}\bigl[(P^m f)(Y_n) \mathbf{1}_{B \cap \{N_t = n\}}\bigr] \\
+&amp;= \sum_{n=0}^{\infty} \mathbb{E}\bigl[(Q_s f)(Y_n) \mathbf{1}_{B \cap \{N_t = n\}}\bigr] \\
+&amp; = \sum_{n=0}^{\infty} \mathbb{E}\bigl[(Q_s f)(X_t) \mathbf{1}_{B \cap \{N_t = n\}}\bigr] \\
+&amp;= \mathbb{E}\bigl[(Q_s f)(X_t) \mathbf{1}_B\bigr].
+\end{aligned}
+\]</span> The interchange of <span class="math inline">\(\sum_m\)</span> and <span class="math inline">\(\mathbb{E}\)</span> is justified by <span class="math inline">\(\sum_m \pi_{\lambda s}(m) \|P^m f\|_\infty \le \|f\|_\infty\)</span>. Since <span class="math inline">\((Q_s f)(X_t)\)</span> is bounded and <span class="math inline">\(\mathcal{G}_t\)</span>-measurable by part 2, this proves <span class="math inline">\(\mathbb{E}[f(X_{t+s}) \mid \mathcal{G}_t] = (Q_s f)(X_t)\)</span> a.s.</p></li>
+</ol>
+</div>
+<div id="rem-filtration-consistency" class="proof remark">
+<p><span class="proof-title"><em>Remark 89.2</em> (Consistency with <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a>). </span>If <span class="math inline">\(p = \delta + a/\lambda\)</span> as in <a href="#eq-stochastic-matrix-def" class="quarto-xref">Equation&nbsp;<span>89.3</span></a>, then <span class="math inline">\(Q_s = e^{s A}\)</span> with <span class="math inline">\(A = \lambda(P - I) = T_a\)</span>. Taking <span class="math inline">\(\mathcal{F}_n = \sigma(Y_0, \dots, Y_n)\)</span>, hypothesis 3 of <a href="#thm-driver-filtration" class="quarto-xref">Theorem&nbsp;<span>89.2</span></a> is hypothesis 3 of <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a>, and conditioning the conclusion of <a href="#thm-driver-filtration" class="quarto-xref">Theorem&nbsp;<span>89.2</span></a> on <span class="math inline">\(\mathcal{F}^X_t \subseteq \mathcal{G}_t\)</span> (tower property) recovers the Markov property in <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a>.</p>
+</div>
+<hr>
+</section>
+<section id="the-compound-poisson-process" class="level2" data-number="89.7">
+<h2 data-number="89.7" class="anchored" data-anchor-id="the-compound-poisson-process"><span class="header-section-number">89.7</span> The Compound Poisson Process</h2>
+<div id="def-compound-poisson" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 89.2 (Compound Poisson Process)</strong></span> Let <span class="math inline">\(d \ge 1\)</span>, let <span class="math inline">\(\nu\)</span> be a probability measure on <span class="math inline">\(\mathbb{Z}^d\)</span>, and let <span class="math inline">\(\lambda &gt; 0\)</span>. On a probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> let <span class="math inline">\(Y_0\)</span> be a <span class="math inline">\(\mathbb{Z}^d\)</span>-valued random variable with law <span class="math inline">\(\mu\)</span>, let <span class="math inline">\((\xi_k)_{k \ge 1}\)</span> be i.i.d. with law <span class="math inline">\(\nu\)</span>, and let <span class="math inline">\((N_t)_{t \ge 0}\)</span> be a Poisson process with rate <span class="math inline">\(\lambda\)</span> as in hypothesis 2 of <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a>, such that <span class="math inline">\(Y_0\)</span>, <span class="math inline">\((\xi_k)_{k \ge 1}\)</span> and <span class="math inline">\((N_t)_{t \ge 0}\)</span> are independent. The process <span class="math display">\[
+X_t \coloneqq Y_0 + \sum_{k=1}^{N_t} \xi_k, \qquad t \ge 0,
+\]</span> is a <strong>compound Poisson process</strong> with rate <span class="math inline">\(\lambda\)</span>, jump distribution <span class="math inline">\(\nu\)</span>, and initial law <span class="math inline">\(\mu\)</span>.</p>
+</div>
+<p>With <span class="math inline">\(Y_n \coloneqq Y_0 + \sum_{k=1}^{n} \xi_k\)</span> (a random walk with step law <span class="math inline">\(\nu\)</span>), we have <span class="math inline">\(X_t = Y_{N_t}\)</span>: the compound Poisson process is exactly the uniformization of a random walk.</p>
+<div id="prp-compound-poisson-markov" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 89.1 (Compound Poisson Processes are Uniformized Chains)</strong></span> In the setting of <a href="#def-compound-poisson" class="quarto-xref">Definition&nbsp;<span>89.2</span></a>, let <span class="math inline">\(S = \mathbb{Z}^d\)</span> and define <span class="math display">\[
+a(i, j) \coloneqq \lambda \bigl(\nu(\{j - i\}) - \delta_{ij}\bigr), \qquad i, j \in \mathbb{Z}^d.
+\]</span> Then <span class="math inline">\(a\)</span> is a conservative Q-matrix with bounded rates, <span class="math inline">\(\sup_i |a(i,i)| = \lambda(1 - \nu(\{0\})) \le \lambda\)</span>, and <span class="math inline">\((X_t)_{t \ge 0}\)</span> is a time-homogeneous Markov chain with initial law <span class="math inline">\(\mu\)</span> and transition function <span class="math inline">\(q_t(i,j) = e^{tA}(i,j)\)</span>, where <span class="math inline">\(A = T_a\)</span> acts by <span class="math display">\[
+(Af)(i) = \lambda \sum_{j \in \mathbb{Z}^d} \nu(\{j\}) \bigl(f(i + j) - f(i)\bigr), \qquad f \in B(\mathbb{Z}^d),\ i \in \mathbb{Z}^d.
+\]</span> Moreover, <span class="math inline">\(X\)</span> is Markov with respect to the filtration <span class="math inline">\((\mathcal{G}_t)\)</span> of <a href="#thm-driver-filtration" class="quarto-xref">Theorem&nbsp;<span>89.2</span></a> built from <span class="math inline">\(\mathcal{F}_n \coloneqq \sigma(Y_0, \xi_1, \dots, \xi_n)\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-compound-poisson-markov" class="quarto-xref">Proposition&nbsp;<span>89.1</span></a>). </span><em>Q-matrix.</em> For <span class="math inline">\(i \ne j\)</span>, <span class="math inline">\(a(i,j) = \lambda \nu(\{j - i\}) \ge 0\)</span>; <span class="math inline">\(a(i,i) = -\lambda(1 - \nu(\{0\})) \in [-\lambda, 0]\)</span>; and <span class="math inline">\(\sum_j a(i,j) = \lambda\bigl(\sum_{k \in \mathbb{Z}^d} \nu(\{k\}) - 1\bigr) = 0\)</span>. Thus <span class="math inline">\(a\)</span> is a conservative Q-matrix with <span class="math inline">\(\sup_i |a(i,i)| = \lambda(1 - \nu(\{0\})) \le \lambda\)</span>, and the formula for <span class="math inline">\(Af\)</span> follows from <span class="math inline">\(Af(i) = \sum_j a(i,j) f(j)\)</span> by the substitution <span class="math inline">\(j \mapsto i + j\)</span> (absolutely convergent).</p>
+<p><em>Random walk.</em> The matrix of <a href="#eq-stochastic-matrix-def" class="quarto-xref">Equation&nbsp;<span>89.3</span></a> is <span class="math inline">\(p(i,j) = \delta_{ij} + a(i,j)/\lambda = \nu(\{j - i\})\)</span>. With <span class="math inline">\(\mathcal{F}_n = \sigma(Y_0, \xi_1, \dots, \xi_n)\)</span>, <span class="math inline">\(Y_n\)</span> is <span class="math inline">\(\mathcal{F}_n\)</span>-measurable and <span class="math inline">\(\xi_{n+1}\)</span> is independent of <span class="math inline">\(\mathcal{F}_n\)</span>, so <span class="math display">\[
+\mathbb{P}(Y_{n+1} = j \mid \mathcal{F}_n) = \mathbb{P}(\xi_{n+1} = j - i)\big|_{i = Y_n} = p(Y_n, j) \quad \text{a.s.}
+\]</span> Hence <span class="math inline">\((Y_n)\)</span> is Markov with respect to <span class="math inline">\((\mathcal{F}_n)\)</span> with transition matrix <span class="math inline">\(p\)</span> and initial law <span class="math inline">\(\mu\)</span>; in particular it satisfies the finite-dimensional formula preceding <a href="#eq-y-fdd" class="quarto-xref">Equation&nbsp;<span>89.4</span></a>.</p>
+<p><em>Independence.</em> <span class="math inline">\(\sigma(Y_n : n \ge 0) \subseteq \mathcal{F}_\infty = \sigma(Y_0, \xi_1, \xi_2, \dots)\)</span>, which is independent of <span class="math inline">\(\sigma(N_t : t \ge 0)\)</span> by assumption.</p>
+<p>All hypotheses of <a href="#thm-uniformization" class="quarto-xref">Theorem&nbsp;<span>89.1</span></a> (with this <span class="math inline">\(\lambda\)</span>) and of <a href="#thm-driver-filtration" class="quarto-xref">Theorem&nbsp;<span>89.2</span></a> are therefore satisfied, and both conclusions apply to <span class="math inline">\(X_t = Y_{N_t}\)</span>.</p>
+</div>
+<div id="rem-fictitious-jumps" class="proof remark">
+<p><span class="proof-title"><em>Remark 89.3</em> (Fictitious Jumps). </span>If <span class="math inline">\(\nu(\{0\}) &gt; 0\)</span>, some Poisson arrivals produce a “jump” of size <span class="math inline">\(0\)</span>, so <span class="math inline">\(X\)</span> does not move. The same phenomenon occurs in general uniformization whenever <span class="math inline">\(\lambda &gt; |a(i,i)|\)</span>: then <span class="math inline">\(p(i,i) &gt; 0\)</span>, and at an arrival of <span class="math inline">\(N\)</span> the chain stays at <span class="math inline">\(i\)</span> with probability <span class="math inline">\(p(i,i)\)</span>. The actual jump rate out of <span class="math inline">\(i\)</span> is <span class="math inline">\(\lambda(1 - p(i,i)) = |a(i,i)|\)</span>, which does not depend on the choice of <span class="math inline">\(\lambda\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="takeaways" class="level2" data-number="89.8">
+<h2 data-number="89.8" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">89.8</span> Takeaways</h2>
+<ul>
+<li>For a Markov chain on a countable state space with operator-norm continuous semigroup, the generator <span class="math inline">\(A\)</span> is represented by a conservative Q-matrix <span class="math inline">\(a\)</span> with bounded rates, <span class="math inline">\(\|A\|_{\mathrm{op}} = 2 \sup_i |a(i,i)|\)</span>, and <span class="math inline">\(q_t(i,j) = \delta_{ij} + t\, a(i,j) + O(t^2)\)</span> uniformly in <span class="math inline">\(i, j\)</span>.</li>
+<li><strong>Uniformization:</strong> for any <span class="math inline">\(\lambda &gt; 0\)</span> with <span class="math inline">\(\lambda \ge \sup_i |a(i,i)|\)</span>, the matrix <span class="math inline">\(p = \delta + a/\lambda\)</span> is stochastic and <span class="math inline">\(e^{tA} = \sum_n \pi_{\lambda t}(n) P^n\)</span>. Running a <span class="math inline">\(p\)</span>-chain <span class="math inline">\(Y\)</span> at the arrival times of an independent rate-<span class="math inline">\(\lambda\)</span> Poisson process gives <span class="math inline">\(X_t = Y_{N_t}\)</span>, a Markov chain with transition function <span class="math inline">\(e^{tA}\)</span>.</li>
+<li>With the right hypotheses (Markov with respect to <span class="math inline">\((\mathcal{F}_n)\)</span>, and <span class="math inline">\(N\)</span> independent of <span class="math inline">\(\mathcal{F}_\infty\)</span>), <span class="math inline">\(X\)</span> is Markov with respect to the larger filtration <span class="math inline">\(\mathcal{G}_t\)</span> of <a href="#eq-gt-filtration" class="quarto-xref">Equation&nbsp;<span>89.7</span></a>, not only its natural filtration.</li>
+<li>A compound Poisson process on <span class="math inline">\(\mathbb{Z}^d\)</span> is the uniformization of a random walk. Its generator is <span class="math inline">\(Af(i) = \lambda \sum_j \nu(\{j\})(f(i+j) - f(i))\)</span>.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./41-1-Generator-Matrix.html" class="pagination-link" aria-label="Lecture 41.1: Generator Matrix">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">88</span>&nbsp; <span class="chapter-title">Lecture 41.1: Generator Matrix</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./AppendixA.html" class="pagination-link" aria-label="Limsups, Liminfs and Extended Limits">
+        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/41-2-Compound-Poisson-Process.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
