@@ -1,0 +1,365 @@
+
+# Lecture 42.1 Jump-Hold Description
+
+## The Discrete-Time Jump–Hold Construction
+
+Throughout, $S$ is a countable state space equipped with the discrete $\sigma$-algebra $\mathcal{P}(S)$ (and, whenever topological notions such as right-continuity are used, with the discrete topology). Let $q : S \times S \to [0,1]$ be a stochastic transition kernel (transition matrix) on $S$, meaning that $q(i,j) \ge 0$ for all $i,j \in S$ and
+$$
+\sum_{j \in S} q(i,j) = 1 \qquad \text{for all } i \in S.
+$$ {#eq-stochastic-kernel}
+
+We use the conventions $\inf \emptyset := +\infty$ and $0^0 := 1$. For $b \in (0,1]$, an $\mathbb{N}$-valued random variable $G$ (where $\mathbb{N} = \{1, 2, \dots\}$) has the **geometric distribution** $\mathrm{Geom}(b)$ if
+$$
+\mathbb{P}(G = m) = g_b(m) := (1-b)^{m-1}\, b, \qquad m \in \mathbb{N}.
+$$ {#eq-geom-pmf}
+Note that $\sum_{m \ge 1} g_b(m) = 1$, and that $G = 1$ almost surely when $b = 1$.
+
+As in Lecture 41.2, a process $(Y_n)_{n \in \mathbb{N}_0}$ (where $\mathbb{N}_0 = \{0,1,2,\dots\}$) of $S$-valued random variables on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ is a **(time-homogeneous) Markov chain with initial law $\mu$ and transition kernel $q$** if
+$$
+\mathbb{P}(Y_0 = i_0, Y_1 = i_1, \dots, Y_n = i_n) = \mu(i_0) \prod_{\ell=1}^{n} q(i_{\ell-1}, i_\ell),
+$$ {#eq-discrete-fdd}
+for all $n \in \mathbb{N}_0,\ i_0, \dots, i_n \in S$.
+
+::: {#def-absorbing-lazy}
+## Absorbing States and Self-Loops
+Let $q$ be a stochastic transition kernel on $S$.
+
+1. A state $i \in S$ is called **absorbing** if $q(i,i) = 1$. Since $q(i,j) \ge 0$ for all $j \in S$ and $\sum_{j \in S} q(i,j) = 1$, a state $i$ is absorbing if and only if $q(i,j) = 0$ for all $j \neq i$.
+2. The kernel $q$ has a **self-loop** at $i \in S$ if $q(i,i) > 0$. A chain with kernel $q$ may then remain at $i$ for several consecutive steps; these "fictitious transitions" $i \to i$ are exactly what the jump chain below removes.
+:::
+
+(In parts of the literature a chain is called *lazy* if $q(i,i) \ge \tfrac12$ for **all** $i \in S$, e.g. $q = \tfrac12(I + q')$ for a stochastic kernel $q'$. We do not use that notion here.)
+
+Suppose now that $q$ has **no absorbing states**, so that $q(i,i) < 1$ (equivalently, $1 - q(i,i) > 0$) for every $i \in S$. Under this assumption, we define the **jump transition kernel** $\tilde{q} : S \times S \to [0,1]$ by
+$$
+\tilde{q}(i,j) := \begin{cases}
+\dfrac{q(i,j)}{1 - q(i,i)}, & \text{if } i \neq j, \\[8pt]
+0, & \text{if } i = j.
+\end{cases}
+$$ {#eq-discrete-jump-kernel}
+
+Let us verify that $\tilde{q}$ is indeed a valid stochastic transition kernel on $S$:
+
+- **Non-negativity:** For every $i, j \in S$, since $q(i,j) \ge 0$ and $1 - q(i,i) > 0$, we have $\tilde{q}(i,j) \ge 0$.
+- **Row sums equal to $1$:** For every $i \in S$, using @eq-stochastic-kernel (all series have non-negative terms, so the diagonal term may be split off),
+  $$
+  \sum_{j \in S} \tilde{q}(i,j) = \sum_{j \neq i} \tilde{q}(i,j) = \sum_{j \neq i} \frac{q(i,j)}{1 - q(i,i)} = \frac{1 - q(i,i)}{1 - q(i,i)} = 1.
+  $$
+
+This kernel governs the embedded jump chain associated with a Markov chain with kernel $q$, as formalized below.
+
+::: {#prp-discrete-jump-hold}
+## Discrete-Time Jump–Hold Proposition
+Let $(Y_n)_{n \in \mathbb{N}_0}$ be a Markov chain on $S$ with initial law $\mu$ and transition kernel $q$, defined on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$, where $q$ has no absorbing states ($q(i,i) < 1$ for all $i \in S$). Define the jump times $(\tau_k)_{k \in \mathbb{N}_0}$ recursively by $\tau_0 := 0$ and, for $k \ge 0$,
+$$
+\tau_{k+1} := \begin{cases}
+\inf\{n > \tau_k : Y_n \neq Y_{\tau_k}\}, & \text{on } \{\tau_k < \infty\}, \\
++\infty, & \text{on } \{\tau_k = \infty\}.
+\end{cases}
+$$ {#eq-discrete-jump-times}
+On $\{\tau_k < \infty\}$ set $Z_k := Y_{\tau_k}$, and for $k \ge 1$ let $\rho_k := \tau_k - \tau_{k-1}$ denote the holding times. (Events concerning $Z_0, \dots, Z_n$ or $\rho_1, \dots, \rho_n$ are understood as subsets of $\{\tau_n < \infty\}$.) Then:
+
+1. $\tau_k < \infty$ $\mathbb{P}$-almost surely for every $k \in \mathbb{N}_0$, and the embedded process $(Z_k)_{k \in \mathbb{N}_0}$ is a Markov chain on $S$ with initial law $\mu$ and transition kernel $\tilde{q}$ given by @eq-discrete-jump-kernel.
+2. Let $n \ge 1$ and $i_0, i_1, \dots, i_n \in S$ with $\mathbb{P}(B) > 0$, where $B := \{Z_0 = i_0, Z_1 = i_1, \dots, Z_n = i_n\}$ (this forces $i_{k-1} \neq i_k$ for $1 \le k \le n$). Put $b_k := 1 - q(i_{k-1}, i_{k-1}) \in (0,1]$. Then, under $\mathbb{P}(\cdot \mid B)$, the holding times $\rho_1, \dots, \rho_n$ are independent with $\rho_k \sim \mathrm{Geom}(b_k)$, i.e.
+   $$
+   \begin{aligned}
+   &\mathbb{P}(\rho_1 = m_1, \dots, \rho_n = m_n \mid B) \\
+   &= \prod_{k=1}^{n} q(i_{k-1}, i_{k-1})^{m_k-1}\big(1 - q(i_{k-1}, i_{k-1})\big), \qquad m_1, \dots, m_n \in \mathbb{N}.
+   \end{aligned}
+   $$
+:::
+
+Each $\tau_k$ is an $\mathbb{N}_0 \cup \{\infty\}$-valued random variable: by induction on $k$, $\{\tau_k = m\} \in \sigma(Y_0, \dots, Y_m)$ for every $m \in \mathbb{N}_0$, since
+$$
+\{\tau_{k+1} = m\} = \bigcup_{r < m} \bigcup_{i \in S} \{\tau_k = r,\ Y_r = Y_{r+1} = \dots = Y_{m-1} = i,\ Y_m \neq i\}.
+$$
+Consequently $Z_k = \sum_{m} \mathbf{1}_{\{\tau_k = m\}} Y_m$ is measurable on $\{\tau_k < \infty\}$.
+
+::: {.proof}
+## Proof of @prp-discrete-jump-hold
+**Step 1: Path decomposition.** Fix $n \ge 1$, states $i_0, \dots, i_n \in S$ with $i_{k-1} \neq i_k$ for $1 \le k \le n$, and $m = (m_1, \dots, m_n) \in \mathbb{N}^n$. Put $n_0 := 0$, $n_k := m_1 + \dots + m_k$, $c_k := q(i_{k-1}, i_{k-1}) \in [0,1)$ and $b_k := 1 - c_k$. We claim that
+$$
+\begin{aligned}
+&\{\tau_1 = n_1, \dots, \tau_n = n_n,\ Z_0 = i_0, \dots, Z_n = i_n\} \\
+& = \bigcap_{k=1}^{n} \{Y_r = i_{k-1} \text{ for } n_{k-1} \le r < n_k,\ Y_{n_k} = i_k\} \\
+& =: C_m.
+\end{aligned}
+$$ {#eq-path-decomposition}
+
+- "$\subseteq$": On the left-hand event, for each $k$ we have $\tau_{k-1} = n_{k-1} < \infty$ and $Y_{\tau_{k-1}} = i_{k-1}$. By the definition of $\tau_k$ as an infimum, $Y_r = Y_{\tau_{k-1}} = i_{k-1}$ for $\tau_{k-1} \le r < \tau_k$, and $Y_{\tau_k} = Z_k = i_k$.
+- "$\supseteq$": On $C_m$ we show by induction on $k$ that $\tau_k = n_k$ and $Z_k = i_k$. This holds for $k = 0$. If $\tau_{k-1} = n_{k-1}$ and $Z_{k-1} = i_{k-1}$, then $Y_r = i_{k-1}$ for $n_{k-1} < r < n_k$ and $Y_{n_k} = i_k \neq i_{k-1}$, so $\tau_k = n_k$ and $Z_k = i_k$.
+
+**Step 2: Path probabilities.** The event $C_m$ prescribes the values of $Y_0, \dots, Y_{n_n}$, so by @eq-discrete-fdd
+$$
+\begin{aligned}
+\mathbb{P}(C_m) &= \mu(i_0) \prod_{k=1}^{n} c_k^{m_k - 1}\, q(i_{k-1}, i_k) \\
+& = \mu(i_0) \prod_{k=1}^{n} \tilde{q}(i_{k-1}, i_k) \prod_{k=1}^{n} g_{b_k}(m_k),
+\end{aligned}
+$$ {#eq-path-probability}
+where we used $q(i_{k-1}, i_k) = b_k\, \tilde{q}(i_{k-1}, i_k)$ (valid as $i_{k-1} \neq i_k$) and @eq-geom-pmf (with $0^0 = 1$ when $c_k = 0$, $m_k = 1$).
+
+The events $C_m$, $m \in \mathbb{N}^n$, are pairwise disjoint with union $\{\tau_n < \infty, Z_0 = i_0, \dots, Z_n = i_n\}$. Summing @eq-path-probability over $m \in \mathbb{N}^n$ (a sum of non-negative terms over a product of counting measures, so it factorizes by Tonelli) and using $\sum_{m \ge 1} g_{b}(m) = 1$, we obtain
+$$
+\mathbb{P}(\tau_n < \infty,\ Z_0 = i_0, \dots, Z_n = i_n) = \mu(i_0) \prod_{k=1}^{n} \tilde{q}(i_{k-1}, i_k).
+$$ {#eq-jump-chain-fdd}
+This identity also holds if $i_{k-1} = i_k$ for some $k$: then both sides vanish, the left side because $Z_k \neq Z_{k-1}$ on $\{\tau_k < \infty\}$ by the definition of $\tau_k$, and the right side because $\tilde{q}(i,i) = 0$. It holds trivially for $n = 0$.
+
+**Step 3: Part 1.** Summing @eq-jump-chain-fdd over all $i_0, \dots, i_n \in S$ (successively over $i_n, i_{n-1}, \dots, i_1$, using that $\tilde{q}$ is stochastic, and then over $i_0$) gives $\mathbb{P}(\tau_n < \infty) = 1$ for every $n$. Hence @eq-jump-chain-fdd reads $\mathbb{P}(Z_0 = i_0, \dots, Z_n = i_n) = \mu(i_0) \prod_{k=1}^{n} \tilde{q}(i_{k-1}, i_k)$, which is @eq-discrete-fdd for the kernel $\tilde{q}$. Thus $(Z_k)$ is a Markov chain with initial law $\mu$ and kernel $\tilde{q}$.
+
+**Step 4: Part 2.** Let $\mathbb{P}(B) > 0$; by @eq-jump-chain-fdd, $i_{k-1} \neq i_k$ for all $k$. Since $\{\rho_1 = m_1, \dots, \rho_n = m_n\} \cap B$ is precisely the left-hand side of @eq-path-decomposition, dividing @eq-path-probability by @eq-jump-chain-fdd yields
+$$
+\mathbb{P}(\rho_1 = m_1, \dots, \rho_n = m_n \mid B) = \prod_{k=1}^{n} g_{b_k}(m_k), \qquad m \in \mathbb{N}^n.
+$$
+A joint probability mass function on $\mathbb{N}^n$ that is a product of probability mass functions is the law of independent random variables with these marginals (sum over all but one coordinate to identify the marginals). Hence, under $\mathbb{P}(\cdot \mid B)$, $\rho_1, \dots, \rho_n$ are independent with $\rho_k \sim \mathrm{Geom}(b_k)$.
+:::
+
+---
+
+## The Continuous-Time Jump–Hold Theorem
+
+We now develop an analogous Jump–Hold characterization for **right-continuous**, time-homogeneous, continuous-time Markov chains on a countable state space $S$ whose transition semigroup is **operator-norm continuous**.
+
+Recall from Lectures 40.1–41.2 that the transition operators $Q_t = T_{q_t}$ of a Markov chain act on $B(S) = \ell_\infty(S)$, and that $(Q_t)_{t \ge 0}$ is **operator-norm continuous** (also called *uniformly continuous*) if $\lim_{t \downarrow 0} \|Q_t - I\|_{\mathrm{op}} = 0$, equivalently $\lim_{t \downarrow 0} \inf_{i \in S} q_t(i,i) = 1$ (@eq-uniform-condition). This holds if and only if $(Q_t)_{t \ge 0}$ has a bounded generator $A$, in which case $Q_t = e^{tA}$ for all $t \ge 0$ (@thm-uniformly-continuous-semigroup). Moreover, $A = T_a$ for a matrix $a = (a(i,j))_{i,j \in S}$ that is a conservative Q-matrix with bounded rates (@cor-q-matrix-properties, @def-bounded-rates), i.e.
+
+- $a(i,j) \ge 0$ for all $i \neq j$;
+- $a_i := -a(i,i) = \sum_{j \neq i} a(i,j) \in [0, \infty)$ for all $i \in S$;
+- $\sup_{i \in S} a_i < \infty$;
+
+and conversely every such matrix generates an operator-norm continuous Markov semigroup (@thm-q-matrix-converse). By @lem-generator-bounds, $\|A\|_{\mathrm{op}} = 2 \sup_{i \in S} a_i$.
+
+The jump times of a path are defined through an infimum over uncountably many times. They are only meaningful under a path-regularity assumption, which we now analyze for a single deterministic path.
+
+::: {#lem-rc-jump-times}
+## Jump Times of a Right-Continuous Path
+Let $x : [0, \infty) \to S$ be right-continuous for the discrete topology on $S$, i.e. for every $t \ge 0$ there exists $\varepsilon > 0$ with $x(s) = x(t)$ for all $s \in [t, t + \varepsilon)$. Define $j_0 := 0$ and, for $k \ge 0$, $j_{k+1} := \inf\{t > j_k : x(t) \neq x(j_k)\}$ if $j_k < \infty$, and $j_{k+1} := \infty$ if $j_k = \infty$. Then for every $k$ with $j_k < \infty$:
+
+(a) $x(t) = x(j_k)$ for all $t \in [j_k, j_{k+1})$;
+
+(b) if $j_{k+1} < \infty$, then $j_{k+1} > j_k$ and $x(j_{k+1}) \neq x(j_k)$;
+
+(c) $j_{k+1} = \inf\{q \in \mathbb{Q} : q > j_k,\ x(q) \neq x(j_k)\}$;
+
+(d) there exists $\varepsilon > 0$ such that $x(q) = x(j_k)$ for all rational $q \in (j_k, j_k + \varepsilon)$.
+:::
+
+::: {.proof}
+## Proof of @lem-rc-jump-times
+(a) is immediate from the definition of $j_{k+1}$ as an infimum, and (d) is right-continuity at $j_k$.
+
+(b) By right-continuity at $j_k$ there is $\varepsilon > 0$ with $x = x(j_k)$ on $[j_k, j_k + \varepsilon)$, so $j_{k+1} \ge j_k + \varepsilon > j_k$. By right-continuity at $j_{k+1}$ there is $\delta > 0$ with $x = x(j_{k+1})$ on $[j_{k+1}, j_{k+1} + \delta)$. If $x(j_{k+1}) = x(j_k)$, then together with (a), $x = x(j_k)$ on $[j_k, j_{k+1} + \delta)$, so $j_{k+1} \ge j_{k+1} + \delta$, a contradiction.
+
+(c) Let $U := \{t > j_k : x(t) \neq x(j_k)\}$. Clearly $\inf U \le \inf (U \cap \mathbb{Q})$. Conversely, if $t \in U$, right-continuity at $t$ gives $\eta > 0$ with $x(s) = x(t) \neq x(j_k)$ for $s \in [t, t + \eta)$; this interval contains rationals arbitrarily close to $t$, all of which lie in $U$. Hence $\inf (U \cap \mathbb{Q}) \le t$ for all $t \in U$, i.e. $\inf (U \cap \mathbb{Q}) \le \inf U$. (If $U = \emptyset$, both infima equal $+\infty$.)
+:::
+
+For an $S$-valued process $(X_t)_{t \ge 0}$ we define its jump times $(J_k)_{k \in \mathbb{N}_0}$ pathwise as in @lem-rc-jump-times, i.e. $J_0 := 0$ and, for $k \ge 0$,
+$$
+J_{k+1} := \begin{cases}
+\inf\{t > J_k : X_t \neq X_{J_k}\}, & \text{on } \{J_k < \infty\}, \\
++\infty, & \text{on } \{J_k = \infty\},
+\end{cases}
+$$ {#eq-ctmc-jump-times}
+and, on $\{J_k < \infty\}$, the embedded chain $Z_k := X_{J_k}$ and (for $k \ge 1$) the holding times $H_k := J_k - J_{k-1}$. Fix a cemetery point $\partial \notin S$ and put $S_\partial := S \cup \{\partial\}$, $\hat{Z}_k := Z_k$ on $\{J_k < \infty\}$ and $\hat{Z}_k := \partial$ on $\{J_k = \infty\}$.
+
+The next lemma shows that for right-continuous processes the joint law of the jump times and the embedded chain is determined by the finite-dimensional distributions. This is what allows us to compute it on a convenient realization of the chain.
+
+::: {#lem-jump-transfer}
+## Jump Functionals Are Determined by the Finite-Dimensional Distributions
+Let $(X_t)_{t \ge 0}$ on $(\Omega, \mathcal{F}, \mathbb{P})$ and $(X'_t)_{t \ge 0}$ on $(\Omega', \mathcal{F}', \mathbb{P}')$ be $S$-valued processes all of whose paths are right-continuous for the discrete topology, and assume they have the same finite-dimensional distributions. Then each $J_k$ (resp. $J'_k$) is a $[0,\infty]$-valued random variable, each $\hat{Z}_k$ (resp. $\hat{Z}'_k$) is an $S_\partial$-valued random variable, and for every $n \in \mathbb{N}_0$
+$$
+\mathrm{Law}_{\mathbb{P}}\big((J_k, \hat{Z}_k)_{k \le n}\big) = \mathrm{Law}_{\mathbb{P}'}\big((J'_k, \hat{Z}'_k)_{k \le n}\big) \qquad \text{on } ([0,\infty] \times S_\partial)^{n+1}.
+$$
+:::
+
+::: {.proof}
+## Proof of @lem-jump-transfer
+Let $\mathbb{Q}_+ := \mathbb{Q} \cap [0,\infty)$ and let $\Omega_0 := S^{\mathbb{Q}_+}$, with coordinates $(y_q)_{q \in \mathbb{Q}_+}$ and product $\sigma$-algebra $\mathcal{G}_0$. For $t \in [0,\infty)$ and $m \in \mathbb{N}$ put $d_m(t) := (\lfloor 2^m t \rfloor + 1) 2^{-m}$, a dyadic rational in $(t, t + 2^{-m}]$. Define maps $\hat{j}_k : \Omega_0 \to [0,\infty]$ and $\hat{z}_k : \Omega_0 \to S_\partial$ recursively by $\hat{j}_0 := 0$, $\hat{z}_0 := y_0$, and
+$$
+\hat{j}_{k+1} := \begin{cases} \inf\{q \in \mathbb{Q}_+ : q > \hat{j}_k,\ y_q \neq \hat{z}_k\}, & \text{if } \hat{z}_k \in S, \\ +\infty, & \text{if } \hat{z}_k = \partial, \end{cases}
+$$
+$$
+\hat{z}_{k+1} := \begin{cases} i, & \text{if } \hat{j}_{k+1} < \infty \text{ and } y_{d_m(\hat{j}_{k+1})} = i \text{ for all sufficiently large } m, \\ \partial, & \text{otherwise.} \end{cases}
+$$
+
+*Measurability.* Suppose $\hat{j}_k$ and $\hat{z}_k$ are $\mathcal{G}_0$-measurable. For $t \in (0, \infty]$,
+$$
+\{\hat{j}_{k+1} < t\} = \bigcup_{q \in \mathbb{Q}_+,\, q < t} \ \bigcup_{i \in S} \big(\{\hat{j}_k < q\} \cap \{\hat{z}_k = i\} \cap \{y_q \neq i\}\big) \in \mathcal{G}_0,
+$$
+so $\hat{j}_{k+1}$ is measurable. On $\{\hat{j}_{k+1} < \infty\}$, $d_m(\hat{j}_{k+1})$ is a measurable random time with countably many values, so $y_{d_m(\hat{j}_{k+1})} = \sum_{r} \mathbf{1}_{\{d_m(\hat{j}_{k+1}) = r\}}\, y_r$ is measurable, and $\{\hat{z}_{k+1} = i\} = \{\hat{j}_{k+1} < \infty\} \cap \bigcup_{M} \bigcap_{m \ge M} \{y_{d_m(\hat{j}_{k+1})} = i\} \in \mathcal{G}_0$. By induction, $\Phi_n := (\hat{j}_k, \hat{z}_k)_{k \le n}$ is a measurable map $\Omega_0 \to ([0,\infty] \times S_\partial)^{n+1}$. Note that $\Phi_n$ is defined without reference to any process.
+
+*Consistency.* Let $x$ be a right-continuous path and $y := x|_{\mathbb{Q}_+}$. By induction on $k$, using @lem-rc-jump-times (c) for $\hat{j}_{k+1}$ and (d), applied at $j_{k+1}$, for $\hat{z}_{k+1}$ (note $d_m(j_{k+1}) \downarrow j_{k+1}$ strictly from the right), we get $\hat{j}_k(y) = j_k$, and $\hat{z}_k(y) = x(j_k)$ if $j_k < \infty$, $\hat{z}_k(y) = \partial$ otherwise.
+
+*Conclusion.* The map $\omega \mapsto (X_q(\omega))_{q \in \mathbb{Q}_+}$ is $\mathcal{F}/\mathcal{G}_0$-measurable, and by consistency $(J_k, \hat{Z}_k)_{k \le n} = \Phi_n\big((X_q)_{q \in \mathbb{Q}_+}\big)$ pointwise on $\Omega$; this proves measurability, and likewise for $X'$. The cylinder sets $\{y_{q_1} = j_1, \dots, y_{q_r} = j_r\}$, together with $\emptyset$ and $\Omega_0$, form a $\pi$-system generating $\mathcal{G}_0$. Their probabilities are finite-dimensional distributions, so the laws of $(X_q)_{q \in \mathbb{Q}_+}$ and $(X'_q)_{q \in \mathbb{Q}_+}$ on $(\Omega_0, \mathcal{G}_0)$ coincide by the uniqueness theorem for measures agreeing on a $\pi$-system. Applying the same measurable map $\Phi_n$ gives the claim.
+:::
+
+::: {#thm-continuous-jump-hold}
+## Continuous-Time Jump–Hold Theorem
+Let $a = (a(i,j))_{i,j \in S}$ be a conservative Q-matrix with bounded rates (@def-bounded-rates), let $A := T_a$, and write
+$$
+a_i := -a(i,i) = \sum_{j \neq i} a(i,j) \quad \text{for all } i \in S, \qquad \sup_{i \in S} a_i < \infty.
+$$
+Assume that there are **no absorbing states**, i.e., $a_i > 0$ for all $i \in S$. Let $(X_t)_{t \ge 0}$ be a time-homogeneous Markov chain on $S$ with initial law $\mu$ and transition function $q_t(i,j) = e^{tA}(i,j)$ (in the sense of @eq-fdd-markov), defined on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$, and assume that **every** path $t \mapsto X_t(\omega)$ is right-continuous for the discrete topology on $S$. Let $J_k$, $Z_k$, $H_k$ be as in @eq-ctmc-jump-times. Then:
+
+1. Each $J_k$ is a $[0,\infty]$-valued random variable, $J_k < \infty$ $\mathbb{P}$-almost surely for every $k \in \mathbb{N}_0$, and $J_k \uparrow \infty$ $\mathbb{P}$-almost surely. Moreover, $X_t = Z_k$ for all $t \in [J_k, J_{k+1})$ (for every $\omega$ and every $k$ with $J_k(\omega) < \infty$). The embedded process $(Z_k)_{k \in \mathbb{N}_0}$ is a Markov chain on $S$ with initial law $\mu$ and transition kernel
+   $$
+   \tilde{p}(i,j) = \begin{cases}
+   \dfrac{a(i,j)}{a_i}, & \text{if } i \neq j, \\[8pt]
+   0, & \text{if } i = j.
+   \end{cases}
+   $$ {#eq-ctmc-jump-kernel}
+2. Let $n \ge 1$ and $i_0, i_1, \dots, i_n \in S$ with $\mathbb{P}(B) > 0$, where $B := \{Z_0 = i_0, Z_1 = i_1, \dots, Z_n = i_n\}$ (this forces $i_{k-1} \neq i_k$). Then, under $\mathbb{P}(\cdot \mid B)$, the holding times $H_1, \dots, H_n$ are independent with
+   $$
+   H_k \sim \mathrm{Exp}(a_{i_{k-1}}) \qquad \text{for each } k = 1, \dots, n.
+   $$
+:::
+
+Before proving @thm-continuous-jump-hold, we record a lemma on geometric sums of independent exponential random variables used in the second part of the proof.
+
+::: {#lem-geom-exp-sum}
+## Geometric Compounding of Exponential Random Variables
+On a probability space $(\Omega, \mathcal{F}, \mathbb{P})$, let $(E_\ell)_{\ell \in \mathbb{N}}$ be i.i.d. with $E_\ell \sim \mathrm{Exp}(\lambda)$ for some rate $\lambda > 0$, and let $\rho_1, \dots, \rho_n$ be independent $\mathbb{N}$-valued random variables with $\rho_k \sim \mathrm{Geom}(b_k)$, $b_k \in (0,1]$, such that $(\rho_1, \dots, \rho_n)$ is independent of $(E_\ell)_{\ell \in \mathbb{N}}$. Define
+$$
+W_0 := 0, \qquad W_m := E_1 + \dots + E_m \quad (m \ge 1),
+$$
+and set $\tau_0 := 0$, $\tau_k := \rho_1 + \dots + \rho_k$, and
+$$
+H_k := W_{\tau_k} - W_{\tau_{k-1}} = \sum_{\ell = \tau_{k-1} + 1}^{\tau_k} E_\ell \qquad (k = 1, \dots, n).
+$$
+Then $H_1, \dots, H_n$ are independent random variables with
+$$
+H_k \sim \mathrm{Exp}(\lambda b_k) \qquad \text{for each } k = 1, \dots, n.
+$$
+:::
+
+::: {.proof}
+## Proof of @lem-geom-exp-sum
+For $m \in \mathbb{N}$, the sum of $m$ independent $\mathrm{Exp}(\lambda)$ random variables has the Gamma density
+$$
+\gamma_m(x) := \frac{\lambda^m x^{m-1}}{(m-1)!} e^{-\lambda x}, \qquad x > 0.
+$$
+This is the marginal density of the $m$-th arrival time in @lem-joint-density: integrate $\lambda^m e^{-\lambda x_m}$ over $(x_1, \dots, x_{m-1}) \in D_{m-1}(x_m)$, using @lem-leb-simplex.
+
+For $m = (m_1, \dots, m_n) \in \mathbb{N}^n$ with partial sums $n_0 := 0$, $n_k := m_1 + \dots + m_k$, put $U^{(m)}_k := \sum_{\ell = n_{k-1}+1}^{n_k} E_\ell$. On $\{\rho = m\}$ we have $H_k = U^{(m)}_k$; in particular $H_k = \sum_{m} \mathbf{1}_{\{\rho = m\}} U^{(m)}_k$ is measurable. The variables $U^{(m)}_1, \dots, U^{(m)}_n$ are functions of disjoint blocks of the independent family $(E_\ell)$, hence independent (@lem-grouping-sigma-fields), and $U^{(m)}_k$ has density $\gamma_{m_k}$.
+
+Fix Borel sets $C_1, \dots, C_n \subseteq \mathbb{R}$. Using the independence of $(\rho_1, \dots, \rho_n)$ and $(E_\ell)$, then Tonelli's theorem for counting measure and for Lebesgue measure (all integrands are non-negative),
+$$
+\begin{aligned}
+\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n)
+&= \sum_{m \in \mathbb{N}^n} \mathbb{P}(\rho = m)\, \mathbb{P}\big(U^{(m)}_1 \in C_1, \dots, U^{(m)}_n \in C_n\big) \\
+&= \sum_{m \in \mathbb{N}^n} \prod_{k=1}^{n} g_{b_k}(m_k) \int_{C_k \cap (0,\infty)} \gamma_{m_k}(x)\, dx\\
+&= \prod_{k=1}^{n} \int_{C_k \cap (0,\infty)} \sum_{m=1}^{\infty} g_{b_k}(m)\, \gamma_m(x)\, dx.
+\end{aligned}
+$$
+For $b \in (0,1]$ and $x > 0$,
+$$
+\begin{aligned}
+\sum_{m=1}^{\infty} (1-b)^{m-1} b\, \frac{\lambda^m x^{m-1}}{(m-1)!} e^{-\lambda x} &= b \lambda e^{-\lambda x} \sum_{r=0}^{\infty} \frac{\big((1-b)\lambda x\big)^r}{r!} \\
+& = b\lambda e^{-\lambda x} e^{(1-b)\lambda x} = \lambda b\, e^{-\lambda b x}.
+\end{aligned}
+$$
+Therefore $\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n) = \prod_{k=1}^{n} \int_{C_k \cap (0,\infty)} \lambda b_k e^{-\lambda b_k x}\, dx$. Taking all but one $C_k$ equal to $\mathbb{R}$ shows $H_k \sim \mathrm{Exp}(\lambda b_k)$, and the product formula then shows that $H_1, \dots, H_n$ are independent.
+:::
+
+::: {.proof}
+## Proof of @thm-continuous-jump-hold
+The strategy is as follows. We construct, via uniformization, a second right-continuous chain $X'$ with the same finite-dimensional distributions whose jumps can be identified explicitly. We prove both parts for $X'$, and then transfer them to $X$ by @lem-jump-transfer.
+
+**Step 1: The uniformized kernel.**
+Choose a constant $\lambda$ with
+$$
+\lambda > 0 \quad \text{and} \quad \lambda \ge \sup_{i \in S} a_i = \frac{1}{2}\|A\|_{\mathrm{op}}
+$$
+(@lem-generator-bounds). For instance, $\lambda := \sup_{i} a_i$ is admissible, since it is finite and positive because $a_i > 0$. Define the matrix $p$ by
+$$
+p(i,j) = \delta_{ij} + \frac{1}{\lambda} a(i,j) = \begin{cases}
+\dfrac{a(i,j)}{\lambda}, & \text{if } i \neq j, \\[8pt]
+1 - \dfrac{a_i}{\lambda}, & \text{if } i = j,
+\end{cases}
+$$ {#eq-uniformized-kernel}
+where $\delta_{ij}$ denotes the Kronecker delta. By @lem-markov-matrix, $p$ is a stochastic kernel on $S$. Since $a_i > 0$, $p(i,i) = 1 - a_i/\lambda < 1$ for every $i \in S$, so $p$ has **no absorbing states** (although $p$ may have self-loops). Its jump kernel @eq-discrete-jump-kernel is, for $i \neq j$,
+$$
+\frac{p(i,j)}{1 - p(i,i)} = \frac{a(i,j)/\lambda}{a_i/\lambda} = \frac{a(i,j)}{a_i} = \tilde{p}(i,j),
+$$
+and it vanishes on the diagonal, so it coincides with @eq-ctmc-jump-kernel.
+
+**Step 2: A right-continuous realization.**
+On some probability space $(\Omega', \mathcal{F}', \mathbb{P}')$ (e.g. a product space, using the Kolmogorov extension theorem for $Y$), let $(Y_m)_{m \in \mathbb{N}_0}$ be a Markov chain with initial law $\mu$ and kernel $p$, and let $(E_\ell)_{\ell \in \mathbb{N}}$ be i.i.d. $\mathrm{Exp}(\lambda)$ random variables such that $\sigma(Y_m : m \in \mathbb{N}_0)$ and $\sigma(E_\ell : \ell \in \mathbb{N})$ are independent. Put $T_0 := 0$, $T_m := E_1 + \dots + E_m$, and
+$$
+N_t := \sup\{m \in \mathbb{N}_0 : T_m \le t\}, \qquad t \ge 0,
+$$
+as in @eq-poisson-explicit-def. Almost surely, $E_\ell > 0$ for all $\ell$ and $T_m \to \infty$ (by the strong law of large numbers, $T_m / m \to 1/\lambda$). Restricting $\Omega'$ to this event of full probability, which changes no joint law, we may assume that these properties hold for **every** $\omega'$. Then, for every $\omega'$, $0 = T_0 < T_1 < T_2 < \dots$, $T_m \to \infty$, and $t \mapsto N_t$ is $\mathbb{N}_0$-valued, non-decreasing and right-continuous with $N_0 = 0$, $N_t = m$ for $t \in [T_m, T_{m+1})$, and in particular $N_{T_m} = m$. By Lecture 35.2 (@thm-poisson-measure), $N$ has independent increments with $N_t - N_s \sim \mathrm{Poisson}(\lambda(t-s))$. Moreover, $\sigma(N_t : t \ge 0) \subseteq \sigma(E_\ell : \ell \in \mathbb{N})$ is independent of $\sigma(Y_m : m \in \mathbb{N}_0)$. Hence all hypotheses of @thm-uniformization hold, and
+$$
+X'_t := Y_{N_t}, \qquad t \ge 0,
+$$ {#eq-uniformization-realization}
+is a Markov chain with initial law $\mu$ and transition function $e^{tA}$. Thus $X'$ has the same finite-dimensional distributions as $X$. Every path of $X'$ is right-continuous: given $t$, $N_s = N_t$ for $s \in [t, T_{N_t + 1})$, so $X'_s = X'_t$ there.
+
+**Step 3: Pathwise identification of the jumps of $X'$.**
+Let $(\tau_k)$ and $(\rho_k)$ be the jump times and holding times of $Y$ as in @prp-discrete-jump-hold (with kernel $p$). By @prp-discrete-jump-hold (Part 1), the event $\Omega'_1 := \{\tau_k < \infty \text{ for all } k\}$ has $\mathbb{P}'(\Omega'_1) = 1$. Let $J'_k, Z'_k, H'_k$ denote the jump times, embedded chain and holding times of $X'$. We claim that on $\Omega'_1$,
+$$
+J'_k = T_{\tau_k} \quad \text{and} \quad Z'_k = Y_{\tau_k} \qquad \text{for all } k \in \mathbb{N}_0.
+$$ {#eq-jump-identification}
+For $k = 0$ this holds since $J'_0 = 0 = T_0$ and $Z'_0 = X'_0 = Y_0$. Assume it holds for $k$. For $t > T_{\tau_k}$ we have $N_t \ge N_{T_{\tau_k}} = \tau_k$. If moreover $t < T_{\tau_{k+1}}$, then $\tau_k \le N_t < \tau_{k+1}$, so $X'_t = Y_{N_t} = Y_{\tau_k} = Z'_k$ by the definition of $\tau_{k+1}$. At $t = T_{\tau_{k+1}}$, which is $> T_{\tau_k}$ because $\tau_{k+1} > \tau_k$ and $(T_m)$ is strictly increasing, we have $N_t = \tau_{k+1}$ and $X'_t = Y_{\tau_{k+1}} \neq Y_{\tau_k}$. Hence the infimum defining $J'_{k+1}$ is attained at $T_{\tau_{k+1}}$, i.e. $J'_{k+1} = T_{\tau_{k+1}}$ and $Z'_{k+1} = Y_{\tau_{k+1}}$.
+
+Consequently, on $\Omega'_1$,
+$$
+H'_k = T_{\tau_k} - T_{\tau_{k-1}} = \sum_{\ell = \tau_{k-1} + 1}^{\tau_k} E_\ell \quad (k \ge 1), \qquad J'_k = T_{\tau_k} \ge T_k \to \infty,
+$$
+since $\tau_k \ge k$.
+
+**Step 4: Both parts for $X'$.**
+*Part 1.* By Step 3, $J'_k < \infty$ for all $k$ and $J'_k \to \infty$ on $\Omega'_1$, and $(Z'_k) = (Y_{\tau_k})$ there. By @prp-discrete-jump-hold (Part 1) and Step 1, $(Z'_k)$ is a Markov chain with initial law $\mu$ and kernel $\tilde{p}$.
+
+*Part 2.* Fix $n \ge 1$ and $i_0, \dots, i_n$, and put $B' := \{Z'_0 = i_0, \dots, Z'_n = i_n\}$ and $B_Y := \{Y_{\tau_0} = i_0, \dots, Y_{\tau_n} = i_n\} \in \sigma(Y_m : m \in \mathbb{N}_0)$. By Step 3, $B' \cap \Omega'_1 = B_Y \cap \Omega'_1$, so $\mathbb{P}'(B') = \mathbb{P}'(B_Y)$; assume this is positive. By @prp-discrete-jump-hold (Part 2), under $\mathbb{P}'(\cdot \mid B_Y)$ the variables $\rho_1, \dots, \rho_n$ are independent with
+$$
+\rho_k \sim \mathrm{Geom}(b_k), \qquad b_k := 1 - p(i_{k-1}, i_{k-1}) = \frac{a_{i_{k-1}}}{\lambda} \in (0,1].
+$$
+Under $\mathbb{P}'(\cdot \mid B_Y)$, the sequence $(E_\ell)$ is still i.i.d. $\mathrm{Exp}(\lambda)$ and independent of $\sigma(Y_m : m \in \mathbb{N}_0)$. Indeed, for $C \in \sigma(Y_m : m \in \mathbb{N}_0)$ and $D \in \sigma(E_\ell : \ell \in \mathbb{N})$, since $C \cap B_Y \in \sigma(Y_m : m \in \mathbb{N}_0)$,
+$$
+\mathbb{P}'(C \cap D \mid B_Y) = \frac{\mathbb{P}'(C \cap B_Y)\, \mathbb{P}'(D)}{\mathbb{P}'(B_Y)} = \mathbb{P}'(C \mid B_Y)\, \mathbb{P}'(D),
+$$
+and taking $C = \Omega'$ gives $\mathbb{P}'(D \mid B_Y) = \mathbb{P}'(D)$. As $\rho_1, \dots, \rho_n$ are $\sigma(Y_m : m \in \mathbb{N}_0)$-measurable, @lem-geom-exp-sum applies under $\mathbb{P}'(\cdot \mid B_Y)$. Since $H'_k$ equals the block sums of Step 3 almost surely, under $\mathbb{P}'(\cdot \mid B_Y) = \mathbb{P}'(\cdot \mid B')$ the variables $H'_1, \dots, H'_n$ are independent with
+$$
+H'_k \sim \mathrm{Exp}(\lambda b_k) = \mathrm{Exp}(a_{i_{k-1}}) \qquad (k = 1, \dots, n).
+$$
+
+**Step 5: Transfer to $X$.**
+By @lem-jump-transfer, each $J_k$ is a random variable and, for every $n$, $(J_k, \hat{Z}_k)_{k \le n}$ under $\mathbb{P}$ has the same law as $(J'_k, \hat{Z}'_k)_{k \le n}$ under $\mathbb{P}'$. All assertions of the theorem are statements about these joint laws:
+
+- $\mathbb{P}(J_n < \infty) = \mathbb{P}'(J'_n < \infty) = 1$ for every $n$.
+- $\mathbb{P}(Z_0 = i_0, \dots, Z_n = i_n) = \mathbb{P}'(Z'_0 = i_0, \dots, Z'_n = i_n) = \mu(i_0) \prod_{k=1}^{n} \tilde{p}(i_{k-1}, i_k)$, so $(Z_k)$ is a Markov chain with initial law $\mu$ and kernel $\tilde{p}$.
+- Since $(J_k)$ is non-decreasing, for every $M \in \mathbb{N}$, $\mathbb{P}(\sup_k J_k \le M) = \lim_{n} \mathbb{P}(J_n \le M) = \lim_n \mathbb{P}'(J'_n \le M) = \mathbb{P}'(\sup_k J'_k \le M) = 0$; hence $J_k \uparrow \infty$ almost surely. By @lem-rc-jump-times (b), the finite $J_k$ are strictly increasing.
+- On $\{J_n < \infty\}$, $(H_1, \dots, H_n)$ is the same measurable function of $(J_0, \dots, J_n)$ as $(H'_1, \dots, H'_n)$ is of $(J'_0, \dots, J'_n)$. Hence $\mathbb{P}(B \cap \{H_1 \in C_1, \dots, H_n \in C_n\}) = \mathbb{P}'(B' \cap \{H'_1 \in C_1, \dots, H'_n \in C_n\})$ for Borel sets $C_k$, and $\mathbb{P}(B) = \mathbb{P}'(B')$. Thus the conditional law of $(H_1, \dots, H_n)$ given $B$ equals that of $(H'_1, \dots, H'_n)$ given $B'$, which was identified in Step 4.
+
+Finally, $X_t = Z_k$ for $t \in [J_k, J_{k+1})$ holds for every $\omega$ by @lem-rc-jump-times (a). This completes the proof.
+:::
+
+---
+
+## Scope and Limitations: Bounded vs. Unbounded Generators
+
+::: {#rem-operator-norm-continuity}
+## Applicability of the Jump–Hold Description
+The Jump–Hold description established in @thm-continuous-jump-hold applies to every **right-continuous** time-homogeneous, continuous-time Markov chain $(X_t)_{t \ge 0}$ that has **no absorbing states** and whose transition semigroup $(Q_t)_{t \ge 0}$ is **operator-norm continuous**, meaning that
+$$
+\|Q_t - I\|_{\mathrm{op}} \to 0 \qquad \text{as } t \downarrow 0,
+$$
+or equivalently (@eq-uniform-condition), in terms of the diagonal transition probabilities,
+$$
+\inf_{i \in S} q_t(i,i) \to 1 \qquad \text{as } t \downarrow 0.
+$$ {#eq-uniform-continuity-diag}
+As noted earlier, operator-norm continuity of $(Q_t)_{t \ge 0}$ is equivalent to $(Q_t)_{t \ge 0}$ possessing a **bounded** generator $A$, in which case $Q_t = e^{tA}$ for all $t \ge 0$.
+
+1. **Path regularity cannot be dropped.** The finite-dimensional distributions alone do not determine the jump times. Let $X$ be as in @thm-continuous-jump-hold, let $\phi : S \to S$ be any map without fixed points (which exists since $|S| \ge 2$ when there are no absorbing states), and let $U \sim \mathrm{Exp}(1)$ be independent of $X$. Define $X'_t := X_t$ for $t \neq U$ and $X'_U := \phi(X_U)$. Then $\mathbb{P}(X'_t = X_t) = 1$ for every $t$, so $X'$ has the same finite-dimensional distributions as $X$. However, its first jump time is $J'_1 = \min(J_1, U)$ almost surely, and given $X_0 = i$ this is $\mathrm{Exp}(a_i + 1)$-distributed rather than $\mathrm{Exp}(a_i)$-distributed. Moreover, on $\{U < J_1\}$ the path of $X'$ leaves $X_0$ at time $U$ and returns immediately, so $J'_2 = J'_1 = U$ (a holding time equal to $0$). Right-continuity is exactly what rules out such modifications (@lem-jump-transfer).
+
+2. **Unbounded rates.** In many important applications (such as birth–death processes with unbounded rates or general jump processes on infinite state spaces), $\sup_{i \in S} a_i = \infty$. Then $(Q_t)_{t \ge 0}$ is **not** operator-norm continuous as $t \downarrow 0$ (i.e., $\|Q_t - I\|_{\mathrm{op}} \not\to 0$), and in fact it is not even strongly continuous on $B(S) = \ell_\infty(S)$. By a theorem of Lotz, every strongly continuous semigroup on $\ell_\infty$ is automatically norm continuous, because $\ell_\infty$ is a Grothendieck space with the Dunford–Pettis property. A Hille–Yosida-type description with an **unbounded** generator is instead available for the action on measures: on $\ell_1(S)$, the semigroup $\nu \mapsto \nu Q_t$ is strongly continuous as soon as $q_t(i,i) \to 1$ for each $i$. Indeed, $\|\delta_i Q_t - \delta_i\|_{\ell_1} = 2(1 - q_t(i,i))$, and dominated convergence handles general $\nu \in \ell_1(S)$.
+
+3. **What fails, and what survives.** Uniformization requires a finite $\lambda \ge \sup_i a_i$, so the *proof* above breaks down when rates are unbounded. The jump–hold *structure* itself survives for right-continuous chains with a conservative Q-matrix whose rates $a_i$ are all finite: the jump chain still has kernel $a(i,j)/a_i$ and the holding times are still conditionally independent $\mathrm{Exp}(a_i)$. This can be proved with the strong Markov property instead of uniformization. However, it now describes the process only up to the explosion time $J_\infty := \lim_k J_k$, which may be finite with positive probability (infinitely many jumps in finite time). If some $a_i = \infty$ (an *instantaneous* state), there is no first jump time at all. We will explore these unbounded-generator regimes in later lectures.
+:::
+
+## Takeaways
+
+- **Discrete jump chain.** For a Markov chain with kernel $q$ and no absorbing states, deleting the fictitious transitions $i \to i$ yields the jump chain $Z_k = Y_{\tau_k}$. It is Markov with kernel $\tilde{q}(i,j) = q(i,j)/(1 - q(i,i))$ for $i \neq j$ and $\tilde{q}(i,i) = 0$. Conditionally on the jump-chain path $i_0, \dots, i_n$, the holding times are independent $\mathrm{Geom}(1 - q(i_{k-1}, i_{k-1}))$ (@prp-discrete-jump-hold). Both facts come from a single computation: the probability of a path factorizes as $\mu(i_0) \prod_k \tilde{q}(i_{k-1}, i_k) \cdot \prod_k g_{b_k}(m_k)$ (@eq-path-probability).
+- **Geometric compounding.** A $\mathrm{Geom}(b)$ number of i.i.d. $\mathrm{Exp}(\lambda)$ variables sums to an $\mathrm{Exp}(\lambda b)$ variable, and disjoint blocks of this kind are independent (@lem-geom-exp-sum).
+- **Continuous-time Jump–Hold Theorem.** Consider a right-continuous chain with bounded rates and no absorbing states. The jump chain is Markov with kernel $\tilde{p}(i,j) = a(i,j)/a_i$. Given the jump-chain path, the holding times are independent $\mathrm{Exp}(a_{i_{k-1}})$. The jump times increase to $\infty$ almost surely (no explosion), and $X_t = Z_k$ on $[J_k, J_{k+1})$ (@thm-continuous-jump-hold). Thus the chain stays in state $i$ for an $\mathrm{Exp}(a_i)$ time and then jumps to $j \neq i$ with probability $a(i,j)/a_i$.
+- **Proof strategy.** Uniformization with $\lambda \ge \sup_i a_i$ gives the realization $X'_t = Y_{N_t}$, whose jumps occur exactly at $T_{\tau_k}$, the Poisson epochs where the $p$-chain $Y$ really changes state. The discrete Jump–Hold Proposition and geometric compounding (with $b_k = a_{i_{k-1}}/\lambda$) then give the result for $X'$.
+- **From distributions to paths.** Equality of finite-dimensional distributions does not imply pathwise equality. For right-continuous processes, however, jump times and jump states are measurable functions of the values at rational times (@lem-rc-jump-times, @lem-jump-transfer). Their joint law is therefore determined by the finite-dimensional distributions, which transfers the result from $X'$ to any right-continuous version $X$. Without right-continuity, the conclusion can fail for a modification (@rem-operator-norm-continuity).
+- **Limits of the method.** Unbounded rates destroy operator-norm continuity, and on $\ell_\infty(S)$ even strong continuity (Lotz's theorem), so uniformization is unavailable. The jump–hold structure persists up to a possibly finite explosion time, which is the subject of later lectures.

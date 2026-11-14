@@ -117,6 +117,7 @@ book:
         - 40-2-Bounded-Generators.qmd
         - 41-1-Generator-Matrix.qmd
         - 41-2-Compound-Poisson-Process.qmd
+        - 42-1-Jump-Hold-Description.qmd
         
 
 
