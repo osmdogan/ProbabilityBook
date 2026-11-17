@@ -715,6 +715,30 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-2-Bounded-Generators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">87</span>&nbsp; <span class="chapter-title">Lecture 40.2: Bounded Generators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-1-Generator-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">88</span>&nbsp; <span class="chapter-title">Lecture 41.1: Generator Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-2-Compound-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">89</span>&nbsp; <span class="chapter-title">Lecture 41.2: Compound Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42-1-Jump-Hold-Description.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">90</span>&nbsp; <span class="chapter-title">Lecture 42.1 Jump-Hold Description</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -790,7 +814,7 @@ window.Quarto = {
 
 <section id="introduction-and-the-path-space-framework" class="level2" data-number="82.1">
 <h2 data-number="82.1" class="anchored" data-anchor-id="introduction-and-the-path-space-framework"><span class="header-section-number">82.1</span> Introduction and the Path Space Framework</h2>
-<p>Given a totally ordered index set <span class="math inline">\(T\)</span> with least element <span class="math inline">\(0\)</span>, an initial probability measure <span class="math inline">\(\nu \in \mathcal{P}(S, \mathcal{B})\)</span>, and a family of Markov transition operators <span class="math inline">\(\{Q_{s,t}\}_{s \le t}\)</span> satisfying the Chapman–Kolmogorov equations on a standard Borel space <span class="math inline">\((S, \mathcal{B})\)</span> (<a href="37-2-Kolmogorov-Extension-Theorem.html#thm-canonical-markov-construction" class="quarto-xref">Theorem&nbsp;<span>81.2</span></a>, Lecture 37.2), the Kolmogorov Extension Theorem constructs a canonical probability measure <span class="math inline">\(\mathbb{P}^\nu \in \mathcal{P}(S^T, \mathcal{B}^{\otimes T})\)</span> on the infinite product space <span class="math inline">\(S^T = \{\omega : T \to S\}\)</span>. Under <span class="math inline">\(\mathbb{P}^\nu\)</span>, the coordinate process <span class="math inline">\(X_t(\omega) = \omega(t)\)</span> is a Markov process matching the specified finite-dimensional distributions.</p>
+<p>Given a totally ordered index set <span class="math inline">\(T\)</span> with least element <span class="math inline">\(0\)</span>, an initial probability measure <span class="math inline">\(\nu \in \mathcal{P}(S, \mathcal{B})\)</span>, and a family of Markov transition operators <span class="math inline">\(\{Q_{s,t}\}_{s \le t}\)</span> satisfying the Chapman–Kolmogorov equations on a standard Borel space <span class="math inline">\((S, \mathcal{B})\)</span> (<span class="quarto-unresolved-ref">?thm-canonical-markov-construction</span>, Lecture 37.2), the Kolmogorov Extension Theorem constructs a canonical probability measure <span class="math inline">\(\mathbb{P}^\nu \in \mathcal{P}(S^T, \mathcal{B}^{\otimes T})\)</span> on the infinite product space <span class="math inline">\(S^T = \{\omega : T \to S\}\)</span>. Under <span class="math inline">\(\mathbb{P}^\nu\)</span>, the coordinate process <span class="math inline">\(X_t(\omega) = \omega(t)\)</span> is a Markov process matching the specified finite-dimensional distributions.</p>
 <p>However, not every Markov process associated with the data <span class="math inline">\((\nu, \{Q_{s,t}\}_{s \le t})\)</span> “is” literally this coordinate process on <span class="math inline">\(S^T\)</span>. In general, any stochastic process <span class="math inline">\(X = \{X_t\}_{t \in T}\)</span> defined on an arbitrary probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> induces a pushforward measure <span class="math inline">\(P_X\)</span> on the path space <span class="math inline">\((S^T, \mathcal{B}^{\otimes T})\)</span>:</p>
 <div id="def-law-of-process" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 82.1 (Law of a Stochastic Process / Path Measure)</strong></span> Let <span class="math inline">\(X = \{X_t\}_{t \in T}\)</span> be an <span class="math inline">\(S\)</span>-valued stochastic process defined on <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span>. The <strong>law of the process</strong> <span class="math inline">\(X\)</span>, denoted by <span class="math inline">\(P_X \in \mathcal{P}(S^T, \mathcal{B}^{\otimes T})\)</span>, is the pushforward measure under the path map <span class="math inline">\(\omega \mapsto (t \mapsto X_t(\omega))\)</span>: <span id="eq-law-of-process"><span class="math display">\[
@@ -817,14 +841,14 @@ P_X(E) := \mathbb{P} \Big( \big\{ \omega \in \Omega : (t \mapsto X_t(\omega))_{t
 <p><span class="theorem-title"><strong>Definition 82.2 (Standard Brownian Motion)</strong></span> An adapted stochastic process <span class="math inline">\(B = \{B_t\}_{t \ge 0}\)</span> defined on <span class="math inline">\((\Omega, \mathcal{F}, \{\mathcal{F}_t\}_{t \ge 0}, \mathbb{P})\)</span> is a <strong>standard Brownian motion</strong> if:</p>
 <ol start="0" type="1">
 <li><strong>Standard Start:</strong> <span class="math inline">\(B_0 = 0\)</span> <span class="math inline">\(\mathbb{P}\)</span>-almost surely.</li>
-<li><strong>Independent Increments:</strong> For all <span class="math inline">\(0 \le s &lt; t\)</span>, <span class="math inline">\(B_t - B_s\)</span> is independent of <span class="math inline">\(\mathcal{F}_s\)</span> (in the sense of <a href="37-1-Markov-Processes.html#def-independent-increments" class="quarto-xref">Definition&nbsp;<span>80.5</span></a>, Lecture 37.1). (If <span class="math inline">\(\{\mathcal{F}_t\}\)</span> is the natural filtration <span class="math inline">\(\mathcal{F}_t^B = \sigma(B_u : u \le t)\)</span>, this is equivalent, via <a href="37-1-Markov-Processes.html#rem-independent-increments-equivalent" class="quarto-xref">Remark&nbsp;<span>80.3</span></a> together with <span class="math inline">\(B_0 = 0\)</span>, to the weaker-looking statement that for any <span class="math inline">\(0 \le t_0 &lt; t_1 &lt; \dots &lt; t_n\)</span> the increments <span class="math inline">\(B_{t_1}-B_{t_0},\dots,B_{t_n}-B_{t_{n-1}}\)</span> are mutually independent; for a general, possibly strictly larger, filtration <span class="math inline">\(\{\mathcal{F}_t\}\)</span> the two need not coincide, and it is independence from <span class="math inline">\(\mathcal{F}_s\)</span> that is required for the Markov property.)</li>
+<li><strong>Independent Increments:</strong> For all <span class="math inline">\(0 \le s &lt; t\)</span>, <span class="math inline">\(B_t - B_s\)</span> is independent of <span class="math inline">\(\mathcal{F}_s\)</span> (in the sense of <span class="quarto-unresolved-ref">?def-independent-increments</span>, Lecture 37.1). (If <span class="math inline">\(\{\mathcal{F}_t\}\)</span> is the natural filtration <span class="math inline">\(\mathcal{F}_t^B = \sigma(B_u : u \le t)\)</span>, this is equivalent, via <span class="quarto-unresolved-ref">?rem-independent-increments-equivalent</span> together with <span class="math inline">\(B_0 = 0\)</span>, to the weaker-looking statement that for any <span class="math inline">\(0 \le t_0 &lt; t_1 &lt; \dots &lt; t_n\)</span> the increments <span class="math inline">\(B_{t_1}-B_{t_0},\dots,B_{t_n}-B_{t_{n-1}}\)</span> are mutually independent; for a general, possibly strictly larger, filtration <span class="math inline">\(\{\mathcal{F}_t\}\)</span> the two need not coincide, and it is independence from <span class="math inline">\(\mathcal{F}_s\)</span> that is required for the Markov property.)</li>
 <li><strong>Gaussian Increments:</strong> <span class="math inline">\(B_t - B_s \sim \mathcal{N}(0, t-s)\)</span> for all <span class="math inline">\(0 \le s &lt; t\)</span>.</li>
 <li><strong>Continuous Sample Paths:</strong> The map <span class="math inline">\(t \mapsto B_t(\omega)\)</span> is continuous <span class="math inline">\(\mathbb{P}\)</span>-almost surely.</li>
 </ol>
 </div>
 <p>Using Kolmogorov’s Extension Theorem, one can readily construct a Markov process <span class="math inline">\(X = \{X_t\}_{t \ge 0}\)</span> satisfying conditions (0)–(2) via the Gaussian transition kernel <span id="eq-bm-kernel"><span class="math display">\[
 q_{s,t}(x, B) := \int_B \frac{1}{\sqrt{2\pi(t-s)}} \exp \left( -\frac{(y-x)^2}{2(t-s)} \right) dy,
-\tag{82.2}\]</span></span> for <span class="math inline">\(0 \le s \le t\)</span>, <span class="math inline">\(x \in \mathbb{R}\)</span> and <span class="math inline">\(B \in \mathcal{B}(\mathbb{R})\)</span> together with <span class="math inline">\(\nu = \delta_0\)</span> as initial law, applying <a href="37-2-Kolmogorov-Extension-Theorem.html#thm-canonical-markov-construction" class="quarto-xref">Theorem&nbsp;<span>81.2</span></a> (Lecture 37.2). Once a process <span class="math inline">\(B\)</span> with this law is in hand, <a href="#eq-bm-kernel" class="quarto-xref">Equation&nbsp;<span>82.2</span></a> indeed coincides with <span class="math display">\[
+\tag{82.2}\]</span></span> for <span class="math inline">\(0 \le s \le t\)</span>, <span class="math inline">\(x \in \mathbb{R}\)</span> and <span class="math inline">\(B \in \mathcal{B}(\mathbb{R})\)</span> together with <span class="math inline">\(\nu = \delta_0\)</span> as initial law, applying <span class="quarto-unresolved-ref">?thm-canonical-markov-construction</span> (Lecture 37.2). Once a process <span class="math inline">\(B\)</span> with this law is in hand, <a href="#eq-bm-kernel" class="quarto-xref">Equation&nbsp;<span>82.2</span></a> indeed coincides with <span class="math display">\[
 q_{s,t}(x,B) = \mathbb{E}[\mathbf{1}_B(x+B_t-B_s)]= \mathbb{P}(x + B_t - B_s \in B),
 \]</span> since <span class="math inline">\(x + B_t - B_s \sim \mathcal{N}(x,\, t-s)\)</span>.</p>
 <p>The corresponding transition operators <span class="math inline">\(Q_{s,t} f = \gamma_{t-s} * f\)</span> (where <span class="math inline">\(\gamma_\tau\)</span> denotes the centered Gaussian density with variance <span class="math inline">\(\tau\)</span>) satisfy the Chapman–Kolmogorov equations by convolution properties of independent normal distributions: <span id="eq-bm-ck-convolution"><span class="math display">\[

@@ -24,7 +24,7 @@
         "\n",
         "Probability is a measure of the likelihood of an **event** $E \\subseteq \\Omega$, which is a set of outcomes.\n"
       ],
-      "id": "e7d05cde"
+      "id": "553bc7b0"
     },
     {
       "cell_type": "code",
@@ -35,7 +35,7 @@
         "   ω ∈ Ω      ─────── X ───────>   ℝ\n",
         "(Inaccessible)               (Observable)"
       ],
-      "id": "e766fddb",
+      "id": "8038d7a5",
       "execution_count": null,
       "outputs": []
     },
@@ -249,7 +249,7 @@
         "\n",
         "---\n"
       ],
-      "id": "6be820b1"
+      "id": "17134c53"
     }
   ],
   "metadata": {

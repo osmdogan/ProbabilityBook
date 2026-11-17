@@ -304,6 +304,20 @@ Assume that there are **no absorbing states**, i.e., $a_i > 0$ for all $i \in S$
    $$
 :::
 
+:::{#rem-continuous-jump-hold}
+@thm-continuous-jump-hold is the continuous-time analogue of @prp-discrete-jump-hold. Given a conservative Q-matrix $a$ with bounded rates and no absorbing states, and a right-continuous Markov chain $(X_t)_{t \ge 0}$ with transition semigroup $e^{tA}$, the theorem asserts:
+
+* **Part 1:** Jump-chain structure. The jump times $J_k$ are all finite a.s. and $J_k \uparrow \infty$, so the chain makes infinitely many jumps but never explodes. The chain is piecewise constant: $X_t = Z_k$ for all $t \in [J_k, J_{k+1})$. The embedded jump chain $(Z_k)$ is a Markov chain with the normalized jump kernel
+$$
+\tilde{p}(i,j) = \frac{a(i,j)}{a_i}, \quad i \neq j; \qquad \tilde{p}(i,i) = 0.
+$$
+
+* **Part 2:** Holding time structure. Conditional on the jump sequence $Z_0 = i_0, \dots, Z_n = i_n$, the holding times $H_1, \dots, H_n$ are independent with $H_k \sim \mathrm{Exp}(a_{i_{k-1}})$. The rate $a_{i_{k-1}}$ is the total leaving rate from state $i_{k-1}$, so the chain waits an exponential time whose rate depends only on the current state, not on the future.
+
+Together, the two parts say: a continuous-time Markov chain with bounded rates is completely equivalent to alternating between geometric waiting (now exponential) and jumping according to the normalized rate matrix.
+
+:::
+
 Before proving @thm-continuous-jump-hold, we record a lemma on geometric sums of independent exponential random variables used in the second part of the proof.
 
 ::: {#lem-geom-exp-sum}
@@ -324,31 +338,77 @@ $$
 
 ::: {.proof}
 ## Proof of @lem-geom-exp-sum
-For $m \in \mathbb{N}$, the sum of $m$ independent $\mathrm{Exp}(\lambda)$ random variables has the Gamma density
+For a multi-index $m = (m_1, \dots, m_n) \in \mathbb{N}^n$ write the partial sums $n_0 = 0$ and $n_k = m_1 + \cdots + m_k$. Define the block sum
 $$
-\gamma_m(x) := \frac{\lambda^m x^{m-1}}{(m-1)!} e^{-\lambda x}, \qquad x > 0.
+U_k^{(m)} = \sum_{\ell = n_{k-1}+1}^{n_k} E_\ell, \qquad k = 1, \dots, n.
 $$
-This is the marginal density of the $m$-th arrival time in @lem-joint-density: integrate $\lambda^m e^{-\lambda x_m}$ over $(x_1, \dots, x_{m-1}) \in D_{m-1}(x_m)$, using @lem-leb-simplex.
+This is the sum of exactly $m_k$ consecutive terms from the i.i.d. sequence, starting right after the previous block ends. On the event $\{\rho = m\} := \{\rho_1 = m_1, \dots, \rho_n = m_n\}$ we have $\tau_k = n_k$, so $H_k = U_k^{(m)}$ on this event.
 
-For $m = (m_1, \dots, m_n) \in \mathbb{N}^n$ with partial sums $n_0 := 0$, $n_k := m_1 + \dots + m_k$, put $U^{(m)}_k := \sum_{\ell = n_{k-1}+1}^{n_k} E_\ell$. On $\{\rho = m\}$ we have $H_k = U^{(m)}_k$; in particular $H_k = \sum_{m} \mathbf{1}_{\{\rho = m\}} U^{(m)}_k$ is measurable. The variables $U^{(m)}_1, \dots, U^{(m)}_n$ are functions of disjoint blocks of the independent family $(E_\ell)$, hence independent (@lem-grouping-sigma-fields), and $U^{(m)}_k$ has density $\gamma_{m_k}$.
+Since $\tau_{k-1}$ and $\tau_k$ are random, the limits of summation in $H_k$ are themselves random. To see that $H_k$ is a well-defined random variable, write
+$$
+H_k = \sum_{m \in \mathbb{N}^n} \mathbf{1}_{\{\rho = m\}} U_k^{(m)}.
+$$
+For each fixed $m$, the indicator $\mathbf{1}_{\{\rho = m\}}$ is measurable (a function of $\rho_1, \dots, \rho_n$) and $U_k^{(m)}$ is measurable (a finite sum of measurable $E_\ell$’s). The sum is countable and all terms are non-negative (since $E_\ell \ge 0$), so the whole expression is measurable.
 
-Fix Borel sets $C_1, \dots, C_n \subseteq \mathbb{R}$. Using the independence of $(\rho_1, \dots, \rho_n)$ and $(E_\ell)$, then Tonelli's theorem for counting measure and for Lebesgue measure (all integrands are non-negative),
+Let $C_1, \dots, C_n \subseteq [0,\infty)$ be Borel sets. We want to compute $\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n)$. Using the total probability formula over the countable partition $\{\rho = m\}_{m \in \mathbb{N}^n}$:
 $$
-\begin{aligned}
-\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n)
-&= \sum_{m \in \mathbb{N}^n} \mathbb{P}(\rho = m)\, \mathbb{P}\big(U^{(m)}_1 \in C_1, \dots, U^{(m)}_n \in C_n\big) \\
-&= \sum_{m \in \mathbb{N}^n} \prod_{k=1}^{n} g_{b_k}(m_k) \int_{C_k \cap (0,\infty)} \gamma_{m_k}(x)\, dx\\
-&= \prod_{k=1}^{n} \int_{C_k \cap (0,\infty)} \sum_{m=1}^{\infty} g_{b_k}(m)\, \gamma_m(x)\, dx.
-\end{aligned}
+\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n) = \sum_{m \in \mathbb{N}^n} \mathbb{P}(\rho = m)\, \mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n \mid \rho = m).
 $$
-For $b \in (0,1]$ and $x > 0$,
+On $\{\rho = m\}$, we have $H_k = U_k^{(m)}$, so
 $$
-\begin{aligned}
-\sum_{m=1}^{\infty} (1-b)^{m-1} b\, \frac{\lambda^m x^{m-1}}{(m-1)!} e^{-\lambda x} &= b \lambda e^{-\lambda x} \sum_{r=0}^{\infty} \frac{\big((1-b)\lambda x\big)^r}{r!} \\
-& = b\lambda e^{-\lambda x} e^{(1-b)\lambda x} = \lambda b\, e^{-\lambda b x}.
-\end{aligned}
+\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n \mid \rho = m) = \mathbb{P}(U_1^{(m)} \in C_1, \dots, U_n^{(m)} \in C_n \mid \rho = m).
 $$
-Therefore $\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n) = \prod_{k=1}^{n} \int_{C_k \cap (0,\infty)} \lambda b_k e^{-\lambda b_k x}\, dx$. Taking all but one $C_k$ equal to $\mathbb{R}$ shows $H_k \sim \mathrm{Exp}(\lambda b_k)$, and the product formula then shows that $H_1, \dots, H_n$ are independent.
+Since $(\rho_1, \dots, \rho_n)$ is independent of $(E_\ell)$ and $U_k^{(m)}$ is a function of $(E_\ell)$ alone, conditioning on $\rho = m$ does not affect the distribution of $(U_k^{(m)})$:
+$$
+\mathbb{P}(U_1^{(m)} \in C_1, \dots, U_n^{(m)} \in C_n \mid \rho = m) = \mathbb{P}(U_1^{(m)} \in C_1, \dots, U_n^{(m)} \in C_n).
+$$
+
+The blocks $U_1^{(m)}, \dots, U_n^{(m)}$ are functions of disjoint index sets of the i.i.d. sequence $(E_\ell)$ — block $k$ uses only $E_{n_{k-1}+1}, \dots, E_{n_k}$, and these sets $\{n_{k-1}+1, \dots, n_k\}$ are pairwise disjoint. By the grouping lemma for independent random variables (functions of disjoint sub-families of independent variables are independent), the blocks $U_1^{(m)}, \dots, U_n^{(m)}$ are independent. Therefore:
+$$
+\mathbb{P}(U_1^{(m)} \in C_1, \dots, U_n^{(m)} \in C_n) = \prod_{k=1}^n \mathbb{P}(U_k^{(m)} \in C_k).
+$$
+Thus, we obtain the following expression for the joint probability:
+$$
+\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n) = \sum_{m \in \mathbb{N}^n} \prod_{k=1}^n g_{b_k}(m_k) \cdot \prod_{k=1}^n \mathbb{P}(U_k^{(m)} \in C_k), \tag{$*$}
+$$
+where $g_{b_k}(m_k) = (1-b_k)^{m_k - 1} b_k$ is the geometric PMF and $\mathbb{P}(\rho = m) = \prod_k g_{b_k}(m_k)$ by independence of $\rho_1, \dots, \rho_n$. Since the summand in $(*)$ is a product over $k$ of terms that depend only on $m_k$, the sum over $m \in \mathbb{N}^n$ separates into a product of sums over each $m_k \in \mathbb{N}$:
+$$
+\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n) = \prod_{k=1}^n \left[\sum_{m=1}^\infty g_{b_k}(m) \cdot \mathbb{P}(U_k^{(m)} \in C_k)\right]. \tag{$**$}
+$$
+Fix $k$ and write $b = b_k$ and $m$ for the summation variable. We evaluate the inner sum in $(**)$ by finding its density.The variable $U_k^{(m)} = \sum_{\ell=1}^m E_\ell'$ (relabelling) is the sum of $m$ i.i.d. $\mathrm{Exp}(\lambda)$ random variables. This has the Gamma$(m, \lambda)$ distribution with density
+$$
+\gamma_m(x) = \frac{\lambda^m x^{m-1}}{(m-1)!} e^{-\lambda x}, \qquad x > 0.
+$$
+Why this density? One can prove by induction on $m$ using convolution. For $m=1$, $\gamma_1(x) = \lambda e^{-\lambda x}$, which is the $\mathrm{Exp}(\lambda)$ density. For the inductive step, the density of $U^{(m)} = U^{(m-1)} + E_m'$ is the convolution:
+$$
+\gamma_m(x) = \int_0^x \gamma_{m-1}(y)\, \lambda e^{-\lambda(x-y)}\, dy = \lambda e^{-\lambda x} \int_0^x \frac{\lambda^{m-1} y^{m-2}}{(m-2)!}\, dy = \frac{\lambda^m x^{m-1}}{(m-1)!} e^{-\lambda x}.
+$$
+We now compute the mixture sum over $m$:
+$$
+\sum_{m=1}^\infty g_b(m)\, \gamma_m(x) = \sum_{m=1}^\infty (1-b)^{m-1} b \cdot \frac{\lambda^m x^{m-1}}{(m-1)!} e^{-\lambda x}.
+$$
+Factor out $b\lambda e^{-\lambda x}$ and substitute $r = m - 1$:
+$$
+= b\lambda e^{-\lambda x} \sum_{r=0}^\infty \frac{[(1-b)\lambda x]^r}{r!}.
+$$
+Recognize the Taylor series for the exponential function $e^z = \sum_{r=0}^\infty z^r/r!$ with $z = (1-b)\lambda x$:
+$$
+= b\lambda e^{-\lambda x} \cdot e^{(1-b)\lambda x} = b\lambda\, e^{-\lambda x + (1-b)\lambda x} = b\lambda\, e^{-b\lambda x}.
+$$
+The density of the mixture is $b\lambda\, e^{-b\lambda x}$ for $x > 0$, which is exactly the $\mathrm{Exp}(\lambda b)$ density. Therefore, for every Borel $C \subseteq [0,\infty)$:
+$$
+\sum_{m=1}^\infty g_b(m)\, \mathbb{P}(U_k^{(m)} \in C) = \sum_{m=1}^\infty g_b(m) \int_{C \cap (0,\infty)} \gamma_m(x)\, dx = \int_{C \cap (0,\infty)} \lambda b\, e^{-\lambda b x}\, dx,
+$$
+where we swapped sum and integral using Tonelli (all terms non-negative). The right-hand side is $\mathbb{P}(V_k \in C)$ where $V_k \sim \mathrm{Exp}(\lambda b_k)$.Substituting back into $(**)$:
+$$
+\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n) = \prod_{k=1}^n \mathbb{P}(V_k \in C_k), \qquad V_k \sim \mathrm{Exp}(\lambda b_k).
+$$
+Set $C_j = [0,\infty)$ for all $j \neq k$. Since $\mathbb{P}(V_j \in [0,\infty)) = 1$, the product reduces to $\mathbb{P}(H_k \in C_k) = \mathbb{P}(V_k \in C_k)$ for every Borel $C_k$. Hence $H_k \sim \mathrm{Exp}(\lambda b_k)$. Since $H_k \sim \mathrm{Exp}(\lambda b_k)$, we have $\mathbb{P}(V_k \in C_k) = \mathbb{P}(H_k \in C_k)$, and the product formula becomes
+$$
+\mathbb{P}(H_1 \in C_1, \dots, H_n \in C_n) = \prod_{k=1}^n \mathbb{P}(H_k \in C_k)
+$$
+for all Borel sets $C_1, \dots, C_n$. This is the definition of mutual independence of $H_1, \dots, H_n$.
+
 :::
 
 ::: {.proof}

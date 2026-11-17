@@ -715,6 +715,30 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-2-Bounded-Generators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">87</span>&nbsp; <span class="chapter-title">Lecture 40.2: Bounded Generators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-1-Generator-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">88</span>&nbsp; <span class="chapter-title">Lecture 41.1: Generator Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-2-Compound-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">89</span>&nbsp; <span class="chapter-title">Lecture 41.2: Compound Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42-1-Jump-Hold-Description.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">90</span>&nbsp; <span class="chapter-title">Lecture 42.1 Jump-Hold Description</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -824,7 +848,7 @@ P(X_{i_1} \in B_1, \ldots, X_{i_n} \in B_n) = \prod_{k=1}^n P(X_{i_k} \in B_k)
 <ol type="1">
 <li><span class="math inline">\(\mathcal{C}_i\)</span> is a <span class="math inline">\(\pi\)</span>-system on <span class="math inline">\(\Omega\)</span> because <span class="math inline">\(X_i^{-1}(E_1) \cap X_i^{-1}(E_2) = X_i^{-1}(E_1 \cap E_2) \in \mathcal{C}_i\)</span> for <span class="math inline">\(E_1, E_2 \in \mathcal{E}_i\)</span>.</li>
 <li><span class="math inline">\(\sigma(\mathcal{C}_i) = \sigma(X_i^{-1}(\mathcal{E}_i)) = X_i^{-1}(\sigma(\mathcal{E}_i)) = X_i^{-1}(\mathcal{B}_i) = \sigma(X_i)\)</span>.</li>
-<li>For every finite collection of distinct indices <span class="math inline">\(i_1,\ldots,i_n\)</span>, the hypothesis says precisely that the <span class="math inline">\(\pi\)</span>-systems <span class="math inline">\(\mathcal{C}_{i_1},\ldots,\mathcal{C}_{i_n}\)</span> are independent. By <a href="15-1-Independence.html#thm-indep-pi-systems" class="quarto-xref">Theorem&nbsp;<span>32.1</span></a>, their generated <span class="math inline">\(\sigma\)</span>-algebras <span class="math inline">\(\sigma(\mathcal{C}_{i_k}) = \sigma(X_{i_k})\)</span> are independent. Since this holds for every finite subfamily, the family <span class="math inline">\(\{\sigma(X_i)\}_{i\in I}\)</span> is independent.</li>
+<li>For every finite collection of distinct indices <span class="math inline">\(i_1,\ldots,i_n\)</span>, the hypothesis says precisely that the <span class="math inline">\(\pi\)</span>-systems <span class="math inline">\(\mathcal{C}_{i_1},\ldots,\mathcal{C}_{i_n}\)</span> are independent. By <span class="quarto-unresolved-ref">?thm-indep-pi-systems</span>, their generated <span class="math inline">\(\sigma\)</span>-algebras <span class="math inline">\(\sigma(\mathcal{C}_{i_k}) = \sigma(X_{i_k})\)</span> are independent. Since this holds for every finite subfamily, the family <span class="math inline">\(\{\sigma(X_i)\}_{i\in I}\)</span> is independent.</li>
 </ol>
 </div>
 <p>The following corollary gives a convenient criterion for checking independence of real-valued random variables by verifying the independence condition on their cumulative distribution functions (CDFs).</p>
@@ -855,7 +879,7 @@ P(X_1 \in B_1, \dots, X_n \in B_n) &amp;= \mu_X(B_1 \times \dots \times B_n) \\
 &amp;= \prod_{i=1}^n \mu_{X_i}(B_i) = \prod_{i=1}^n P(X_i \in B_i)
 \end{aligned}
 \]</span></p>
-<p><span class="math inline">\((\Rightarrow)\)</span> If <span class="math inline">\(X_1, \dots, X_n\)</span> are independent, <span class="math inline">\(\mu_X\)</span> and <span class="math inline">\(\bigotimes_{i=1}^n \mu_{X_i}\)</span> agree on all product rectangles <span class="math inline">\(B_1 \times \dots \times B_n\)</span>. Because product rectangles form a <span class="math inline">\(\pi\)</span>-system generating <span class="math inline">\(\bigotimes_{i=1}^n \mathcal{B}_i\)</span>, uniqueness of extension implies the measures are identical by <a href="15-1-Independence.html#lem-pi-system-uniqueness" class="quarto-xref">Lemma&nbsp;<span>32.1</span></a>.</p>
+<p><span class="math inline">\((\Rightarrow)\)</span> If <span class="math inline">\(X_1, \dots, X_n\)</span> are independent, <span class="math inline">\(\mu_X\)</span> and <span class="math inline">\(\bigotimes_{i=1}^n \mu_{X_i}\)</span> agree on all product rectangles <span class="math inline">\(B_1 \times \dots \times B_n\)</span>. Because product rectangles form a <span class="math inline">\(\pi\)</span>-system generating <span class="math inline">\(\bigotimes_{i=1}^n \mathcal{B}_i\)</span>, uniqueness of extension implies the measures are identical by <span class="quarto-unresolved-ref">?lem-pi-system-uniqueness</span>.</p>
 </div>
 <hr>
 </section>
@@ -967,8 +991,8 @@ P\!\left(\bigcap_{j=1}^k C_j\right) = P\!\left(\bigcap_{i=1}^n A_i\right) = \pro
 P(C_j) = P\!\left(\bigcap_{i \in \text{block}_j} A_i\right) = \prod_{i \in \text{block}_j} P(A_i).
 \]</span> Therefore: <span class="math display">\[
 \prod_{j=1}^k P(C_j) = \prod_{j=1}^k \prod_{i \in \text{block}_j} P(A_i) = \prod_{i=1}^n P(A_i) = P\!\left(\bigcap_{j=1}^k C_j\right).
-\]</span> Since <span class="math inline">\(\Omega \in \mathcal{C}_j\)</span> for every <span class="math inline">\(j\)</span>, the convenient-notation form of the independence definition (<a href="15-1-Independence.html#eq-indep-reduced-notation" class="quarto-xref">Equation&nbsp;<span>32.4</span></a>) shows <span class="math inline">\(\mathcal{C}_1, \ldots, \mathcal{C}_k\)</span> are independent.</p>
-<p><strong>Conclusion.</strong> By <a href="15-1-Independence.html#thm-indep-pi-systems" class="quarto-xref">Theorem&nbsp;<span>32.1</span></a>, since <span class="math inline">\(\mathcal{C}_1, \ldots, \mathcal{C}_k\)</span> are independent <span class="math inline">\(\pi\)</span>-systems with <span class="math inline">\(\sigma(\mathcal{C}_j) = \mathcal{G}_j\)</span>, the <span class="math inline">\(\sigma\)</span>-algebras <span class="math inline">\(\mathcal{G}_1, \ldots, \mathcal{G}_k\)</span> are independent.</p>
+\]</span> Since <span class="math inline">\(\Omega \in \mathcal{C}_j\)</span> for every <span class="math inline">\(j\)</span>, the convenient-notation form of the independence definition (<span class="quarto-unresolved-ref">?eq-indep-reduced-notation</span>) shows <span class="math inline">\(\mathcal{C}_1, \ldots, \mathcal{C}_k\)</span> are independent.</p>
+<p><strong>Conclusion.</strong> By <span class="quarto-unresolved-ref">?thm-indep-pi-systems</span>, since <span class="math inline">\(\mathcal{C}_1, \ldots, \mathcal{C}_k\)</span> are independent <span class="math inline">\(\pi\)</span>-systems with <span class="math inline">\(\sigma(\mathcal{C}_j) = \mathcal{G}_j\)</span>, the <span class="math inline">\(\sigma\)</span>-algebras <span class="math inline">\(\mathcal{G}_1, \ldots, \mathcal{G}_k\)</span> are independent.</p>
 </div>
 <div id="cor-function-groupings" class="theorem corollary">
 <p><span class="theorem-title"><strong>Corollary 33.3</strong></span> Let <span class="math inline">\(X_i:(\Omega,\mathcal{F},P)\to(S_i,\mathcal{B}_i)\)</span>, <span class="math inline">\(i=1,\ldots,n\)</span>, be independent random variables, let <span class="math inline">\(1\le n_1&lt;n\)</span>, and let <span class="math display">\[
@@ -981,7 +1005,7 @@ f_2:\prod_{i=n_1+1}^{n}(S_i,\mathcal{B}_i)\to(T_2,\mathcal{T}_2)
 <p><strong>Step 1: Block <span class="math inline">\(\sigma\)</span>-algebras are independent.</strong> Since <span class="math inline">\(X_1, \ldots, X_n\)</span> are independent, the generated <span class="math inline">\(\sigma\)</span>-algebras <span class="math inline">\(\sigma(X_1), \ldots, \sigma(X_n)\)</span> are independent. By <a href="#lem-grouping-sigma-fields" class="quarto-xref">Lemma&nbsp;<span>33.2</span></a> with <span class="math inline">\(k = 2\)</span> and block sizes <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_2\)</span>, the block-generated <span class="math inline">\(\sigma\)</span>-algebras <span class="math display">\[
 \mathcal{G}_1 \triangleq \sigma\!\bigl(\sigma(X_1) \cup \cdots \cup \sigma(X_{n_1})\bigr), \qquad \mathcal{G}_2 \triangleq \sigma\!\bigl(\sigma(X_{n_1+1}) \cup \cdots \cup \sigma(X_n)\bigr)
 \]</span> are independent.</p>
-<p><strong>Step 2: Each <span class="math inline">\(Y_j\)</span> is <span class="math inline">\(\mathcal{G}_j\)</span>-measurable.</strong> Every <span class="math inline">\(X_i\)</span> with <span class="math inline">\(i \le n_1\)</span> is <span class="math inline">\(\sigma(X_i)\)</span>-measurable, and <span class="math inline">\(\sigma(X_i) \subseteq \mathcal{G}_1\)</span>, so <span class="math inline">\((X_1, \ldots, X_{n_1})\)</span> is <span class="math inline">\(\mathcal{G}_1\)</span>-measurable as a map into <span class="math inline">\(\prod_{i=1}^{n_1} S_i\)</span> (by <a href="14-2-Product-Measure.html#lem-product-measurability" class="quarto-xref">Lemma&nbsp;<span>30.3</span></a> applied on <span class="math inline">\(\Omega\)</span>). Since <span class="math inline">\(f_1\)</span> is measurable, <span class="math inline">\(Y_1 = f_1(X_1, \ldots, X_{n_1})\)</span> is <span class="math inline">\(\mathcal{G}_1\)</span>-measurable, i.e., <span class="math inline">\(\sigma(Y_1) \subseteq \mathcal{G}_1\)</span>. The same argument gives <span class="math inline">\(\sigma(Y_2) \subseteq \mathcal{G}_2\)</span>.</p>
+<p><strong>Step 2: Each <span class="math inline">\(Y_j\)</span> is <span class="math inline">\(\mathcal{G}_j\)</span>-measurable.</strong> Every <span class="math inline">\(X_i\)</span> with <span class="math inline">\(i \le n_1\)</span> is <span class="math inline">\(\sigma(X_i)\)</span>-measurable, and <span class="math inline">\(\sigma(X_i) \subseteq \mathcal{G}_1\)</span>, so <span class="math inline">\((X_1, \ldots, X_{n_1})\)</span> is <span class="math inline">\(\mathcal{G}_1\)</span>-measurable as a map into <span class="math inline">\(\prod_{i=1}^{n_1} S_i\)</span> (by <span class="quarto-unresolved-ref">?lem-product-measurability</span> applied on <span class="math inline">\(\Omega\)</span>). Since <span class="math inline">\(f_1\)</span> is measurable, <span class="math inline">\(Y_1 = f_1(X_1, \ldots, X_{n_1})\)</span> is <span class="math inline">\(\mathcal{G}_1\)</span>-measurable, i.e., <span class="math inline">\(\sigma(Y_1) \subseteq \mathcal{G}_1\)</span>. The same argument gives <span class="math inline">\(\sigma(Y_2) \subseteq \mathcal{G}_2\)</span>.</p>
 <p><strong>Conclusion.</strong> For any <span class="math inline">\(A \in \sigma(Y_1) \subseteq \mathcal{G}_1\)</span> and <span class="math inline">\(B \in \sigma(Y_2) \subseteq \mathcal{G}_2\)</span>, independence of <span class="math inline">\(\mathcal{G}_1\)</span> and <span class="math inline">\(\mathcal{G}_2\)</span> gives <span class="math inline">\(P(A \cap B) = P(A)P(B)\)</span>. Hence <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span> are independent. The same argument applied with <span class="math inline">\(k \ge 2\)</span> blocks yields independence of <span class="math inline">\(k\)</span> such block functions.</p>
 </div>
 <ul>
