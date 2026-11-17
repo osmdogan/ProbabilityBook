@@ -69,11 +69,21 @@ On $\{\tau_k < \infty\}$ set $Z_k := Y_{\tau_k}$, and for $k \ge 1$ let $\rho_k 
    $$
 :::
 
-Each $\tau_k$ is an $\mathbb{N}_0 \cup \{\infty\}$-valued random variable: by induction on $k$, $\{\tau_k = m\} \in \sigma(Y_0, \dots, Y_m)$ for every $m \in \mathbb{N}_0$, since
+::: {#rem-measurability-jump-holding-times}
+## Measurability of Jump and Holding Times 
+Each $\tau_k$ is an $\mathbb{N}_0 \cup \{\infty\}$-valued random variable: by induction on $k$, $\{\tau_k = m\} \in \sigma(Y_0, \dots, Y_m)$ for every $m \in \mathbb{N}_0$. To see this, recall that $\tau_{k+1} = \inf\{n > \tau_k : Y_n \neq Y_{\tau_k}\}$. The event $\{\tau_{k+1} = m\}$ says: the $(k+1)$-th jump occurs exactly at time $m$. For this to happen:
+
+1. The $k$-th jump must have occurred at some earlier time $r < m$, so $\tau_k = r$ and $r < m$.
+2. At that time $r$, the chain is in some state $i = Y_r$.
+3. The chain stays in $i$ throughout times $r, r+1, \dots, m-1$ (no jump before $m$).
+4. At time $m$, the chain leaves $i$: $Y_m \neq i$.
+
+Combining: $\tau_{k+1} = m$ iff there exist $r < m$ and $i \in S$ such that $\tau_k = r$ and $Y_r = Y_{r+1} = \dots = Y_{m-1} = i$ and $Y_m \neq i$:
 $$
 \{\tau_{k+1} = m\} = \bigcup_{r < m} \bigcup_{i \in S} \{\tau_k = r,\ Y_r = Y_{r+1} = \dots = Y_{m-1} = i,\ Y_m \neq i\}.
 $$
 Consequently $Z_k = \sum_{m} \mathbf{1}_{\{\tau_k = m\}} Y_m$ is measurable on $\{\tau_k < \infty\}$.
+:::
 
 ::: {.proof}
 ## Proof of @prp-discrete-jump-hold
@@ -85,18 +95,50 @@ $$
 & =: C_m.
 \end{aligned}
 $$ {#eq-path-decomposition}
+This path decomposition identity says that specifying the jump times $\tau_1 = n_1, \dots, \tau_n = n_n$ and the embedded chain states $Z_0 = i_0, \dots, Z_n = i_n$ is exactly the same as prescribing the entire path of $Y$ up to time $n_n$. Each factor in the intersection describes one “segment” of the path. For $k = 1, \dots, n$, the event
+$$
+\{Y_r = i_{k-1} \text{ for } n_{k-1} \le r < n_k,\ Y_{n_k} = i_k\}
+$$
+says: the chain stays in $i_{k-1}$ throughout the interval $[n_{k-1}, n_k)$, then jumps to $i_k$ at time $n_k$. Taking the intersection over all $k$ pieces the full trajectory together:
+$$
+\underbrace{i_0, i_0, \dots, i_0}_{n_1 \text{ steps}},\ \underbrace{i_1, i_1, \dots, i_1}_{m_2 \text{ steps}},\ \underbrace{i_2, \dots}_{m_3 \text{ steps}},\ \dots
+$$
+The chain sits in state $i_{k-1}$ for exactly $m_k = n_k - n_{k-1}$ steps, then moves to $i_k$.
 
 - "$\subseteq$": On the left-hand event, for each $k$ we have $\tau_{k-1} = n_{k-1} < \infty$ and $Y_{\tau_{k-1}} = i_{k-1}$. By the definition of $\tau_k$ as an infimum, $Y_r = Y_{\tau_{k-1}} = i_{k-1}$ for $\tau_{k-1} \le r < \tau_k$, and $Y_{\tau_k} = Z_k = i_k$.
 - "$\supseteq$": On $C_m$ we show by induction on $k$ that $\tau_k = n_k$ and $Z_k = i_k$. This holds for $k = 0$. If $\tau_{k-1} = n_{k-1}$ and $Z_{k-1} = i_{k-1}$, then $Y_r = i_{k-1}$ for $n_{k-1} < r < n_k$ and $Y_{n_k} = i_k \neq i_{k-1}$, so $\tau_k = n_k$ and $Z_k = i_k$.
 
-**Step 2: Path probabilities.** The event $C_m$ prescribes the values of $Y_0, \dots, Y_{n_n}$, so by @eq-discrete-fdd
+**Step 2: Path probabilities.** Recall $C_m = \bigcap_{k=1}^n \{Y_r = i_{k-1} \text{ for } n_{k-1} \le r < n_k,\ Y_{n_k} = i_k\}$. Written out explicitly, the path looks like:
+$$
+\underbrace{i_0, \dots, i_0}_{m_1 \text{ times}},\ i_1,\ \underbrace{i_1, \dots, i_1}_{m_2 - 1 \text{ more}},\ i_2,\ \dots,\ i_{n-1},\ \underbrace{i_{n-1}, \dots}_{m_n - 1 \text{ more}},\ i_n
+$$
+For the $k$-th segment: the chain sits at $i_{k-1}$ for $m_k - 1$ steps (self-transitions), then makes one genuine jump to $i_k$. The FDD formula for a Markov chain gives $\mathbb{P}(Y_0 = y_0, \ldots, Y_N = y_N) = \mu(y_0)\prod_{j=0}^{N-1} q(y_j, y_{j+1})$. Reading off the transitions segment by segment: 
+
+* Starting state $i_0$: contributes $\mu(i_0)$. 
+* Within segment $k$: the chain makes $m_k - 1$ self-transitions $i_{k-1} \to i_{k-1}$, each contributing a factor $q(i_{k-1}, i_{k-1}) = c_k$. Total: $c_k^{m_k - 1}$. 
+* At the end of segment $k$: one genuine transition $i_{k-1} \to i_k$, contributing $q(i_{k-1}, i_k)$. 
+
+Multiplying over all $k$ gives the first line:
+$$
+\mathbb{P}(C_m) = \mu(i_0)\prod_{k=1}^n c_k^{m_k-1}\, q(i_{k-1}, i_k).
+$$
+
+Now substitute $q(i_{k-1}, i_k) = b_k\,\tilde{q}(i_{k-1}, i_k)$, which holds because for $i \neq j$:
+$$
+\tilde{q}(i,j) = \frac{q(i,j)}{1 - q(i,i)} = \frac{q(i,j)}{b_k} \implies q(i_{k-1}, i_k) = b_k\,\tilde{q}(i_{k-1}, i_k).
+$$
+Substituting:
 $$
 \begin{aligned}
-\mathbb{P}(C_m) &= \mu(i_0) \prod_{k=1}^{n} c_k^{m_k - 1}\, q(i_{k-1}, i_k) \\
-& = \mu(i_0) \prod_{k=1}^{n} \tilde{q}(i_{k-1}, i_k) \prod_{k=1}^{n} g_{b_k}(m_k),
+\mathbb{P}(C_m) &= \mu(i_0)\prod_{k=1}^n c_k^{m_k-1} b_k\,\tilde{q}(i_{k-1},i_k) \\
+& = \mu(i_0)\prod_{k=1}^n \tilde{q}(i_{k-1},i_k)\prod_{k=1}^n \underbrace{c_k^{m_k-1} b_k}_{= g_{b_k}(m_k)}.
 \end{aligned}
 $$ {#eq-path-probability}
-where we used $q(i_{k-1}, i_k) = b_k\, \tilde{q}(i_{k-1}, i_k)$ (valid as $i_{k-1} \neq i_k$) and @eq-geom-pmf (with $0^0 = 1$ when $c_k = 0$, $m_k = 1$).
+The last factor is the geometric PMF: $g_{b_k}(m_k) = c_k^{m_k - 1} b_k$ is the probability of waiting exactly $m_k$ steps before the first successful jump, where each step independently succeeds with probability $b_k = 1 - q(i_{k-1}, i_{k-1})$. The probability of the full path splits cleanly into two independent parts:
+
+1. $\mu(i_0)\prod_k \tilde{q}(i_{k-1}, i_k)$ — the probability that the jump chain visits states $i_0, i_1, \dots, i_n$ in order (this is the FDD formula for a Markov chain with kernel $\tilde{q}$).
+2. $\prod_k g_{b_k}(m_k)$ — the probability that the holding times are $m_1, \dots, m_n$, as independent geometric random variables.
+
 
 The events $C_m$, $m \in \mathbb{N}^n$, are pairwise disjoint with union $\{\tau_n < \infty, Z_0 = i_0, \dots, Z_n = i_n\}$. Summing @eq-path-probability over $m \in \mathbb{N}^n$ (a sum of non-negative terms over a product of counting measures, so it factorizes by Tonelli) and using $\sum_{m \ge 1} g_{b}(m) = 1$, we obtain
 $$
@@ -104,12 +146,36 @@ $$
 $$ {#eq-jump-chain-fdd}
 This identity also holds if $i_{k-1} = i_k$ for some $k$: then both sides vanish, the left side because $Z_k \neq Z_{k-1}$ on $\{\tau_k < \infty\}$ by the definition of $\tau_k$, and the right side because $\tilde{q}(i,i) = 0$. It holds trivially for $n = 0$.
 
-**Step 3: Part 1.** Summing @eq-jump-chain-fdd over all $i_0, \dots, i_n \in S$ (successively over $i_n, i_{n-1}, \dots, i_1$, using that $\tilde{q}$ is stochastic, and then over $i_0$) gives $\mathbb{P}(\tau_n < \infty) = 1$ for every $n$. Hence @eq-jump-chain-fdd reads $\mathbb{P}(Z_0 = i_0, \dots, Z_n = i_n) = \mu(i_0) \prod_{k=1}^{n} \tilde{q}(i_{k-1}, i_k)$, which is @eq-discrete-fdd for the kernel $\tilde{q}$. Thus $(Z_k)$ is a Markov chain with initial law $\mu$ and kernel $\tilde{q}$.
+**Step 3:** Summing @eq-jump-chain-fdd over all $i_0, \dots, i_n \in S$ (successively over $i_n, i_{n-1}, \dots, i_1$, using that $\tilde{q}$ is stochastic, and then over $i_0$) gives $\mathbb{P}(\tau_n < \infty) = 1$ for every $n$:
+$$
+\mathbb{P}(\tau_n < \infty) = \sum_{i_0,\dots,i_n} \mu(i_0)\prod_{k=1}^n \tilde{q}(i_{k-1}, i_k).
+$$
+The text says to do this successively, starting from $i_n$:
+$$
+\sum_{i_n \in S} \tilde{q}(i_{n-1}, i_n) = 1 \quad \text{(since $\tilde{q}$ is stochastic)}.
+$$
+This collapses the $i_n$ sum to $1$, leaving a product up to $k = n-1$. Repeating for $i_{n-1}, i_{n-2}, \dots, i_1$ (each time using that $\tilde{q}$ is stochastic), all factors of $\tilde{q}$ collapse to $1$, leaving: $\mathbb{P}(\tau_n < \infty) = \sum_{i_0 \in S} \mu(i_0) = 1$. So every jump time is finite almost surely — the chain never gets “stuck” and always keeps jumping.
 
-**Step 4: Part 2.** Let $\mathbb{P}(B) > 0$; by @eq-jump-chain-fdd, $i_{k-1} \neq i_k$ for all $k$. Since $\{\rho_1 = m_1, \dots, \rho_n = m_n\} \cap B$ is precisely the left-hand side of @eq-path-decomposition, dividing @eq-path-probability by @eq-jump-chain-fdd yields
+Hence @eq-jump-chain-fdd reads $\mathbb{P}(Z_0 = i_0, \dots, Z_n = i_n) = \mu(i_0) \prod_{k=1}^{n} \tilde{q}(i_{k-1}, i_k)$, which is @eq-discrete-fdd for the kernel $\tilde{q}$. Thus $(Z_k)$ is a Markov chain with initial law $\mu$ and kernel $\tilde{q}$.
+
+**Step 4:** Since $\mathbb{P}(\tau_n < \infty) = 1$, equation @eq-jump-chain-fdd gives $\mathbb{P}(B) = \mu(i_0)\prod_{k=1}^n \tilde{q}(i_{k-1}, i_k)$. For this to be positive, every factor $\tilde{q}(i_{k-1}, i_k)$ must be positive. But $\tilde{q}(i,i) = 0$ by construction (the jump chain never stays put), so consecutive states must differ. The holding time $\rho_k = \tau_k - \tau_{k-1}$, so $\rho_k = m_k$ iff $\tau_k = n_k$ (since $n_k = m_1 + \dots + m_k$ is the cumulative sum). Therefore:
 $$
-\mathbb{P}(\rho_1 = m_1, \dots, \rho_n = m_n \mid B) = \prod_{k=1}^{n} g_{b_k}(m_k), \qquad m \in \mathbb{N}^n.
+\begin{aligned}
+&\{\rho_1 = m_1, \dots, \rho_n = m_n\} \cap B \\
+&= \{\tau_1 = n_1, \dots, \tau_n = n_n,\ Z_0 = i_0, \dots, Z_n = i_n\} \\
+&= C_m,
+\end{aligned}
 $$
+where the last equality is @eq-path-decomposition. So the numerator of the conditional probability is exactly $\mathbb{P}(C_m)$.Then
+$$
+\begin{aligned}
+\mathbb{P}(\rho_1 = m_1, \dots, \rho_n = m_n \mid B) &= \frac{\mathbb{P}(C_m)}{\mathbb{P}(B)}\\
+& = \frac{\mu(i_0)\prod_{k=1}^n \tilde{q}(i_{k-1},i_k)\prod_{k=1}^n g_{b_k}(m_k)}{\mu(i_0)\prod_{k=1}^n \tilde{q}(i_{k-1},i_k)}\\
+& = \prod_{k=1}^n g_{b_k}(m_k).
+\end{aligned}
+$$
+The $\mu(i_0)\prod_k \tilde{q}(i_{k-1},i_k)$ factor cancels exactly between numerator (@eq-path-probability) and denominator (@eq-jump-chain-fdd), leaving only the product of geometric PMFs.
+
 A joint probability mass function on $\mathbb{N}^n$ that is a product of probability mass functions is the law of independent random variables with these marginals (sum over all but one coordinate to identify the marginals). Hence, under $\mathbb{P}(\cdot \mid B)$, $\rho_1, \dots, \rho_n$ are independent with $\rho_k \sim \mathrm{Geom}(b_k)$.
 :::
 
