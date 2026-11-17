@@ -210,11 +210,19 @@ Let $x : [0, \infty) \to S$ be right-continuous for the discrete topology on $S$
 
 ::: {.proof}
 ## Proof of @lem-rc-jump-times
-(a) is immediate from the definition of $j_{k+1}$ as an infimum, and (d) is right-continuity at $j_k$.
+Right-continuity here means: at every time $t$, the path stays constant on some interval $[t, t+\varepsilon)$. The **jump times** are defined pathwise: $j_0 = 0$ and $j_{k+1} = \inf\{t > j_k : x(t) \neq x(j_k)\}$.
 
-(b) By right-continuity at $j_k$ there is $\varepsilon > 0$ with $x = x(j_k)$ on $[j_k, j_k + \varepsilon)$, so $j_{k+1} \ge j_k + \varepsilon > j_k$. By right-continuity at $j_{k+1}$ there is $\delta > 0$ with $x = x(j_{k+1})$ on $[j_{k+1}, j_{k+1} + \delta)$. If $x(j_{k+1}) = x(j_k)$, then together with (a), $x = x(j_k)$ on $[j_k, j_{k+1} + \delta)$, so $j_{k+1} \ge j_{k+1} + \delta$, a contradiction.
+(a) is immediate from the definition of $j_{k+1}$ as an infimum.
 
-(c) Let $U := \{t > j_k : x(t) \neq x(j_k)\}$. Clearly $\inf U \le \inf (U \cap \mathbb{Q})$. Conversely, if $t \in U$, right-continuity at $t$ gives $\eta > 0$ with $x(s) = x(t) \neq x(j_k)$ for $s \in [t, t + \eta)$; this interval contains rationals arbitrarily close to $t$, all of which lie in $U$. Hence $\inf (U \cap \mathbb{Q}) \le t$ for all $t \in U$, i.e. $\inf (U \cap \mathbb{Q}) \le \inf U$. (If $U = \emptyset$, both infima equal $+\infty$.)
+(b) If $j_{k+1} < \infty$ then $j_{k+1} > j_k$ (the path cannot jump instantaneously) and $x(j_{k+1}) \neq x(j_k)$ (the path actually changes value at the jump). Both follow from right-continuity: at $j_k$ there is a small interval where the path is constant, forcing $j_{k+1}$ strictly away from $j_k$; at $j_{k+1}$ right-continuity forces a genuine change, otherwise the path would still be constant past $j_{k+1}$ contradicting minimality.
+
+(c) This is the most important part for measurability. It says you can compute the jump times from the values of the path on the rationals alone. Let $U := \{t > j_k : x(t) \neq x(j_k)\}$. Since $U \cap \mathbb{Q} \subseteq U$, we have $\inf U \le \inf(U \cap \mathbb{Q})$ immediately. Take any $t \in U$, so $t > j_k$ and $x(t) \neq x(j_k)$. By right-continuity of $x$ at $t$, there exists $\eta > 0$ such that
+$$
+x(s) = x(t) \quad \text{for all } s \in [t, t + \eta).
+$$
+Since $x(t) \neq x(j_k)$, this gives $x(s) \neq x(j_k)$ for all $s \in [t, t+\eta)$. In particular every rational $q \in [t, t + \eta)$ satisfies $q > j_k$ (since $t > j_k$) and $x(q) \neq x(j_k)$, so $q \in U \cap \mathbb{Q}$. By density of $\mathbb{Q}$, the interval $[t, t+\eta)$ contains rationals arbitrarily close to $t$, so $\inf(U \cap \mathbb{Q}) \le t$. Since $t \in U$ was arbitrary, $\inf(U \cap \mathbb{Q}) \le \inf U$.Combining: $\inf(U \cap \mathbb{Q}) = \inf U = j_{k+1}$, with both sides equal to $+\infty$ when $U = \emptyset$.
+
+(d) After each jump time $j_k$ there is a rational interval $(j_k, j_k + \varepsilon)$ on which the path equals $x(j_k)$. This is just right-continuity applied at the rational level, and it ensures the infimum in (c) is not attained by rationals arbitrarily close to $j_k$ itself.
 :::
 
 For an $S$-valued process $(X_t)_{t \ge 0}$ we define its jump times $(J_k)_{k \in \mathbb{N}_0}$ pathwise as in @lem-rc-jump-times, i.e. $J_0 := 0$ and, for $k \ge 0$,
@@ -226,7 +234,7 @@ J_{k+1} := \begin{cases}
 $$ {#eq-ctmc-jump-times}
 and, on $\{J_k < \infty\}$, the embedded chain $Z_k := X_{J_k}$ and (for $k \ge 1$) the holding times $H_k := J_k - J_{k-1}$. Fix a cemetery point $\partial \notin S$ and put $S_\partial := S \cup \{\partial\}$, $\hat{Z}_k := Z_k$ on $\{J_k < \infty\}$ and $\hat{Z}_k := \partial$ on $\{J_k = \infty\}$.
 
-The next lemma shows that for right-continuous processes the joint law of the jump times and the embedded chain is determined by the finite-dimensional distributions. This is what allows us to compute it on a convenient realization of the chain.
+The next lemma makes precise a key philosophical point: for right-continuous processes, jump times and jump states are entirely determined by the finite-dimensional distributions. Its consequence is that any result proved for a particular right-continuous realization automatically transfers to any other right-continuous process with the same FDDs.
 
 ::: {#lem-jump-transfer}
 ## Jump Functionals Are Determined by the Finite-Dimensional Distributions
@@ -238,23 +246,41 @@ $$
 
 ::: {.proof}
 ## Proof of @lem-jump-transfer
-Let $\mathbb{Q}_+ := \mathbb{Q} \cap [0,\infty)$ and let $\Omega_0 := S^{\mathbb{Q}_+}$, with coordinates $(y_q)_{q \in \mathbb{Q}_+}$ and product $\sigma$-algebra $\mathcal{G}_0$. For $t \in [0,\infty)$ and $m \in \mathbb{N}$ put $d_m(t) := (\lfloor 2^m t \rfloor + 1) 2^{-m}$, a dyadic rational in $(t, t + 2^{-m}]$. Define maps $\hat{j}_k : \Omega_0 \to [0,\infty]$ and $\hat{z}_k : \Omega_0 \to S_\partial$ recursively by $\hat{j}_0 := 0$, $\hat{z}_0 := y_0$, and
+The goal is to construct a single measurable map
 $$
-\hat{j}_{k+1} := \begin{cases} \inf\{q \in \mathbb{Q}_+ : q > \hat{j}_k,\ y_q \neq \hat{z}_k\}, & \text{if } \hat{z}_k \in S, \\ +\infty, & \text{if } \hat{z}_k = \partial, \end{cases}
+\Phi_n : S^{\mathbb{Q}_+} \to ([0,\infty] \times S_\partial)^{n+1},
 $$
+such that $\Phi_n\bigl((x(q))_{q \in \mathbb{Q}_+}\bigr) = (J_k, \hat{Z}_k)_{k \le n}$ for every right-continuous path $x$. The result then follows because two processes with the same FDDs induce the same law on $S^{\mathbb{Q}_+}$, so applying $\Phi_n$ to both gives equal joint laws for the jump data.
+
+**Step 1:** Define $\Phi_n$. Let $\Omega_0 = S^{\mathbb{Q}_+}$ with product $\sigma$-algebra $\mathcal{G}_0$ and coordinates $(y_q)_{q \in \mathbb{Q}_+}$. Set $\hat{j}_0 = 0$ and $\hat{z}_0 = y_0$. Given $(\hat{j}_k, \hat{z}_k)$ already $\mathcal{G}_0$-measurable, define:
 $$
-\hat{z}_{k+1} := \begin{cases} i, & \text{if } \hat{j}_{k+1} < \infty \text{ and } y_{d_m(\hat{j}_{k+1})} = i \text{ for all sufficiently large } m, \\ \partial, & \text{otherwise.} \end{cases}
+\hat{j}_{k+1} := 
+\begin{cases} \inf\{q \in \mathbb{Q}_+ : q > \hat{j}_k,\ y_q \neq \hat{z}_k\}, & \hat{z}_k \in S, \\ +\infty, & \hat{z}_k = \partial. 
+\end{cases}
 $$
 
-*Measurability.* Suppose $\hat{j}_k$ and $\hat{z}_k$ are $\mathcal{G}_0$-measurable. For $t \in (0, \infty]$,
+Measurability: for $t \in (0,\infty]$,
 $$
-\{\hat{j}_{k+1} < t\} = \bigcup_{q \in \mathbb{Q}_+,\, q < t} \ \bigcup_{i \in S} \big(\{\hat{j}_k < q\} \cap \{\hat{z}_k = i\} \cap \{y_q \neq i\}\big) \in \mathcal{G}_0,
+\{\hat{j}_{k+1} < t\} = \bigcup_{\substack{q \in \mathbb{Q}_+ \\ q < t}} \bigl(\{\hat{j}_k < q\} \cap \{y_q \neq \hat{z}_k\}\bigr) \in \mathcal{G}_0.
 $$
-so $\hat{j}_{k+1}$ is measurable. On $\{\hat{j}_{k+1} < \infty\}$, $d_m(\hat{j}_{k+1})$ is a measurable random time with countably many values, so $y_{d_m(\hat{j}_{k+1})} = \sum_{r} \mathbf{1}_{\{d_m(\hat{j}_{k+1}) = r\}}\, y_r$ is measurable, and $\{\hat{z}_{k+1} = i\} = \{\hat{j}_{k+1} < \infty\} \cap \bigcup_{M} \bigcap_{m \ge M} \{y_{d_m(\hat{j}_{k+1})} = i\} \in \mathcal{G}_0$. By induction, $\Phi_n := (\hat{j}_k, \hat{z}_k)_{k \le n}$ is a measurable map $\Omega_0 \to ([0,\infty] \times S_\partial)^{n+1}$. Note that $\Phi_n$ is defined without reference to any process.
+For the state at the new jump, observe that $\hat{j}_{k+1}$ may be irrational, so $y_{\hat{j}_{k+1}}$ is not defined. Right-continuity says the path holds its new value $x(j_{k+1})$ on a whole right-interval $(j_{k+1}, j_{k+1}+\varepsilon)$; this interval contains rationals. So define:
+$$
+\hat{z}_{k+1} := i \quad \text{if} \quad \exists\, q \in \mathbb{Q}_+,\ q > \hat{j}_{k+1} : y_r = i\ \text{ for all rational } r \in (\hat{j}_{k+1}, q],
+$$
+and $\hat{z}_{k+1} := \partial$ otherwise. For measurability, write for each $i \in S$:
+$$
+\{\hat{z}_{k+1} = i\} = \bigcup_{q \in \mathbb{Q}_+} \left[\{\hat{j}_{k+1} < q\} \cap \bigcap_{\substack{r \in \mathbb{Q}_+ \\ r \le q}} \bigl(\{\hat{j}_{k+1} \ge r\} \cup \{y_r = i\}\bigr)\right] \in \mathcal{G}_0,
+$$
+a countable union of countable intersections of $\mathcal{G}_0$-sets. By induction, $\Phi_n := (\hat{j}_k, \hat{z}_k)_{k \le n}$ is $\mathcal{G}_0$-measurable.
 
-*Consistency.* Let $x$ be a right-continuous path and $y := x|_{\mathbb{Q}_+}$. By induction on $k$, using @lem-rc-jump-times (c) for $\hat{j}_{k+1}$ and (d), applied at $j_{k+1}$, for $\hat{z}_{k+1}$ (note $d_m(j_{k+1}) \downarrow j_{k+1}$ strictly from the right), we get $\hat{j}_k(y) = j_k$, and $\hat{z}_k(y) = x(j_k)$ if $j_k < \infty$, $\hat{z}_k(y) = \partial$ otherwise.
+**Step 2:** Consistency. For a right-continuous path $x$ and $y = x|_{\mathbb{Q}_+}$, prove by induction that $\hat{j}_k(y) = j_k$ and $\hat{z}_k(y) = x(j_k)$ when $j_k < \infty$.
 
-*Conclusion.* The map $\omega \mapsto (X_q(\omega))_{q \in \mathbb{Q}_+}$ is $\mathcal{F}/\mathcal{G}_0$-measurable, and by consistency $(J_k, \hat{Z}_k)_{k \le n} = \Phi_n\big((X_q)_{q \in \mathbb{Q}_+}\big)$ pointwise on $\Omega$; this proves measurability, and likewise for $X'$. The cylinder sets $\{y_{q_1} = j_1, \dots, y_{q_r} = j_r\}$, together with $\emptyset$ and $\Omega_0$, form a $\pi$-system generating $\mathcal{G}_0$. Their probabilities are finite-dimensional distributions, so the laws of $(X_q)_{q \in \mathbb{Q}_+}$ and $(X'_q)_{q \in \mathbb{Q}_+}$ on $(\Omega_0, \mathcal{G}_0)$ coincide by the uniqueness theorem for measures agreeing on a $\pi$-system. Applying the same measurable map $\Phi_n$ gives the claim.
+* Base: $\hat{j}_0 = 0 = j_0$ and $\hat{z}_0 = y_0 = x(0)$.
+* Inductive step: Assuming $\hat{j}_k(y) = j_k$ and $\hat{z}_k(y) = x(j_k)$, the formula for $\hat{j}_{k+1}$ gives $\inf\{q \in \mathbb{Q}_+ : q > j_k,\ x(q) \neq x(j_k)\} = j_{k+1}$ by lem-rc-jump-times (c). For the state: by lem-rc-jump-times (d), there exists $\varepsilon > 0$ such that $x(q) = x(j_{k+1})$ for all rational $q \in (j_{k+1}, j_{k+1}+\varepsilon)$. Taking $q$ to be any rational in this interval, all rationals $r \in (j_{k+1}, q]$ satisfy $y_r = x(j_{k+1})$, so $\hat{z}_{k+1}(y) = x(j_{k+1})$.
+
+Hence $(J_k, \hat{Z}_k)_{k \le n} = \Phi_n\bigl((X_q)_{q \in \mathbb{Q}_+}\bigr)$ pointwise on $\Omega$, and likewise for $X'$.
+
+**Step 3:** Transfer. The law of $(X_q)_{q \in \mathbb{Q}_+}$ on $(\Omega_0, \mathcal{G}_0)$ is a probability measure that agrees with the law of $(X'_q)_{q \in \mathbb{Q}_+}$ on every cylinder set $\{y_{q_1} = s_1, \dots, y_{q_r} = s_r\}$, since these are finite-dimensional distributions. These cylinder sets form a $\pi$-system generating $\mathcal{G}_0$, so by the uniqueness theorem the two laws coincide on all of $\mathcal{G}_0$. Applying the same measurable map $\Phi_n$ yields $\mathrm{Law}_\mathbb{P}(J_k, \hat{Z}_k)_{k \le n} = \mathrm{Law}_{\mathbb{P}'}(J'_k, \hat{Z}'_k)_{k \le n}$.
 :::
 
 ::: {#thm-continuous-jump-hold}

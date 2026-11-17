@@ -143,7 +143,7 @@
         "\n",
         "In the following, we use Python to visualize the CDF of the uniform distribution on $[0, 1]$."
       ],
-      "id": "ffc2697e"
+      "id": "a9023d56"
     },
     {
       "cell_type": "code",
@@ -199,7 +199,7 @@
         "\n",
         "In the following, we use Python to visualize the CDF of this discrete measure."
       ],
-      "id": "067d510b"
+      "id": "26d9a31a"
     },
     {
       "cell_type": "code",
@@ -271,7 +271,7 @@
         "\n",
         "---"
       ],
-      "id": "93370db1"
+      "id": "53c6771d"
     }
   ],
   "metadata": {
