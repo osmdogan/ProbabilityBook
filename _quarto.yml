@@ -118,6 +118,7 @@ book:
         - 41-1-Generator-Matrix.qmd
         - 41-2-Compound-Poisson-Process.qmd
         - 42-1-Jump-Hold-Description.qmd
+        - 42-2-Hitting-Times.qmd
         
 
 

@@ -6,7 +6,7 @@
       "source": [
         "# Lecture 28.2: Stein's Method "
       ],
-      "id": "ba2a7e49"
+      "id": "ad52249c"
     },
     {
       "cell_type": "code",
@@ -18,7 +18,7 @@
         "import seaborn as sns\n",
         "sns.set(style=\"darkgrid\")"
       ],
-      "id": "4fc1161a",
+      "id": "5863e07a",
       "execution_count": null,
       "outputs": []
     },
@@ -102,7 +102,7 @@
         "\n",
         "In the following, we use Python to visualize the normal tail bound. The plot shows the standard normal CDF $\\Phi(t)$, the tail probability $1 - \\Phi(t)$, and the upper bound $\\min\\{1/2, e^{-t^2/2}/(\\sqrt{2\\pi} t)\\}$ for $t > 0$."
       ],
-      "id": "e0ffed64"
+      "id": "0ba046de"
     },
     {
       "cell_type": "code",
@@ -464,7 +464,7 @@
         "3. Rewrite using the Stein operator: $|\\mathbb{E}[h(W)] - \\mathbb{E}[h(Z)]| = |\\mathbb{E}[f_h'(W) - Wf_h(W)]|$.\n",
         "4. Exploit the structure of $W$ (e.g., $W = S_n/\\sqrt{n}$ is a normalized sum) together with the derivative bounds on $f_h$ to estimate the right-hand side. This is carried out for sums of i.i.d. variables in the Berry-Esseen theorem (Lecture 29)."
       ],
-      "id": "5fa0ad29"
+      "id": "bb2fc658"
     }
   ],
   "metadata": {

@@ -6,7 +6,7 @@
       "source": [
         "# Lecture 25.1: The Riemann-Lebesgue Lemma"
       ],
-      "id": "7374506c"
+      "id": "7b3ed861"
     },
     {
       "cell_type": "code",
@@ -17,7 +17,7 @@
         "import seaborn as sns\n",
         "sns.set_theme(style=\"darkgrid\", palette=\"muted\")"
       ],
-      "id": "27f6792f",
+      "id": "150dfb6a",
       "execution_count": null,
       "outputs": []
     },
@@ -45,7 +45,7 @@
         "\\end{cases}\n",
         "$$"
       ],
-      "id": "da879d72"
+      "id": "8f992474"
     },
     {
       "cell_type": "code",
@@ -81,7 +81,7 @@
         "2. **Cauchy Distribution** (Continuous, non-smooth derivative at 0):\n",
         "   $$\\hat{f}(\\xi) = e^{-|\\xi|}$$"
       ],
-      "id": "71d22168"
+      "id": "7974cae4"
     },
     {
       "cell_type": "code",
@@ -117,7 +117,7 @@
         "3. **Standard Normal Distribution** $\\mathcal{N}(0, 1)$ (Smooth Gaussian decay):\n",
         "   $$\\hat{f}(\\xi) = e^{-\\xi^2 / 2}$$\n"
       ],
-      "id": "aa7edf25"
+      "id": "9549e73a"
     },
     {
       "cell_type": "code",
@@ -153,7 +153,7 @@
         "4. **Symmetric Discrete Measure** $\\mu = \\frac{1}{2}\\delta_1 + \\frac{1}{2}\\delta_{-1}$ (Purely oscillatory, no decay):\n",
         "   $$\\phi(\\xi) = \\cos(\\xi)$$"
       ],
-      "id": "37d73067"
+      "id": "05114fac"
     },
     {
       "cell_type": "code",
@@ -339,7 +339,7 @@
         "\n",
         "**Continuity of $\\hat{f}$:** For any $\\xi_0 \\in \\mathbb{R}^d$, we have $|\\hat{f}(\\xi) - \\hat{f}(\\xi_0)| \\le \\int_{\\mathbb{R}^d} |f(x)| \\, |e^{i\\langle x, \\xi\\rangle} - e^{i\\langle x, \\xi_0\\rangle}| \\, d\\lambda(x)$. As $\\xi \\to \\xi_0$, the integrand converges pointwise to $0$ and is dominated by $2|f(x)| \\in L^1$, so DCT gives $\\hat{f}(\\xi) \\to \\hat{f}(\\xi_0)$. Thus $\\hat{f} \\in C_0(\\mathbb{R}^d)$, completing the proof."
       ],
-      "id": "951af74c"
+      "id": "b0683c1e"
     }
   ],
   "metadata": {

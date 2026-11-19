@@ -715,6 +715,36 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-2-Bounded-Generators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">87</span>&nbsp; <span class="chapter-title">Lecture 40.2: Bounded Generators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-1-Generator-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">88</span>&nbsp; <span class="chapter-title">Lecture 41.1: Generator Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-2-Compound-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">89</span>&nbsp; <span class="chapter-title">Lecture 41.2: Compound Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42-1-Jump-Hold-Description.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">90</span>&nbsp; <span class="chapter-title">Lecture 42.1 Jump-Hold Description</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42-2-Hitting-Times.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">91</span>&nbsp; <span class="chapter-title">Lecture 42.2 Hitting Times</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -943,9 +973,9 @@ q_{s,t}(x, B) = \mathbb{P}\left( x + X_t - X_s \in B \right), \, s \le t, \; x \
 <div class="proof">
 <p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-independent-increments-markov" class="quarto-xref">Proposition&nbsp;<span>80.2</span></a>). </span></p>
 <ul>
-<li><p><em>Step 0 (a <span class="math inline">\(\sigma\)</span>-algebra form of the freezing lemma).</em> We will repeatedly use the following generalization of <a href="32-3-Conditioning-on-Random-Variables.html#prp-independence-substitution" class="quarto-xref">Proposition&nbsp;<span>71.2</span></a>: if <span class="math inline">\(Z\)</span> is <span class="math inline">\(\mathcal{G}\)</span>-measurable, <span class="math inline">\(W\)</span> is independent of <span class="math inline">\(\mathcal{G}\)</span> (not merely of <span class="math inline">\(Z\)</span>), and <span class="math inline">\(\phi \in \mathcal{B}_b(\mathbb{R}^d \times \mathbb{R}^d)\)</span>, then <span class="math display">\[
+<li><p><em>Step 0 (a <span class="math inline">\(\sigma\)</span>-algebra form of the freezing lemma).</em> We will repeatedly use the following generalization of <span class="quarto-unresolved-ref">?prp-independence-substitution</span>: if <span class="math inline">\(Z\)</span> is <span class="math inline">\(\mathcal{G}\)</span>-measurable, <span class="math inline">\(W\)</span> is independent of <span class="math inline">\(\mathcal{G}\)</span> (not merely of <span class="math inline">\(Z\)</span>), and <span class="math inline">\(\phi \in \mathcal{B}_b(\mathbb{R}^d \times \mathbb{R}^d)\)</span>, then <span class="math display">\[
 \mathbb{E}[\phi(Z,W) \mid \mathcal{G}] = \psi(Z) \text{ a.s.}, \qquad \psi(z) := \mathbb{E}[\phi(z,W)],
-\]</span> and consequently, taking total expectation, <span class="math inline">\(\mathbb{E}[\phi(Z,W)] = \mathbb{E}[\psi(Z)]\)</span>. Indeed, for any bounded <span class="math inline">\(\mathcal{G}\)</span>-measurable <span class="math inline">\(h\)</span>, the pair <span class="math inline">\((Z,h)\)</span> is <span class="math inline">\(\mathcal{G}\)</span>-measurable, hence independent of <span class="math inline">\(W\)</span> (since <span class="math inline">\(W \perp \mathcal{G}\)</span>); applying Fubini–Tonelli to the product measure <span class="math inline">\(\mu_{(Z,h)} \otimes \mu_W\)</span>, exactly as in the proof of <a href="32-3-Conditioning-on-Random-Variables.html#prp-independence-substitution" class="quarto-xref">Proposition&nbsp;<span>71.2</span></a> but with <span class="math inline">\(h\)</span> in place of the test function there, gives <span class="math inline">\(\mathbb{E}[\phi(Z,W) h] = \mathbb{E}[\psi(Z) h]\)</span> for every such <span class="math inline">\(h\)</span>, which is the defining property of <span class="math inline">\(\mathbb{E}[\phi(Z,W) \mid \mathcal{G}] = \psi(Z)\)</span>.</p></li>
+\]</span> and consequently, taking total expectation, <span class="math inline">\(\mathbb{E}[\phi(Z,W)] = \mathbb{E}[\psi(Z)]\)</span>. Indeed, for any bounded <span class="math inline">\(\mathcal{G}\)</span>-measurable <span class="math inline">\(h\)</span>, the pair <span class="math inline">\((Z,h)\)</span> is <span class="math inline">\(\mathcal{G}\)</span>-measurable, hence independent of <span class="math inline">\(W\)</span> (since <span class="math inline">\(W \perp \mathcal{G}\)</span>); applying Fubini–Tonelli to the product measure <span class="math inline">\(\mu_{(Z,h)} \otimes \mu_W\)</span>, exactly as in the proof of <span class="quarto-unresolved-ref">?prp-independence-substitution</span> but with <span class="math inline">\(h\)</span> in place of the test function there, gives <span class="math inline">\(\mathbb{E}[\phi(Z,W) h] = \mathbb{E}[\psi(Z) h]\)</span> for every such <span class="math inline">\(h\)</span>, which is the defining property of <span class="math inline">\(\mathbb{E}[\phi(Z,W) \mid \mathcal{G}] = \psi(Z)\)</span>.</p></li>
 <li><p><em>Step 1 (the kernel is well defined and measurable).</em> Fix <span class="math inline">\(s \le t\)</span>, let <span class="math inline">\(\Delta = X_t - X_s\)</span> with law <span class="math inline">\(\mu_\Delta\)</span>, and fix <span class="math inline">\(B \in \mathcal{B}(\mathbb{R}^d)\)</span>. Then <span class="math inline">\(q_{s,t}(x,B) = \mathbb{P}(x + \Delta \in B) = \int_{\mathbb{R}^d} \mathbf{1}_B(x+z) \, \mu_\Delta(dz)\)</span>. For fixed <span class="math inline">\(x\)</span>, <span class="math inline">\(B \mapsto q_{s,t}(x,B)\)</span> is the law of <span class="math inline">\(x + \Delta\)</span>, hence a probability measure. For fixed <span class="math inline">\(B\)</span>, the map <span class="math inline">\((x,z) \mapsto \mathbf{1}_B(x+z)\)</span> is the indicator of the preimage of <span class="math inline">\(B\)</span> under the continuous (hence Borel) addition map, so it is jointly measurable and nonnegative; by Tonelli’s theorem, <span class="math inline">\(x \mapsto \int \mathbf{1}_B(x+z)\,\mu_\Delta(dz) = q_{s,t}(x,B)\)</span> is Borel measurable. So <span class="math inline">\(q_{s,t}\)</span> is a probability kernel.</p></li>
 <li><p><em>Step 2 (Markov property and <a href="#eq-markov-process-def" class="quarto-xref">Equation&nbsp;<span>80.9</span></a>).</em> Fix <span class="math inline">\(f \in \mathcal{B}_b(\mathbb{R}^d)\)</span> and <span class="math inline">\(s \le t\)</span>, and let <span class="math inline">\(\Delta = X_t - X_s\)</span>, so <span class="math inline">\(X_t = X_s + \Delta\)</span> with <span class="math inline">\(X_s\)</span> being <span class="math inline">\(\mathcal{F}_s\)</span>-measurable (as <span class="math inline">\(X\)</span> is adapted). If <span class="math inline">\(s = t\)</span>, then <span class="math inline">\(\Delta = 0\)</span> a.s., so <span class="math inline">\(H(x) := \mathbb{E}[f(x+\Delta)] = f(x)\)</span>, and since <span class="math inline">\(f(X_t) = f(X_s)\)</span> is already <span class="math inline">\(\sigma(X_s)\)</span>-measurable, <span class="math inline">\(\mathbb{E}[f(X_t) \mid \mathcal{F}_s] = f(X_s) = H(X_s)\)</span> trivially — no independence is needed in this degenerate case. If <span class="math inline">\(s &lt; t\)</span>, then by definition of independent increments <span class="math inline">\(\Delta\)</span> is independent of <span class="math inline">\(\mathcal{F}_s\)</span>; the map <span class="math inline">\(\phi(x,z) = f(x+z)\)</span> is bounded and jointly measurable (addition is continuous, <span class="math inline">\(f\)</span> is Borel), so Step 0 with <span class="math inline">\(\mathcal{G} = \mathcal{F}_s\)</span>, <span class="math inline">\(Z = X_s\)</span>, <span class="math inline">\(W = \Delta\)</span> gives <span class="math display">\[
 \mathbb{E}[f(X_t) \mid \mathcal{F}_s] = H(X_s), \qquad H(x) = \mathbb{E}[f(x+\Delta)] = \int f(y) \, q_{s,t}(x,dy).

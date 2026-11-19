@@ -1,0 +1,398 @@
+
+# Lecture 42.2 Hitting Times
+
+## Basic Setup and Definitions
+
+Let $\mathbb{N}_0 = \{0, 1, 2, \dots\}$, $\overline{\mathbb{N}}_0 := \mathbb{N}_0 \cup \{\infty\}$, and let $(S, \mathcal{B})$ be a measurable state space. Let $q : S \times \mathcal{B} \to [0, 1]$ be a **Markov kernel**: $q(x, \cdot)$ is a probability measure on $(S, \mathcal{B})$ for every $x \in S$, and $x \mapsto q(x, A)$ is $\mathcal{B}$-measurable for every $A \in \mathcal{B}$.
+
+We work in the **canonical setting** of Lecture 38.2:
+
+- $\Omega = S^{\mathbb{N}_0}$, $\mathcal{F} = \mathcal{B}^{\otimes \mathbb{N}_0}$, and $X_n(\omega) = \omega_n$ is the $n$-th coordinate map, so that $X = (X_n)_{n \in \mathbb{N}_0}$ is the identity map $\Omega \to S^{\mathbb{N}_0}$;
+- $\mathcal{F}_n := \sigma(X_0, \dots, X_n)$ is the natural filtration;
+- for each $x \in S$, $\mathbb{P}^x$ is the unique probability measure on $(\Omega, \mathcal{F})$ under which $X$ is a time-homogeneous Markov chain with respect to $(\mathcal{F}_n)_{n \in \mathbb{N}_0}$ with one-step transition kernel $q$ and $\mathbb{P}^x(X_0 = x) = 1$. Its existence and uniqueness follow from the Kolmogorov Extension Theorem, since its finite-dimensional distributions are determined by $x$ and $q$. We write $\mathbb{E}^x$ for the corresponding expectation.
+
+In discrete time the transition semigroup of Lecture 38.2 is $Q_n = q^n$ ($n$-fold composition of $q$), and we use its shift property (@thm-shift-property) with time set $T = \mathbb{N}_0$.
+
+::: {#def-hitting-time}
+## First Hitting Time and Hitting Location on Path Space
+
+Let $S^{\mathbb{N}_0} = \prod_{n=0}^{\infty} S$ be the canonical path space equipped with the product $\sigma$-algebra $\mathcal{B}^{\otimes \mathbb{N}_0}$. For any measurable target set $B \in \mathcal{B}$, define the **first hitting time functional** $T_B : S^{\mathbb{N}_0} \to \overline{\mathbb{N}}_0$ for any sequence $\underline{x} = (x_0, x_1, x_2, \dots) \in S^{\mathbb{N}_0}$ by
+$$
+T_B(\underline{x}) := \inf \{ n \ge 0 : x_n \in B \},
+$$ {#eq-hitting-time-path}
+with the standard convention $\inf \emptyset = \infty$.
+
+When $T_B(\underline{x}) < \infty$, we define the **hitting location** $L_B(\underline{x}) \in B$ by
+$$
+L_B(\underline{x}) := x_{T_B(\underline{x})}.
+$$ {#eq-hitting-location-path}
+On $\{T_B(\underline{x}) = \infty\}$ we set $L_B(\underline{x}) := \Delta$, where $\Delta \notin S$ is an isolated cemetery state; thus $L_B$ takes values in $S_\Delta := S \cup \{\Delta\}$, equipped with the $\sigma$-algebra $\mathcal{B}_\Delta := \sigma(\mathcal{B} \cup \{\{\Delta\}\})$.
+
+Applying these functionals to the trajectory of the Markov chain $X(\omega) = (X_0(\omega), X_1(\omega), X_2(\omega), \dots)$, we define the **first hitting time of $B$ by $X$** as the $\overline{\mathbb{N}}_0$-valued random variable $T_B(X) : \Omega \to \overline{\mathbb{N}}_0$ given by
+$$
+\begin{aligned}
+T_B(X)(\omega) &:= T_B\bigl(X_0(\omega), X_1(\omega), X_2(\omega), \dots\bigr) \\
+&= \inf \{ n \ge 0 : X_n(\omega) \in B \}.
+\end{aligned}
+$$ {#eq-hitting-time-rv}
+When no confusion can arise, we use the same symbol $T_B$ for the path functional and for the random variable $T_B(X)$.
+:::
+
+::: {#rem-measurability-stopping}
+## Measurability and Stopping Time Property
+
+1. For each $n \in \mathbb{N}_0$, the event $\{T_B = n\} = \{X_0 \notin B, \dots, X_{n-1} \notin B, X_n \in B\} \in \mathcal{F}_n$, and $\{T_B = \infty\} = \bigcap_{n=0}^{\infty} \{X_n \notin B\} \in \mathcal{F}$. Thus, $T_B$ is an $(\mathcal{F}_n)_{n \in \mathbb{N}_0}$-stopping time (and in particular a well-defined measurable random variable).
+2. Similarly, the path functional $\underline{x} \mapsto T_B(\underline{x})$ is $\mathcal{B}^{\otimes \mathbb{N}_0} / \mathcal{P}(\overline{\mathbb{N}}_0)$-measurable, since for every $n \in \mathbb{N}_0$,
+   $$
+   \begin{aligned}
+   &\{ \underline{x} \in S^{\mathbb{N}_0} : T_B(\underline{x}) = n \} \\
+   & = \left( \bigcap_{k=0}^{n-1} \{ \underline{x} : x_k \in B^c \} \right) \cap \{ \underline{x} : x_n \in B \} \in \mathcal{B}^{\otimes \mathbb{N}_0},
+   \end{aligned}
+   $$
+   and $\{ \underline{x} : T_B(\underline{x}) = \infty \} = \bigcap_{k=0}^{\infty} \{ \underline{x} : x_k \in B^c \} \in \mathcal{B}^{\otimes \mathbb{N}_0}$. Since $\overline{\mathbb{N}}_0$ is countable, this also gives $\mathcal{B}^{\otimes \mathbb{N}_0} / \mathcal{B}([0, \infty])$-measurability.
+3. The hitting location $L_B$ is $\mathcal{B}^{\otimes \mathbb{N}_0} / \mathcal{B}_\Delta$-measurable: for $A \in \mathcal{B}$,
+   $$
+   \begin{aligned}
+   &\{ L_B \in A \} = \bigcup_{n=0}^{\infty} \bigl( \{ T_B = n \} \cap \{ \underline{x} : x_n \in A \} \bigr), \\
+   &\{ L_B = \Delta \} = \{ T_B = \infty \},
+   \end{aligned}
+   $$
+   and both sets belong to $\mathcal{B}^{\otimes \mathbb{N}_0}$.
+:::
+
+::: {#prp-basic-shift-observations}
+## Shift Properties of Hitting Times and Hitting Locations
+
+Let $B \in \mathcal{B}$ and let $\underline{x} = (x_0, x_1, x_2, \dots) \in S^{\mathbb{N}_0}$ be any path such that $x_0 \in B^c$. Denote by $\theta(\underline{x}) := (x_1, x_2, x_3, \dots) \in S^{\mathbb{N}_0}$ the shifted path. Then:
+
+1. **One-Step Decomposition of Hitting Time:**
+   $$
+   T_B(\underline{x}) = 1 + T_B\bigl(\theta(\underline{x})\bigr),
+   $$ {#eq-shift-time}
+   as an identity in $\overline{\mathbb{N}}_0$ (both sides are $\infty$ if $\theta(\underline{x})$ never enters $B$). Equivalently, with the convention $0 \cdot \infty = 0$, $T_B(\underline{x}) = 1 + \mathbf{1}_{B^c}(x_1)\, T_B(\theta(\underline{x}))$, because $T_B(\theta(\underline{x})) = 0$ whenever $x_1 \in B$.
+2. **Invariance of Hitting Location:**
+   $$
+   L_B(\underline{x}) = L_B\bigl(\theta(\underline{x})\bigr).
+   $$ {#eq-shift-location}
+   In particular, $T_B(\underline{x}) < \infty$ if and only if $T_B(\theta(\underline{x})) < \infty$, and then $T_B(\theta(\underline{x})) = T_B(\underline{x}) - 1$.
+:::
+
+::: {.proof}
+## Proof of @prp-basic-shift-observations
+Assume $x_0 \in B^c$.
+
+1. Since $x_0 \notin B$, the index $n = 0$ does not belong to $\{n \ge 0 : x_n \in B\}$. Hence, with $\inf \emptyset = \infty$ on both sides,
+   $$
+   T_B(\underline{x}) = \inf \{ n \ge 1 : x_n \in B \} = 1 + \inf \{ m \ge 0 : x_{m+1} \in B \} = 1 + T_B\bigl(\theta(\underline{x})\bigr).
+   $$
+   For the equivalent form, if $x_1 \in B$ then $T_B(\theta(\underline{x})) = 0 = \mathbf{1}_{B^c}(x_1)\, T_B(\theta(\underline{x}))$, while if $x_1 \in B^c$ then $\mathbf{1}_{B^c}(x_1) = 1$.
+
+2. By part 1, $T_B(\underline{x}) = \infty$ if and only if $T_B(\theta(\underline{x})) = \infty$, and then both sides of @eq-shift-location equal $\Delta$. Otherwise, let $k := T_B(\theta(\underline{x})) \in \mathbb{N}_0$. Then $T_B(\underline{x}) = k + 1$, and by @eq-hitting-location-path,
+   $$
+   L_B(\underline{x}) = x_{T_B(\underline{x})} = x_{k+1} = \bigl(\theta(\underline{x})\bigr)_k = L_B\bigl(\theta(\underline{x})\bigr).
+   $$
+:::
+
+---
+
+## First-Step Analysis
+
+Let $\mathcal{B}_b(S^{\mathbb{N}_0})$ denote the space of bounded, $\mathcal{B}^{\otimes \mathbb{N}_0}$-measurable real-valued functions on $S^{\mathbb{N}_0}$, and let $\mathcal{B}_+(S^{\mathbb{N}_0})$ denote the space of $[0, \infty]$-valued, $\mathcal{B}^{\otimes \mathbb{N}_0} / \mathcal{B}([0, \infty])$-measurable functions (such as $F = T_B$, by @rem-measurability-stopping).
+
+For $x \in S$, let $\iota_x : S^{\mathbb{N}_0} \to S^{\mathbb{N}_0}$, $\iota_x(y_0, y_1, \dots) := (x, y_0, y_1, \dots)$, be the map that prepends $x$. Each coordinate of $\iota_x$ is either constant or a coordinate projection, so $\iota_x$ is $\mathcal{B}^{\otimes \mathbb{N}_0} / \mathcal{B}^{\otimes \mathbb{N}_0}$-measurable. Consequently $F \circ \iota_x$ is measurable whenever $F$ is, and it is bounded (resp. non-negative) whenever $F$ is.
+
+::: {#thm-first-step}
+## First-Step Analysis Formula
+
+Let $F \in \mathcal{B}_b(S^{\mathbb{N}_0})$ or $F \in \mathcal{B}_+(S^{\mathbb{N}_0})$. Then for every initial state $x \in S$,
+$$
+\mathbb{E}^x\bigl[F(X)\bigr] = \int_S q(x, dy)\, \mathbb{E}^y\bigl[F(x, X)\bigr],
+$$ {#eq-first-step-general}
+where $(x, X) := \iota_x(X) = (x, X_0, X_1, X_2, \dots) \in S^{\mathbb{N}_0}$ denotes the path obtained by prepending $x$ to the trajectory $X = (X_0, X_1, X_2, \dots)$. Here the map $y \mapsto \mathbb{E}^y[F(x, X)]$ is $\mathcal{B}$-measurable (real-valued and bounded, resp. $[0, \infty]$-valued), so the integral is well defined.
+
+In particular, if $S$ is countable with $\mathcal{B} = \mathcal{P}(S)$ (the discrete state space setting) and one-step transition probabilities $q(x, y) := q(x, \{y\})$, then @eq-first-step-general becomes
+$$
+\mathbb{E}^x\bigl[F(X_0, X_1, \dots)\bigr] = \sum_{y \in S} q(x, y)\, \mathbb{E}^y\bigl[F(x, X_0, X_1, \dots)\bigr].
+$$ {#eq-first-step-discrete}
+:::
+
+::: {.proof}
+## Proof of @thm-first-step
+Fix $x \in S$ and put $G := F \circ \iota_x$, i.e.
+$$
+G(y_0, y_1, y_2, \dots) := F(x, y_0, y_1, y_2, \dots).
+$$
+$G$ is measurable (see the paragraph before the theorem), $G(X_1, X_2, \dots) = F(x, X_1, X_2, \dots)$, and $G(X_0, X_1, \dots) = F(x, X)$.
+
+**Step 1: bounded $F$.** Let $F \in \mathcal{B}_b(S^{\mathbb{N}_0})$, so that $G$ is bounded. Under $\mathbb{P}^x$ we have $X_0 = x$ almost surely, so the paths $(X_0, X_1, X_2, \dots)$ and $(x, X_1, X_2, \dots)$ agree $\mathbb{P}^x$-a.s., and hence
+$$
+F(X) = F(x, X_1, X_2, \dots) = G(X_{1 + \cdot}) \quad \mathbb{P}^x\text{-a.s.},
+$$
+where $X_{1+\cdot} := (X_{1+n})_{n \in \mathbb{N}_0}$. By the shift property (@thm-shift-property) with $t = 1$ and $\nu_0 = \delta_x$, the map $g(y) := \mathbb{E}^y[G(X)] = \mathbb{E}^y[F(x, X)]$ is $\mathcal{B}$-measurable (statement 1), and (statement 2)
+$$
+\mathbb{E}^x\bigl[G(X_{1+\cdot}) \mid \mathcal{F}_1\bigr] = g(X_1) = \mathbb{E}^{X_1}\bigl[F(x, X)\bigr] \quad \mathbb{P}^x\text{-a.s.}
+$$
+Taking $\mathbb{E}^x$-expectations and using the tower property,
+$$
+\mathbb{E}^x\bigl[F(X)\bigr] = \mathbb{E}^x\bigl[G(X_{1+\cdot})\bigr] = \mathbb{E}^x\Bigl[ \mathbb{E}^x\bigl[G(X_{1+\cdot}) \mid \mathcal{F}_1\bigr] \Bigr] = \mathbb{E}^x\bigl[g(X_1)\bigr].
+$$
+Since the distribution of $X_1$ under $\mathbb{P}^x$ is $q(x, \cdot)$, the change-of-variables formula for pushforward measures yields
+$$
+\mathbb{E}^x\bigl[g(X_1)\bigr] = \int_S q(x, dy)\, g(y) = \int_S q(x, dy)\, \mathbb{E}^y\bigl[F(x, X)\bigr],
+$$
+which proves @eq-first-step-general for bounded $F$.
+
+**Step 2: non-negative $F$.** Let $F \in \mathcal{B}_+(S^{\mathbb{N}_0})$ and put $F_k := F \wedge k$ for $k \in \mathbb{N}$. Each $F_k$ is bounded and measurable, so Step 1 gives
+$$
+\mathbb{E}^x\bigl[F_k(X)\bigr] = \int_S q(x, dy)\, \mathbb{E}^y\bigl[F_k(x, X)\bigr], \qquad k \in \mathbb{N},
+$$
+and each $y \mapsto \mathbb{E}^y[F_k(x, X)]$ is measurable. As $k \uparrow \infty$, $F_k \uparrow F$ pointwise. By the monotone convergence theorem under $\mathbb{P}^x$ and under each $\mathbb{P}^y$, $\mathbb{E}^x[F_k(X)] \uparrow \mathbb{E}^x[F(X)]$ and $\mathbb{E}^y[F_k(x, X)] \uparrow \mathbb{E}^y[F(x, X)]$ for every $y$. In particular, $y \mapsto \mathbb{E}^y[F(x, X)]$ is measurable as an increasing limit of measurable functions. A further application of monotone convergence, now to the integral against $q(x, dy)$, gives @eq-first-step-general in $[0, \infty]$.
+
+Finally, when $S$ is countable and $\mathcal{B} = \mathcal{P}(S)$, $q(x, \cdot) = \sum_{y \in S} q(x, y)\, \delta_y$, so the integral reduces to the sum in @eq-first-step-discrete. For bounded $F$ this sum converges absolutely, and for non-negative $F$ it is a sum of terms in $[0, \infty]$.
+:::
+
+::: {#rem-alternate-direct-proof}
+## Alternate Direct Proof for Cylinder Functionals and $n$-Step Extension
+
+Suppose $F$ depends only on the first $n+1$ coordinates ($n \ge 1$), i.e., $F(x_0, x_1, x_2, \dots) = f(x_0, x_1, \dots, x_n)$ for a bounded or non-negative $\mathcal{B}^{\otimes (n+1)}$-measurable function $f : S^{n+1} \to \mathbb{R}$ (or $[0, \infty]$). By the finite-dimensional distributions of a time-homogeneous Markov chain starting at $x$ (@prp-fdds), written as iterated kernel integrals (Tonelli/Fubini for kernels),
+$$
+\begin{aligned}
+&\mathbb{E}^x\bigl[f(X_0, X_1, \dots, X_n)\bigr] \\
+&= \int_{S} q(x, dx_1) \int_S q(x_1, dx_2) \cdots \int_S q(x_{n-1}, dx_n)\, f(x, x_1, x_2, \dots, x_n) \\
+&= \int_S q(x, dy) \left[ \int_{S} q(y, dx_1) \cdots \int_S q(x_{n-2}, dx_{n-1})\, f(x, y, x_1, \dots, x_{n-1}) \right] \\
+&= \int_S q(x, dy)\, \mathbb{E}^y\bigl[f(x, X_0, X_1, \dots, X_{n-1})\bigr],
+\end{aligned}
+$$
+where in the second equality we relabeled $x_1$ as $y$ and shifted the remaining integration variables $x_2, \dots, x_n$ to $x_1, \dots, x_{n-1}$. (For $n = 1$ the bracket is just $f(x, y)$.) The third equality is the finite-dimensional distribution formula under $\mathbb{P}^y$, using $X_0 = y$ $\mathbb{P}^y$-a.s.
+
+To pass to general $F \in \mathcal{B}_b(S^{\mathbb{N}_0})$, let $\mathbb{H}$ be the set of bounded measurable $F$ for which $y \mapsto \mathbb{E}^y[F(x, X)]$ is measurable and @eq-first-step-general holds. $\mathbb{H}$ is a vector space containing the constants. By bounded convergence it is closed under bounded monotone limits, and measurability of the inner expectation passes to the limit. The computation above shows that $\mathbb{H}$ contains the indicators of the cylinder sets $\{x_0 \in A_0, \dots, x_n \in A_n\}$, which form a $\pi$-system generating $\mathcal{B}^{\otimes \mathbb{N}_0}$. By the multiplicative systems (monotone class) theorem, $\mathbb{H} = \mathcal{B}_b(S^{\mathbb{N}_0})$. The extension to $F \in \mathcal{B}_+(S^{\mathbb{N}_0})$ is Step 2 of the proof of @thm-first-step.
+
+**$n$-step extension.** For $n \ge 1$ and $F \in \mathcal{B}_b(S^{\mathbb{N}_0}) \cup \mathcal{B}_+(S^{\mathbb{N}_0})$, with the convention $x_0 := x$,
+$$
+\begin{aligned}
+\mathbb{E}^x\bigl[F(X_0, X_1, \dots)\bigr] &= \int_S q(x_0, dx_1) \int_S q(x_1, dx_2) \cdots \int_S q(x_{n-1}, dx_n)\\
+&\times \mathbb{E}^{x_n}\bigl[F(x_0, x_1, \dots, x_{n-1}, X_0, X_1, \dots)\bigr].
+\end{aligned}
+$$ {#eq-n-step-analysis}
+Here the integrand $(x_0, \dots, x_n) \mapsto \mathbb{E}^{x_n}[F(x_0, \dots, x_{n-1}, X)]$ is jointly $\mathcal{B}^{\otimes(n+1)}$-measurable. For cylinder indicators $F = \mathbf{1}_{A_0 \times \cdots \times A_m \times S \times \cdots}$ it is a finite product of indicators $\mathbf{1}_{A_j}(x_j)$ and a measurable function of $x_n$ (@thm-shift-property, statement 1). The monotone class argument above and truncation $F \wedge k$ extend this to all bounded and all non-negative $F$.
+
+The formula follows by induction on $n$. The case $n = 1$ is @thm-first-step. If it holds for some $n$, apply @thm-first-step to $F$ to get $\mathbb{E}^x[F(X)] = \int_S q(x, dx_1)\, \mathbb{E}^{x_1}[F(x, X)]$. Then apply the $n$-step formula, started at $x_1$, to the functional $F \circ \iota_x$:
+$$
+\begin{aligned}
+\mathbb{E}^{x_1}\bigl[F(x, X)\bigr] &= \int_S q(x_1, dx_2) \cdots \int_S q(x_n, dx_{n+1})\, \mathbb{E}^{x_{n+1}}\\
+&\times \bigl[F(x, x_1, \dots, x_n, X)\bigr].
+\end{aligned}
+$$
+Substituting this gives the $(n+1)$-step formula.
+:::
+
+Armed with @prp-basic-shift-observations and @thm-first-step, first-step analysis becomes an effective tool for analyzing hitting times.
+
+---
+
+## Application: Simple Symmetric Random Walk on $\mathbb{Z}$
+
+Consider the **simple symmetric random walk** $X = (X_n)_{n \in \mathbb{N}_0}$ on the discrete state space $S = \mathbb{Z}$, whose one-step transition probabilities are given by
+$$
+q(x, y) = \begin{cases}
+\frac{1}{2}, & \text{if } |y - x| = 1 \text{ (i.e., } y = x \pm 1\text{)}, \\
+0, & \text{if } |y - x| \neq 1.
+\end{cases}
+$$ {#eq-srw-kernel}
+
+Fix a target state $b \in \mathbb{Z}$ and let $B = \{b\}$. We write $T_b := T_{\{b\}} = \inf \{ n \ge 0 : X_n = b \}$ for the first hitting time of $b$. Several fundamental questions arise:
+
+1. Is $T_b < \infty$ almost surely, i.e., is $\mathbb{P}^x(T_b < \infty) = 1$ for every starting point $x$? (This **hitting probability** question is closely tied to **recurrence** of $b$, which concerns the *return* time $T_b^+ := \inf\{n \ge 1 : X_n = b\}$ under $\mathbb{P}^b$; see @rem-null-recurrence.)
+2. What is the probability distribution of $T_b$ under $\mathbb{P}^x$?
+3. What is the expected hitting time $\mathbb{E}^x[T_b]$?
+
+We analyze the expected hitting time by defining $u : \mathbb{Z} \to [0, \infty]$ via
+$$
+u(x) := \mathbb{E}^x[T_b], \qquad x \in \mathbb{Z}.
+$$ {#eq-def-u}
+
+## Derivation of the Difference Equation for $u(x)$
+
+- **Boundary condition at $x = b$:** Under $\mathbb{P}^b$, we have $\mathbb{P}^b(X_0 = b) = 1$, which implies $\mathbb{P}^b(T_b = 0) = 1$. Hence,
+  $$
+  u(b) = \mathbb{E}^b[T_b] = 0.
+  $$ {#eq-u-boundary}
+
+- **Recurrence relation for $x \neq b$:** Suppose $x \in \mathbb{Z} \setminus \{b\}$, so $x \in B^c$. Here $S = \mathbb{Z}$ with $\mathcal{B} = \mathcal{P}(\mathbb{Z})$, and $T_b \in \mathcal{B}_+(\mathbb{Z}^{\mathbb{N}_0})$ by @rem-measurability-stopping. Applying the discrete first-step formula @eq-first-step-discrete with $F = T_b$ yields
+  $$
+  \begin{aligned}
+  u(x) &= \mathbb{E}^x\bigl[T_b(X)\bigr] \\
+  &= \sum_{y \in \mathbb{Z}} q(x, y)\, \mathbb{E}^y\bigl[T_b(x, X)\bigr] \\
+  &= \frac{1}{2}\, \mathbb{E}^{x-1}\bigl[T_b(x, X)\bigr] + \frac{1}{2}\, \mathbb{E}^{x+1}\bigl[T_b(x, X)\bigr].
+  \end{aligned}
+  $$
+  Since $x \neq b$, @eq-shift-time (applied to the path $(x, \underline{y})$, whose shift is $\underline{y}$) gives, for **every** path $\underline{y} \in \mathbb{Z}^{\mathbb{N}_0}$,
+  $$
+  T_b(x, \underline{y}) = 1 + T_b(\underline{y}) \quad \text{in } \overline{\mathbb{N}}_0.
+  $$
+  Hence $T_b(x, X) = 1 + T_b(X)$ identically on $\Omega$, and consequently, for every $y \in \mathbb{Z}$,
+  $$
+  \mathbb{E}^y\bigl[T_b(x, X)\bigr] = 1 + \mathbb{E}^y\bigl[T_b(X)\bigr] = 1 + u(y) \in [1, \infty].
+  $$
+  Substituting this for $y = x - 1$ and $y = x + 1$ gives, with the usual arithmetic in $[0, \infty]$,
+  $$
+  \begin{aligned}
+  u(x) &= \frac{1}{2}\bigl(1 + u(x-1)\bigr) + \frac{1}{2}\bigl(1 + u(x+1)\bigr) \\
+  &= \frac{1}{2}\bigl(u(x-1) + u(x+1)\bigr) + 1, \qquad \forall x \neq b.
+  \end{aligned}
+  $$ {#eq-u-recurrence}
+
+## Is the System Uniquely Solvable in $[0, \infty]$?
+
+The system consisting of @eq-u-boundary and @eq-u-recurrence has at least one solution in $[0, \infty]^{\mathbb{Z}}$ that is easy to write down:
+
+- **Trivial infinite solution:** The function
+  $$
+  \tilde{u}(x) = \begin{cases}
+  0, & x = b, \\
+  \infty, & x \neq b
+  \end{cases}
+  $$
+  satisfies $\tilde{u}(b) = 0$. For every $x \neq b$, at least one of $\tilde{u}(x-1)$, $\tilde{u}(x+1)$ equals $\infty$ (both do unless $x = b \pm 1$, in which case one of them is $\tilde{u}(b) = 0$), so $\frac{1}{2}\bigl(\tilde{u}(x-1) + \tilde{u}(x+1)\bigr) + 1 = \infty = \tilde{u}(x)$.
+- **Question:** A priori, the system might have other solutions in $[0, \infty]^{\mathbb{Z}}$. In particular, could $u(x)$ be finite for some $x \neq b$? We show below that the answer is no: $\tilde{u}$ is the **only** solution (@rem-unique-solution), and hence $u = \tilde{u}$.
+
+## Dichotomy on Each Half-Line $\{x > b\}$ and $\{x < b\}$
+
+::: {#lem-half-line-dichotomy}
+## Half-Line Dichotomy
+Suppose $v : \mathbb{Z} \to [0, \infty]$ satisfies
+$$
+v(x) = \frac{1}{2}\bigl(v(x-1) + v(x+1)\bigr) + 1 \qquad \text{for all } x \neq b.
+$$
+
+1. If $v(x) = \infty$ for some $x > b$, then $v(y) = \infty$ for **all** $y > b$.
+2. Symmetrically, if $v(x) = \infty$ for some $x < b$, then $v(y) = \infty$ for **all** $y < b$.
+:::
+
+::: {.proof}
+## Proof of @lem-half-line-dichotomy
+We prove (1); the proof of (2) is the same after reflecting across $b$ (i.e., replacing $z$ by $2b - z$).
+
+Suppose $v(x) = \infty$ for some integer $x > b$. Since $v$ takes values in $[0, \infty]$, we have $\infty + a = \infty$ for every $a \in [0, \infty]$, and no expression of the form $\infty - \infty$ arises:
+- Because $x + 1 > b$ (so $x + 1 \neq b$), the equation at $x + 1$ gives
+  $$
+  v(x+1) = \frac{1}{2}\bigl(v(x) + v(x+2)\bigr) + 1 = \frac{1}{2}\bigl(\infty + v(x+2)\bigr) + 1 = \infty.
+  $$
+- If $x - 1 > b$ (so $x - 1 \neq b$), the equation at $x - 1$ gives
+  $$
+  v(x-1) = \frac{1}{2}\bigl(v(x-2) + v(x)\bigr) + 1 = \frac{1}{2}\bigl(v(x-2) + \infty\bigr) + 1 = \infty.
+  $$
+
+By induction, the forward step $z \mapsto z + 1$ shows $v(y) = \infty$ for all $y \ge x$, and the backward step $z \mapsto z - 1$, applied while $z - 1 > b$, shows $v(y) = \infty$ for all $b < y \le x$. Hence $v(y) = \infty$ for every $y > b$.
+:::
+
+@lem-half-line-dichotomy shows that on each side of $b$ separately, either $v \equiv \infty$ on that half-line, or $v(x) < \infty$ everywhere on that half-line.
+
+## Ruling Out Finite Solutions via Quadratic Shift
+
+::: {#prp-srw-infinite-mean}
+For the simple symmetric random walk on $\mathbb{Z}$, the expected hitting time of any state $b \in \mathbb{Z}$ satisfies
+$$
+\mathbb{E}^x[T_b] = u(x) = \infty \qquad \text{for all } x \neq b.
+$$ {#eq-srw-infinite-mean}
+:::
+
+::: {.proof}
+## Proof of @prp-srw-infinite-mean
+We prove a slightly stronger statement. Let $v : \mathbb{Z} \to [0, \infty]$ be **any** solution of the system @eq-u-boundary and @eq-u-recurrence, i.e., $v(b) = 0$ and $v(x) = \frac{1}{2}(v(x-1) + v(x+1)) + 1$ for $x \neq b$. We show that $v(x) = \infty$ for all $x \neq b$. Since $u$ is such a solution, this proves @eq-srw-infinite-mean.
+
+Suppose, for the sake of contradiction, that $v(x) < \infty$ for some $x > b$. By @lem-half-line-dichotomy, $0 \le v(x) < \infty$ for **all** $x > b$. Since also $v(b) = 0$, $v$ is finite on $\{x \in \mathbb{Z} : x \ge b\}$.
+
+Define the auxiliary function $w : \{x \in \mathbb{Z} : x \ge b\} \to \mathbb{R}$ by
+$$
+w(x) := v(x) + x^2.
+$$ {#eq-quadratic-shift}
+For every integer $x > b$, both $x - 1 \ge b$ and $x + 1 > b$, so $w(x-1)$, $w(x)$, and $w(x+1)$ are finite real numbers. Because all values involved are finite, the equation for $v$ at $x$ may be rewritten as $\frac{1}{2}(v(x-1) + v(x+1)) = v(x) - 1$. Computing the discrete average of $w$ at $x \pm 1$, we obtain
+$$
+\begin{aligned}
+&\frac{1}{2}\bigl(w(x-1) + w(x+1)\bigr) = \frac{1}{2}\Bigl( v(x-1) + (x-1)^2 + v(x+1) + (x+1)^2 \Bigr) \\
+&= \frac{1}{2}\bigl(v(x-1) + v(x+1)\bigr) + \frac{1}{2}\bigl((x^2 - 2x + 1) + (x^2 + 2x + 1)\bigr) \\
+&= \frac{1}{2}\bigl(v(x-1) + v(x+1)\bigr) + x^2 + 1 \\
+&= \bigl(v(x) - 1\bigr) + x^2 + 1 \\
+&= v(x) + x^2 = w(x).
+\end{aligned}
+$$
+Thus $w$ is discrete harmonic on $\{x \in \mathbb{Z} : x > b\}$:
+$$
+w(x) = \frac{1}{2}\bigl(w(x-1) + w(x+1)\bigr), \qquad \forall x > b.
+$$
+
+Every real-valued function on $\{x \ge b\}$ with this property is affine. Indeed, the relation is equivalent to $w(x+1) - w(x) = w(x) - w(x-1)$ for $x > b$, so the first difference $\Delta w(x) := w(x+1) - w(x)$ is constant, say $\Delta w \equiv A_1$, on $\{x \ge b\}$. Summing the differences then gives
+$$
+w(x) = w(b) + A_1 (x - b) =: A_0 + A_1 x \qquad \text{for all } x \ge b,
+$$
+with $A_0, A_1 \in \mathbb{R}$.
+
+Substituting this back into @eq-quadratic-shift gives
+$$
+v(x) = w(x) - x^2 = A_0 + A_1 x - x^2 \qquad \text{for all } x \ge b.
+$$
+Taking the limit as $x \to \infty$ along the integers yields
+$$
+\lim_{x \to \infty} v(x) = \lim_{x \to \infty} (A_0 + A_1 x - x^2) = -\infty,
+$$
+which contradicts $v \ge 0$. Therefore, $v(x) = \infty$ for all $x > b$.
+
+The same argument on the left half-line, with $w(x) := v(x) + x^2$ for $x \le b$ (harmonic for $x < b$, hence affine on $\{x \le b\}$) and $x \to -\infty$, where again $A_0 + A_1 x - x^2 \to -\infty$, shows that $v(x) = \infty$ for all $x < b$ as well.
+:::
+
+::: {#rem-unique-solution}
+## Uniqueness of the Solution
+The proof of @prp-srw-infinite-mean uses only the boundary condition @eq-u-boundary, the difference equation @eq-u-recurrence, and non-negativity. It never uses the probabilistic meaning of $u$. It therefore shows that the trivial infinite solution $\tilde{u}$ is the **unique** solution of @eq-u-boundary and @eq-u-recurrence in $[0, \infty]^{\mathbb{Z}}$, and that $u = \tilde{u}$.
+
+The quadratic $x^2$ was chosen because $\frac{1}{2}((x-1)^2 + (x+1)^2) - x^2 = 1$: it absorbs the "$+1$" in @eq-u-recurrence and turns the inhomogeneous equation into a homogeneous one, whose finite solutions are affine and so cannot dominate $-x^2$.
+:::
+
+## Hitting Probabilities and Null Recurrence
+
+The same first-step technique, applied to the bounded functional $F = \mathbf{1}_{\{T_b < \infty\}}$ instead of $F = T_b$, shows that the hitting time, although it has infinite mean, is finite almost surely.
+
+::: {#prp-srw-hitting-probability}
+## The Simple Symmetric Random Walk Hits Every State
+For the simple symmetric random walk on $\mathbb{Z}$ and every $b \in \mathbb{Z}$,
+$$
+\mathbb{P}^x(T_b < \infty) = 1 \qquad \text{for all } x \in \mathbb{Z}.
+$$ {#eq-srw-hits-surely}
+:::
+
+::: {.proof}
+## Proof of @prp-srw-hitting-probability
+Let $h(x) := \mathbb{P}^x(T_b < \infty) \in [0, 1]$. Clearly $h(b) = 1$, since $T_b = 0$ $\mathbb{P}^b$-a.s.
+
+Fix $x \neq b$. By @eq-shift-time, $T_b(x, \underline{y}) = 1 + T_b(\underline{y})$ for every path $\underline{y}$, so $\mathbf{1}_{\{T_b < \infty\}}(x, \underline{y}) = \mathbf{1}_{\{T_b < \infty\}}(\underline{y})$. Applying @eq-first-step-discrete to the bounded measurable functional $F = \mathbf{1}_{\{T_b < \infty\}}$ gives
+$$
+\begin{aligned}
+h(x) &= \frac{1}{2}\, \mathbb{P}^{x-1}(T_b < \infty) + \frac{1}{2}\, \mathbb{P}^{x+1}(T_b < \infty) \\
+&= \frac{1}{2}\bigl(h(x-1) + h(x+1)\bigr), \qquad x \neq b.
+\end{aligned}
+$$
+Thus $h$ is real-valued and harmonic on $\{x > b\}$. As in the proof of @prp-srw-infinite-mean, $h(x) = h(b) + A_1(x - b)$ for $x \ge b$ and some $A_1 \in \mathbb{R}$. Since $0 \le h \le 1$ on $\{x \ge b\}$, letting $x \to \infty$ forces $A_1 = 0$, so $h \equiv h(b) = 1$ on $\{x \ge b\}$. The same argument on $\{x \le b\}$, letting $x \to -\infty$, gives $h \equiv 1$ on $\{x \le b\}$.
+:::
+
+::: {#rem-null-recurrence}
+## Null Recurrence of Simple Symmetric Random Walk on $\mathbb{Z}$
+
+Let $T_b^+ := \inf\{n \ge 1 : X_n = b\}$ be the **return time** to $b$. For every path $\underline{y}$ (regardless of $y_0$), $T_b^+(\underline{y}) = 1 + T_b(\theta(\underline{y}))$. Hence $T_b^+ = 1 + T_b \circ \theta$ is measurable, and for any $x_0 \in \mathbb{Z}$, $T_b^+(x_0, \underline{y}) = 1 + T_b(\underline{y})$. Applying @eq-first-step-discrete at $x = b$, first with $F = \mathbf{1}_{\{T_b^+ < \infty\}}$ and then with $F = T_b^+$, together with @prp-srw-hitting-probability and @prp-srw-infinite-mean, gives
+$$
+\mathbb{P}^b(T_b^+ < \infty) = \frac{1}{2}\, \mathbb{P}^{b-1}(T_b < \infty) + \frac{1}{2}\, \mathbb{P}^{b+1}(T_b < \infty) = 1,
+$$
+$$
+\mathbb{E}^b[T_b^+] = 1 + \frac{1}{2}\, \mathbb{E}^{b-1}[T_b] + \frac{1}{2}\, \mathbb{E}^{b+1}[T_b] = \infty.
+$$
+In the terminology of Markov chain classification, a state $b$ with $\mathbb{P}^b(T_b^+ < \infty) = 1$ (the chain returns to $b$ almost surely) but $\mathbb{E}^b[T_b^+] = \infty$ (the mean return time is infinite) is called **null recurrent**. Since $b \in \mathbb{Z}$ was arbitrary, **every** state of the simple symmetric random walk on $\mathbb{Z}$ is null recurrent.
+:::
+
+## Takeaways
+
+- **Hitting times are path functionals.** For $B \in \mathcal{B}$, the first hitting time $T_B(\underline{x}) = \inf\{n \ge 0 : x_n \in B\}$ is a measurable map $S^{\mathbb{N}_0} \to \overline{\mathbb{N}}_0$, and $T_B(X)$ is an $(\mathcal{F}_n)$-stopping time (@rem-measurability-stopping). The hitting location $L_B = x_{T_B}$ (with cemetery value $\Delta$ on $\{T_B = \infty\}$) is measurable as well.
+- **One-step shift identities.** If $x_0 \notin B$, then $T_B(\underline{x}) = 1 + T_B(\theta(\underline{x}))$ and $L_B(\underline{x}) = L_B(\theta(\underline{x}))$ (@prp-basic-shift-observations). Removing a starting point outside $B$ costs one time unit and does not change where $B$ is first entered.
+- **First-step analysis.** For bounded or non-negative path functionals $F$, $\mathbb{E}^x[F(X)] = \int_S q(x, dy)\, \mathbb{E}^y[F(x, X)]$ (@thm-first-step). This follows from the shift property of Lecture 38.2 at time $1$ for bounded $F$, and by truncation and monotone convergence for non-negative $F$. Iterating it gives the $n$-step formula @eq-n-step-analysis.
+- **Recipe for hitting problems.** Combining first-step analysis with the shift identity turns hitting-time quantities into difference equations. Expected hitting times satisfy $u(b) = 0$ and $u = 1 + Qu$ off $b$, while hitting probabilities satisfy $h(b) = 1$ and $h = Qh$ off $b$, where $Qf(x) = \int_S q(x, dy)\, f(y)$.
+- **Infinite values need care.** The equations hold in $[0, \infty]$, where $u \equiv \infty$ off $b$ is always a candidate solution. To decide whether finite solutions exist, one has to argue separately. For the simple random walk, the half-line dichotomy (@lem-half-line-dichotomy) reduces this to two cases: either $u \equiv \infty$ or $u < \infty$ on each half-line.
+- **Quadratic shift.** If $u$ were finite on a half-line, $w = u + x^2$ would be harmonic and hence affine there, forcing $u = A_0 + A_1 x - x^2 \to -\infty$, which contradicts $u \ge 0$. Hence $\mathbb{E}^x[T_b] = \infty$ for all $x \neq b$ (@prp-srw-infinite-mean), and $\tilde{u}$ is the unique solution of the system (@rem-unique-solution).
+- **Null recurrence.** Bounded harmonic functions on a half-line are constant, so $\mathbb{P}^x(T_b < \infty) = 1$ for all $x$ (@prp-srw-hitting-probability). Thus the simple symmetric random walk on $\mathbb{Z}$ returns to every state almost surely, yet the mean return time is infinite: every state is null recurrent (@rem-null-recurrence).
