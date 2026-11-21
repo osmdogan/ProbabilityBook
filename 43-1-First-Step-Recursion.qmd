@@ -1,0 +1,405 @@
+
+# Lecture 43.1 First Step Recursion
+
+## Hitting Times and First-Step Analysis
+
+Throughout this lecture we work in the **canonical setting** of Lecture 42.2. Thus $\mathbb{N}_0 = \{0, 1, 2, \dots\}$, $\overline{\mathbb{N}}_0 := \mathbb{N}_0 \cup \{\infty\}$, $(S, \mathcal{B})$ is a (non-empty) measurable state space, and $q: S \times \mathcal{B} \to [0, 1]$ is a Markov kernel. Moreover, $\Omega = S^{\mathbb{N}_0}$, $\mathcal{F} = \mathcal{B}^{\otimes \mathbb{N}_0}$, $X_n(\omega) = \omega_n$ is the $n$-th coordinate map, and $\mathcal{F}_n = \sigma(X_0, \dots, X_n)$. For each $x \in S$, $\mathbb{P}^x$ is the unique probability measure on $(\Omega, \mathcal{F})$ under which $X = (X_n)_{n \in \mathbb{N}_0}$ is a time-homogeneous Markov chain with respect to $(\mathcal{F}_n)_{n \in \mathbb{N}_0}$ with one-step transition kernel $q$ and $\mathbb{P}^x(X_0 = x) = 1$. We write $\mathbb{E}^x$ for the corresponding expectation.
+
+As in Lecture 42.2, $\mathcal{B}_b(S)$ denotes the space of bounded $\mathcal{B}$-measurable functions $f: S \to \mathbb{R}$, and $\mathcal{B}_+(S)$ denotes the space of $\mathcal{B}/\mathcal{B}([0, \infty])$-measurable functions $f: S \to [0, \infty]$; the analogous notation is used on the path space $S^{\mathbb{N}_0}$. The **transition operator**
+$$
+(Qf)(x) = \int_S q(x, dy)\, f(y), \qquad x \in S,
+$$
+maps $\mathcal{B}_b(S)$ into $\mathcal{B}_b(S)$ and $\mathcal{B}_+(S)$ into $\mathcal{B}_+(S)$. In computations with $[0, \infty]$-valued quantities we use the convention $0 \cdot \infty = 0$.
+
+We use the hitting-time notation of @def-hitting-time. For $B \in \mathcal{B}$ and a path $\underline{x} = (x_0, x_1, \dots) \in S^{\mathbb{N}_0}$,
+$$
+T_B(\underline{x}) = \inf\{ n \ge 0 : x_n \in B \} \in \overline{\mathbb{N}}_0 \qquad (\inf \emptyset = \infty)
+$$
+is the **first hitting time** of $B$, and $L_B(\underline{x}) = x_{T_B(\underline{x})}$ is the **hitting location** (with $L_B(\underline{x}) = \Delta$ if $T_B(\underline{x}) = \infty$). We use the same symbol $T_B$ for the random variable $T_B(X)$, and we write $X_{T_B} := L_B(X)$ on $\{T_B < \infty\}$. By @rem-measurability-stopping, $T_B$ is an $(\mathcal{F}_n)$-stopping time, and $T_B$ and $L_B$ are measurable functions on path space. Since the infimum includes $n = 0$, we have $T_B = 0$ $\mathbb{P}^x$-a.s. whenever $x \in B$.
+
+We shall use the following results from Lecture 42.2.
+
+- **First-step analysis** (@thm-first-step). For $F \in \mathcal{B}_b(S^{\mathbb{N}_0})$ or $F \in \mathcal{B}_+(S^{\mathbb{N}_0})$ and $x \in S$, the map $y \mapsto \mathbb{E}^y[F(x, X)]$ is $\mathcal{B}$-measurable and
+  $$
+  \mathbb{E}^x[F(X)] = \int_S q(x, dy)\, \mathbb{E}^y[F(x, X)], \qquad (x, X) := (x, X_0, X_1, X_2, \dots).
+  $$
+  Its iterated form is the $n$-step formula @eq-n-step-analysis.
+- **Shift identities** (@prp-basic-shift-observations). If $x \in B^c$, then for every path $\underline{y} \in S^{\mathbb{N}_0}$,
+  $$
+  T_B(x, \underline{y}) = 1 + T_B(\underline{y}) \qquad \text{and} \qquad L_B(x, \underline{y}) = L_B(\underline{y}).
+  $$
+  (Apply @prp-basic-shift-observations to the path $(x, \underline{y})$, whose initial coordinate lies in $B^c$ and whose shift is $\underline{y}$.)
+
+We also record a measurability statement that is used repeatedly.
+
+::: {#lem-expectation-measurable}
+## Measurability in the Starting Point
+Let $H \in \mathcal{B}_b(S^{\mathbb{N}_0})$ or $H \in \mathcal{B}_+(S^{\mathbb{N}_0})$. Then the map $y \mapsto \mathbb{E}^y[H(X)]$ is $\mathcal{B}$-measurable; it is bounded by $\sup |H|$ in the first case and $[0, \infty]$-valued in the second.
+:::
+
+::: {.proof}
+## Proof of @lem-expectation-measurable
+The shift $\theta(x_0, x_1, x_2, \dots) := (x_1, x_2, \dots)$ is $\mathcal{B}^{\otimes \mathbb{N}_0}/\mathcal{B}^{\otimes \mathbb{N}_0}$-measurable, because each of its coordinates is a coordinate projection. Hence $F := H \circ \theta$ belongs to the same class as $H$, and $F(x, X) = H(X)$ for every $x \in S$. Fixing any $x \in S$, the measurability clause of @thm-first-step shows that $y \mapsto \mathbb{E}^y[F(x, X)] = \mathbb{E}^y[H(X)]$ is $\mathcal{B}$-measurable. The bounds are immediate.
+:::
+
+We are interested in characterizing the distribution of $T_B$, for instance by computing the hitting probabilities $\mathbb{P}^x(T_B < \infty)$ or the expected hitting times $\mathbb{E}^x[T_B]$ as functions of the starting state $x \in S$. To analyze these quantities systematically, it is fruitful to embed them into two broader families of functionals, which have natural interpretations in terms of stochastic games:
+
+1. **Terminal-payoff game:** Given a payoff function $h \in \mathcal{B}_b(S)$ or $h \in \mathcal{B}_+(S)$, consider
+   $$
+   u(x) := \mathbb{E}^x\big[h(X_{T_B})\mathbf{1}_{\{T_B < \infty\}}\big], \qquad x \in S,
+   $$
+   where the integrand is understood to be $h(X_{T_B})$ on $\{T_B < \infty\}$ and $0$ on $\{T_B = \infty\}$.
+
+   *Interpretation:* Start the chain at state $x$ and let it evolve until the first time $T_B$ it enters the target set $B$. At the entrance state $y = X_{T_B} \in B$, you collect a terminal reward of $\$h(y)$ (and $\$0$ if the chain never hits $B$). Only the values of $h$ on $B$ matter. In the special case $h \equiv 1$, this reduces to the hitting probability:
+   $$
+   u(x) = \mathbb{E}^x[\mathbf{1}_{\{T_B < \infty\}}] = \mathbb{P}^x(T_B < \infty).
+   $$
+
+2. **Running-cost (or running-reward) game:** Given a running-reward function $g \in \mathcal{B}_+(S)$, consider
+   $$
+   v(x) := \mathbb{E}^x\left[\sum_{0 \le n < T_B} g(X_n)\right], \qquad x \in S.
+   $$
+   *Interpretation:* Start at $x$ and follow the random trajectory $X_0, X_1, X_2, \dots$ until the first time $T_B$ that the chain enters $B$ (if $T_B = 0$, the empty sum is $0$). At each step $n < T_B$ before hitting $B$, you collect $\$g(X_n)$. What is your expected total reward? Since $X_n \in B^c$ for every $n < T_B$, only the values of $g$ on $B^c$ matter. In particular, for $g = \mathbf{1}_{B^c}$ (or $g \equiv 1$), each step prior to hitting $B$ contributes $1$, so this reduces to the expected hitting time:
+   $$
+   v(x) = \mathbb{E}^x\left[\sum_{0 \le n < T_B} 1\right] = \mathbb{E}^x[T_B].
+   $$
+
+---
+
+## Sub-Probability Kernels
+
+To express the recursive equations satisfied by $u$ and $v$ cleanly, we split the transition kernel $q$ according to whether the next state lies in a given set $B \in \mathcal{B}$ or not.
+
+For $C \in \mathcal{B}$, recall that the **trace $\sigma$-algebra** on $C$ is
+$$
+\mathcal{B}|_C := \{ E \in \mathcal{B} : E \subseteq C \} = \{ F \cap C : F \in \mathcal{B} \},
+$$
+which is a $\sigma$-algebra on $C$ (the two descriptions agree because $C \in \mathcal{B}$).
+
+::: {#def-subprob-kernel}
+## Restricted Sub-Probability Kernel and Operator
+Let $q: S \times \mathcal{B} \to [0, 1]$ be a Markov kernel and let $B \in \mathcal{B}$.
+
+1. The **restriction of $q$ to $B$** is the map $q_B: S \times \mathcal{B} \to [0, 1]$ defined by
+   $$
+   q_B(x, A) := q(x, A \cap B), \qquad x \in S, \; A \in \mathcal{B}.
+   $$
+   For each $x \in S$, $q_B(x, \cdot)$ is a measure on $(S, \mathcal{B})$ concentrated on $B$, and for each $A \in \mathcal{B}$ the map $x \mapsto q_B(x, A) = q(x, A \cap B)$ is $\mathcal{B}$-measurable. Thus $q_B$ is a kernel on $(S, \mathcal{B})$. Note that the starting point $x$ ranges over all of $S$; in particular, for $x \in B^c$, $q_B(x, \cdot)$ describes one-step transitions from outside $B$ into $B$.
+2. The associated operator $Q_B$ is defined, for $f \in \mathcal{B}_b(S)$ or $f \in \mathcal{B}_+(S)$, by
+   $$
+   \begin{aligned}
+   (Q_B f)(x) &:= \int_S q_B(x, dy)\, f(y) \\
+   &= \int_B q(x, dy)\, f(y) \\
+   &= Q(f \mathbf{1}_B)(x), \qquad x \in S.
+   \end{aligned}
+   $$
+   It maps $\mathcal{B}_b(S)$ into $\mathcal{B}_b(S)$ and $\mathcal{B}_+(S)$ into $\mathcal{B}_+(S)$, and $Q_B f$ depends only on the restriction $f|_B$.
+:::
+
+::: {#rem-subprob-properties}
+## Properties of $q_B$ and $Q_B$
+For every $x \in S$, the total mass of $q_B(x, \cdot)$ is
+$$
+q_B(x, S) = q(x, B) \le 1,
+$$
+which is not necessarily equal to $1$ (in contrast to $q(x, S) = 1$). Consequently, $q_B$ is a **sub-probability kernel**, and $Q_B$ is a sub-Markovian operator:
+
+- $Q_B$ is linear on $\mathcal{B}_b(S)$, additive and positively homogeneous on $\mathcal{B}_+(S)$, positive ($f \ge 0 \Rightarrow Q_B f \ge 0$), and therefore monotone; moreover, if $0 \le f_n \uparrow f$, then $Q_B f_n \uparrow Q_B f$ by the monotone convergence theorem.
+- $(Q_B \mathbf{1})(x) = Q(\mathbf{1}_B)(x) = q(x, B) \le 1$, rather than $1$.
+- Because $\{B, B^c\}$ is a measurable partition of $S$, the kernel $q$ and operator $Q$ decompose additively as
+  $$
+  q = q_B + q_{B^c} \qquad \text{and} \qquad Q = Q_B + Q_{B^c},
+  $$
+  meaning that for any $f \in \mathcal{B}_b(S)$ or $f \in \mathcal{B}_+(S)$ and any $x \in S$,
+  $$
+  \begin{aligned}
+  (Qf)(x) &= (Q_B f)(x) + (Q_{B^c} f)(x) \\
+  &= \int_B q(x, dy)\, f(y) + \int_{B^c} q(x, dy)\, f(y),
+  \end{aligned}
+  $$
+  with the sum taken in $[0, \infty]$ when $f \ge 0$.
+- Iterates of $Q_{B^c}$ can be expressed through the chain. For $f \in \mathcal{B}_b(S)$ or $f \in \mathcal{B}_+(S)$, $k \in \mathbb{N}_0$, and $x \in S$,
+  $$
+  (Q_{B^c}^k f)(x) = \mathbb{E}^x\big[\mathbf{1}_{B^c}(X_1) \cdots \mathbf{1}_{B^c}(X_k)\, f(X_k)\big].
+  $$ {#eq-taboo-iterates}
+  Indeed, unwinding $Q_{B^c} f = Q(\mathbf{1}_{B^c} f)$ shows that the left side is the iterated integral $\int_S q(x, dx_1) \cdots \int_S q(x_{k-1}, dx_k)\, \mathbf{1}_{B^c}(x_1) \cdots \mathbf{1}_{B^c}(x_k) f(x_k)$, which equals the right side by @eq-n-step-analysis applied to a functional of $(X_0, \dots, X_k)$ (using $X_0 = x_k$ $\mathbb{P}^{x_k}$-a.s.).
+:::
+
+When working only with functions defined on $B^c$, we also regard $Q_{B^c}$ as an operator on functions $f: B^c \to \mathbb{R}$ that are bounded and $\mathcal{B}|_{B^c}$-measurable, via $(Q_{B^c} f)(x) = \int_{B^c} q(x, dy)\, f(y)$ for $x \in B^c$. This is the restriction of the operator of @def-subprob-kernel to functions supported on $B^c$, evaluated at points of $B^c$.
+
+---
+
+## First-Step Equations for Hitting Distributions and Costs
+
+We now derive the fundamental recursive equations satisfied by the expected terminal payoff $u$ and the expected cumulative running cost $v$.
+
+::: {#prp-terminal-payoff}
+## Equation for Terminal Payoff at the Hitting Time
+Let $B \in \mathcal{B}$, and let $h \in \mathcal{B}_b(S)$ or $h \in \mathcal{B}_+(S)$. Define
+$$
+u(x) := \mathbb{E}^x\big[h(X_{T_B}) \mathbf{1}_{\{T_B < \infty\}}\big], \qquad x \in S.
+$$
+Then:
+
+1. $u \in \mathcal{B}_b(S)$ with $\sup|u| \le \sup|h|$ (when $h \in \mathcal{B}_b(S)$), and $u \in \mathcal{B}_+(S)$ (when $h \in \mathcal{B}_+(S)$).
+2. On $B$, $u$ agrees with $h$:
+   $$
+   u(x) = h(x) \qquad \text{for all } x \in B.
+   $$
+3. On $B^c$, $u$ satisfies $u = Qu$, or equivalently,
+   $$
+   u = Q_B h + Q_{B^c} u \qquad \text{on } B^c,
+   $$
+   that is, for all $x \in B^c$,
+   $$
+   u(x) = \int_B q(x, dy)\, h(y) + \int_{B^c} q(x, dy)\, u(y).
+   $$
+:::
+
+::: {.proof}
+## Proof of @prp-terminal-payoff
+Define the path functional $F: S^{\mathbb{N}_0} \to \mathbb{R}$ (resp. $[0, \infty]$) by
+$$
+F(\underline{x}) := \sum_{k \in \mathbb{N}_0} \mathbf{1}_{\{T_B(\underline{x}) = k\}}\, h(x_k), \qquad \underline{x} = (x_0, x_1, \dots) \in S^{\mathbb{N}_0}.
+$$
+For each path at most one term of the sum is non-zero, so $F(\underline{x}) = h(L_B(\underline{x}))$ if $T_B(\underline{x}) < \infty$ and $F(\underline{x}) = 0$ otherwise. In particular $F(X) = h(X_{T_B}) \mathbf{1}_{\{T_B < \infty\}}$ and $u(x) = \mathbb{E}^x[F(X)]$. Each set $\{T_B = k\}$ belongs to $\mathcal{B}^{\otimes \mathbb{N}_0}$ by @rem-measurability-stopping, and $\underline{x} \mapsto h(x_k)$ is measurable, so $F$ is measurable. Moreover, $\sup|F| \le \sup|h|$ if $h$ is bounded, and $F \ge 0$ if $h \ge 0$.
+
+*(1)* By @lem-expectation-measurable applied to $H = F$, $u$ is $\mathcal{B}$-measurable, with $\sup|u| \le \sup|h|$ if $h \in \mathcal{B}_b(S)$ and values in $[0, \infty]$ if $h \in \mathcal{B}_+(S)$.
+
+*(2)* Let $x \in B$. Under $\mathbb{P}^x$ we have $X_0 = x \in B$ almost surely, so $T_B = 0$ and $F(X) = h(X_0) = h(x)$ almost surely. Hence $u(x) = h(x)$.
+
+*(3)* Fix $x \in B^c$ and a path $\underline{y} = (y_0, y_1, \dots)$. By the shift identities, $T_B(x, \underline{y}) = 1 + T_B(\underline{y})$. In particular $T_B(x, \underline{y}) \ne 0$, and for $k \in \mathbb{N}_0$ we have $T_B(x, \underline{y}) = k + 1$ if and only if $T_B(\underline{y}) = k$, while the $(k+1)$-st coordinate of $(x, \underline{y})$ is $y_k$. Therefore
+$$
+F(x, \underline{y}) = \sum_{k \in \mathbb{N}_0} \mathbf{1}_{\{T_B(\underline{y}) = k\}}\, h(y_k) = F(\underline{y}) \qquad \text{for all } \underline{y} \in S^{\mathbb{N}_0}.
+$$
+Applying @thm-first-step at $x \in B^c$ yields
+$$
+\begin{aligned}
+u(x) &= \mathbb{E}^x[F(X)] = \int_S q(x, dy) \, \mathbb{E}^y[F(x, X)] \\
+&= \int_S q(x, dy) \, \mathbb{E}^y[F(X)] = \int_S q(x, dy)\, u(y) = (Qu)(x).
+\end{aligned}
+$$
+Finally, decomposing $Q = Q_B + Q_{B^c}$ (@rem-subprob-properties) and using $u = h$ on $B$ from (2),
+$$
+\begin{aligned}
+u(x) &= (Qu)(x) = \int_B q(x, dy)\, h(y) + \int_{B^c} q(x, dy)\, u(y) \\
+&= (Q_B h)(x) + (Q_{B^c} u)(x).
+\end{aligned}
+$$
+:::
+
+::: {#cor-hitting-prob}
+## Hitting Probabilities
+Taking $h \equiv 1$ in @prp-terminal-payoff, the hitting probability $u(x) := \mathbb{P}^x(T_B < \infty)$ is a $[0, 1]$-valued $\mathcal{B}$-measurable function satisfying
+$$
+\begin{cases}
+u(x) = 1 & \text{for } x \in B, \\
+u(x) = (Q_{B^c} u)(x) + (Q_B \mathbf{1})(x) = (Q_{B^c} u)(x) + q(x, B) & \text{for } x \in B^c.
+\end{cases}
+$$
+:::
+
+We next establish the analogous first-step equation for cumulative running rewards prior to hitting $B$.
+
+::: {#prp-running-cost}
+## Equation for Cumulative Running Cost
+Let $B \in \mathcal{B}$ and $g \in \mathcal{B}_+(S)$. Define
+$$
+v(x) := \mathbb{E}^x\left[\sum_{0 \le n < T_B} g(X_n)\right], \qquad x \in S.
+$$
+Then:
+
+1. $v \in \mathcal{B}_+(S)$.
+2. On $B$, $v$ vanishes identically:
+   $$
+   v(x) = 0 \qquad \text{for all } x \in B.
+   $$
+3. On $B^c$, $v$ satisfies (as an identity in $[0, \infty]$)
+   $$
+   v(x) = g(x) + (Qv)(x) = g(x) + (Q_{B^c} v)(x) \qquad \text{for all } x \in B^c.
+   $$
+:::
+
+::: {.proof}
+## Proof of @prp-running-cost
+Define the path functional $G: S^{\mathbb{N}_0} \to [0, \infty]$ by
+$$
+G(\underline{x}) := \sum_{0 \le n < T_B(\underline{x})} g(x_n) = \sum_{n \in \mathbb{N}_0} \mathbf{1}_{\{T_B(\underline{x}) > n\}}\, g(x_n).
+$$
+Each summand is a product of non-negative measurable functions on path space (by @rem-measurability-stopping, $\{T_B > n\} \in \mathcal{B}^{\otimes \mathbb{N}_0}$), so $G \in \mathcal{B}_+(S^{\mathbb{N}_0})$, and $v(x) = \mathbb{E}^x[G(X)]$.
+
+*(1)* By @lem-expectation-measurable applied to $H = G$, $v \in \mathcal{B}_+(S)$.
+
+*(2)* If $x \in B$, then $X_0 = x \in B$ $\mathbb{P}^x$-a.s., so $T_B = 0$ and the sum defining $G(X)$ is empty, i.e. $G(X) = 0$ $\mathbb{P}^x$-a.s. Hence $v(x) = 0$.
+
+*(3)* Fix $x \in B^c$ and a path $\underline{y} = (y_0, y_1, \dots)$. By the shift identities, $T_B(x, \underline{y}) = 1 + T_B(\underline{y}) \ge 1$. The $0$-th coordinate of $(x, \underline{y})$ is $x$ and its $n$-th coordinate is $y_{n-1}$ for $n \ge 1$, so, separating the term $n = 0$ and substituting $m = n - 1$,
+$$
+\begin{aligned}
+G(x, \underline{y}) &= g(x) + \sum_{n \ge 1} \mathbf{1}_{\{1 + T_B(\underline{y}) > n\}}\, g(y_{n-1}) \\
+&= g(x) + \sum_{m \in \mathbb{N}_0} \mathbf{1}_{\{T_B(\underline{y}) > m\}}\, g(y_m) \\
+&= g(x) + G(\underline{y}).
+\end{aligned}
+$$
+Applying @thm-first-step at $x$, together with additivity of integrals of $[0, \infty]$-valued functions and $q(x, S) = 1$, we obtain
+$$
+\begin{aligned}
+v(x) &= \mathbb{E}^x[G(X)] = \int_S q(x, dy) \, \mathbb{E}^y[G(x, X)] \\
+&= \int_S q(x, dy) \, \big( g(x) + \mathbb{E}^y[G(X)] \big) \\
+&= g(x)\, q(x, S) + \int_S q(x, dy)\, v(y) = g(x) + (Qv)(x).
+\end{aligned}
+$$
+Since $v = 0$ on $B$ by (2), we have $v = v \mathbf{1}_{B^c}$, hence $(Qv)(x) = Q(v\mathbf{1}_{B^c})(x) = (Q_{B^c} v)(x)$.
+:::
+
+::: {#cor-expected-hitting-time}
+## Expected Hitting Time
+Taking $g = \mathbf{1}_{B^c}$ in @prp-running-cost, for which $\sum_{0 \le n < T_B} g(X_n) = T_B$, the expected hitting time $v(x) := \mathbb{E}^x[T_B] \in [0, \infty]$ satisfies
+$$
+\begin{cases}
+v(x) = 0 & \text{for } x \in B, \\
+v(x) = (Q_{B^c} v)(x) + 1 = \displaystyle\int_{B^c} q(x, dy) \, \mathbb{E}^y[T_B] + 1 & \text{for } x \in B^c,
+\end{cases}
+$$
+as identities in $[0, \infty]$.
+:::
+
+---
+
+## Solving the Recursive Equations and Minimality
+
+@prp-terminal-payoff and @prp-running-cost reduce the computation of $u$ and $v$ to solving linear operator equations on $B^c$ subject to prescribed boundary values on $B$:
+$$
+\begin{aligned}
+u &= Q_{B^c} u + Q_B h \quad \text{on } B^c, \qquad u = h \quad \text{on } B, \\
+v &= Q_{B^c} v + g \quad \text{on } B^c, \qquad v = 0 \quad \text{on } B.
+\end{aligned}
+$$
+Heuristically, rearranging these equations on $B^c$ yields
+$$
+(I - Q_{B^c}) u = Q_B h \implies u \text{ ``}=\text{'' } (I - Q_{B^c})^{-1} Q_B h
+$$
+and
+$$
+(I - Q_{B^c}) v = g \implies v \text{ ``}=\text{'' } (I - Q_{B^c})^{-1} g,
+$$
+where $I$ denotes the identity operator on functions on $B^c$, $Q_{B^c}$ is regarded as an operator on functions on $B^c$, and $(I - Q_{B^c})^{-1}$ is formally given by the Neumann series $\sum_{n=0}^\infty Q_{B^c}^n$. These manipulations are only formal: $u$ and $v$ may take the value $+\infty$, in which case $(I - Q_{B^c})u$ involves $\infty - \infty$, and $I - Q_{B^c}$ need not be invertible. For non-negative data, however, the Neumann series does make sense and gives exactly $u$ and $v$ on $B^c$ (@thm-minimal-solutions, @rem-series-representation).
+
+::: {#rem-non-uniqueness}
+## Invertibility and Non-Uniqueness
+Suppose $h \in \mathcal{B}_b(S)$ (resp. $g \in \mathcal{B}_+(S)$ is bounded), and regard $Q_{B^c}$ as a bounded operator on the Banach space of bounded $\mathcal{B}|_{B^c}$-measurable functions on $B^c$ with the supremum norm; note $\|Q_{B^c}^n\| = \sup_{x \in B^c} (Q_{B^c}^n \mathbf{1})(x) \le 1$. If $I - Q_{B^c}$ is invertible on this space, then the corresponding system has exactly one *bounded* solution: its values on $B$ are prescribed, and on $B^c$ any bounded solution $w$ satisfies $(I - Q_{B^c})(w|_{B^c}) = (Q_B h)|_{B^c}$ (resp. $= g|_{B^c}$).
+
+This holds, for example, when $B^c$ is finite and $\mathbb{P}^x(T_B < \infty) = 1$ for all $x \in B^c$. Indeed, for $x \in B^c$, @eq-taboo-iterates gives $(Q_{B^c}^n \mathbf{1})(x) = \mathbb{P}^x(X_1, \dots, X_n \in B^c) = \mathbb{P}^x(T_B > n) \to 0$ as $n \to \infty$. Since $B^c$ is finite, $\|Q_{B^c}^N\| = \max_{x \in B^c} \mathbb{P}^x(T_B > N) < 1$ for some $N$, so $\sum_{n \ge 0} \|Q_{B^c}^n\| < \infty$ and the Neumann series $\sum_{n \ge 0} Q_{B^c}^n$ converges in operator norm to $(I - Q_{B^c})^{-1}$.
+
+Even then, uniqueness may fail among *non-negative* solutions that are allowed to take the value $+\infty$. For example, let $S = \{0, 1\}$, $B = \{0\}$, $q(0, \{0\}) = 1$, and $q(1, \{0\}) = q(1, \{1\}) = \tfrac{1}{2}$. With $g = \mathbf{1}_{B^c}$, the system of @cor-expected-hitting-time reads $w(0) = 0$, $w(1) = \tfrac{1}{2} w(1) + 1$, which has the two solutions $w(1) = 2 = \mathbb{E}^1[T_B]$ and $w(1) = \infty$ in $[0, \infty]$.
+
+In general, $I - Q_{B^c}$ need **not** be invertible, and the recursive equations may admit several bounded solutions. For instance, in @cor-hitting-prob ($h \equiv 1$), the constant function $\tilde{u} \equiv 1$ on $S$ always satisfies
+$$
+\begin{aligned}
+(Q_{B^c} \mathbf{1})(x) + (Q_B \mathbf{1})(x)&= q(x, B^c) + q(x, B) \\
+&= q(x, S) = 1 = \tilde{u}(x) \; \text{for all } x \in B^c.
+\end{aligned}
+$$
+But the true hitting probability $u(x) = \mathbb{P}^x(T_B < \infty)$ may be strictly less than $1$. For example, for the simple symmetric random walk on $\mathbb{Z}^3$ with $B = \{0\}$, transience gives $\mathbb{P}^x(T_B < \infty) < 1$ for every $x \ne 0$. In that case $\tilde{u} - u$ is a non-zero bounded function on $B^c$ with $(I - Q_{B^c})(\tilde{u} - u) = 0$, so $I - Q_{B^c}$ is not injective. See Driver, *Probability Tools with Examples*, Corollary 22.58.
+:::
+
+When uniqueness fails, we need a selection principle to single out the true probabilistic quantities $u$ and $v$ among all solutions to the first-step equations. A function $w \in \mathcal{B}_+(S)$ is called the **least** (or minimal) non-negative solution of a system if it solves the system and $w \le \tilde{w}$ pointwise for every non-negative measurable solution $\tilde{w}$; such a function is necessarily unique.
+
+::: {#thm-minimal-solutions}
+## Characterization via Minimal Non-Negative Solutions
+Let $B \in \mathcal{B}$, $h \in \mathcal{B}_+(S)$, and $g \in \mathcal{B}_+(S)$.
+
+1. The function $u(x) = \mathbb{E}^x[h(X_{T_B}) \mathbf{1}_{\{T_B < \infty\}}]$ is the **least non-negative measurable solution** of
+   $$
+   \begin{cases}
+   w(x) = h(x) & \text{for } x \in B, \\
+   w(x) = (Q_{B^c} w)(x) + (Q_B h)(x) & \text{for } x \in B^c.
+   \end{cases}
+   $$
+   More precisely, $u$ solves this system, and if $\tilde{u} \in \mathcal{B}_+(S)$ is any **supersolution**, i.e.
+   $$
+   \tilde{u} \ge h \ \text{ on } B \qquad \text{and} \qquad \tilde{u} \ge Q_{B^c}\tilde{u} + Q_B h \ \text{ on } B^c,
+   $$
+   then $u(x) \le \tilde{u}(x)$ for all $x \in S$.
+
+2. The function $v(x) = \mathbb{E}^x\big[\sum_{0 \le n < T_B} g(X_n)\big]$ is the **least non-negative measurable solution** of
+   $$
+   \begin{cases}
+   w(x) = 0 & \text{for } x \in B, \\
+   w(x) = (Q_{B^c} w)(x) + g(x) & \text{for } x \in B^c.
+   \end{cases}
+   $$
+   More precisely, $v$ solves this system, and if $\tilde{v} \in \mathcal{B}_+(S)$ satisfies
+   $$
+   \tilde{v} \ge Q_{B^c}\tilde{v} + g \ \text{ on } B^c,
+   $$
+   then $v(x) \le \tilde{v}(x)$ for all $x \in S$.
+
+*(Compare Driver, Probability Tools with Examples, Theorem 22.81.)*
+:::
+
+::: {.proof}
+## Proof of @thm-minimal-solutions
+That $u$ and $v$ solve their systems is the content of @prp-terminal-payoff and @prp-running-cost. All functions below are $[0, \infty]$-valued, and we use repeatedly that $Q_{B^c}$ is additive and monotone on $\mathcal{B}_+(S)$ and that $Q_{B^c} f = Q_{B^c}(f \mathbf{1}_{B^c})$ depends only on $f|_{B^c}$ (@rem-subprob-properties).
+
+**Step 1: probabilistic form of the iterates.** Let $x \in B^c$ and $k \in \mathbb{N}_0$. Under $\mathbb{P}^x$ we have $X_0 = x \in B^c$ a.s., hence $\mathbb{P}^x$-a.s.
+$$
+\begin{aligned}
+&\{X_1, \dots, X_k \in B^c\} = \{T_B > k\}, \\
+&\{X_1, \dots, X_k \in B^c,\ X_{k+1} \in B\} = \{T_B = k + 1\}.
+\end{aligned}
+$$
+By @eq-taboo-iterates with $f = g$,
+$$
+(Q_{B^c}^k g)(x) = \mathbb{E}^x\big[g(X_k)\, \mathbf{1}_{\{T_B > k\}}\big].
+$$
+Applying @eq-taboo-iterates with $f = Q_B h = Q(h \mathbf{1}_B)$, and then @eq-n-step-analysis to express $(Q(h\mathbf{1}_B))(X_k)$ as an expectation over one further step, gives
+$$
+\begin{aligned}
+(Q_{B^c}^k Q_B h)(x) &= \mathbb{E}^x\big[\mathbf{1}_{B^c}(X_1) \cdots \mathbf{1}_{B^c}(X_k)\, \mathbf{1}_B(X_{k+1})\, h(X_{k+1})\big] \\
+&= \mathbb{E}^x\big[h(X_{T_B})\, \mathbf{1}_{\{T_B = k+1\}}\big].
+\end{aligned}
+$$
+
+**Step 2: iterating the supersolution inequality (part 1).** Let $\tilde{u}$ be a supersolution. We claim that for every $n \in \mathbb{N}_0$,
+$$
+\tilde{u} \ \ge\ \sum_{k=0}^{n} Q_{B^c}^k Q_B h + Q_{B^c}^{n+1}\tilde{u} \qquad \text{on } B^c.
+$$ {#eq-iterated-supersolution}
+For $n = 0$ this is the hypothesis. If it holds for $n$, then, since $Q_{B^c}^{n+1}$ only sees values on $B^c$, where $\tilde{u} \ge Q_{B^c}\tilde{u} + Q_B h$, monotonicity and additivity give
+$$
+\begin{aligned}
+Q_{B^c}^{n+1}\tilde{u} &= Q_{B^c}^{n+1}(\tilde{u}\mathbf{1}_{B^c}) \ge Q_{B^c}^{n+1}\big((Q_{B^c}\tilde{u} + Q_B h)\mathbf{1}_{B^c}\big) \\
+&= Q_{B^c}^{n+2}\tilde{u} + Q_{B^c}^{n+1} Q_B h,
+\end{aligned}
+$$
+which yields @eq-iterated-supersolution for $n + 1$. Dropping the non-negative term $Q_{B^c}^{n+1}\tilde{u}$ and using Step 1, for $x \in B^c$,
+$$
+\tilde{u}(x) \ge \sum_{k=0}^{n} \mathbb{E}^x\big[h(X_{T_B})\, \mathbf{1}_{\{T_B = k+1\}}\big] = \mathbb{E}^x\big[h(X_{T_B})\, \mathbf{1}_{\{1 \le T_B \le n+1\}}\big].
+$$
+Letting $n \to \infty$ and using the monotone convergence theorem together with $T_B \ge 1$ $\mathbb{P}^x$-a.s. (since $x \in B^c$), we get $\tilde{u}(x) \ge \mathbb{E}^x[h(X_{T_B}) \mathbf{1}_{\{T_B < \infty\}}] = u(x)$. On $B$ we have $\tilde{u} \ge h = u$ by @prp-terminal-payoff. Hence $u \le \tilde{u}$ on $S$.
+
+**Step 3: part 2.** Let $\tilde{v} \in \mathcal{B}_+(S)$ satisfy $\tilde{v} \ge Q_{B^c}\tilde{v} + g$ on $B^c$. The same induction, with $Q_B h$ replaced by $g$, gives for all $n \in \mathbb{N}_0$
+$$
+\tilde{v} \ge \sum_{k=0}^{n} Q_{B^c}^k g + Q_{B^c}^{n+1}\tilde{v} \ge \sum_{k=0}^{n} Q_{B^c}^k g \qquad \text{on } B^c.
+$$
+By Step 1, for $x \in B^c$, the right side equals $\mathbb{E}^x\big[\sum_{k=0}^{n} g(X_k)\, \mathbf{1}_{\{T_B > k\}}\big]$, which increases to $\mathbb{E}^x\big[\sum_{k \in \mathbb{N}_0} g(X_k)\, \mathbf{1}_{\{T_B > k\}}\big] = v(x)$ by the monotone convergence theorem. On $B$ we have $\tilde{v} \ge 0 = v$. Hence $v \le \tilde{v}$ on $S$.
+
+Finally, any non-negative measurable solution of either system is in particular a supersolution, so $u$ and $v$ are the least non-negative measurable solutions.
+:::
+
+::: {#rem-series-representation}
+## The Neumann Series Made Rigorous
+Summing the identities of Step 1 of the proof over $k \in \mathbb{N}_0$ (Tonelli's theorem for series of non-negative terms) shows that, for $h, g \in \mathcal{B}_+(S)$ and every $x \in B^c$,
+$$
+u(x) = \sum_{k=0}^{\infty} (Q_{B^c}^k Q_B h)(x), \qquad v(x) = \sum_{k=0}^{\infty} (Q_{B^c}^k g)(x),
+$$
+as identities in $[0, \infty]$. Thus the formal expressions $(I - Q_{B^c})^{-1} Q_B h$ and $(I - Q_{B^c})^{-1} g$ are meaningful for non-negative data when $(I - Q_{B^c})^{-1}$ is interpreted as the series $\sum_{k \ge 0} Q_{B^c}^k$, and they select precisely the least non-negative solutions. In particular, $\mathbb{P}^x(T_B < \infty)$ and $\mathbb{E}^x[T_B]$ are the least non-negative solutions of the systems in @cor-hitting-prob and @cor-expected-hitting-time, respectively.
+:::
+
+## Takeaways
+
+- **Two master functionals.** Hitting questions for a set $B \in \mathcal{B}$ are embedded into the terminal payoff $u(x) = \mathbb{E}^x[h(X_{T_B})\mathbf{1}_{\{T_B < \infty\}}]$ and the running cost $v(x) = \mathbb{E}^x[\sum_{0 \le n < T_B} g(X_n)]$. The choices $h \equiv 1$ and $g = \mathbf{1}_{B^c}$ give the hitting probability $\mathbb{P}^x(T_B < \infty)$ and the expected hitting time $\mathbb{E}^x[T_B]$.
+- **Splitting the kernel.** The sub-probability kernels $q_B(x, \cdot) = q(x, \cdot \cap B)$ and $q_{B^c}(x, \cdot) = q(x, \cdot \cap B^c)$, defined for every starting point $x \in S$, decompose $q = q_B + q_{B^c}$ and $Q = Q_B + Q_{B^c}$ (@def-subprob-kernel, @rem-subprob-properties). For $x \in B^c$, $Q_B$ records a jump from outside $B$ into $B$, and the iterates $Q_{B^c}^k$ describe the chain while it avoids $B$ (@eq-taboo-iterates).
+- **First-step equations.** Combining first-step analysis (@thm-first-step) with the shift identities $T_B(x, \underline{y}) = 1 + T_B(\underline{y})$ and $L_B(x, \underline{y}) = L_B(\underline{y})$ for $x \in B^c$ gives the boundary value problems $u = h$ on $B$, $u = Q_{B^c} u + Q_B h$ on $B^c$ (@prp-terminal-payoff), and $v = 0$ on $B$, $v = Q_{B^c} v + g$ on $B^c$ (@prp-running-cost). Measurability of $u$ and $v$ comes from @lem-expectation-measurable.
+- **Non-uniqueness.** These systems need not determine $u$ and $v$. Among bounded solutions, uniqueness holds when $I - Q_{B^c}$ is invertible, e.g. when $B^c$ is finite and $B$ is reached almost surely from every $x \in B^c$. In general it fails: $\tilde{u} \equiv 1$ always solves the hitting-probability system, even for a transient chain, and $w \equiv \infty$ on $B^c$ can solve the expected-hitting-time system alongside the true finite solution (@rem-non-uniqueness).
+- **Minimality selects the truth.** For non-negative data, $u$ and $v$ are the least non-negative measurable solutions, and they lie below every supersolution (@thm-minimal-solutions). The proof iterates the supersolution inequality and identifies $Q_{B^c}^k Q_B h$ and $Q_{B^c}^k g$ with contributions from paths that avoid $B$ for $k$ steps.
+- **Neumann series.** For non-negative data, the formal inverse $(I - Q_{B^c})^{-1} = \sum_{k \ge 0} Q_{B^c}^k$ is meaningful in $[0, \infty]$ and gives exactly $u = \sum_k Q_{B^c}^k Q_B h$ and $v = \sum_k Q_{B^c}^k g$ on $B^c$ (@rem-series-representation).

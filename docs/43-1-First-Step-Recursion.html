@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>92&nbsp; Lecture 43.1 First Step Recursion – Probability Theory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./AppendixA.html" rel="next">
+<link href="./42-2-Hitting-Times.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c4271747027ed85495c680a7a6c1cf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      cov: "\\operatorname{cov}",
+      corr: "\\operatorname{corr}",
+      var: "\\operatorname{var}",
+      SE: "\\operatorname{SE}",
+      E: "\\operatorname{E}",
+      A: "\\boldsymbol{A}",
+      x: "\\boldsymbol{x}",
+      sgn: "\\operatorname{sgn}",
+      argmin: "\\operatorname{argmin}",
+      tr: "\\text{tr}",
+      bs: ["\\boldsymbol{#1}", 1],
+      mb: ["\\mathbb{#1}", 1]
+    }
+  }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-III.html">Probability Theory III</a></li><li class="breadcrumb-item"><a href="./43-1-First-Step-Recursion.html"><span class="chapter-number">92</span>&nbsp; <span class="chapter-title">Lecture 43.1 First Step Recursion</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Probability Theory</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/osmdogan/datasets.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0-Banach-Tarski-Banach-Tarski.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 0: Banach Tarski</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-1-Probability-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1.1: Probability Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1-2-Sigma-Algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 1.2: Sigma Algebra</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-1-Measures-Definition-Examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 2.1: Measures, Definition, Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-2-Finitely-Additive-Measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 2.2: Finitely Additive Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-1-Stieltjes-Premeasures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lecture 3.1: Stieltjes Premeasures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3-2-Outer-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lecture 3.2: Outer Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-1-Outer-Pseudo-Metric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4.1: Outer Pseudo-Metric</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-2-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lecture 4.2: Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-3-Uniqueness-Sigma-Finite Extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 4.3: Uniqueness of Sigma-Finite Extension</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-1-Radon-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lecture 5.1. Radon Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-2-Lebesgue-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 5.2: Lebesgue Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-1-Random-Variables-Motivation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lecture 6.1: Random Variables Motivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-2-Measurable-Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 6.2: Measurable Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-1-Robustness-Measurability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lecture 7.1: Robustness and Measurability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-2-Riemann-Stieltjes-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Lecture 7.2: Riemann-Stieltjes Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-1-Simple-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Lecture 8.1: Simple Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-2-Lebesgue-Integral-MCTheorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Lecture 8.2: The Lebesgue Integral and the MC Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-1-Fatou-Borel-Cantelli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lecture 9.1: Fatou and Borel-Cantelli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-2-L1-DCT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Lecture 9.2: <span class="math inline">\(L^1\)</span> and the Dominated Convergence Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-1-Integrals-Derivatives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lecture 10.1: Integrals and Derivatives</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-2-Lebesgue-Riemann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Lecture 10.2: Lebesgue vs.&nbsp;Riemann</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-1-Radon-Nikodym.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Lecture 11.1: Radon-Nikodym</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-2-Laws-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Lecture 11.2: Laws Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-1-L2-Covariance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Lecture 12.1: <span class="math inline">\(L^2\)</span> and Covariance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-2-WLN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Lecture 12.2: The Weak Law of Large Numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-1-Convergence-in-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Lecture 13.1: Convergence in Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-2-Lp-Complete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 13.2: <span class="math inline">\(L^p\)</span> is Complete</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-1-Dynkin-Multiplicative-Systems-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Lecture 14.1: Dynkin’s Multiplicative Systems Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-2-Product-Measure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lecture 14.2: Product Measure</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-3-Tonelli-Fubini-Theorems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Lecture 14.3: Tonelli and Fubini Theorems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-1-Independence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Lecture 15.1: Independence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-2-Independent-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Lecture 15.2: Independent Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-1-Kolmogorov-Extension-Theorem1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Lecture 16.1: Kolmogorov’s Extension Theorem (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-2-Kolmogorov-Extension-Theorem2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Lecture 16.2: Kolmogorov’s Extension Theorem (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-1-Kolmogorov- 0-1-Law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Lecture 17.1: Kolmogorov’s 0-1 Law</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17-2-Convolution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Lecture 17.2: Convolution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-1-SLLN1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Lecture 18.1: Strong Law of Large Numbers (I)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18-2-Kolmogorov-Convergence-Criterion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Lecture 18.2: Kolmogorov Convergence Criterion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-1-SLLN2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Lecture 19.1: Strong Law of Large Numbers (II)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19-2-Renewal-Theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Lecture 19.2: Renewal Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory II</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-1-Cramer-LDP-Part-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Lecture 20.1: Cramer’s LDP-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20-2-Cramer-LDP-Part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Lecture 20.2: Cramer’s LDP-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-1-Total-Variation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Lecture 21.1: Total Variation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21-2-LRE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Lecture 21.2: Law of Rare Events</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-1-Weak-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Lecture 22.1: Weak Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22-2-Weak-Convergence-Over-Rd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Lecture 22.2: Weak Convergence over <span class="math inline">\(R^d\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-1-Vague-Convergence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Lecture 23.1: Vague Convergence</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-2-Prokhorov-Compactness-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Lecture 23.2: Prokhorov’s Compactness Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23-3-Skorohod-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Lecture 23.3: Skorohod’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-1-Complex-Integration-Dynkin-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Lecture 24.1: Complex Integration and Dynkin’s Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24-2-Characteristic-Function.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Lecture 24.2: Characteristic Function</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-1-Riemann-Lebesge-Lemma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Lecture 25.1: The Riemann-Lebesgue Lemma</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-2-Fourier-Inversion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Lecture 25.2: Fourier Inversion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25-3-The-Continuity-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Lecture 25.3: The Continuity Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-1-Central-Limit-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Lecture 26.1: The Central Limit Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26-2-Infinitely-Divisible-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">Lecture 26.2: Infinite Divisibility</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-1-Average-Uniformity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Lecture 27.1: Average Uniformity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-2-Lindberg-Feller-CLT.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Lecture 27.2: Lindberg-Feller CLT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27-3-Random-Permutations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Lecture 27.3: Random Permutations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-1-Probability-Metrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Lecture 28.1: Metrics on Probability Measures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28-2-Stein-Method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Lecture 28.2: Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-1-Berry-Esseen-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Lecture 29.1: Berry-Esseen Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29-2-Local-Dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Lecture 29.2: Local Dependencies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-1-Conditional-Probability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Lecture 30.1: Conditional Probability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30-2-Conditional-Probability-I.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Lecture 30.2: Conditional Expectation-Part I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-1-Orthogonal-Projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">67</span>&nbsp; <span class="chapter-title">Lecture 31.1: Orthogonal Projection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31-2-Conditional-Expecation-II.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">68</span>&nbsp; <span class="chapter-title">Lecture 31.2: Conditional Expectation-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-1-Conditioning-Partial-Integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">69</span>&nbsp; <span class="chapter-title">Lecture 32.1: Conditioning as Partial Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-2-Conditional-MCT-Fatou-DCT-Jensen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">70</span>&nbsp; <span class="chapter-title">Lecture 32.2: Conditional MCT, Fatou, DCT, Jensen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32-3-Conditioning-on-Random-Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">71</span>&nbsp; <span class="chapter-title">Lecture 32.3: Conditioning on Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-1-Probability-Kernels-Part1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">72</span>&nbsp; <span class="chapter-title">Lecture 33.1: Probability Kernels-Part 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./33-2-Regular-Conditional-Distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">73</span>&nbsp; <span class="chapter-title">Lecture 33.2: Regular Conditional Distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-1-Probability-Kernels-Part2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">74</span>&nbsp; <span class="chapter-title">Lecture 34.1: Probability Kernels-Part II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./34-2-Random-Dynamics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">75</span>&nbsp; <span class="chapter-title">Lecture 34.2: Random Dynamics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-1-Stochastic-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">76</span>&nbsp; <span class="chapter-title">Lecture 35.1: Stochastic Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35-2-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">77</span>&nbsp; <span class="chapter-title">Lecture 35.2: Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-1-Markov-Property.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">78</span>&nbsp; <span class="chapter-title">Lecture 36.1: The Markov Property</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36-2-Probability-Kernels-Revisited.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">79</span>&nbsp; <span class="chapter-title">Lecture 36.2: Probability Kernels Revisited</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-1-Markov-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">80</span>&nbsp; <span class="chapter-title">Lecture 37.1: Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./37-2-Kolmogorov-Extension-Theorem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">81</span>&nbsp; <span class="chapter-title">Lecture 37.2: Kolmogorov Extension Theorem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-1-Path-Space.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">82</span>&nbsp; <span class="chapter-title">Lecture 38.1: Path Space</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./38-2-Time-Homogeneous-Processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">83</span>&nbsp; <span class="chapter-title">Lecture 38.2: Time-Homogeneous Markov Processes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-1-Markov-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">84</span>&nbsp; <span class="chapter-title">Lecture 39.1: Markov Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./39-2-Markov-Generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">85</span>&nbsp; <span class="chapter-title">Lecture 39.2: Markov Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Probability-Theory-III.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory III</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-1-Operator-Norm-Continuity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">86</span>&nbsp; <span class="chapter-title">Lecture 40.1: Operator Norm Continuity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40-2-Bounded-Generators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">87</span>&nbsp; <span class="chapter-title">Lecture 40.2: Bounded Generators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-1-Generator-Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">88</span>&nbsp; <span class="chapter-title">Lecture 41.1: Generator Matrix</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41-2-Compound-Poisson-Process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">89</span>&nbsp; <span class="chapter-title">Lecture 41.2: Compound Poisson Process</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42-1-Jump-Hold-Description.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">90</span>&nbsp; <span class="chapter-title">Lecture 42.1 Jump-Hold Description</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42-2-Hitting-Times.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">91</span>&nbsp; <span class="chapter-title">Lecture 42.2 Hitting Times</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./43-1-First-Step-Recursion.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">92</span>&nbsp; <span class="chapter-title">Lecture 43.1 First Step Recursion</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AppendixB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Basic Metric and Topological Space Notions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#hitting-times-and-first-step-analysis" id="toc-hitting-times-and-first-step-analysis" class="nav-link active" data-scroll-target="#hitting-times-and-first-step-analysis"><span class="header-section-number">92.1</span> Hitting Times and First-Step Analysis</a></li>
+  <li><a href="#sub-probability-kernels" id="toc-sub-probability-kernels" class="nav-link" data-scroll-target="#sub-probability-kernels"><span class="header-section-number">92.2</span> Sub-Probability Kernels</a></li>
+  <li><a href="#first-step-equations-for-hitting-distributions-and-costs" id="toc-first-step-equations-for-hitting-distributions-and-costs" class="nav-link" data-scroll-target="#first-step-equations-for-hitting-distributions-and-costs"><span class="header-section-number">92.3</span> First-Step Equations for Hitting Distributions and Costs</a></li>
+  <li><a href="#solving-the-recursive-equations-and-minimality" id="toc-solving-the-recursive-equations-and-minimality" class="nav-link" data-scroll-target="#solving-the-recursive-equations-and-minimality"><span class="header-section-number">92.4</span> Solving the Recursive Equations and Minimality</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">92.5</span> Takeaways</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/43-1-First-Step-Recursion.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Probability-Theory-III.html">Probability Theory III</a></li><li class="breadcrumb-item"><a href="./43-1-First-Step-Recursion.html"><span class="chapter-number">92</span>&nbsp; <span class="chapter-title">Lecture 43.1 First Step Recursion</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">92</span>&nbsp; <span class="chapter-title">Lecture 43.1 First Step Recursion</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="hitting-times-and-first-step-analysis" class="level2" data-number="92.1">
+<h2 data-number="92.1" class="anchored" data-anchor-id="hitting-times-and-first-step-analysis"><span class="header-section-number">92.1</span> Hitting Times and First-Step Analysis</h2>
+<p>Throughout this lecture we work in the <strong>canonical setting</strong> of Lecture 42.2. Thus <span class="math inline">\(\mathbb{N}_0 = \{0, 1, 2, \dots\}\)</span>, <span class="math inline">\(\overline{\mathbb{N}}_0 := \mathbb{N}_0 \cup \{\infty\}\)</span>, <span class="math inline">\((S, \mathcal{B})\)</span> is a (non-empty) measurable state space, and <span class="math inline">\(q: S \times \mathcal{B} \to [0, 1]\)</span> is a Markov kernel. Moreover, <span class="math inline">\(\Omega = S^{\mathbb{N}_0}\)</span>, <span class="math inline">\(\mathcal{F} = \mathcal{B}^{\otimes \mathbb{N}_0}\)</span>, <span class="math inline">\(X_n(\omega) = \omega_n\)</span> is the <span class="math inline">\(n\)</span>-th coordinate map, and <span class="math inline">\(\mathcal{F}_n = \sigma(X_0, \dots, X_n)\)</span>. For each <span class="math inline">\(x \in S\)</span>, <span class="math inline">\(\mathbb{P}^x\)</span> is the unique probability measure on <span class="math inline">\((\Omega, \mathcal{F})\)</span> under which <span class="math inline">\(X = (X_n)_{n \in \mathbb{N}_0}\)</span> is a time-homogeneous Markov chain with respect to <span class="math inline">\((\mathcal{F}_n)_{n \in \mathbb{N}_0}\)</span> with one-step transition kernel <span class="math inline">\(q\)</span> and <span class="math inline">\(\mathbb{P}^x(X_0 = x) = 1\)</span>. We write <span class="math inline">\(\mathbb{E}^x\)</span> for the corresponding expectation.</p>
+<p>As in Lecture 42.2, <span class="math inline">\(\mathcal{B}_b(S)\)</span> denotes the space of bounded <span class="math inline">\(\mathcal{B}\)</span>-measurable functions <span class="math inline">\(f: S \to \mathbb{R}\)</span>, and <span class="math inline">\(\mathcal{B}_+(S)\)</span> denotes the space of <span class="math inline">\(\mathcal{B}/\mathcal{B}([0, \infty])\)</span>-measurable functions <span class="math inline">\(f: S \to [0, \infty]\)</span>; the analogous notation is used on the path space <span class="math inline">\(S^{\mathbb{N}_0}\)</span>. The <strong>transition operator</strong> <span class="math display">\[
+(Qf)(x) = \int_S q(x, dy)\, f(y), \qquad x \in S,
+\]</span> maps <span class="math inline">\(\mathcal{B}_b(S)\)</span> into <span class="math inline">\(\mathcal{B}_b(S)\)</span> and <span class="math inline">\(\mathcal{B}_+(S)\)</span> into <span class="math inline">\(\mathcal{B}_+(S)\)</span>. In computations with <span class="math inline">\([0, \infty]\)</span>-valued quantities we use the convention <span class="math inline">\(0 \cdot \infty = 0\)</span>.</p>
+<p>We use the hitting-time notation of <a href="42-2-Hitting-Times.html#def-hitting-time" class="quarto-xref">Definition&nbsp;<span>91.1</span></a>. For <span class="math inline">\(B \in \mathcal{B}\)</span> and a path <span class="math inline">\(\underline{x} = (x_0, x_1, \dots) \in S^{\mathbb{N}_0}\)</span>, <span class="math display">\[
+T_B(\underline{x}) = \inf\{ n \ge 0 : x_n \in B \} \in \overline{\mathbb{N}}_0 \qquad (\inf \emptyset = \infty)
+\]</span> is the <strong>first hitting time</strong> of <span class="math inline">\(B\)</span>, and <span class="math inline">\(L_B(\underline{x}) = x_{T_B(\underline{x})}\)</span> is the <strong>hitting location</strong> (with <span class="math inline">\(L_B(\underline{x}) = \Delta\)</span> if <span class="math inline">\(T_B(\underline{x}) = \infty\)</span>). We use the same symbol <span class="math inline">\(T_B\)</span> for the random variable <span class="math inline">\(T_B(X)\)</span>, and we write <span class="math inline">\(X_{T_B} := L_B(X)\)</span> on <span class="math inline">\(\{T_B &lt; \infty\}\)</span>. By <a href="42-2-Hitting-Times.html#rem-measurability-stopping" class="quarto-xref">Remark&nbsp;<span>91.1</span></a>, <span class="math inline">\(T_B\)</span> is an <span class="math inline">\((\mathcal{F}_n)\)</span>-stopping time, and <span class="math inline">\(T_B\)</span> and <span class="math inline">\(L_B\)</span> are measurable functions on path space. Since the infimum includes <span class="math inline">\(n = 0\)</span>, we have <span class="math inline">\(T_B = 0\)</span> <span class="math inline">\(\mathbb{P}^x\)</span>-a.s. whenever <span class="math inline">\(x \in B\)</span>.</p>
+<p>We shall use the following results from Lecture 42.2.</p>
+<ul>
+<li><strong>First-step analysis</strong> (<a href="42-2-Hitting-Times.html#thm-first-step" class="quarto-xref">Theorem&nbsp;<span>91.1</span></a>). For <span class="math inline">\(F \in \mathcal{B}_b(S^{\mathbb{N}_0})\)</span> or <span class="math inline">\(F \in \mathcal{B}_+(S^{\mathbb{N}_0})\)</span> and <span class="math inline">\(x \in S\)</span>, the map <span class="math inline">\(y \mapsto \mathbb{E}^y[F(x, X)]\)</span> is <span class="math inline">\(\mathcal{B}\)</span>-measurable and <span class="math display">\[
+\mathbb{E}^x[F(X)] = \int_S q(x, dy)\, \mathbb{E}^y[F(x, X)], \qquad (x, X) := (x, X_0, X_1, X_2, \dots).
+\]</span> Its iterated form is the <span class="math inline">\(n\)</span>-step formula <a href="42-2-Hitting-Times.html#eq-n-step-analysis" class="quarto-xref">Equation&nbsp;<span>91.8</span></a>.</li>
+<li><strong>Shift identities</strong> (<a href="42-2-Hitting-Times.html#prp-basic-shift-observations" class="quarto-xref">Proposition&nbsp;<span>91.1</span></a>). If <span class="math inline">\(x \in B^c\)</span>, then for every path <span class="math inline">\(\underline{y} \in S^{\mathbb{N}_0}\)</span>, <span class="math display">\[
+T_B(x, \underline{y}) = 1 + T_B(\underline{y}) \qquad \text{and} \qquad L_B(x, \underline{y}) = L_B(\underline{y}).
+\]</span> (Apply <a href="42-2-Hitting-Times.html#prp-basic-shift-observations" class="quarto-xref">Proposition&nbsp;<span>91.1</span></a> to the path <span class="math inline">\((x, \underline{y})\)</span>, whose initial coordinate lies in <span class="math inline">\(B^c\)</span> and whose shift is <span class="math inline">\(\underline{y}\)</span>.)</li>
+</ul>
+<p>We also record a measurability statement that is used repeatedly.</p>
+<div id="lem-expectation-measurable" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 92.1 (Measurability in the Starting Point)</strong></span> Let <span class="math inline">\(H \in \mathcal{B}_b(S^{\mathbb{N}_0})\)</span> or <span class="math inline">\(H \in \mathcal{B}_+(S^{\mathbb{N}_0})\)</span>. Then the map <span class="math inline">\(y \mapsto \mathbb{E}^y[H(X)]\)</span> is <span class="math inline">\(\mathcal{B}\)</span>-measurable; it is bounded by <span class="math inline">\(\sup |H|\)</span> in the first case and <span class="math inline">\([0, \infty]\)</span>-valued in the second.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#lem-expectation-measurable" class="quarto-xref">Lemma&nbsp;<span>92.1</span></a>). </span>The shift <span class="math inline">\(\theta(x_0, x_1, x_2, \dots) := (x_1, x_2, \dots)\)</span> is <span class="math inline">\(\mathcal{B}^{\otimes \mathbb{N}_0}/\mathcal{B}^{\otimes \mathbb{N}_0}\)</span>-measurable, because each of its coordinates is a coordinate projection. Hence <span class="math inline">\(F := H \circ \theta\)</span> belongs to the same class as <span class="math inline">\(H\)</span>, and <span class="math inline">\(F(x, X) = H(X)\)</span> for every <span class="math inline">\(x \in S\)</span>. Fixing any <span class="math inline">\(x \in S\)</span>, the measurability clause of <a href="42-2-Hitting-Times.html#thm-first-step" class="quarto-xref">Theorem&nbsp;<span>91.1</span></a> shows that <span class="math inline">\(y \mapsto \mathbb{E}^y[F(x, X)] = \mathbb{E}^y[H(X)]\)</span> is <span class="math inline">\(\mathcal{B}\)</span>-measurable. The bounds are immediate.</p>
+</div>
+<p>We are interested in characterizing the distribution of <span class="math inline">\(T_B\)</span>, for instance by computing the hitting probabilities <span class="math inline">\(\mathbb{P}^x(T_B &lt; \infty)\)</span> or the expected hitting times <span class="math inline">\(\mathbb{E}^x[T_B]\)</span> as functions of the starting state <span class="math inline">\(x \in S\)</span>. To analyze these quantities systematically, it is fruitful to embed them into two broader families of functionals, which have natural interpretations in terms of stochastic games:</p>
+<ol type="1">
+<li><p><strong>Terminal-payoff game:</strong> Given a payoff function <span class="math inline">\(h \in \mathcal{B}_b(S)\)</span> or <span class="math inline">\(h \in \mathcal{B}_+(S)\)</span>, consider <span class="math display">\[
+u(x) := \mathbb{E}^x\big[h(X_{T_B})\mathbf{1}_{\{T_B &lt; \infty\}}\big], \qquad x \in S,
+\]</span> where the integrand is understood to be <span class="math inline">\(h(X_{T_B})\)</span> on <span class="math inline">\(\{T_B &lt; \infty\}\)</span> and <span class="math inline">\(0\)</span> on <span class="math inline">\(\{T_B = \infty\}\)</span>.</p>
+<p><em>Interpretation:</em> Start the chain at state <span class="math inline">\(x\)</span> and let it evolve until the first time <span class="math inline">\(T_B\)</span> it enters the target set <span class="math inline">\(B\)</span>. At the entrance state <span class="math inline">\(y = X_{T_B} \in B\)</span>, you collect a terminal reward of <span class="math inline">\(\$h(y)\)</span> (and <span class="math inline">\(\$0\)</span> if the chain never hits <span class="math inline">\(B\)</span>). Only the values of <span class="math inline">\(h\)</span> on <span class="math inline">\(B\)</span> matter. In the special case <span class="math inline">\(h \equiv 1\)</span>, this reduces to the hitting probability: <span class="math display">\[
+u(x) = \mathbb{E}^x[\mathbf{1}_{\{T_B &lt; \infty\}}] = \mathbb{P}^x(T_B &lt; \infty).
+\]</span></p></li>
+<li><p><strong>Running-cost (or running-reward) game:</strong> Given a running-reward function <span class="math inline">\(g \in \mathcal{B}_+(S)\)</span>, consider <span class="math display">\[
+v(x) := \mathbb{E}^x\left[\sum_{0 \le n &lt; T_B} g(X_n)\right], \qquad x \in S.
+\]</span> <em>Interpretation:</em> Start at <span class="math inline">\(x\)</span> and follow the random trajectory <span class="math inline">\(X_0, X_1, X_2, \dots\)</span> until the first time <span class="math inline">\(T_B\)</span> that the chain enters <span class="math inline">\(B\)</span> (if <span class="math inline">\(T_B = 0\)</span>, the empty sum is <span class="math inline">\(0\)</span>). At each step <span class="math inline">\(n &lt; T_B\)</span> before hitting <span class="math inline">\(B\)</span>, you collect <span class="math inline">\(\$g(X_n)\)</span>. What is your expected total reward? Since <span class="math inline">\(X_n \in B^c\)</span> for every <span class="math inline">\(n &lt; T_B\)</span>, only the values of <span class="math inline">\(g\)</span> on <span class="math inline">\(B^c\)</span> matter. In particular, for <span class="math inline">\(g = \mathbf{1}_{B^c}\)</span> (or <span class="math inline">\(g \equiv 1\)</span>), each step prior to hitting <span class="math inline">\(B\)</span> contributes <span class="math inline">\(1\)</span>, so this reduces to the expected hitting time: <span class="math display">\[
+v(x) = \mathbb{E}^x\left[\sum_{0 \le n &lt; T_B} 1\right] = \mathbb{E}^x[T_B].
+\]</span></p></li>
+</ol>
+<hr>
+</section>
+<section id="sub-probability-kernels" class="level2" data-number="92.2">
+<h2 data-number="92.2" class="anchored" data-anchor-id="sub-probability-kernels"><span class="header-section-number">92.2</span> Sub-Probability Kernels</h2>
+<p>To express the recursive equations satisfied by <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> cleanly, we split the transition kernel <span class="math inline">\(q\)</span> according to whether the next state lies in a given set <span class="math inline">\(B \in \mathcal{B}\)</span> or not.</p>
+<p>For <span class="math inline">\(C \in \mathcal{B}\)</span>, recall that the <strong>trace <span class="math inline">\(\sigma\)</span>-algebra</strong> on <span class="math inline">\(C\)</span> is <span class="math display">\[
+\mathcal{B}|_C := \{ E \in \mathcal{B} : E \subseteq C \} = \{ F \cap C : F \in \mathcal{B} \},
+\]</span> which is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(C\)</span> (the two descriptions agree because <span class="math inline">\(C \in \mathcal{B}\)</span>).</p>
+<div id="def-subprob-kernel" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 92.1 (Restricted Sub-Probability Kernel and Operator)</strong></span> Let <span class="math inline">\(q: S \times \mathcal{B} \to [0, 1]\)</span> be a Markov kernel and let <span class="math inline">\(B \in \mathcal{B}\)</span>.</p>
+<ol type="1">
+<li>The <strong>restriction of <span class="math inline">\(q\)</span> to <span class="math inline">\(B\)</span></strong> is the map <span class="math inline">\(q_B: S \times \mathcal{B} \to [0, 1]\)</span> defined by <span class="math display">\[
+q_B(x, A) := q(x, A \cap B), \qquad x \in S, \; A \in \mathcal{B}.
+\]</span> For each <span class="math inline">\(x \in S\)</span>, <span class="math inline">\(q_B(x, \cdot)\)</span> is a measure on <span class="math inline">\((S, \mathcal{B})\)</span> concentrated on <span class="math inline">\(B\)</span>, and for each <span class="math inline">\(A \in \mathcal{B}\)</span> the map <span class="math inline">\(x \mapsto q_B(x, A) = q(x, A \cap B)\)</span> is <span class="math inline">\(\mathcal{B}\)</span>-measurable. Thus <span class="math inline">\(q_B\)</span> is a kernel on <span class="math inline">\((S, \mathcal{B})\)</span>. Note that the starting point <span class="math inline">\(x\)</span> ranges over all of <span class="math inline">\(S\)</span>; in particular, for <span class="math inline">\(x \in B^c\)</span>, <span class="math inline">\(q_B(x, \cdot)\)</span> describes one-step transitions from outside <span class="math inline">\(B\)</span> into <span class="math inline">\(B\)</span>.</li>
+<li>The associated operator <span class="math inline">\(Q_B\)</span> is defined, for <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span> or <span class="math inline">\(f \in \mathcal{B}_+(S)\)</span>, by <span class="math display">\[
+\begin{aligned}
+(Q_B f)(x) &amp;:= \int_S q_B(x, dy)\, f(y) \\
+&amp;= \int_B q(x, dy)\, f(y) \\
+&amp;= Q(f \mathbf{1}_B)(x), \qquad x \in S.
+\end{aligned}
+\]</span> It maps <span class="math inline">\(\mathcal{B}_b(S)\)</span> into <span class="math inline">\(\mathcal{B}_b(S)\)</span> and <span class="math inline">\(\mathcal{B}_+(S)\)</span> into <span class="math inline">\(\mathcal{B}_+(S)\)</span>, and <span class="math inline">\(Q_B f\)</span> depends only on the restriction <span class="math inline">\(f|_B\)</span>.</li>
+</ol>
+</div>
+<div id="rem-subprob-properties" class="proof remark">
+<p><span class="proof-title"><em>Remark 92.1</em> (Properties of <span class="math inline">\(q_B\)</span> and <span class="math inline">\(Q_B\)</span>). </span>For every <span class="math inline">\(x \in S\)</span>, the total mass of <span class="math inline">\(q_B(x, \cdot)\)</span> is <span class="math display">\[
+q_B(x, S) = q(x, B) \le 1,
+\]</span> which is not necessarily equal to <span class="math inline">\(1\)</span> (in contrast to <span class="math inline">\(q(x, S) = 1\)</span>). Consequently, <span class="math inline">\(q_B\)</span> is a <strong>sub-probability kernel</strong>, and <span class="math inline">\(Q_B\)</span> is a sub-Markovian operator:</p>
+<ul>
+<li><span class="math inline">\(Q_B\)</span> is linear on <span class="math inline">\(\mathcal{B}_b(S)\)</span>, additive and positively homogeneous on <span class="math inline">\(\mathcal{B}_+(S)\)</span>, positive (<span class="math inline">\(f \ge 0 \Rightarrow Q_B f \ge 0\)</span>), and therefore monotone; moreover, if <span class="math inline">\(0 \le f_n \uparrow f\)</span>, then <span class="math inline">\(Q_B f_n \uparrow Q_B f\)</span> by the monotone convergence theorem.</li>
+<li><span class="math inline">\((Q_B \mathbf{1})(x) = Q(\mathbf{1}_B)(x) = q(x, B) \le 1\)</span>, rather than <span class="math inline">\(1\)</span>.</li>
+<li>Because <span class="math inline">\(\{B, B^c\}\)</span> is a measurable partition of <span class="math inline">\(S\)</span>, the kernel <span class="math inline">\(q\)</span> and operator <span class="math inline">\(Q\)</span> decompose additively as <span class="math display">\[
+q = q_B + q_{B^c} \qquad \text{and} \qquad Q = Q_B + Q_{B^c},
+\]</span> meaning that for any <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span> or <span class="math inline">\(f \in \mathcal{B}_+(S)\)</span> and any <span class="math inline">\(x \in S\)</span>, <span class="math display">\[
+\begin{aligned}
+(Qf)(x) &amp;= (Q_B f)(x) + (Q_{B^c} f)(x) \\
+&amp;= \int_B q(x, dy)\, f(y) + \int_{B^c} q(x, dy)\, f(y),
+\end{aligned}
+\]</span> with the sum taken in <span class="math inline">\([0, \infty]\)</span> when <span class="math inline">\(f \ge 0\)</span>.</li>
+<li>Iterates of <span class="math inline">\(Q_{B^c}\)</span> can be expressed through the chain. For <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span> or <span class="math inline">\(f \in \mathcal{B}_+(S)\)</span>, <span class="math inline">\(k \in \mathbb{N}_0\)</span>, and <span class="math inline">\(x \in S\)</span>, <span id="eq-taboo-iterates"><span class="math display">\[
+(Q_{B^c}^k f)(x) = \mathbb{E}^x\big[\mathbf{1}_{B^c}(X_1) \cdots \mathbf{1}_{B^c}(X_k)\, f(X_k)\big].
+\tag{92.1}\]</span></span> Indeed, unwinding <span class="math inline">\(Q_{B^c} f = Q(\mathbf{1}_{B^c} f)\)</span> shows that the left side is the iterated integral <span class="math inline">\(\int_S q(x, dx_1) \cdots \int_S q(x_{k-1}, dx_k)\, \mathbf{1}_{B^c}(x_1) \cdots \mathbf{1}_{B^c}(x_k) f(x_k)\)</span>, which equals the right side by <a href="42-2-Hitting-Times.html#eq-n-step-analysis" class="quarto-xref">Equation&nbsp;<span>91.8</span></a> applied to a functional of <span class="math inline">\((X_0, \dots, X_k)\)</span> (using <span class="math inline">\(X_0 = x_k\)</span> <span class="math inline">\(\mathbb{P}^{x_k}\)</span>-a.s.).</li>
+</ul>
+</div>
+<p>When working only with functions defined on <span class="math inline">\(B^c\)</span>, we also regard <span class="math inline">\(Q_{B^c}\)</span> as an operator on functions <span class="math inline">\(f: B^c \to \mathbb{R}\)</span> that are bounded and <span class="math inline">\(\mathcal{B}|_{B^c}\)</span>-measurable, via <span class="math inline">\((Q_{B^c} f)(x) = \int_{B^c} q(x, dy)\, f(y)\)</span> for <span class="math inline">\(x \in B^c\)</span>. This is the restriction of the operator of <a href="#def-subprob-kernel" class="quarto-xref">Definition&nbsp;<span>92.1</span></a> to functions supported on <span class="math inline">\(B^c\)</span>, evaluated at points of <span class="math inline">\(B^c\)</span>.</p>
+<hr>
+</section>
+<section id="first-step-equations-for-hitting-distributions-and-costs" class="level2" data-number="92.3">
+<h2 data-number="92.3" class="anchored" data-anchor-id="first-step-equations-for-hitting-distributions-and-costs"><span class="header-section-number">92.3</span> First-Step Equations for Hitting Distributions and Costs</h2>
+<p>We now derive the fundamental recursive equations satisfied by the expected terminal payoff <span class="math inline">\(u\)</span> and the expected cumulative running cost <span class="math inline">\(v\)</span>.</p>
+<div id="prp-terminal-payoff" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 92.1 (Equation for Terminal Payoff at the Hitting Time)</strong></span> Let <span class="math inline">\(B \in \mathcal{B}\)</span>, and let <span class="math inline">\(h \in \mathcal{B}_b(S)\)</span> or <span class="math inline">\(h \in \mathcal{B}_+(S)\)</span>. Define <span class="math display">\[
+u(x) := \mathbb{E}^x\big[h(X_{T_B}) \mathbf{1}_{\{T_B &lt; \infty\}}\big], \qquad x \in S.
+\]</span> Then:</p>
+<ol type="1">
+<li><span class="math inline">\(u \in \mathcal{B}_b(S)\)</span> with <span class="math inline">\(\sup|u| \le \sup|h|\)</span> (when <span class="math inline">\(h \in \mathcal{B}_b(S)\)</span>), and <span class="math inline">\(u \in \mathcal{B}_+(S)\)</span> (when <span class="math inline">\(h \in \mathcal{B}_+(S)\)</span>).</li>
+<li>On <span class="math inline">\(B\)</span>, <span class="math inline">\(u\)</span> agrees with <span class="math inline">\(h\)</span>: <span class="math display">\[
+u(x) = h(x) \qquad \text{for all } x \in B.
+\]</span></li>
+<li>On <span class="math inline">\(B^c\)</span>, <span class="math inline">\(u\)</span> satisfies <span class="math inline">\(u = Qu\)</span>, or equivalently, <span class="math display">\[
+u = Q_B h + Q_{B^c} u \qquad \text{on } B^c,
+\]</span> that is, for all <span class="math inline">\(x \in B^c\)</span>, <span class="math display">\[
+u(x) = \int_B q(x, dy)\, h(y) + \int_{B^c} q(x, dy)\, u(y).
+\]</span></li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-terminal-payoff" class="quarto-xref">Proposition&nbsp;<span>92.1</span></a>). </span>Define the path functional <span class="math inline">\(F: S^{\mathbb{N}_0} \to \mathbb{R}\)</span> (resp. <span class="math inline">\([0, \infty]\)</span>) by <span class="math display">\[
+F(\underline{x}) := \sum_{k \in \mathbb{N}_0} \mathbf{1}_{\{T_B(\underline{x}) = k\}}\, h(x_k), \qquad \underline{x} = (x_0, x_1, \dots) \in S^{\mathbb{N}_0}.
+\]</span> For each path at most one term of the sum is non-zero, so <span class="math inline">\(F(\underline{x}) = h(L_B(\underline{x}))\)</span> if <span class="math inline">\(T_B(\underline{x}) &lt; \infty\)</span> and <span class="math inline">\(F(\underline{x}) = 0\)</span> otherwise. In particular <span class="math inline">\(F(X) = h(X_{T_B}) \mathbf{1}_{\{T_B &lt; \infty\}}\)</span> and <span class="math inline">\(u(x) = \mathbb{E}^x[F(X)]\)</span>. Each set <span class="math inline">\(\{T_B = k\}\)</span> belongs to <span class="math inline">\(\mathcal{B}^{\otimes \mathbb{N}_0}\)</span> by <a href="42-2-Hitting-Times.html#rem-measurability-stopping" class="quarto-xref">Remark&nbsp;<span>91.1</span></a>, and <span class="math inline">\(\underline{x} \mapsto h(x_k)\)</span> is measurable, so <span class="math inline">\(F\)</span> is measurable. Moreover, <span class="math inline">\(\sup|F| \le \sup|h|\)</span> if <span class="math inline">\(h\)</span> is bounded, and <span class="math inline">\(F \ge 0\)</span> if <span class="math inline">\(h \ge 0\)</span>.</p>
+<p><em>(1)</em> By <a href="#lem-expectation-measurable" class="quarto-xref">Lemma&nbsp;<span>92.1</span></a> applied to <span class="math inline">\(H = F\)</span>, <span class="math inline">\(u\)</span> is <span class="math inline">\(\mathcal{B}\)</span>-measurable, with <span class="math inline">\(\sup|u| \le \sup|h|\)</span> if <span class="math inline">\(h \in \mathcal{B}_b(S)\)</span> and values in <span class="math inline">\([0, \infty]\)</span> if <span class="math inline">\(h \in \mathcal{B}_+(S)\)</span>.</p>
+<p><em>(2)</em> Let <span class="math inline">\(x \in B\)</span>. Under <span class="math inline">\(\mathbb{P}^x\)</span> we have <span class="math inline">\(X_0 = x \in B\)</span> almost surely, so <span class="math inline">\(T_B = 0\)</span> and <span class="math inline">\(F(X) = h(X_0) = h(x)\)</span> almost surely. Hence <span class="math inline">\(u(x) = h(x)\)</span>.</p>
+<p><em>(3)</em> Fix <span class="math inline">\(x \in B^c\)</span> and a path <span class="math inline">\(\underline{y} = (y_0, y_1, \dots)\)</span>. By the shift identities, <span class="math inline">\(T_B(x, \underline{y}) = 1 + T_B(\underline{y})\)</span>. In particular <span class="math inline">\(T_B(x, \underline{y}) \ne 0\)</span>, and for <span class="math inline">\(k \in \mathbb{N}_0\)</span> we have <span class="math inline">\(T_B(x, \underline{y}) = k + 1\)</span> if and only if <span class="math inline">\(T_B(\underline{y}) = k\)</span>, while the <span class="math inline">\((k+1)\)</span>-st coordinate of <span class="math inline">\((x, \underline{y})\)</span> is <span class="math inline">\(y_k\)</span>. Therefore <span class="math display">\[
+F(x, \underline{y}) = \sum_{k \in \mathbb{N}_0} \mathbf{1}_{\{T_B(\underline{y}) = k\}}\, h(y_k) = F(\underline{y}) \qquad \text{for all } \underline{y} \in S^{\mathbb{N}_0}.
+\]</span> Applying <a href="42-2-Hitting-Times.html#thm-first-step" class="quarto-xref">Theorem&nbsp;<span>91.1</span></a> at <span class="math inline">\(x \in B^c\)</span> yields <span class="math display">\[
+\begin{aligned}
+u(x) &amp;= \mathbb{E}^x[F(X)] = \int_S q(x, dy) \, \mathbb{E}^y[F(x, X)] \\
+&amp;= \int_S q(x, dy) \, \mathbb{E}^y[F(X)] = \int_S q(x, dy)\, u(y) = (Qu)(x).
+\end{aligned}
+\]</span> Finally, decomposing <span class="math inline">\(Q = Q_B + Q_{B^c}\)</span> (<a href="#rem-subprob-properties" class="quarto-xref">Remark&nbsp;<span>92.1</span></a>) and using <span class="math inline">\(u = h\)</span> on <span class="math inline">\(B\)</span> from (2), <span class="math display">\[
+\begin{aligned}
+u(x) &amp;= (Qu)(x) = \int_B q(x, dy)\, h(y) + \int_{B^c} q(x, dy)\, u(y) \\
+&amp;= (Q_B h)(x) + (Q_{B^c} u)(x).
+\end{aligned}
+\]</span></p>
+</div>
+<div id="cor-hitting-prob" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 92.1 (Hitting Probabilities)</strong></span> Taking <span class="math inline">\(h \equiv 1\)</span> in <a href="#prp-terminal-payoff" class="quarto-xref">Proposition&nbsp;<span>92.1</span></a>, the hitting probability <span class="math inline">\(u(x) := \mathbb{P}^x(T_B &lt; \infty)\)</span> is a <span class="math inline">\([0, 1]\)</span>-valued <span class="math inline">\(\mathcal{B}\)</span>-measurable function satisfying <span class="math display">\[
+\begin{cases}
+u(x) = 1 &amp; \text{for } x \in B, \\
+u(x) = (Q_{B^c} u)(x) + (Q_B \mathbf{1})(x) = (Q_{B^c} u)(x) + q(x, B) &amp; \text{for } x \in B^c.
+\end{cases}
+\]</span></p>
+</div>
+<p>We next establish the analogous first-step equation for cumulative running rewards prior to hitting <span class="math inline">\(B\)</span>.</p>
+<div id="prp-running-cost" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 92.2 (Equation for Cumulative Running Cost)</strong></span> Let <span class="math inline">\(B \in \mathcal{B}\)</span> and <span class="math inline">\(g \in \mathcal{B}_+(S)\)</span>. Define <span class="math display">\[
+v(x) := \mathbb{E}^x\left[\sum_{0 \le n &lt; T_B} g(X_n)\right], \qquad x \in S.
+\]</span> Then:</p>
+<ol type="1">
+<li><span class="math inline">\(v \in \mathcal{B}_+(S)\)</span>.</li>
+<li>On <span class="math inline">\(B\)</span>, <span class="math inline">\(v\)</span> vanishes identically: <span class="math display">\[
+v(x) = 0 \qquad \text{for all } x \in B.
+\]</span></li>
+<li>On <span class="math inline">\(B^c\)</span>, <span class="math inline">\(v\)</span> satisfies (as an identity in <span class="math inline">\([0, \infty]\)</span>) <span class="math display">\[
+v(x) = g(x) + (Qv)(x) = g(x) + (Q_{B^c} v)(x) \qquad \text{for all } x \in B^c.
+\]</span></li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#prp-running-cost" class="quarto-xref">Proposition&nbsp;<span>92.2</span></a>). </span>Define the path functional <span class="math inline">\(G: S^{\mathbb{N}_0} \to [0, \infty]\)</span> by <span class="math display">\[
+G(\underline{x}) := \sum_{0 \le n &lt; T_B(\underline{x})} g(x_n) = \sum_{n \in \mathbb{N}_0} \mathbf{1}_{\{T_B(\underline{x}) &gt; n\}}\, g(x_n).
+\]</span> Each summand is a product of non-negative measurable functions on path space (by <a href="42-2-Hitting-Times.html#rem-measurability-stopping" class="quarto-xref">Remark&nbsp;<span>91.1</span></a>, <span class="math inline">\(\{T_B &gt; n\} \in \mathcal{B}^{\otimes \mathbb{N}_0}\)</span>), so <span class="math inline">\(G \in \mathcal{B}_+(S^{\mathbb{N}_0})\)</span>, and <span class="math inline">\(v(x) = \mathbb{E}^x[G(X)]\)</span>.</p>
+<p><em>(1)</em> By <a href="#lem-expectation-measurable" class="quarto-xref">Lemma&nbsp;<span>92.1</span></a> applied to <span class="math inline">\(H = G\)</span>, <span class="math inline">\(v \in \mathcal{B}_+(S)\)</span>.</p>
+<p><em>(2)</em> If <span class="math inline">\(x \in B\)</span>, then <span class="math inline">\(X_0 = x \in B\)</span> <span class="math inline">\(\mathbb{P}^x\)</span>-a.s., so <span class="math inline">\(T_B = 0\)</span> and the sum defining <span class="math inline">\(G(X)\)</span> is empty, i.e.&nbsp;<span class="math inline">\(G(X) = 0\)</span> <span class="math inline">\(\mathbb{P}^x\)</span>-a.s. Hence <span class="math inline">\(v(x) = 0\)</span>.</p>
+<p><em>(3)</em> Fix <span class="math inline">\(x \in B^c\)</span> and a path <span class="math inline">\(\underline{y} = (y_0, y_1, \dots)\)</span>. By the shift identities, <span class="math inline">\(T_B(x, \underline{y}) = 1 + T_B(\underline{y}) \ge 1\)</span>. The <span class="math inline">\(0\)</span>-th coordinate of <span class="math inline">\((x, \underline{y})\)</span> is <span class="math inline">\(x\)</span> and its <span class="math inline">\(n\)</span>-th coordinate is <span class="math inline">\(y_{n-1}\)</span> for <span class="math inline">\(n \ge 1\)</span>, so, separating the term <span class="math inline">\(n = 0\)</span> and substituting <span class="math inline">\(m = n - 1\)</span>, <span class="math display">\[
+\begin{aligned}
+G(x, \underline{y}) &amp;= g(x) + \sum_{n \ge 1} \mathbf{1}_{\{1 + T_B(\underline{y}) &gt; n\}}\, g(y_{n-1}) \\
+&amp;= g(x) + \sum_{m \in \mathbb{N}_0} \mathbf{1}_{\{T_B(\underline{y}) &gt; m\}}\, g(y_m) \\
+&amp;= g(x) + G(\underline{y}).
+\end{aligned}
+\]</span> Applying <a href="42-2-Hitting-Times.html#thm-first-step" class="quarto-xref">Theorem&nbsp;<span>91.1</span></a> at <span class="math inline">\(x\)</span>, together with additivity of integrals of <span class="math inline">\([0, \infty]\)</span>-valued functions and <span class="math inline">\(q(x, S) = 1\)</span>, we obtain <span class="math display">\[
+\begin{aligned}
+v(x) &amp;= \mathbb{E}^x[G(X)] = \int_S q(x, dy) \, \mathbb{E}^y[G(x, X)] \\
+&amp;= \int_S q(x, dy) \, \big( g(x) + \mathbb{E}^y[G(X)] \big) \\
+&amp;= g(x)\, q(x, S) + \int_S q(x, dy)\, v(y) = g(x) + (Qv)(x).
+\end{aligned}
+\]</span> Since <span class="math inline">\(v = 0\)</span> on <span class="math inline">\(B\)</span> by (2), we have <span class="math inline">\(v = v \mathbf{1}_{B^c}\)</span>, hence <span class="math inline">\((Qv)(x) = Q(v\mathbf{1}_{B^c})(x) = (Q_{B^c} v)(x)\)</span>.</p>
+</div>
+<div id="cor-expected-hitting-time" class="theorem corollary">
+<p><span class="theorem-title"><strong>Corollary 92.2 (Expected Hitting Time)</strong></span> Taking <span class="math inline">\(g = \mathbf{1}_{B^c}\)</span> in <a href="#prp-running-cost" class="quarto-xref">Proposition&nbsp;<span>92.2</span></a>, for which <span class="math inline">\(\sum_{0 \le n &lt; T_B} g(X_n) = T_B\)</span>, the expected hitting time <span class="math inline">\(v(x) := \mathbb{E}^x[T_B] \in [0, \infty]\)</span> satisfies <span class="math display">\[
+\begin{cases}
+v(x) = 0 &amp; \text{for } x \in B, \\
+v(x) = (Q_{B^c} v)(x) + 1 = \displaystyle\int_{B^c} q(x, dy) \, \mathbb{E}^y[T_B] + 1 &amp; \text{for } x \in B^c,
+\end{cases}
+\]</span> as identities in <span class="math inline">\([0, \infty]\)</span>.</p>
+</div>
+<hr>
+</section>
+<section id="solving-the-recursive-equations-and-minimality" class="level2" data-number="92.4">
+<h2 data-number="92.4" class="anchored" data-anchor-id="solving-the-recursive-equations-and-minimality"><span class="header-section-number">92.4</span> Solving the Recursive Equations and Minimality</h2>
+<p><a href="#prp-terminal-payoff" class="quarto-xref">Proposition&nbsp;<span>92.1</span></a> and <a href="#prp-running-cost" class="quarto-xref">Proposition&nbsp;<span>92.2</span></a> reduce the computation of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> to solving linear operator equations on <span class="math inline">\(B^c\)</span> subject to prescribed boundary values on <span class="math inline">\(B\)</span>: <span class="math display">\[
+\begin{aligned}
+u &amp;= Q_{B^c} u + Q_B h \quad \text{on } B^c, \qquad u = h \quad \text{on } B, \\
+v &amp;= Q_{B^c} v + g \quad \text{on } B^c, \qquad v = 0 \quad \text{on } B.
+\end{aligned}
+\]</span> Heuristically, rearranging these equations on <span class="math inline">\(B^c\)</span> yields <span class="math display">\[
+(I - Q_{B^c}) u = Q_B h \implies u \text{ ``}=\text{'' } (I - Q_{B^c})^{-1} Q_B h
+\]</span> and <span class="math display">\[
+(I - Q_{B^c}) v = g \implies v \text{ ``}=\text{'' } (I - Q_{B^c})^{-1} g,
+\]</span> where <span class="math inline">\(I\)</span> denotes the identity operator on functions on <span class="math inline">\(B^c\)</span>, <span class="math inline">\(Q_{B^c}\)</span> is regarded as an operator on functions on <span class="math inline">\(B^c\)</span>, and <span class="math inline">\((I - Q_{B^c})^{-1}\)</span> is formally given by the Neumann series <span class="math inline">\(\sum_{n=0}^\infty Q_{B^c}^n\)</span>. These manipulations are only formal: <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> may take the value <span class="math inline">\(+\infty\)</span>, in which case <span class="math inline">\((I - Q_{B^c})u\)</span> involves <span class="math inline">\(\infty - \infty\)</span>, and <span class="math inline">\(I - Q_{B^c}\)</span> need not be invertible. For non-negative data, however, the Neumann series does make sense and gives exactly <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> on <span class="math inline">\(B^c\)</span> (<a href="#thm-minimal-solutions" class="quarto-xref">Theorem&nbsp;<span>92.1</span></a>, <a href="#rem-series-representation" class="quarto-xref">Remark&nbsp;<span>92.3</span></a>).</p>
+<div id="rem-non-uniqueness" class="proof remark">
+<p><span class="proof-title"><em>Remark 92.2</em> (Invertibility and Non-Uniqueness). </span>Suppose <span class="math inline">\(h \in \mathcal{B}_b(S)\)</span> (resp. <span class="math inline">\(g \in \mathcal{B}_+(S)\)</span> is bounded), and regard <span class="math inline">\(Q_{B^c}\)</span> as a bounded operator on the Banach space of bounded <span class="math inline">\(\mathcal{B}|_{B^c}\)</span>-measurable functions on <span class="math inline">\(B^c\)</span> with the supremum norm; note <span class="math inline">\(\|Q_{B^c}^n\| = \sup_{x \in B^c} (Q_{B^c}^n \mathbf{1})(x) \le 1\)</span>. If <span class="math inline">\(I - Q_{B^c}\)</span> is invertible on this space, then the corresponding system has exactly one <em>bounded</em> solution: its values on <span class="math inline">\(B\)</span> are prescribed, and on <span class="math inline">\(B^c\)</span> any bounded solution <span class="math inline">\(w\)</span> satisfies <span class="math inline">\((I - Q_{B^c})(w|_{B^c}) = (Q_B h)|_{B^c}\)</span> (resp. <span class="math inline">\(= g|_{B^c}\)</span>).</p>
+<p>This holds, for example, when <span class="math inline">\(B^c\)</span> is finite and <span class="math inline">\(\mathbb{P}^x(T_B &lt; \infty) = 1\)</span> for all <span class="math inline">\(x \in B^c\)</span>. Indeed, for <span class="math inline">\(x \in B^c\)</span>, <a href="#eq-taboo-iterates" class="quarto-xref">Equation&nbsp;<span>92.1</span></a> gives <span class="math inline">\((Q_{B^c}^n \mathbf{1})(x) = \mathbb{P}^x(X_1, \dots, X_n \in B^c) = \mathbb{P}^x(T_B &gt; n) \to 0\)</span> as <span class="math inline">\(n \to \infty\)</span>. Since <span class="math inline">\(B^c\)</span> is finite, <span class="math inline">\(\|Q_{B^c}^N\| = \max_{x \in B^c} \mathbb{P}^x(T_B &gt; N) &lt; 1\)</span> for some <span class="math inline">\(N\)</span>, so <span class="math inline">\(\sum_{n \ge 0} \|Q_{B^c}^n\| &lt; \infty\)</span> and the Neumann series <span class="math inline">\(\sum_{n \ge 0} Q_{B^c}^n\)</span> converges in operator norm to <span class="math inline">\((I - Q_{B^c})^{-1}\)</span>.</p>
+<p>Even then, uniqueness may fail among <em>non-negative</em> solutions that are allowed to take the value <span class="math inline">\(+\infty\)</span>. For example, let <span class="math inline">\(S = \{0, 1\}\)</span>, <span class="math inline">\(B = \{0\}\)</span>, <span class="math inline">\(q(0, \{0\}) = 1\)</span>, and <span class="math inline">\(q(1, \{0\}) = q(1, \{1\}) = \tfrac{1}{2}\)</span>. With <span class="math inline">\(g = \mathbf{1}_{B^c}\)</span>, the system of <a href="#cor-expected-hitting-time" class="quarto-xref">Corollary&nbsp;<span>92.2</span></a> reads <span class="math inline">\(w(0) = 0\)</span>, <span class="math inline">\(w(1) = \tfrac{1}{2} w(1) + 1\)</span>, which has the two solutions <span class="math inline">\(w(1) = 2 = \mathbb{E}^1[T_B]\)</span> and <span class="math inline">\(w(1) = \infty\)</span> in <span class="math inline">\([0, \infty]\)</span>.</p>
+<p>In general, <span class="math inline">\(I - Q_{B^c}\)</span> need <strong>not</strong> be invertible, and the recursive equations may admit several bounded solutions. For instance, in <a href="#cor-hitting-prob" class="quarto-xref">Corollary&nbsp;<span>92.1</span></a> (<span class="math inline">\(h \equiv 1\)</span>), the constant function <span class="math inline">\(\tilde{u} \equiv 1\)</span> on <span class="math inline">\(S\)</span> always satisfies <span class="math display">\[
+\begin{aligned}
+(Q_{B^c} \mathbf{1})(x) + (Q_B \mathbf{1})(x)&amp;= q(x, B^c) + q(x, B) \\
+&amp;= q(x, S) = 1 = \tilde{u}(x) \; \text{for all } x \in B^c.
+\end{aligned}
+\]</span> But the true hitting probability <span class="math inline">\(u(x) = \mathbb{P}^x(T_B &lt; \infty)\)</span> may be strictly less than <span class="math inline">\(1\)</span>. For example, for the simple symmetric random walk on <span class="math inline">\(\mathbb{Z}^3\)</span> with <span class="math inline">\(B = \{0\}\)</span>, transience gives <span class="math inline">\(\mathbb{P}^x(T_B &lt; \infty) &lt; 1\)</span> for every <span class="math inline">\(x \ne 0\)</span>. In that case <span class="math inline">\(\tilde{u} - u\)</span> is a non-zero bounded function on <span class="math inline">\(B^c\)</span> with <span class="math inline">\((I - Q_{B^c})(\tilde{u} - u) = 0\)</span>, so <span class="math inline">\(I - Q_{B^c}\)</span> is not injective. See Driver, <em>Probability Tools with Examples</em>, Corollary 22.58.</p>
+</div>
+<p>When uniqueness fails, we need a selection principle to single out the true probabilistic quantities <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> among all solutions to the first-step equations. A function <span class="math inline">\(w \in \mathcal{B}_+(S)\)</span> is called the <strong>least</strong> (or minimal) non-negative solution of a system if it solves the system and <span class="math inline">\(w \le \tilde{w}\)</span> pointwise for every non-negative measurable solution <span class="math inline">\(\tilde{w}\)</span>; such a function is necessarily unique.</p>
+<div id="thm-minimal-solutions" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 92.1 (Characterization via Minimal Non-Negative Solutions)</strong></span> Let <span class="math inline">\(B \in \mathcal{B}\)</span>, <span class="math inline">\(h \in \mathcal{B}_+(S)\)</span>, and <span class="math inline">\(g \in \mathcal{B}_+(S)\)</span>.</p>
+<ol type="1">
+<li><p>The function <span class="math inline">\(u(x) = \mathbb{E}^x[h(X_{T_B}) \mathbf{1}_{\{T_B &lt; \infty\}}]\)</span> is the <strong>least non-negative measurable solution</strong> of <span class="math display">\[
+\begin{cases}
+w(x) = h(x) &amp; \text{for } x \in B, \\
+w(x) = (Q_{B^c} w)(x) + (Q_B h)(x) &amp; \text{for } x \in B^c.
+\end{cases}
+\]</span> More precisely, <span class="math inline">\(u\)</span> solves this system, and if <span class="math inline">\(\tilde{u} \in \mathcal{B}_+(S)\)</span> is any <strong>supersolution</strong>, i.e. <span class="math display">\[
+\tilde{u} \ge h \ \text{ on } B \qquad \text{and} \qquad \tilde{u} \ge Q_{B^c}\tilde{u} + Q_B h \ \text{ on } B^c,
+\]</span> then <span class="math inline">\(u(x) \le \tilde{u}(x)\)</span> for all <span class="math inline">\(x \in S\)</span>.</p></li>
+<li><p>The function <span class="math inline">\(v(x) = \mathbb{E}^x\big[\sum_{0 \le n &lt; T_B} g(X_n)\big]\)</span> is the <strong>least non-negative measurable solution</strong> of <span class="math display">\[
+\begin{cases}
+w(x) = 0 &amp; \text{for } x \in B, \\
+w(x) = (Q_{B^c} w)(x) + g(x) &amp; \text{for } x \in B^c.
+\end{cases}
+\]</span> More precisely, <span class="math inline">\(v\)</span> solves this system, and if <span class="math inline">\(\tilde{v} \in \mathcal{B}_+(S)\)</span> satisfies <span class="math display">\[
+\tilde{v} \ge Q_{B^c}\tilde{v} + g \ \text{ on } B^c,
+\]</span> then <span class="math inline">\(v(x) \le \tilde{v}(x)\)</span> for all <span class="math inline">\(x \in S\)</span>.</p></li>
+</ol>
+<p><em>(Compare Driver, Probability Tools with Examples, Theorem 22.81.)</em></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em> (Proof of <a href="#thm-minimal-solutions" class="quarto-xref">Theorem&nbsp;<span>92.1</span></a>). </span>That <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> solve their systems is the content of <a href="#prp-terminal-payoff" class="quarto-xref">Proposition&nbsp;<span>92.1</span></a> and <a href="#prp-running-cost" class="quarto-xref">Proposition&nbsp;<span>92.2</span></a>. All functions below are <span class="math inline">\([0, \infty]\)</span>-valued, and we use repeatedly that <span class="math inline">\(Q_{B^c}\)</span> is additive and monotone on <span class="math inline">\(\mathcal{B}_+(S)\)</span> and that <span class="math inline">\(Q_{B^c} f = Q_{B^c}(f \mathbf{1}_{B^c})\)</span> depends only on <span class="math inline">\(f|_{B^c}\)</span> (<a href="#rem-subprob-properties" class="quarto-xref">Remark&nbsp;<span>92.1</span></a>).</p>
+<p><strong>Step 1: probabilistic form of the iterates.</strong> Let <span class="math inline">\(x \in B^c\)</span> and <span class="math inline">\(k \in \mathbb{N}_0\)</span>. Under <span class="math inline">\(\mathbb{P}^x\)</span> we have <span class="math inline">\(X_0 = x \in B^c\)</span> a.s., hence <span class="math inline">\(\mathbb{P}^x\)</span>-a.s. <span class="math display">\[
+\begin{aligned}
+&amp;\{X_1, \dots, X_k \in B^c\} = \{T_B &gt; k\}, \\
+&amp;\{X_1, \dots, X_k \in B^c,\ X_{k+1} \in B\} = \{T_B = k + 1\}.
+\end{aligned}
+\]</span> By <a href="#eq-taboo-iterates" class="quarto-xref">Equation&nbsp;<span>92.1</span></a> with <span class="math inline">\(f = g\)</span>, <span class="math display">\[
+(Q_{B^c}^k g)(x) = \mathbb{E}^x\big[g(X_k)\, \mathbf{1}_{\{T_B &gt; k\}}\big].
+\]</span> Applying <a href="#eq-taboo-iterates" class="quarto-xref">Equation&nbsp;<span>92.1</span></a> with <span class="math inline">\(f = Q_B h = Q(h \mathbf{1}_B)\)</span>, and then <a href="42-2-Hitting-Times.html#eq-n-step-analysis" class="quarto-xref">Equation&nbsp;<span>91.8</span></a> to express <span class="math inline">\((Q(h\mathbf{1}_B))(X_k)\)</span> as an expectation over one further step, gives <span class="math display">\[
+\begin{aligned}
+(Q_{B^c}^k Q_B h)(x) &amp;= \mathbb{E}^x\big[\mathbf{1}_{B^c}(X_1) \cdots \mathbf{1}_{B^c}(X_k)\, \mathbf{1}_B(X_{k+1})\, h(X_{k+1})\big] \\
+&amp;= \mathbb{E}^x\big[h(X_{T_B})\, \mathbf{1}_{\{T_B = k+1\}}\big].
+\end{aligned}
+\]</span></p>
+<p><strong>Step 2: iterating the supersolution inequality (part 1).</strong> Let <span class="math inline">\(\tilde{u}\)</span> be a supersolution. We claim that for every <span class="math inline">\(n \in \mathbb{N}_0\)</span>, <span id="eq-iterated-supersolution"><span class="math display">\[
+\tilde{u} \ \ge\ \sum_{k=0}^{n} Q_{B^c}^k Q_B h + Q_{B^c}^{n+1}\tilde{u} \qquad \text{on } B^c.
+\tag{92.2}\]</span></span> For <span class="math inline">\(n = 0\)</span> this is the hypothesis. If it holds for <span class="math inline">\(n\)</span>, then, since <span class="math inline">\(Q_{B^c}^{n+1}\)</span> only sees values on <span class="math inline">\(B^c\)</span>, where <span class="math inline">\(\tilde{u} \ge Q_{B^c}\tilde{u} + Q_B h\)</span>, monotonicity and additivity give <span class="math display">\[
+\begin{aligned}
+Q_{B^c}^{n+1}\tilde{u} &amp;= Q_{B^c}^{n+1}(\tilde{u}\mathbf{1}_{B^c}) \ge Q_{B^c}^{n+1}\big((Q_{B^c}\tilde{u} + Q_B h)\mathbf{1}_{B^c}\big) \\
+&amp;= Q_{B^c}^{n+2}\tilde{u} + Q_{B^c}^{n+1} Q_B h,
+\end{aligned}
+\]</span> which yields <a href="#eq-iterated-supersolution" class="quarto-xref">Equation&nbsp;<span>92.2</span></a> for <span class="math inline">\(n + 1\)</span>. Dropping the non-negative term <span class="math inline">\(Q_{B^c}^{n+1}\tilde{u}\)</span> and using Step 1, for <span class="math inline">\(x \in B^c\)</span>, <span class="math display">\[
+\tilde{u}(x) \ge \sum_{k=0}^{n} \mathbb{E}^x\big[h(X_{T_B})\, \mathbf{1}_{\{T_B = k+1\}}\big] = \mathbb{E}^x\big[h(X_{T_B})\, \mathbf{1}_{\{1 \le T_B \le n+1\}}\big].
+\]</span> Letting <span class="math inline">\(n \to \infty\)</span> and using the monotone convergence theorem together with <span class="math inline">\(T_B \ge 1\)</span> <span class="math inline">\(\mathbb{P}^x\)</span>-a.s. (since <span class="math inline">\(x \in B^c\)</span>), we get <span class="math inline">\(\tilde{u}(x) \ge \mathbb{E}^x[h(X_{T_B}) \mathbf{1}_{\{T_B &lt; \infty\}}] = u(x)\)</span>. On <span class="math inline">\(B\)</span> we have <span class="math inline">\(\tilde{u} \ge h = u\)</span> by <a href="#prp-terminal-payoff" class="quarto-xref">Proposition&nbsp;<span>92.1</span></a>. Hence <span class="math inline">\(u \le \tilde{u}\)</span> on <span class="math inline">\(S\)</span>.</p>
+<p><strong>Step 3: part 2.</strong> Let <span class="math inline">\(\tilde{v} \in \mathcal{B}_+(S)\)</span> satisfy <span class="math inline">\(\tilde{v} \ge Q_{B^c}\tilde{v} + g\)</span> on <span class="math inline">\(B^c\)</span>. The same induction, with <span class="math inline">\(Q_B h\)</span> replaced by <span class="math inline">\(g\)</span>, gives for all <span class="math inline">\(n \in \mathbb{N}_0\)</span> <span class="math display">\[
+\tilde{v} \ge \sum_{k=0}^{n} Q_{B^c}^k g + Q_{B^c}^{n+1}\tilde{v} \ge \sum_{k=0}^{n} Q_{B^c}^k g \qquad \text{on } B^c.
+\]</span> By Step 1, for <span class="math inline">\(x \in B^c\)</span>, the right side equals <span class="math inline">\(\mathbb{E}^x\big[\sum_{k=0}^{n} g(X_k)\, \mathbf{1}_{\{T_B &gt; k\}}\big]\)</span>, which increases to <span class="math inline">\(\mathbb{E}^x\big[\sum_{k \in \mathbb{N}_0} g(X_k)\, \mathbf{1}_{\{T_B &gt; k\}}\big] = v(x)\)</span> by the monotone convergence theorem. On <span class="math inline">\(B\)</span> we have <span class="math inline">\(\tilde{v} \ge 0 = v\)</span>. Hence <span class="math inline">\(v \le \tilde{v}\)</span> on <span class="math inline">\(S\)</span>.</p>
+<p>Finally, any non-negative measurable solution of either system is in particular a supersolution, so <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are the least non-negative measurable solutions.</p>
+</div>
+<div id="rem-series-representation" class="proof remark">
+<p><span class="proof-title"><em>Remark 92.3</em> (The Neumann Series Made Rigorous). </span>Summing the identities of Step 1 of the proof over <span class="math inline">\(k \in \mathbb{N}_0\)</span> (Tonelli’s theorem for series of non-negative terms) shows that, for <span class="math inline">\(h, g \in \mathcal{B}_+(S)\)</span> and every <span class="math inline">\(x \in B^c\)</span>, <span class="math display">\[
+u(x) = \sum_{k=0}^{\infty} (Q_{B^c}^k Q_B h)(x), \qquad v(x) = \sum_{k=0}^{\infty} (Q_{B^c}^k g)(x),
+\]</span> as identities in <span class="math inline">\([0, \infty]\)</span>. Thus the formal expressions <span class="math inline">\((I - Q_{B^c})^{-1} Q_B h\)</span> and <span class="math inline">\((I - Q_{B^c})^{-1} g\)</span> are meaningful for non-negative data when <span class="math inline">\((I - Q_{B^c})^{-1}\)</span> is interpreted as the series <span class="math inline">\(\sum_{k \ge 0} Q_{B^c}^k\)</span>, and they select precisely the least non-negative solutions. In particular, <span class="math inline">\(\mathbb{P}^x(T_B &lt; \infty)\)</span> and <span class="math inline">\(\mathbb{E}^x[T_B]\)</span> are the least non-negative solutions of the systems in <a href="#cor-hitting-prob" class="quarto-xref">Corollary&nbsp;<span>92.1</span></a> and <a href="#cor-expected-hitting-time" class="quarto-xref">Corollary&nbsp;<span>92.2</span></a>, respectively.</p>
+</div>
+</section>
+<section id="takeaways" class="level2" data-number="92.5">
+<h2 data-number="92.5" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">92.5</span> Takeaways</h2>
+<ul>
+<li><strong>Two master functionals.</strong> Hitting questions for a set <span class="math inline">\(B \in \mathcal{B}\)</span> are embedded into the terminal payoff <span class="math inline">\(u(x) = \mathbb{E}^x[h(X_{T_B})\mathbf{1}_{\{T_B &lt; \infty\}}]\)</span> and the running cost <span class="math inline">\(v(x) = \mathbb{E}^x[\sum_{0 \le n &lt; T_B} g(X_n)]\)</span>. The choices <span class="math inline">\(h \equiv 1\)</span> and <span class="math inline">\(g = \mathbf{1}_{B^c}\)</span> give the hitting probability <span class="math inline">\(\mathbb{P}^x(T_B &lt; \infty)\)</span> and the expected hitting time <span class="math inline">\(\mathbb{E}^x[T_B]\)</span>.</li>
+<li><strong>Splitting the kernel.</strong> The sub-probability kernels <span class="math inline">\(q_B(x, \cdot) = q(x, \cdot \cap B)\)</span> and <span class="math inline">\(q_{B^c}(x, \cdot) = q(x, \cdot \cap B^c)\)</span>, defined for every starting point <span class="math inline">\(x \in S\)</span>, decompose <span class="math inline">\(q = q_B + q_{B^c}\)</span> and <span class="math inline">\(Q = Q_B + Q_{B^c}\)</span> (<a href="#def-subprob-kernel" class="quarto-xref">Definition&nbsp;<span>92.1</span></a>, <a href="#rem-subprob-properties" class="quarto-xref">Remark&nbsp;<span>92.1</span></a>). For <span class="math inline">\(x \in B^c\)</span>, <span class="math inline">\(Q_B\)</span> records a jump from outside <span class="math inline">\(B\)</span> into <span class="math inline">\(B\)</span>, and the iterates <span class="math inline">\(Q_{B^c}^k\)</span> describe the chain while it avoids <span class="math inline">\(B\)</span> (<a href="#eq-taboo-iterates" class="quarto-xref">Equation&nbsp;<span>92.1</span></a>).</li>
+<li><strong>First-step equations.</strong> Combining first-step analysis (<a href="42-2-Hitting-Times.html#thm-first-step" class="quarto-xref">Theorem&nbsp;<span>91.1</span></a>) with the shift identities <span class="math inline">\(T_B(x, \underline{y}) = 1 + T_B(\underline{y})\)</span> and <span class="math inline">\(L_B(x, \underline{y}) = L_B(\underline{y})\)</span> for <span class="math inline">\(x \in B^c\)</span> gives the boundary value problems <span class="math inline">\(u = h\)</span> on <span class="math inline">\(B\)</span>, <span class="math inline">\(u = Q_{B^c} u + Q_B h\)</span> on <span class="math inline">\(B^c\)</span> (<a href="#prp-terminal-payoff" class="quarto-xref">Proposition&nbsp;<span>92.1</span></a>), and <span class="math inline">\(v = 0\)</span> on <span class="math inline">\(B\)</span>, <span class="math inline">\(v = Q_{B^c} v + g\)</span> on <span class="math inline">\(B^c\)</span> (<a href="#prp-running-cost" class="quarto-xref">Proposition&nbsp;<span>92.2</span></a>). Measurability of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> comes from <a href="#lem-expectation-measurable" class="quarto-xref">Lemma&nbsp;<span>92.1</span></a>.</li>
+<li><strong>Non-uniqueness.</strong> These systems need not determine <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>. Among bounded solutions, uniqueness holds when <span class="math inline">\(I - Q_{B^c}\)</span> is invertible, e.g.&nbsp;when <span class="math inline">\(B^c\)</span> is finite and <span class="math inline">\(B\)</span> is reached almost surely from every <span class="math inline">\(x \in B^c\)</span>. In general it fails: <span class="math inline">\(\tilde{u} \equiv 1\)</span> always solves the hitting-probability system, even for a transient chain, and <span class="math inline">\(w \equiv \infty\)</span> on <span class="math inline">\(B^c\)</span> can solve the expected-hitting-time system alongside the true finite solution (<a href="#rem-non-uniqueness" class="quarto-xref">Remark&nbsp;<span>92.2</span></a>).</li>
+<li><strong>Minimality selects the truth.</strong> For non-negative data, <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are the least non-negative measurable solutions, and they lie below every supersolution (<a href="#thm-minimal-solutions" class="quarto-xref">Theorem&nbsp;<span>92.1</span></a>). The proof iterates the supersolution inequality and identifies <span class="math inline">\(Q_{B^c}^k Q_B h\)</span> and <span class="math inline">\(Q_{B^c}^k g\)</span> with contributions from paths that avoid <span class="math inline">\(B\)</span> for <span class="math inline">\(k\)</span> steps.</li>
+<li><strong>Neumann series.</strong> For non-negative data, the formal inverse <span class="math inline">\((I - Q_{B^c})^{-1} = \sum_{k \ge 0} Q_{B^c}^k\)</span> is meaningful in <span class="math inline">\([0, \infty]\)</span> and gives exactly <span class="math inline">\(u = \sum_k Q_{B^c}^k Q_B h\)</span> and <span class="math inline">\(v = \sum_k Q_{B^c}^k g\)</span> on <span class="math inline">\(B^c\)</span> (<a href="#rem-series-representation" class="quarto-xref">Remark&nbsp;<span>92.3</span></a>).</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/osmdogan\.github\.io\/ProbabilityBook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./42-2-Hitting-Times.html" class="pagination-link" aria-label="Lecture 42.2 Hitting Times">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">91</span>&nbsp; <span class="chapter-title">Lecture 42.2 Hitting Times</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./AppendixA.html" class="pagination-link" aria-label="Limsups, Liminfs and Extended Limits">
+        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Probability Theory was written by Osman Doğan and Süleyman Taşpınar.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/osmdogan/datasets.git/edit/main/43-1-First-Step-Recursion.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/osmdogan/datasets.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
