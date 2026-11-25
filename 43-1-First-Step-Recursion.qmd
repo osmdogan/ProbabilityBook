@@ -122,7 +122,41 @@ which is not necessarily equal to $1$ (in contrast to $q(x, S) = 1$). Consequent
   $$
   (Q_{B^c}^k f)(x) = \mathbb{E}^x\big[\mathbf{1}_{B^c}(X_1) \cdots \mathbf{1}_{B^c}(X_k)\, f(X_k)\big].
   $$ {#eq-taboo-iterates}
-  Indeed, unwinding $Q_{B^c} f = Q(\mathbf{1}_{B^c} f)$ shows that the left side is the iterated integral $\int_S q(x, dx_1) \cdots \int_S q(x_{k-1}, dx_k)\, \mathbf{1}_{B^c}(x_1) \cdots \mathbf{1}_{B^c}(x_k) f(x_k)$, which equals the right side by @eq-n-step-analysis applied to a functional of $(X_0, \dots, X_k)$ (using $X_0 = x_k$ $\mathbb{P}^{x_k}$-a.s.).
+  The cleanest full proof is an induction on $k$ that uses only first-step analysis (Lecture 42.2), applied once per step. By definition $q_{B^c}(x,dy)=\mathbf 1_{B^c}(y)\,q(x,dy)$, so for $f\in\mathcal B_b(S)$ or $\mathcal B_+(S)$:
+   $$
+   (Q_{B^c}f)(x)=\int_S q(x,dy)\,\mathbf 1_{B^c}(y)\,f(y)=Q(\mathbf 1_{B^c}f)(x).
+   $$
+   We prove, for every $k\in\mathbb N_0$, every such $f$ and every $x\in S$:
+   $$
+   (Q_{B^c}^k f)(x)=\mathbb E^x\big[\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_k)\,f(X_k)\big]. \tag{$\ast_k$}
+   $$
+   **Base case $k=0$**. The left side is $f(x)$, since $Q_{B^c}^0=I$. On the right, the product is empty, so it equals $1$. That leaves $\mathbb E^x[f(X_0)]=f(x)$, because $X_0=x$ holds $\mathbb P^x$-a.s.
+
+   **Inductive step**. Assume $(\ast_k)$ holds for all $f$ and all starting points. Write $g:=Q_{B^c}^k f$, which is again in $\mathcal B_b(S)$ or $\mathcal B_+(S)$. Then
+   $$
+   \begin{aligned}
+   &(Q_{B^c}^{k+1}f)(x)=(Q_{B^c}g)(x)\\
+   &=\int_S q(x,dy)\,\mathbf 1_{B^c}(y)\,g(y)\\
+   &=\int_S q(x,dy)\,\mathbf 1_{B^c}(y)\,\mathbb E^y\big[\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_k)f(X_k)\big]. 
+   \end{aligned}
+   $$ {#eq-inductive-step}
+   Now define a path functional $F:S^{\mathbb N_0}\to\mathbb R$ (or $[0,\infty]$) by
+   $$
+   F(x_0,x_1,x_2,\dots):=\mathbf 1_{B^c}(x_1)\cdots\mathbf 1_{B^c}(x_{k+1})\,f(x_{k+1}).
+   $$
+   It depends only on finitely many coordinates, so it is measurable. It is bounded if $f$ is, and non-negative if $f$ is. Prepend $x$ to the path, $(x,X)=(x,X_0,X_1,\dots)$. Each coordinate shifts back by one:
+   $$
+   F(x,X)=\mathbf 1_{B^c}(X_0)\,\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_k)\,f(X_k).
+   $$
+   Under $\mathbb P^y$ we have $X_0=y$ a.s., so
+   $$
+   \mathbb E^y[F(x,X)]=\mathbf 1_{B^c}(y)\,\mathbb E^y\big[\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_k)f(X_k)\big].
+   $$
+   This is exactly the integrand in @eq-inductive-step. First-step analysis says $\mathbb E^x[F(X)]=\int_S q(x,dy)\,\mathbb E^y[F(x,X)]$, so @eq-inductive-step becomes
+   $$
+   (Q_{B^c}^{k+1}f)(x)=\mathbb E^x[F(X)]=\mathbb E^x\big[\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_{k+1})\,f(X_{k+1})\big].
+   $$
+   This is $(\ast_{k+1})$.
 :::
 
 When working only with functions defined on $B^c$, we also regard $Q_{B^c}$ as an operator on functions $f: B^c \to \mathbb{R}$ that are bounded and $\mathcal{B}|_{B^c}$-measurable, via $(Q_{B^c} f)(x) = \int_{B^c} q(x, dy)\, f(y)$ for $x \in B^c$. This is the restriction of the operator of @def-subprob-kernel to functions supported on $B^c$, evaluated at points of $B^c$.

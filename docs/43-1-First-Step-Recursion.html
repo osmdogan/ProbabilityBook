@@ -33,7 +33,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./AppendixA.html" rel="next">
+<link href="./43-2-Biased-Radom-Walks.html" rel="next">
 <link href="./42-2-Hitting-Times.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -751,6 +751,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">92</span>&nbsp; <span class="chapter-title">Lecture 43.1 First Step Recursion</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./43-2-Biased-Radom-Walks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">93</span>&nbsp; <span class="chapter-title">Lecture 43.2 Biased Random Walks</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -889,19 +895,38 @@ q_B(x, A) := q(x, A \cap B), \qquad x \in S, \; A \in \mathcal{B}.
 q_B(x, S) = q(x, B) \le 1,
 \]</span> which is not necessarily equal to <span class="math inline">\(1\)</span> (in contrast to <span class="math inline">\(q(x, S) = 1\)</span>). Consequently, <span class="math inline">\(q_B\)</span> is a <strong>sub-probability kernel</strong>, and <span class="math inline">\(Q_B\)</span> is a sub-Markovian operator:</p>
 <ul>
-<li><span class="math inline">\(Q_B\)</span> is linear on <span class="math inline">\(\mathcal{B}_b(S)\)</span>, additive and positively homogeneous on <span class="math inline">\(\mathcal{B}_+(S)\)</span>, positive (<span class="math inline">\(f \ge 0 \Rightarrow Q_B f \ge 0\)</span>), and therefore monotone; moreover, if <span class="math inline">\(0 \le f_n \uparrow f\)</span>, then <span class="math inline">\(Q_B f_n \uparrow Q_B f\)</span> by the monotone convergence theorem.</li>
-<li><span class="math inline">\((Q_B \mathbf{1})(x) = Q(\mathbf{1}_B)(x) = q(x, B) \le 1\)</span>, rather than <span class="math inline">\(1\)</span>.</li>
-<li>Because <span class="math inline">\(\{B, B^c\}\)</span> is a measurable partition of <span class="math inline">\(S\)</span>, the kernel <span class="math inline">\(q\)</span> and operator <span class="math inline">\(Q\)</span> decompose additively as <span class="math display">\[
+<li><p><span class="math inline">\(Q_B\)</span> is linear on <span class="math inline">\(\mathcal{B}_b(S)\)</span>, additive and positively homogeneous on <span class="math inline">\(\mathcal{B}_+(S)\)</span>, positive (<span class="math inline">\(f \ge 0 \Rightarrow Q_B f \ge 0\)</span>), and therefore monotone; moreover, if <span class="math inline">\(0 \le f_n \uparrow f\)</span>, then <span class="math inline">\(Q_B f_n \uparrow Q_B f\)</span> by the monotone convergence theorem.</p></li>
+<li><p><span class="math inline">\((Q_B \mathbf{1})(x) = Q(\mathbf{1}_B)(x) = q(x, B) \le 1\)</span>, rather than <span class="math inline">\(1\)</span>.</p></li>
+<li><p>Because <span class="math inline">\(\{B, B^c\}\)</span> is a measurable partition of <span class="math inline">\(S\)</span>, the kernel <span class="math inline">\(q\)</span> and operator <span class="math inline">\(Q\)</span> decompose additively as <span class="math display">\[
 q = q_B + q_{B^c} \qquad \text{and} \qquad Q = Q_B + Q_{B^c},
 \]</span> meaning that for any <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span> or <span class="math inline">\(f \in \mathcal{B}_+(S)\)</span> and any <span class="math inline">\(x \in S\)</span>, <span class="math display">\[
 \begin{aligned}
 (Qf)(x) &amp;= (Q_B f)(x) + (Q_{B^c} f)(x) \\
 &amp;= \int_B q(x, dy)\, f(y) + \int_{B^c} q(x, dy)\, f(y),
 \end{aligned}
-\]</span> with the sum taken in <span class="math inline">\([0, \infty]\)</span> when <span class="math inline">\(f \ge 0\)</span>.</li>
-<li>Iterates of <span class="math inline">\(Q_{B^c}\)</span> can be expressed through the chain. For <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span> or <span class="math inline">\(f \in \mathcal{B}_+(S)\)</span>, <span class="math inline">\(k \in \mathbb{N}_0\)</span>, and <span class="math inline">\(x \in S\)</span>, <span id="eq-taboo-iterates"><span class="math display">\[
+\]</span> with the sum taken in <span class="math inline">\([0, \infty]\)</span> when <span class="math inline">\(f \ge 0\)</span>.</p></li>
+<li><p>Iterates of <span class="math inline">\(Q_{B^c}\)</span> can be expressed through the chain. For <span class="math inline">\(f \in \mathcal{B}_b(S)\)</span> or <span class="math inline">\(f \in \mathcal{B}_+(S)\)</span>, <span class="math inline">\(k \in \mathbb{N}_0\)</span>, and <span class="math inline">\(x \in S\)</span>, <span id="eq-taboo-iterates"><span class="math display">\[
 (Q_{B^c}^k f)(x) = \mathbb{E}^x\big[\mathbf{1}_{B^c}(X_1) \cdots \mathbf{1}_{B^c}(X_k)\, f(X_k)\big].
-\tag{92.1}\]</span></span> Indeed, unwinding <span class="math inline">\(Q_{B^c} f = Q(\mathbf{1}_{B^c} f)\)</span> shows that the left side is the iterated integral <span class="math inline">\(\int_S q(x, dx_1) \cdots \int_S q(x_{k-1}, dx_k)\, \mathbf{1}_{B^c}(x_1) \cdots \mathbf{1}_{B^c}(x_k) f(x_k)\)</span>, which equals the right side by <a href="42-2-Hitting-Times.html#eq-n-step-analysis" class="quarto-xref">Equation&nbsp;<span>91.8</span></a> applied to a functional of <span class="math inline">\((X_0, \dots, X_k)\)</span> (using <span class="math inline">\(X_0 = x_k\)</span> <span class="math inline">\(\mathbb{P}^{x_k}\)</span>-a.s.).</li>
+\tag{92.1}\]</span></span> The cleanest full proof is an induction on <span class="math inline">\(k\)</span> that uses only first-step analysis (Lecture 42.2), applied once per step. By definition <span class="math inline">\(q_{B^c}(x,dy)=\mathbf 1_{B^c}(y)\,q(x,dy)\)</span>, so for <span class="math inline">\(f\in\mathcal B_b(S)\)</span> or <span class="math inline">\(\mathcal B_+(S)\)</span>: <span class="math display">\[
+(Q_{B^c}f)(x)=\int_S q(x,dy)\,\mathbf 1_{B^c}(y)\,f(y)=Q(\mathbf 1_{B^c}f)(x).
+\]</span> We prove, for every <span class="math inline">\(k\in\mathbb N_0\)</span>, every such <span class="math inline">\(f\)</span> and every <span class="math inline">\(x\in S\)</span>: <span class="math display">\[
+(Q_{B^c}^k f)(x)=\mathbb E^x\big[\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_k)\,f(X_k)\big]. \tag{$\ast_k$}
+\]</span> <strong>Base case <span class="math inline">\(k=0\)</span></strong>. The left side is <span class="math inline">\(f(x)\)</span>, since <span class="math inline">\(Q_{B^c}^0=I\)</span>. On the right, the product is empty, so it equals <span class="math inline">\(1\)</span>. That leaves <span class="math inline">\(\mathbb E^x[f(X_0)]=f(x)\)</span>, because <span class="math inline">\(X_0=x\)</span> holds <span class="math inline">\(\mathbb P^x\)</span>-a.s.</p>
+<p><strong>Inductive step</strong>. Assume <span class="math inline">\((\ast_k)\)</span> holds for all <span class="math inline">\(f\)</span> and all starting points. Write <span class="math inline">\(g:=Q_{B^c}^k f\)</span>, which is again in <span class="math inline">\(\mathcal B_b(S)\)</span> or <span class="math inline">\(\mathcal B_+(S)\)</span>. Then <span id="eq-inductive-step"><span class="math display">\[
+\begin{aligned}
+&amp;(Q_{B^c}^{k+1}f)(x)=(Q_{B^c}g)(x)\\
+&amp;=\int_S q(x,dy)\,\mathbf 1_{B^c}(y)\,g(y)\\
+&amp;=\int_S q(x,dy)\,\mathbf 1_{B^c}(y)\,\mathbb E^y\big[\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_k)f(X_k)\big].
+\end{aligned}
+  \tag{92.2}\]</span></span> Now define a path functional <span class="math inline">\(F:S^{\mathbb N_0}\to\mathbb R\)</span> (or <span class="math inline">\([0,\infty]\)</span>) by <span class="math display">\[
+F(x_0,x_1,x_2,\dots):=\mathbf 1_{B^c}(x_1)\cdots\mathbf 1_{B^c}(x_{k+1})\,f(x_{k+1}).
+\]</span> It depends only on finitely many coordinates, so it is measurable. It is bounded if <span class="math inline">\(f\)</span> is, and non-negative if <span class="math inline">\(f\)</span> is. Prepend <span class="math inline">\(x\)</span> to the path, <span class="math inline">\((x,X)=(x,X_0,X_1,\dots)\)</span>. Each coordinate shifts back by one: <span class="math display">\[
+F(x,X)=\mathbf 1_{B^c}(X_0)\,\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_k)\,f(X_k).
+\]</span> Under <span class="math inline">\(\mathbb P^y\)</span> we have <span class="math inline">\(X_0=y\)</span> a.s., so <span class="math display">\[
+\mathbb E^y[F(x,X)]=\mathbf 1_{B^c}(y)\,\mathbb E^y\big[\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_k)f(X_k)\big].
+\]</span> This is exactly the integrand in <a href="#eq-inductive-step" class="quarto-xref">Equation&nbsp;<span>92.2</span></a>. First-step analysis says <span class="math inline">\(\mathbb E^x[F(X)]=\int_S q(x,dy)\,\mathbb E^y[F(x,X)]\)</span>, so <a href="#eq-inductive-step" class="quarto-xref">Equation&nbsp;<span>92.2</span></a> becomes <span class="math display">\[
+(Q_{B^c}^{k+1}f)(x)=\mathbb E^x[F(X)]=\mathbb E^x\big[\mathbf 1_{B^c}(X_1)\cdots\mathbf 1_{B^c}(X_{k+1})\,f(X_{k+1})\big].
+\]</span> This is <span class="math inline">\((\ast_{k+1})\)</span>.</p></li>
 </ul>
 </div>
 <p>When working only with functions defined on <span class="math inline">\(B^c\)</span>, we also regard <span class="math inline">\(Q_{B^c}\)</span> as an operator on functions <span class="math inline">\(f: B^c \to \mathbb{R}\)</span> that are bounded and <span class="math inline">\(\mathcal{B}|_{B^c}\)</span>-measurable, via <span class="math inline">\((Q_{B^c} f)(x) = \int_{B^c} q(x, dy)\, f(y)\)</span> for <span class="math inline">\(x \in B^c\)</span>. This is the restriction of the operator of <a href="#def-subprob-kernel" class="quarto-xref">Definition&nbsp;<span>92.1</span></a> to functions supported on <span class="math inline">\(B^c\)</span>, evaluated at points of <span class="math inline">\(B^c\)</span>.</p>
@@ -1062,12 +1087,12 @@ w(x) = (Q_{B^c} w)(x) + g(x) &amp; \text{for } x \in B^c.
 \]</span></p>
 <p><strong>Step 2: iterating the supersolution inequality (part 1).</strong> Let <span class="math inline">\(\tilde{u}\)</span> be a supersolution. We claim that for every <span class="math inline">\(n \in \mathbb{N}_0\)</span>, <span id="eq-iterated-supersolution"><span class="math display">\[
 \tilde{u} \ \ge\ \sum_{k=0}^{n} Q_{B^c}^k Q_B h + Q_{B^c}^{n+1}\tilde{u} \qquad \text{on } B^c.
-\tag{92.2}\]</span></span> For <span class="math inline">\(n = 0\)</span> this is the hypothesis. If it holds for <span class="math inline">\(n\)</span>, then, since <span class="math inline">\(Q_{B^c}^{n+1}\)</span> only sees values on <span class="math inline">\(B^c\)</span>, where <span class="math inline">\(\tilde{u} \ge Q_{B^c}\tilde{u} + Q_B h\)</span>, monotonicity and additivity give <span class="math display">\[
+\tag{92.3}\]</span></span> For <span class="math inline">\(n = 0\)</span> this is the hypothesis. If it holds for <span class="math inline">\(n\)</span>, then, since <span class="math inline">\(Q_{B^c}^{n+1}\)</span> only sees values on <span class="math inline">\(B^c\)</span>, where <span class="math inline">\(\tilde{u} \ge Q_{B^c}\tilde{u} + Q_B h\)</span>, monotonicity and additivity give <span class="math display">\[
 \begin{aligned}
 Q_{B^c}^{n+1}\tilde{u} &amp;= Q_{B^c}^{n+1}(\tilde{u}\mathbf{1}_{B^c}) \ge Q_{B^c}^{n+1}\big((Q_{B^c}\tilde{u} + Q_B h)\mathbf{1}_{B^c}\big) \\
 &amp;= Q_{B^c}^{n+2}\tilde{u} + Q_{B^c}^{n+1} Q_B h,
 \end{aligned}
-\]</span> which yields <a href="#eq-iterated-supersolution" class="quarto-xref">Equation&nbsp;<span>92.2</span></a> for <span class="math inline">\(n + 1\)</span>. Dropping the non-negative term <span class="math inline">\(Q_{B^c}^{n+1}\tilde{u}\)</span> and using Step 1, for <span class="math inline">\(x \in B^c\)</span>, <span class="math display">\[
+\]</span> which yields <a href="#eq-iterated-supersolution" class="quarto-xref">Equation&nbsp;<span>92.3</span></a> for <span class="math inline">\(n + 1\)</span>. Dropping the non-negative term <span class="math inline">\(Q_{B^c}^{n+1}\tilde{u}\)</span> and using Step 1, for <span class="math inline">\(x \in B^c\)</span>, <span class="math display">\[
 \tilde{u}(x) \ge \sum_{k=0}^{n} \mathbb{E}^x\big[h(X_{T_B})\, \mathbf{1}_{\{T_B = k+1\}}\big] = \mathbb{E}^x\big[h(X_{T_B})\, \mathbf{1}_{\{1 \le T_B \le n+1\}}\big].
 \]</span> Letting <span class="math inline">\(n \to \infty\)</span> and using the monotone convergence theorem together with <span class="math inline">\(T_B \ge 1\)</span> <span class="math inline">\(\mathbb{P}^x\)</span>-a.s. (since <span class="math inline">\(x \in B^c\)</span>), we get <span class="math inline">\(\tilde{u}(x) \ge \mathbb{E}^x[h(X_{T_B}) \mathbf{1}_{\{T_B &lt; \infty\}}] = u(x)\)</span>. On <span class="math inline">\(B\)</span> we have <span class="math inline">\(\tilde{u} \ge h = u\)</span> by <a href="#prp-terminal-payoff" class="quarto-xref">Proposition&nbsp;<span>92.1</span></a>. Hence <span class="math inline">\(u \le \tilde{u}\)</span> on <span class="math inline">\(S\)</span>.</p>
 <p><strong>Step 3: part 2.</strong> Let <span class="math inline">\(\tilde{v} \in \mathcal{B}_+(S)\)</span> satisfy <span class="math inline">\(\tilde{v} \ge Q_{B^c}\tilde{v} + g\)</span> on <span class="math inline">\(B^c\)</span>. The same induction, with <span class="math inline">\(Q_B h\)</span> replaced by <span class="math inline">\(g\)</span>, gives for all <span class="math inline">\(n \in \mathbb{N}_0\)</span> <span class="math display">\[
@@ -1503,8 +1528,8 @@ u(x) = \sum_{k=0}^{\infty} (Q_{B^c}^k Q_B h)(x), \qquad v(x) = \sum_{k=0}^{\inft
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./AppendixA.html" class="pagination-link" aria-label="Limsups, Liminfs and Extended Limits">
-        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Limsups, Liminfs and Extended Limits</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./43-2-Biased-Radom-Walks.html" class="pagination-link" aria-label="Lecture 43.2 Biased Random Walks">
+        <span class="nav-page-text"><span class="chapter-number">93</span>&nbsp; <span class="chapter-title">Lecture 43.2 Biased Random Walks</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
